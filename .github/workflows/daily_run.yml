@@ -1,0 +1,39 @@
+name: Daily NHL Predictions
+
+on:
+  schedule:
+    # Runs at 14:00 UTC (which is 7:00 AM MST)
+    - cron: '0 14 * * *'
+  workflow_dispatch: # Allows you to click a button to run it manually
+
+permissions:
+  contents: write
+
+jobs:
+  run-tracker:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        
+    - name: Run NHL Tracker
+      run: python nhl_tracker.py
+      
+    - name: Commit and Push changes
+      run: |
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+        git add nhl_predictions_log.csv accuracy_plot.png
+        # Only commit if there are changes
+        git commit -m "Auto-update: Daily predictions and graph" || exit 0
+        git push
