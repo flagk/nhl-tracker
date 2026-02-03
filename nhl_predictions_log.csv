@@ -9,3 +9,10 @@ Date,Home,Away,PredictedWinner,Confidence,ActualWinner,Status
 2026-02-02,COL,DET,COL,0.95,DET,Wrong
 2026-02-02,UTA,VAN,UTA,0.91,UTA,Correct
 2026-02-02,CGY,TOR,TOR,0.78,TOR,Correct
+2026-02-03,NJD,CBJ,CBJ,0.73,,Pending
+2026-02-03,PHI,WSH,PHI,0.85,,Pending
+2026-02-03,CAR,OTT,OTT,0.74,,Pending
+2026-02-03,TBL,BUF,TBL,0.57,,Pending
+2026-02-03,NYI,PIT,NYI,0.68,,Pending
+2026-02-03,EDM,TOR,EDM,0.77,,Pending
+2026-02-03,ANA,SEA,ANA,0.83,,Pending
