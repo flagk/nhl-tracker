@@ -1,35 +1,22 @@
-# 🏒 NHL Game Predictor & Tracker
+# 🏒 Automated NHL Predictor
 
-A machine learning application that predicts daily NHL game outcomes using a Random Forest Classifier. This project features an automated data pipeline that fetches live stats from the official NHL API, generates predictions, and tracks historical accuracy in a persistent CSV log.
+This project uses Machine Learning (Random Forest) to predict daily NHL game outcomes. It runs automatically every morning via GitHub Actions.
 
-## 🚀 Project Overview
+## 📊 Live Performance
+![Model Accuracy](accuracy_plot.png)
 
-* **Goal:** Build a sustainable system to predict sports outcomes and validate model performance over time.
-* **Tech Stack:** Python, scikit-learn, pandas, NumPy, Requests (API), Excel (Dashboard).
-* **Model:** Random Forest Classifier (Ensemble Learning).
+## 🛠️ How It Works
+1. **Data Collection:** Fetches live stats from the NHL API.
+2. **Backtesting:** Trained on 2,500+ historical games using Walk-Forward Validation.
+3. **Automation:** A GitHub Action runs the script daily at 7:00 AM MST.
+4. **Self-Correction:** The model retrains itself every day using the latest game results.
 
-## 🧠 How It Works (The Machine Learning Logic)
+## 📂 Files
+* `nhl_tracker.py`: The main Python script (ETL + Training + Prediction).
+* `nhl_history.csv`: The historical training dataset.
+* `nhl_predictions_log.csv`: The daily log of correct/incorrect picks.
 
-This tool treats hockey prediction as a **binary classification problem** (Win vs. Loss).
-
-1.  **Data Ingestion:**
-    * Connects to the `api-web.nhle.com` endpoint to fetch real-time team statistics (Points, Goal Differential, L10 Record, etc.).
-2.  **Feature Engineering:**
-    * The model evaluates matchups based on *relative* differences rather than raw stats.
-    * **Key Features:** `Points Diff`, `Goal Differential Diff`, `Win % Diff`, `Last 10 Games Momentum`.
-3.  **Inference:**
-    * A Random Forest model calculates a "Win Probability" (Confidence Score).
-    * Predictions >55% confidence are flagged as "High Confidence."
-4.  **Validation Loop:**
-    * The system remembers past predictions. Every time the script runs, it checks yesterday's results to auto-grade the model as `Correct` or `Incorrect`, creating a feedback loop for accuracy tracking.
-
-## 🛠️ Installation & Setup
-
-### Prerequisites
-* Python 3.10+
-* pip (Python Package Manager)
-
-### 1. Clone the Repository
-```bash
-git clone [https://github.com/YOUR_USERNAME/nhl-predictor.git](https://github.com/YOUR_USERNAME/nhl-predictor.git)
-cd nhl-predictor
+## 🤖 Credits & Tools
+* **Engine:** Built with Python, Scikit-Learn, and Pandas.
+* **Development:** Code developed with the assistance of **Google Gemini**, serving as an AI pair programmer for debugging, optimization, and automation logic.
+* **Data Source:** NHL public API.
