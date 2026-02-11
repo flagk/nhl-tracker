@@ -33,3 +33,5 @@ Date,Home,Away,PredictedWinner,Confidence,ActualWinner,Status
 2026-02-05,WSH,NSH,NSH,0.62,WSH,Wrong
 2026-02-05,TBL,FLA,TBL,0.75,TBL,Correct
 2026-02-05,VGK,LAK,VGK,0.82,VGK,Correct
+2026-02-11,FIN,SVK,Unknown,0.0,,Pending
+2026-02-11,ITA,SWE,Unknown,0.0,,Pending
