@@ -51,7 +51,11 @@ Date,Home,Away,PredictedWinner,Confidence,ActualWinner,Status
 2026-02-15,FRA,CAN,Unknown,0.0,CAN,Wrong
 2026-02-15,LAT,DEN,Unknown,0.0,DEN,Wrong
 2026-02-15,GER,USA,Unknown,0.0,USA,Wrong
-2026-02-17,GER,FRA,Unknown,0.0,,Pending
-2026-02-17,SUI,ITA,Unknown,0.0,,Pending
-2026-02-17,CZE,DEN,Unknown,0.0,,Pending
-2026-02-17,SWE,LAT,Unknown,0.0,,Pending
+2026-02-17,GER,FRA,Unknown,0.0,GER,Wrong
+2026-02-17,SUI,ITA,Unknown,0.0,SUI,Wrong
+2026-02-17,CZE,DEN,Unknown,0.0,CZE,Wrong
+2026-02-17,SWE,LAT,Unknown,0.0,SWE,Wrong
+2026-02-18,SVK,GER,Unknown,0.0,,Pending
+2026-02-18,CAN,CZE,Unknown,0.0,,Pending
+2026-02-18,FIN,SUI,Unknown,0.0,,Pending
+2026-02-18,USA,SWE,Unknown,0.0,,Pending
