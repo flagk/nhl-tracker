@@ -63,3 +63,11 @@ Date,Home,Away,PredictedWinner,Confidence,ActualWinner,Status
 2026-02-20,USA,SVK,Unknown,0.0,USA,Wrong
 2026-02-21,SVK,FIN,Unknown,0.0,FIN,Wrong
 2026-02-22,CAN,USA,Unknown,0.0,USA,Wrong
+2026-02-25,NJD,BUF,NJD,0.77,,Pending
+2026-02-25,WSH,PHI,WSH,0.7517,,Pending
+2026-02-25,TBL,TOR,TOR,0.57,,Pending
+2026-02-25,DAL,SEA,DAL,0.52,,Pending
+2026-02-25,UTA,COL,COL,0.64,,Pending
+2026-02-25,VAN,WPG,VAN,0.61,,Pending
+2026-02-25,LAK,VGK,LAK,0.83,,Pending
+2026-02-25,ANA,EDM,EDM,0.61,,Pending
