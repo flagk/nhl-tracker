@@ -437,3 +437,6 @@ Date,Home,Away,PredictedWinner,Confidence,ActualWinner,Status
 2026-04-16,CGY,LAK,CGY,0.52,CGY,Correct
 2026-04-16,EDM,VAN,EDM,0.9,EDM,Correct
 2026-04-16,COL,SEA,COL,0.93,COL,Correct
+2026-04-18,CAR,OTT,OTT,0.8,,Pending
+2026-04-18,DAL,MIN,DAL,0.79,,Pending
+2026-04-18,PIT,PHI,PIT,0.81,,Pending
