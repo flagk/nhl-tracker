@@ -504,3 +504,4 @@ Date,Home,Away,PredictedWinner,Confidence,ActualWinner,Status
 2026-05-14,ANA,VGK,VGK,0.69,VGK,Correct
 2026-05-16,MTL,BUF,BUF,0.94,BUF,Correct
 2026-05-18,BUF,MTL,BUF,0.98,MTL,Wrong
+2026-05-20,COL,VGK,COL,0.9,,Pending
