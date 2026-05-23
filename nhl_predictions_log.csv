@@ -506,4 +506,5 @@ Date,Home,Away,PredictedWinner,Confidence,ActualWinner,Status
 2026-05-18,BUF,MTL,BUF,0.98,MTL,Wrong
 2026-05-20,COL,VGK,COL,0.9,VGK,Wrong
 2026-05-21,CAR,MTL,CAR,0.87,MTL,Wrong
-2026-05-22,COL,VGK,COL,0.9,,Pending
+2026-05-22,COL,VGK,COL,0.9,VGK,Wrong
+2026-05-23,CAR,MTL,CAR,0.84,,Pending
