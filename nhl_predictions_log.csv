@@ -510,4 +510,5 @@ Date,Home,Away,PredictedWinner,Confidence,ActualWinner,Status
 2026-05-23,CAR,MTL,CAR,0.84,CAR,Correct
 2026-05-24,VGK,COL,VGK,0.59,VGK,Correct
 2026-05-25,MTL,CAR,CAR,0.74,CAR,Correct
-2026-05-26,VGK,COL,VGK,0.55,,Pending
+2026-05-26,VGK,COL,VGK,0.55,VGK,Correct
+2026-05-27,MTL,CAR,CAR,0.8,,Pending
