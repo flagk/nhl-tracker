@@ -517,4 +517,4 @@ Date,Home,Away,PredictedWinner,Confidence,ActualWinner,Status
 2026-06-04,CAR,VGK,CAR,0.64,CAR,Correct
 2026-06-06,VGK,CAR,VGK,0.73,VGK,Correct
 2026-06-09,VGK,CAR,VGK,0.74,CAR,Wrong
-2026-06-11,CAR,VGK,CAR,0.61,,Pending
+2026-06-11,CAR,VGK,CAR,0.61,CAR,Correct
