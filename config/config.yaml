@@ -1,0 +1,44 @@
+# NHL Teams
+teams:
+  - ANA
+  - BOS
+  - BUF
+  - CGY
+  - CAR
+  - CHI
+  - COL
+  - DAL
+  - DET
+  - EDM
+  - FLA
+  - LA
+  - MIN
+  - MTL
+  - NSH
+  - NJ
+  - NYI
+  - NYR
+  - OTT
+  - PHI
+  - PIT
+  - SJ
+  - STL
+  - TB
+  - TOR
+  - VAN
+  - VGK
+  - WPG
+  - WSH
+
+# Model parameters
+model:
+  n_estimators: 100
+  random_state: 42
+  test_size: 0.2
+  recent_games_window: 5
+
+# Data files
+data:
+  history_file: "data/history/nhl_history.csv"
+  predictions_log: "data/logs/nhl_predictions_log.csv"
+  model_path: "data/models/nhl_model.pkl"

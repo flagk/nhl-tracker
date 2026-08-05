@@ -1,5 +1,5 @@
-requests
-pandas
-scikit-learn
-numpy
-matplotlib
+pandas==1.5.3
+scikit-learn==1.2.2
+matplotlib==3.7.1
+pyyaml==6.0
+joblib==1.2.0
