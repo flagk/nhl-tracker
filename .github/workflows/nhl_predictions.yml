@@ -28,6 +28,9 @@ jobs:
       - name: Generate performance chart
         run: python3.11 src/generate_chart.py
       
+      - name: Update README with latest stats
+        run: python3.11 src/update_readme.py
+      
       - name: Commit results
         run: |
           git config --global user.email "action@github.com"
