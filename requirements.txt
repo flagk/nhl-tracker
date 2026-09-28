@@ -10,3 +10,4 @@ lightgbm>=4.0
 xgboost>=2.0
 shap>=0.44
 pytest>=7
+tabulate>=0.9

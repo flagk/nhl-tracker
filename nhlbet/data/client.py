@@ -28,7 +28,7 @@ class NHLClient:
 
     def __init__(self, cache_dir: str | Path = "data/cache/raw", min_interval: float = 0.25,
                  retries: int = 4, timeout: float = 20.0, session: requests.Session | None = None,
-                 sleep: Callable[[float], None] = time.sleep) -> None:
+                 sleep: Callable[[float], None] = time.sleep, max_consecutive_failures: int = 3) -> None:
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.min_interval, self.retries, self.timeout = min_interval, retries, timeout
@@ -36,6 +36,8 @@ class NHLClient:
         self._sleep = sleep
         self._last = 0.0
         self.network_calls = 0
+        self.max_consecutive_failures = max_consecutive_failures
+        self._consecutive_failures = 0     # circuit breaker: a dead network must not stall a daily job for minutes
 
     def _path(self, url: str) -> Path:
         h = hashlib.sha1(url.encode()).hexdigest()
@@ -59,6 +61,11 @@ class NHLClient:
         cached = self._read(p, ttl)
         if cached is not None:
             return cached
+        if self._consecutive_failures >= self.max_consecutive_failures:
+            stale = self._read(p, None)
+            if stale is not None:
+                return stale
+            raise NHLAPIError(f"NHL API unreachable (circuit open after {self._consecutive_failures} failed requests): {url}")
         delay, last_err = 1.0, None
         for attempt in range(1, self.retries + 1):
             wait = self.min_interval - (time.time() - self._last)
@@ -72,6 +79,7 @@ class NHLClient:
                 last_err = e
             else:
                 if r.status_code == 200:
+                    self._consecutive_failures = 0
                     data = r.json()
                     p.parent.mkdir(parents=True, exist_ok=True)
                     tmp = p.with_suffix(".tmp")
@@ -87,6 +95,7 @@ class NHLClient:
             log.warning("attempt %d/%d failed for %s: %s", attempt, self.retries, url, last_err)
             self._sleep(delay)
             delay *= 2
+        self._consecutive_failures += 1
         # graceful fallback: a stale cache entry beats no data
         stale = self._read(p, None)
         if stale is not None:

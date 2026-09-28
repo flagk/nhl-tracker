@@ -1,0 +1,147 @@
+"""Recommendation/bet log: settle results, running performance (ROI, win rate, CLV, Brier, calibration), CSV export/restore.
+
+Everything in the log that cannot be re-fetched later (odds snapshots, recommendations) is exported to git-tracked CSVs
+and restored into a fresh database at the start of every run; the SQLite file itself is rebuildable cache.
+"""
+from __future__ import annotations
+
+import logging
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+from nhlbet.data.store import Store
+from nhlbet.models.calibration import brier, log_loss_, reliability_table
+from nhlbet.odds.clv import bet_clv, closing_consensus, summarize_clv
+from nhlbet.odds.consensus import consensus_snapshots
+from nhlbet.risk.bankroll import drawdown_stats, equity_curve, summarize_bets
+
+log = logging.getLogger(__name__)
+EXPORT_TABLES = {"recommendations": ["run_id", "game_id"], "odds_fetch_log": ["captured_at"], "goalie_confirmations": ["game_date", "team"]}
+
+
+def final_recommendations(store: Store) -> pd.DataFrame:
+    """The last recommendation made for each game (the one that would actually have been acted on)."""
+    r = store.df("SELECT * FROM recommendations")
+    if r.empty:
+        return r
+    return r.sort_values("run_at").groupby("game_id", as_index=False).tail(1).reset_index(drop=True)
+
+
+def resolved(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Final recommendations joined with results, profit and closing-line value. One row per resolved game."""
+    r = final_recommendations(store)
+    if r.empty:
+        return r
+    g = store.df("SELECT game_id, game_date AS gd, start_utc, home_win FROM games WHERE home_win IS NOT NULL")
+    d = r.merge(g, on="game_id", how="inner")
+    if d.empty:
+        return d
+    cons = consensus_snapshots(store) if cons is None else cons
+    d["close_home_prob"] = [closing_consensus(cons, gid, st) if len(cons) else None for gid, st in zip(d.game_id, d.start_utc)]
+    d["is_bet"] = (d.action == "BET") & (d.stake > 0)
+    d["bet_won"] = np.where(d.is_bet, ((d.side == "home") == (d.home_win == 1)).astype(float), np.nan)
+    d["profit"] = np.where(d.is_bet, np.where(d.bet_won == 1, d.stake * (d.decimal - 1), -d.stake), 0.0)
+    clv_rows = [bet_clv(s, dec, c) if (b and c is not None and not pd.isna(c)) else {"clv_ev": np.nan, "clv_prob_pts": np.nan}
+                for b, s, dec, c in zip(d.is_bet, d.side, d.decimal, d.close_home_prob)]
+    d["clv_ev"] = [x["clv_ev"] for x in clv_rows]
+    d["clv_prob_pts"] = [x["clv_prob_pts"] for x in clv_rows]
+    d["date"] = pd.to_datetime(d.game_date)
+    return d.sort_values("date").reset_index(drop=True)
+
+
+def performance(store: Store, start_bankroll: float = 1000.0, cons: pd.DataFrame | None = None) -> dict:
+    """Running metrics over all resolved games. Every number is out-of-sample: the recommendation existed before the game."""
+    d = resolved(store, cons)
+    out: dict = {"resolved_games": 0, "bets": summarize_bets(pd.DataFrame({"stake": [], "profit": [], "decimal": []}))}
+    if d.empty:
+        return {**out, "bankroll": start_bankroll, "note": "no resolved recommendations yet"}
+    y = d.home_win.astype(int).to_numpy()
+    p = d.p_model.astype(float).to_numpy()
+    out["resolved_games"] = int(len(d))
+    out["model"] = {"brier": brier(p, y), "log_loss": log_loss_(p, y), "accuracy": float(np.mean((p > 0.5) == y))}
+    m = d[d.close_home_prob.notna()]
+    if len(m) >= 20:
+        pc, ym = m.close_home_prob.astype(float).to_numpy(), m.home_win.astype(int).to_numpy()
+        out["vs_market"] = {"n": int(len(m)), "model_log_loss": log_loss_(m.p_model.astype(float), ym), "market_close_log_loss": log_loss_(pc, ym),
+                            "model_brier": brier(m.p_model.astype(float), ym), "market_close_brier": brier(pc, ym)}
+    if len(d) >= 50:
+        out["calibration"] = reliability_table(p, y, bins=min(8, len(d) // 25)).round(4).to_dict("records")
+    bets = d[d.is_bet]
+    out["bets"] = summarize_bets(bets[["stake", "profit", "decimal"]]) if len(bets) else out["bets"]
+    curve = equity_curve(bets[["date", "profit"]], start_bankroll) if len(bets) else pd.DataFrame()
+    out["bankroll"] = float(start_bankroll + bets.profit.sum())
+    out["drawdown"] = drawdown_stats(curve) if len(curve) else drawdown_stats(pd.DataFrame())
+    out["clv"] = summarize_clv(bets.clv_ev) if len(bets) else {"n": 0}
+    out["no_bet_rate"] = float(1 - d.is_bet.mean())
+    out["curve"] = curve
+    return out
+
+
+def plot_performance(store: Store, path: str | Path, start_bankroll: float = 1000.0) -> bool:
+    """Bankroll/drawdown, cumulative CLV and model-vs-market log loss over time. Returns False if there is nothing to plot."""
+    d = resolved(store)
+    if d.empty:
+        return False
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots(3, 1, figsize=(9, 9), sharex=True)
+    bets = d[d.is_bet]
+    if len(bets):
+        c = equity_curve(bets[["date", "profit"]], start_bankroll)
+        ax[0].plot(c.date, c.bankroll, color="#1565C0"); ax[0].fill_between(c.date, c.peak, c.bankroll, color="#C62828", alpha=0.25, label="drawdown")
+        ax[0].legend()
+        ax[1].plot(bets.date, bets.clv_ev.fillna(0).cumsum() / np.arange(1, len(bets) + 1), color="#2E7D32")
+    ax[0].set_ylabel("bankroll"); ax[0].set_title("Performance (out-of-sample, logged before each game)"); ax[0].grid(alpha=0.3)
+    ax[1].axhline(0, color="k", lw=0.8); ax[1].set_ylabel("running mean CLV (EV/$)"); ax[1].grid(alpha=0.3)
+    ll = -(d.home_win * np.log(d.p_model.clip(1e-6, 1)) + (1 - d.home_win) * np.log((1 - d.p_model).clip(1e-6, 1)))
+    ax[2].plot(d.date, ll.expanding().mean(), label="model", color="#1565C0")
+    if d.close_home_prob.notna().sum() > 20:
+        m = d.close_home_prob.astype(float).clip(1e-6, 1 - 1e-6)
+        mll = -(d.home_win * np.log(m) + (1 - d.home_win) * np.log(1 - m))
+        ax[2].plot(d.date, mll.expanding().mean(), label="market close", color="#EF6C00")
+    ax[2].axhline(0.6931, color="k", ls="--", lw=0.8, label="coin flip"); ax[2].set_ylabel("cumulative log loss"); ax[2].legend(); ax[2].grid(alpha=0.3)
+    fig.autofmt_xdate(); fig.tight_layout(); Path(path).parent.mkdir(parents=True, exist_ok=True); fig.savefig(path, dpi=120); plt.close(fig)
+    return True
+
+
+# ---------------------------------------------------------------- CSV export / restore (irreplaceable data lives in git)
+def export_logs(store: Store, root: str | Path = "data/logs") -> list[Path]:
+    root = Path(root); (root / "odds").mkdir(parents=True, exist_ok=True)
+    written = []
+    for table in EXPORT_TABLES:
+        df = store.df(f"SELECT * FROM {table}")
+        if len(df):
+            p = root / f"{table}.csv"; df.sort_values(list(EXPORT_TABLES[table])).to_csv(p, index=False); written.append(p)
+    snaps = store.df("SELECT * FROM odds_snapshots")
+    if len(snaps):
+        snaps["month"] = snaps.captured_at.str[:7]
+        for month, part in snaps.groupby("month"):
+            p = root / "odds" / f"{month}.csv"
+            part.drop(columns="month").sort_values(["captured_at", "event_id", "book", "market", "outcome"]).to_csv(p, index=False)
+            written.append(p)
+    bl = resolved(store)
+    if len(bl):
+        cols = ["game_date", "home", "away", "team", "side", "book", "decimal", "stake", "p_model", "p_adj", "p_market", "edge", "ev", "close_home_prob",
+                "clv_ev", "bet_won", "profit", "home_win", "model_version"]
+        p = root / "bet_log.csv"; bl[bl.is_bet][cols].to_csv(p, index=False); written.append(p)
+    return written
+
+
+def restore_logs(store: Store, root: str | Path = "data/logs") -> dict[str, int]:
+    root = Path(root); n: dict[str, int] = {}
+    for table, keys in EXPORT_TABLES.items():
+        p = root / f"{table}.csv"
+        if p.exists():
+            df = pd.read_csv(p, float_precision="round_trip").astype(object).where(lambda x: x.notna(), None)
+            n[table] = store.upsert(table, df.to_dict("records"), keys)
+    total = 0
+    for p in sorted((root / "odds").glob("*.csv")) if (root / "odds").exists() else []:
+        df = pd.read_csv(p, float_precision="round_trip").astype(object).where(lambda x: x.notna(), None)
+        total += store.upsert("odds_snapshots", df.to_dict("records"), ["captured_at", "event_id", "book", "market", "outcome", "point"])
+    if total:
+        n["odds_snapshots"] = total
+    return n

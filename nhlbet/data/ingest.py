@@ -42,6 +42,9 @@ def ingest_schedule(client: NHLClient, store: Store, season: int) -> int:
             payload = client.club_schedule_season(team, season)
         except NHLAPIError as e:
             log.error("schedule failed for %s %s: %s", team, season, e)
+            if "circuit open" in str(e):
+                log.error("NHL API unreachable; skipping the rest of season %s", season)
+                break
             continue
         rows = parse_schedule_games(payload)
         for r in rows:

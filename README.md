@@ -1,214 +1,115 @@
-# NHL Prediction Model
+# NHL game-outcome model: calibrated probabilities, market prices, risk-managed staking
 
-> **⚠️ Correction (Phase 1 audit):** the "55.8% accuracy / 11.69% ROI / proven edge" figures below
-> are **not valid evidence of betting edge**. They assume even-money payouts with no vig and no real
-> odds, the model does no better than always picking the home team, and its probabilities are
-> overconfident. See [AUDIT.md](AUDIT.md) for the corrected analysis. This project is being rebuilt.
-> Research and educational use only; no model guarantees profit.
+> **Disclaimer.** This is a **research and educational project**. No model guarantees profit, and back-tested or past results
+> do not predict future results. Sports betting carries a real risk of loss: only stake money you can afford to lose, and check
+> that betting is legal where you live. Nothing in this repository is financial advice.
 
-A production-grade machine learning system for predicting NHL game outcomes with walk-forward backtesting and continuous learning.
+## Honest status
 
-## Overview
+| | |
+|---|---|
+| **Has an edge over the betting market been shown?** | **No.** The model has never been compared to real closing lines (none were available). Treat it as a research system that *measures* whether it has edge, not one that has it. |
+| **What the model can do (walk-forward, 1,856 games, score-only data)** | Log loss 0.6824 vs 0.6889 for "always the base rate" (significantly better) and 0.6841 for plain Elo (not distinguishable). A coin flip is 0.6931. |
+| **The original README's "55.8% win rate / +11.69% ROI / proven edge"** | **Not valid.** It assumed even-money payouts (no odds, no vig), had corrupted features, and did no better than always picking the home team. See [AUDIT.md](AUDIT.md). |
+| **Most likely daily output** | **"No bet."** By design. |
 
-This model predicts NHL game winners using 11 engineered features including momentum, volatility, rest days, and home/away splits. Walk-forward backtesting on 2,987 historical games demonstrates a **55.8% win rate with 11.69% ROI** — proving a measurable edge over random guessing.
+Full numbers, protocol and caveats: [docs/RESULTS.md](docs/RESULTS.md) · [reports/model_comparison.md](reports/model_comparison.md).
 
-### Key Results
+## What's here
 
-| Metric | Value |
-|--------|-------|
-| Test Accuracy | 55.8% |
-| Games Backtested | 1,805 |
-| Profit (100 bets) | $21,100 |
-| ROI | 11.69% |
-| Edge vs Random | +5.8% |
-
-## Architecture
-src/
-├── fetcher.py # NHL data retrieval
-├── feature_engineer.py # 11 predictive features
-├── trainer.py # RandomForest with time-series CV
-├── backtester_realistic.py # Walk-forward validation
-├── predictor.py # Live game predictions
-├── tracker.py # Performance logging
-├── generate_chart.py # Performance visualization
-└── main.py # Pipeline orchestrator
-## Features (11 Total)
-
-1. **PPG Difference** — Points per game differential
-2. **Goal Differential** — Goals for/against differential
-3. **Recent Form** — Last 5 games momentum
-4. **Win Streak** — Current streak
-5. **Home/Away Split** — Home court advantage
-6. **Rest Advantage** — Days of rest
-7. **Win Percentage** — Historical win % gap
-8. **Goals For/Against** — Offensive/defensive strength
-9-11. **Recent metrics** — Trend analysis
-
-## Methodology
-
-### Walk-Forward Backtesting (No Look-Ahead Bias)
-
-Traditional backtesting is unrealistic:
-- Train on ALL history
-- Test on SAME history
-- Model "cheats" by seeing the future
-
-**Walk-forward validation is correct:**
-1. Train on games 1-500
-2. Test on games 501-600 (unseen)
-3. Train on games 1-600
-4. Test on games 601-700
-5. Repeat...
-
-This simulates real prediction: train on past, test on future.
-
-### Time-Series Cross-Validation
-
-- Respects chronological order
-- Prevents temporal leakage
-- Realistic performance estimates
-
-### RandomForest Classifier
-
-- 100 trees, no depth limit
-- Handles non-linear patterns
-- Built-in feature importance
-- Fast training and inference
-
-## Results
-
-| Approach | Accuracy | ROI |
-|----------|----------|-----|
-| Random guessing | 50.0% | 0% |
-| **This model** | **55.8%** | **11.69%** |
-
-**Proven edge:** 55.8% win rate beats both random chance and professional baselines.
+```
+nhlbet/
+  data/       NHL API client (cache, retries, circuit breaker) -> parsers -> SQLite store (idempotent upserts), xG model, goalie inputs
+  features/   leak-free as-of-date feature builder (Elo, form, rest/travel, xG/Corsi/PDO, special teams, goalies, lineup, situational, market)
+  analysis/   correlation pruning, walk-forward permutation importance, SHAP
+  models/     home-rate, Elo-only, logistic, Random Forest, LightGBM, XGBoost; stacking/weighted ensembles; Platt/isotonic/online calibration;
+              time-series-CV tuning; walk-forward engine; model bundle
+  odds/       The Odds API client (quota-aware), odds math (Shin/proportional de-vig), best price, edge/EV, append-only snapshots, CLV
+  risk/       fractional Kelly, caps, shrinkage toward the market, "no bet" policy, bankroll/drawdown, Monte Carlo risk of ruin
+  report/     slate builder, markdown daily report, bet log (settlement, ROI, CLV, Brier, calibration), CSV export/restore
+  registry.py model registry;  monitor.py drift checks;  train.py retrain-if-needed;  pipeline.py the daily job
+scripts/      daily.py  fetch_odds.py  train.py  backtest.py  tune.py  select_features.py  risk_sim.py  check_api.py
+tests/        108 tests (no-leakage property tests, parsers, ingestion, odds math, Kelly, risk invariants, reports, workflows)
+docs/         FEATURES.md  ODDS.md  RISK.md  RESULTS.md      AUDIT.md = audit of the original pipeline
+```
 
 ## Setup
 
-### Requirements
-
 ```bash
-pip install -r requirements.txt
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt && pip install -e .
+python -m pytest -q                                   # 108 tests, ~30 s
 ```
 
-### Historical Data
-
-Requires `data/history/nhl_history.csv`:
-- `Date` (YYYY-MM-DD)
-- `Home`, `Away` (team abbreviations)
-- `HomeScore`, `AwayScore` (goals)
-- `Winner` (team that won)
-
-## Usage
-
-### Train & Backtest
-
+### 1. Data
 ```bash
-python3.11 test_realistic.py
+python scripts/check_api.py --season 20242025 --team BOS --n 5       # validates the parsers against the LIVE NHL API first
+python -m nhlbet.data.ingest --seasons 20232024 20242025 20252026    # backfill (cached + idempotent; first run takes a while)
 ```
+Without network access the daily job bootstraps from `data/history/nhl_history.csv` (2,987 games, 28 of 32 teams, scores only). That is enough
+to run everything except the advanced/goalie/lineup features, which are NaN on that file.
 
-Output shows win rate and ROI on held-out test data.
+> The NHL API parsers follow the documented payload shape and are tested against hand-built fixtures; **they have not been validated against the
+> live API from the development sandbox** (blocked by network policy). `scripts/check_api.py` (also the first step of the backfill workflow) cross-checks
+> parsed play-by-play against official scores and shot totals and fails loudly if reality differs.
 
-### Live Predictions
-
-```python
-from src.main import NHLPredictorPipeline
-
-pipeline = NHLPredictorPipeline()
-history = pipeline.load_history()
-
-pred = pipeline.predictor.predict_game(
-    home='NYR', away='BOS', 
-    current_history=history, 
-    game_date='2026-02-03'
-)
-
-print(f"Pick: {pred['predicted_winner']}")
-print(f"Confidence: {pred['confidence_pct']}%")
+### 2. Research pipeline (feature selection, tuning, walk-forward backtest, model)
+```bash
+python scripts/select_features.py --selection-end 2024-06-30
+python scripts/tune.py --tune-end 2024-06-30
+python scripts/backtest.py --eval-start 2024-10-01     # writes reports/model_comparison.md + reliability.png
+python scripts/train.py --force                        # trains, drift-checks, registers a version
 ```
+Selection and tuning only see games up to `--selection-end`; evaluation starts later, so nothing is chosen on the data it is judged on.
 
-## Automation
+### 3. Odds API key (optional but needed for any recommendation)
+1. Sign up for a free key at <https://the-odds-api.com> (500 credits/month; one moneyline call = 1 credit).
+2. Locally: `export ODDS_API_KEY=<your key>`. **Never commit it.** The code reads it only from the environment and never writes it to disk or logs.
+3. GitHub Actions: *Settings -> Secrets and variables -> Actions -> New repository secret* named `ODDS_API_KEY`.
+   (Optional variable `BANKROLL`, default 1000.)
 
-GitHub Actions runs daily:
-1. Retrain model on latest data
-2. Make predictions for today's games
-3. Generate performance chart
-4. Update README stats
-5. Auto-commit results
+Without a key every game is reported as "no odds -> no bet". Details, quota plan and failure behaviour: [docs/ODDS.md](docs/ODDS.md).
 
-## Performance Tracking
+### 4. Daily report
+```bash
+python scripts/daily.py --run-type morning     # refresh data, retrain if new games, fetch odds, settle, report
+python scripts/daily.py --run-type late        # later in the day: confirmed goalies + fresh odds
+```
+Output: `reports/latest.md`, `reports/daily/<date>-<run>.md`, `reports/performance.png`, and the logs in `data/logs/`.
+Each game lists teams, goalies (confirmed/probable), model win probability, best price and book, no-vig market probability, edge, EV per $1,
+stake and a plain-language reason. Confirmed goalies: add rows to `data/manual/confirmed_goalies.csv` (`date,team,name`); the free NHL API does
+not publish them, so this is an input, not automatic.
 
-![Performance Chart](performance_chart.png)
+## Automation (GitHub Actions)
+| Workflow | When | Does |
+|---|---|---|
+| `daily.yml` | ~10:30 ET **and** ~17:15 ET | morning: refresh data, retrain if there are new games, fetch odds, report, commit. Late: rerun after starting goalies are usually confirmed. |
+| `odds-close.yml` | ~18:45 and ~21:45 ET | fetch-only odds snapshots for closing-line value |
+| `backfill.yml` | manual | validate parsers on the live API (gate), backfill seasons, reselect features, retune, backtest, retrain |
+| `ci.yml` | every push | tests |
 
-Chart updates daily showing:
-- **Rolling win rate** (should stay >55%)
-- **Cumulative profit** (should trend up)
+The SQLite database is rebuildable cache (`actions/cache`); data that can never be re-fetched (odds snapshots, recommendations) is committed as
+append-only CSV in `data/logs/` and restored at the start of every run. The first run after setup should be `backfill.yml`.
 
-## Key Design Decisions
+## How the model is judged
+1. **Log loss / Brier / calibration** out-of-sample and time-ordered (no random splits anywhere); calibration curves in `reports/reliability.png`.
+2. **Closing-line value (CLV)** and log loss **against the market close**, as odds snapshots accumulate: the only fast, trustworthy signal of real edge.
+3. ROI last: with ~1-3% edges you need thousands of bets to tell skill from luck (about 6,900 bets to detect a true 3% ROI at 80% power).
 
-**1. Walk-Forward Over Standard Backtesting**
-- Prevents look-ahead bias
-- Proves real edge exists
-- Realistic performance metrics
+Drift monitor (`nhlbet/monitor.py`): each retrain compares recent log loss/calibration to history and to Elo, and PSI on features. `ALERT` suspends all
+recommendations; `WARN` is shown at the top of the report. (At the time of writing it reports `WARN`: the last 200 games show no skill.)
 
-**2. 11 Features Over Many**
-- Interpretable (explainable to stakeholders)
-- Non-redundant (low correlation)
-- Proven predictive value
+## Safety rails
+Quarter Kelly, 2% per-bet cap, 5% daily cap, max 5 bets/day, 3% minimum raw edge (4% with unconfirmed goalies), model probability shrunk toward the
+market (large gaps distrusted, >12 points = "model error"), no bets on stale odds or when the model is unhealthy, early-season guard. See [docs/RISK.md](docs/RISK.md),
+including a Monte Carlo of how often even a *real* 3% edge finishes a 500-bet stretch down (40%).
 
-**3. RandomForest Over Deep Learning**
-- Interpretable feature importance
-- Fast training
-- Works with smaller datasets
-- No hyperparameter tuning needed
-
-**4. Time-Series CV Over Random Split**
-- Respects temporal order
-- Prevents future data leakage
-- Realistic validation
-
-## Limitations
-
-- Daily data only (no intraday)
-- No injury/roster integration
-- No strength-of-schedule weighting
-- No playoff adjustments
-
-## Future Work
-
-- [ ] Injury report integration
-- [ ] Strength of schedule weighting
-- [ ] Player-level statistics
-- [ ] Ensemble methods
-- [ ] Real-time updates
-
-## Tech Stack
-
-- **Data**: Pandas, SQLite
-- **ML**: scikit-learn (RandomForest)
-- **Automation**: GitHub Actions
-- **Visualization**: Matplotlib
-- **Python**: 3.11+
-
-## Repository Stats
-
-- 2,987 historical games
-- 1,805 predictions tested
-- 11 engineered features
-- 5-fold time-series CV
-- **55.8% accuracy on unseen data**
-- **11.69% ROI proven**
-
-## Author
-
-Built as a portfolio project demonstrating:
-- End-to-end ML pipeline design
-- Production Python code
-- Walk-forward backtesting
-- Automated CI/CD
-- Real performance measurement
+## Known limitations
+- No real historical odds: backtest ROI is reported as scenarios only; live CLV will accumulate from the first fetched snapshot.
+- Advanced-metric, goaltending and lineup features are implemented and tested but untested on real API data; the score-only model is at Elo level.
+- No official injury feed in the free API; lineup features are off by default. Confirmed goalies are a manual input.
+- Playoffs are excluded from training/evaluation. Only moneylines are bet (puck line/totals are stored, not modelled).
+- Playoff-race (`cutoff_gap`) and rivalry features are approximations (see docs/FEATURES.md).
 
 ## License
-
 MIT

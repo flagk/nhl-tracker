@@ -137,7 +137,8 @@ class FeatureBuilder:
         self._season_start = 0
 
     # ---------------------------------------------------------------------------------------
-    def build(self, tables: dict[str, pd.DataFrame], market: pd.DataFrame | None = None) -> pd.DataFrame:
+    def build(self, tables: dict[str, pd.DataFrame], market: pd.DataFrame | None = None,
+              starter_override: dict | None = None) -> pd.DataFrame:
         cfg = self.cfg
         games = tables["games"].sort_values(["game_date", "game_id"]).reset_index(drop=True)
         if games.empty:
@@ -153,6 +154,8 @@ class FeatureBuilder:
                 appear[r.game_id].append(r)
                 if r.started:
                     starter_of[(r.game_id, r.team)] = r.player_id
+        if starter_override:  # confirmed starters for upcoming games: {(game_id, team): goalie_id}; identity only
+            starter_of.update({k: v for k, v in starter_override.items() if k not in starter_of})
         skaters_of: dict[tuple[int, str], dict] = defaultdict(dict)
         if len(sk):
             for r in sk.itertuples(index=False):
@@ -468,7 +471,8 @@ class FeatureBuilder:
 GROUPS_FLAT = [b for bs in GROUPS.values() for b in bs]
 
 
-def build_features(store, config: BuilderConfig | None = None, market: pd.DataFrame | None = None) -> pd.DataFrame:
+def build_features(store, config: BuilderConfig | None = None, market: pd.DataFrame | None = None,
+                   starter_override: dict | None = None) -> pd.DataFrame:
     """Convenience: load tables from a ``Store`` and build the full feature frame."""
     from nhlbet.data.loaders import load_tables
-    return FeatureBuilder(config).build(load_tables(store), market)
+    return FeatureBuilder(config).build(load_tables(store), market, starter_override)

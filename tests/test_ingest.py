@@ -106,3 +106,15 @@ def test_season_teams_handles_relocation():
     assert "ARI" in ingest.season_teams(20232024) and "UTA" not in ingest.season_teams(20232024)
     assert "UTA" in ingest.season_teams(20242025) and "ARI" not in ingest.season_teams(20242025)
     assert len(ingest.season_teams(20242025)) == 32
+
+
+def test_circuit_breaker_stops_hammering_a_dead_api(tmp_path):
+    sess = FakeSession({"/v1/": [FakeResp(503)]})
+    c = NHLClient(cache_dir=tmp_path / "raw", min_interval=0, retries=2, session=sess, sleep=lambda s: None, max_consecutive_failures=2)
+    for i in range(2):
+        with pytest.raises(NHLAPIError):
+            c.get(f"/v1/a{i}")
+    calls = len(sess.calls)
+    with pytest.raises(NHLAPIError, match="circuit open"):
+        c.get("/v1/a3")
+    assert len(sess.calls) == calls                                   # no further network attempts

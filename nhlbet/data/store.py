@@ -57,6 +57,18 @@ CREATE INDEX IF NOT EXISTS ix_odds_game ON odds_snapshots(game_id, captured_at);
 CREATE TABLE IF NOT EXISTS odds_fetch_log (
     captured_at TEXT PRIMARY KEY, ok INTEGER, source TEXT, remaining INTEGER, used INTEGER, events INTEGER, note TEXT
 );
+-- every model run's verdict on every game (bets AND no-bets): needed for calibration, Brier and honest ROI
+CREATE TABLE IF NOT EXISTS recommendations (
+    run_id TEXT NOT NULL, run_at TEXT NOT NULL, run_type TEXT, game_id INTEGER NOT NULL, game_date TEXT, home TEXT, away TEXT,
+    home_goalie TEXT, away_goalie TEXT, goalie_status TEXT, model_version TEXT, p_model REAL, p_adj REAL, p_market REAL,
+    p_stack_raw REAL, action TEXT, side TEXT, team TEXT, book TEXT, decimal REAL, stake REAL, edge REAL, ev REAL,
+    reasons TEXT, odds_captured_at TEXT, odds_stale INTEGER, model_status TEXT,
+    PRIMARY KEY (run_id, game_id)
+);
+CREATE TABLE IF NOT EXISTS goalie_confirmations (
+    game_date TEXT NOT NULL, team TEXT NOT NULL, player_id INTEGER, name TEXT, source TEXT, captured_at TEXT,
+    PRIMARY KEY (game_date, team)
+);
 CREATE TABLE IF NOT EXISTS ingest_log (
     game_id INTEGER PRIMARY KEY, stage TEXT, ok INTEGER, note TEXT, ts TEXT
 );

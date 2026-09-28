@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from nhlbet.data.store import Store
 from nhlbet.odds.client import OddsAPIError, OddsClient
 from nhlbet.odds.snapshots import record_fetch
+from nhlbet.report.betlog import export_logs, restore_logs
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--db", default="data/nhl.db")
@@ -32,6 +33,8 @@ except OddsAPIError as e:
     print(f"ERROR: {e}", file=sys.stderr)
     sys.exit(2)
 store = Store(a.db)
+restore_logs(store)                                   # so the append-only CSVs and the DB agree
 n = record_fetch(store, f, ",".join(a.markets))
+export_logs(store)                                    # irreplaceable snapshots are committed as CSV by CI
 print(f"{len(f.events)} events, {n} price rows stored | source={f.source}{' (STALE)' if f.stale else ''} | "
       f"credits remaining={f.remaining} used={f.used}")

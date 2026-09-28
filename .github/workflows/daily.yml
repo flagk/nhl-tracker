@@ -1,0 +1,70 @@
+name: Daily NHL report
+# Research/education only - no guarantee of profit. Stake only money you can afford to lose.
+on:
+  schedule:
+    - cron: "30 14 * * *"   # morning run: refresh data, retrain if new games, fetch odds, report   (~10:30 ET)
+    - cron: "15 21 * * *"   # late run: after starting goalies are usually confirmed, refresh odds + report (~17:15 ET)
+  workflow_dispatch:
+    inputs:
+      run_type:
+        description: "morning or late"
+        default: "morning"
+      date:
+        description: "YYYY-MM-DD (blank = today, US/Eastern)"
+        default: ""
+
+concurrency:
+  group: nhl-data          # never let two jobs write the log files at once
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e .
+
+      - name: Restore database + raw API cache (rebuildable; irreplaceable logs live in git under data/logs)
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/nhl.db
+            data/cache
+          key: nhl-data-${{ github.run_id }}
+          restore-keys: nhl-data-
+
+      - name: Choose run type
+        id: rt
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            if [ "${{ github.event.schedule }}" = "15 21 * * *" ]; then echo "type=late" >> "$GITHUB_OUTPUT"; else echo "type=morning" >> "$GITHUB_OUTPUT"; fi
+          else
+            echo "type=${{ github.event.inputs.run_type || 'morning' }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run daily job
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}      # optional: without it odds are disabled and every game is "no bet"
+          BANKROLL: ${{ vars.BANKROLL || '1000' }}
+        run: |
+          DATE_ARG=""
+          if [ -n "${{ github.event.inputs.date }}" ]; then DATE_ARG="--date ${{ github.event.inputs.date }}"; fi
+          python scripts/daily.py --run-type "${{ steps.rt.outputs.type }}" $DATE_ARG
+
+      - name: Commit results
+        run: |
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A reports data/logs data/models
+          if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+          git commit -m "Daily ${{ steps.rt.outputs.type }} run $(date -u +%F)"
+          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push && exit 0; sleep 5; done
+          exit 1

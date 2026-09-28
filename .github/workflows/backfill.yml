@@ -1,0 +1,60 @@
+name: Backfill data and refresh research (manual)
+# Run this ONCE after setup (and whenever you want to re-tune). It first validates the NHL API parsers against the live API
+# and stops if they do not match reality, then backfills seasons, re-selects features, re-tunes, re-runs the walk-forward
+# backtest and retrains. Long-running (tens of minutes to a few hours the first time; later runs reuse the cache).
+on:
+  workflow_dispatch:
+    inputs:
+      seasons:
+        description: "Seasons to ingest"
+        default: "20232024 20242025 20252026"
+      selection_end:
+        description: "Feature selection/tuning use games up to this date; evaluation starts later"
+        default: "2024-06-30"
+      eval_start:
+        default: "2024-10-01"
+
+concurrency:
+  group: nhl-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e .
+      - uses: actions/cache@v4
+        with:
+          path: |
+            data/nhl.db
+            data/cache
+          key: nhl-data-${{ github.run_id }}
+          restore-keys: nhl-data-
+      - name: Validate parsers against the live NHL API (gate)
+        run: python scripts/check_api.py --season 20242025 --team BOS --n 5
+      - name: Backfill
+        run: python -m nhlbet.data.ingest --seasons ${{ github.event.inputs.seasons }}
+      - name: Feature selection, tuning, walk-forward backtest, retrain
+        run: |
+          python scripts/select_features.py --selection-end "${{ github.event.inputs.selection_end }}"
+          python scripts/tune.py --tune-end "${{ github.event.inputs.selection_end }}"
+          python scripts/backtest.py --eval-start "${{ github.event.inputs.eval_start }}" --tune-end "${{ github.event.inputs.selection_end }}"
+          python scripts/train.py --force || [ $? -eq 3 ]   # exit 3 = drift ALERT (recorded, not a failure of the job)
+      - name: Commit research outputs
+        run: |
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add reports data/models
+          if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+          git commit -m "Backfill and research refresh $(date -u +%F)"
+          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push && exit 0; sleep 5; done
+          exit 1

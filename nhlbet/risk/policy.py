@@ -1,6 +1,6 @@
 """Bet selection and sizing. "No bet" is the default and the common outcome - picks are never forced.
 
-Pipeline per game: both sides' best price/market probability come from ``nhlbet.odds.edge``. Then
+Pipeline per game (after the model-health, early-season and odds-availability guards): both sides' best price/market probability come from ``nhlbet.odds.edge``. Then
 
  1. hard screens on the RAW edge (model prob - no-vig market prob) and other guards -> otherwise NO_BET, with reasons
  2. shrink the model probability toward the market (bigger disagreement -> less trust)
@@ -36,6 +36,7 @@ class RiskConfig:
     trust_d0: float = 0.06
     min_stake: float = 1.0
     allow_stale_odds: bool = False
+    min_games_played: int = 10             # early-season sample-size guard: skip if either team has played fewer games
 
 
 @dataclass
@@ -88,6 +89,9 @@ def recommend_game(game_id, home: str, away: str, quotes: Mapping[str, SideQuote
     rec = Recommendation(game_id, home, away)
     if ctx.get("model_status") == "ALERT":
         rec.reasons.append("model health check is ALERT (performance drift) - recommendations suspended")
+        return rec
+    if ctx.get("games_played_min") is not None and ctx["games_played_min"] < cfg.min_games_played:
+        rec.reasons.append(f"early-season sample size: a team has only played {int(ctx['games_played_min'])} games (< {cfg.min_games_played})")
         return rec
     if not quotes:
         rec.reasons.append("no usable odds available")
