@@ -56,6 +56,7 @@ class NHLPredictorPipeline:
             return pd.DataFrame()
         
         history = pd.read_csv(history_path)
+        history['Date'] = pd.to_datetime(history['Date'])
         print(f"✅ Loaded {len(history)} historical games")
         return history
     
