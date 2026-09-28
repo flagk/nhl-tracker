@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | **Has an edge over the betting market been shown?** | **No.** The model has never been compared to real closing lines (none were available). Treat it as a research system that *measures* whether it has edge, not one that has it. |
-| **What the model can do (walk-forward, 1,856 games, score-only data)** | Log loss 0.6824 vs 0.6889 for "always the base rate" (significantly better) and 0.6841 for plain Elo (not distinguishable). A coin flip is 0.6931. |
+| **What the model can do (walk-forward, 1,492 out-of-sample games with calibration history, score-only data)** | Log loss 0.6824 vs 0.6889 for "always the base rate" (significantly better) and 0.6841 for plain Elo (not distinguishable). A coin flip is 0.6931. |
 | **The original README's "55.8% win rate / +11.69% ROI / proven edge"** | **Not valid.** It assumed even-money payouts (no odds, no vig), had corrupted features, and did no better than always picking the home team. See [AUDIT.md](AUDIT.md). |
 | **Most likely daily output** | **"No bet."** By design. |
 
