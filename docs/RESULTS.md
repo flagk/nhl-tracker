@@ -58,3 +58,9 @@ Paired tests (per-game log loss, week-cluster bootstrap):
 - 1,492-1,856 games cannot resolve differences smaller than ~0.005 log loss.
 - Feature selection on ~1,080 games is unstable: `d_sos10` was kept with a sign that contradicts intuition
   (see `reports/feature_importance.csv`); treat the kept set as provisional until refit on full API data.
+
+## Phase 5: staking risk (`docs/RISK.md`)
+Monte Carlo, 3% claimed edge at ~1.95 odds, 1% stakes, 500 bets: with **no** real edge 87% of paths finish down (median $784
+from $1,000); with the full edge 40% still finish down. Staking is deliberately small and gated behind raw-edge >= 3%,
+shrinkage toward the market, a 12-point "model error" screen, and a drift-monitor kill switch. Because the model has not
+been shown to beat the market (Phase 3), expect the policy to output **mostly "no bet"**; that is the intended behaviour.
