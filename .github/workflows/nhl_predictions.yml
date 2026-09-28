@@ -1,8 +1,7 @@
+# DISABLED (Phase 2): legacy workflow superseded by the rebuilt pipeline (Phase 6). Manual trigger only.
 name: Daily NHL Predictions & Model Update
 
 on:
-  schedule:
-    - cron: '14 23 * * *'  # 6:14 PM ET daily
   workflow_dispatch:
 
 jobs:

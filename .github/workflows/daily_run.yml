@@ -1,9 +1,7 @@
+# DISABLED (Phase 2): legacy workflow superseded by the rebuilt pipeline (Phase 6). Manual trigger only.
 name: Daily NHL Predictions
 
 on:
-  schedule:
-    # Runs at 14:00 UTC (which is 7:00 AM MST)
-    - cron: '0 14 * * *'
   workflow_dispatch: # Allows you to click a button to run it manually
 
 permissions:
