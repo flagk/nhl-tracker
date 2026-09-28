@@ -46,6 +46,17 @@ CREATE TABLE IF NOT EXISTS shots (
     x REAL, y REAL, shot_type TEXT, kind TEXT, is_goal INTEGER, ev INTEGER, goalie_id INTEGER,
     xg REAL, PRIMARY KEY (game_id, event_id)
 );
+-- every odds observation we ever capture; nothing is overwritten (needed for opening line and CLV)
+CREATE TABLE IF NOT EXISTS odds_snapshots (
+    captured_at TEXT NOT NULL, event_id TEXT NOT NULL, commence_time TEXT, home TEXT, away TEXT,
+    book TEXT NOT NULL, market TEXT NOT NULL, outcome TEXT NOT NULL, point REAL NOT NULL DEFAULT 0,
+    price REAL NOT NULL, book_updated TEXT, game_id INTEGER,
+    PRIMARY KEY (captured_at, event_id, book, market, outcome, point)
+);
+CREATE INDEX IF NOT EXISTS ix_odds_game ON odds_snapshots(game_id, captured_at);
+CREATE TABLE IF NOT EXISTS odds_fetch_log (
+    captured_at TEXT PRIMARY KEY, ok INTEGER, source TEXT, remaining INTEGER, used INTEGER, events INTEGER, note TEXT
+);
 CREATE TABLE IF NOT EXISTS ingest_log (
     game_id INTEGER PRIMARY KEY, stage TEXT, ok INTEGER, note TEXT, ts TEXT
 );

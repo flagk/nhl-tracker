@@ -92,3 +92,20 @@ def tz_shift(frm: str, to: str) -> int:
     """Signed time-zone hours crossed travelling from one arena to another."""
     tf, tt = TEAMS.get(canon(frm)), TEAMS.get(canon(to))
     return (tt.tz - tf.tz) if tf and tt else 0
+
+
+def _norm(name: str) -> str:
+    import re
+    import unicodedata
+    n = unicodedata.normalize("NFKD", str(name)).encode("ascii", "ignore").decode().lower()
+    return re.sub(r"[^a-z0-9]", "", n)
+
+
+_NAME_INDEX = {_norm(t.name): t.abbrev for t in _T}
+_NAME_INDEX.update({_norm(n): "UTA" for n in ("Utah Hockey Club", "Utah Mammoth", "Utah")})
+_NAME_INDEX.update({_norm("Arizona Coyotes"): "ARI", _norm("Montreal Canadiens"): "MTL", _norm("St Louis Blues"): "STL"})
+
+
+def team_from_name(name: str) -> str | None:
+    """Odds-feed team name ('Montréal Canadiens', 'St Louis Blues', 'Utah Mammoth') -> abbreviation, else None."""
+    return _NAME_INDEX.get(_norm(name))

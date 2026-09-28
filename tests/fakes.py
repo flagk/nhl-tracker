@@ -60,8 +60,9 @@ class FakeSession:
     def __init__(self, routes):
         self.routes, self.calls = routes, []
 
-    def get(self, url, timeout=None):
+    def get(self, url, timeout=None, params=None):
         self.calls.append(url)
+        self.params = params
         for frag, val in self.routes.items():
             if frag in url:
                 if isinstance(val, list):
@@ -72,3 +73,16 @@ class FakeSession:
                     raise r
                 return r
         return FakeResp(404, {})
+
+
+def odds_event(eid="e1", home="Boston Bruins", away="Toronto Maple Leafs", commence="2023-10-11T23:00:00Z", books=None, extra_markets=False):
+    """Odds API v4 event. books: [(key, home_dec, away_dec, last_update)]."""
+    books = books or [("bookA", 1.80, 2.10, "2023-10-11T15:00:00Z"), ("bookB", 1.87, 2.00, "2023-10-11T15:00:00Z")]
+    out = []
+    for key, h, a, upd in books:
+        markets = [{"key": "h2h", "last_update": upd, "outcomes": [{"name": home, "price": h}, {"name": away, "price": a}]}]
+        if extra_markets:
+            markets += [{"key": "spreads", "last_update": upd, "outcomes": [{"name": home, "price": 2.2, "point": -1.5}, {"name": away, "price": 1.7, "point": 1.5}]},
+                        {"key": "totals", "last_update": upd, "outcomes": [{"name": "Over", "price": 1.9, "point": 6.5}, {"name": "Under", "price": 1.9, "point": 6.5}]}]
+        out.append({"key": key, "title": key, "last_update": upd, "markets": markets})
+    return {"id": eid, "sport_key": "icehockey_nhl", "commence_time": commence, "home_team": home, "away_team": away, "bookmakers": out}
