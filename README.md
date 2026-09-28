@@ -1,5 +1,11 @@
 # NHL Prediction Model
 
+> **⚠️ Correction (Phase 1 audit):** the "55.8% accuracy / 11.69% ROI / proven edge" figures below
+> are **not valid evidence of betting edge**. They assume even-money payouts with no vig and no real
+> odds, the model does no better than always picking the home team, and its probabilities are
+> overconfident. See [AUDIT.md](AUDIT.md) for the corrected analysis. This project is being rebuilt.
+> Research and educational use only; no model guarantees profit.
+
 A production-grade machine learning system for predicting NHL game outcomes with walk-forward backtesting and continuous learning.
 
 ## Overview
