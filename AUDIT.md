@@ -1,6 +1,7 @@
 # Phase 1 Audit: legacy NHL prediction pipeline
 
-Scope: the code at commit `7d0c7a1` (Random Forest, 11 features, `RealisticBacktester`).
+Scope: the code at commit `7d0c7a1` (Random Forest, 11 features, `RealisticBacktester`). That code was
+replaced in Phases 2-3; `audit/reproduce_legacy.py` explains how to check it out and re-run it.
 Everything below is reproducible with the scripts in `audit/`:
 
 | Script | What it does |

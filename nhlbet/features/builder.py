@@ -69,6 +69,7 @@ class BuilderConfig:
     adv_window: int = 20
     elo_k: float = 6.0
     elo_home_adv: float = 35.0
+    elo_regress: float = 0.30
 
 
 @dataclass
@@ -159,7 +160,7 @@ class FeatureBuilder:
 
         teams: dict[str, TeamState] = defaultdict(TeamState)
         goalies: dict[int, GoalieState] = defaultdict(GoalieState)
-        elo = Elo(k=cfg.elo_k, home_adv=cfg.elo_home_adv)
+        elo = Elo(k=cfg.elo_k, home_adv=cfg.elo_home_adv, regress=cfg.elo_regress)
         league = defaultdict(float)  # running league counters (goalie start rates, goals)
         season_pts: dict[tuple[int, str], list] = defaultdict(lambda: [0, 0])  # (season, team) -> [pts, gp]
         pending: dict[tuple[int, str], tuple] = {}

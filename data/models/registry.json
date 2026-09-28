@@ -1,0 +1,102 @@
+[
+ {
+  "created_at": "2026-09-28T22:08:49+00:00",
+  "version": "20260202-ff8cd0",
+  "artifact": "data/models/model_20260202-ff8cd0.joblib",
+  "data_fingerprint": "ff8cd04d70@2026-02-02",
+  "n_train": 2987,
+  "train_start": "2023-10-10",
+  "train_end": "2026-02-02",
+  "features": [
+   "d_gf_season_shrunk",
+   "d_gd_season_shrunk",
+   "d_sos10",
+   "d_ga_season_shrunk",
+   "d_rest_days"
+  ],
+  "hyperparameters": {
+   "logistic": {
+    "C": 0.03
+   },
+   "rf": {
+    "n_estimators": 300,
+    "min_samples_leaf": 80,
+    "max_features": 0.6
+   },
+   "lgbm": {
+    "n_estimators": 60,
+    "learning_rate": 0.03,
+    "num_leaves": 5,
+    "min_child_samples": 60,
+    "reg_lambda": 5.0
+   },
+   "xgb": {
+    "n_estimators": 120,
+    "learning_rate": 0.03,
+    "max_depth": 3,
+    "min_child_weight": 10,
+    "reg_lambda": 30.0
+   }
+  },
+  "builder_config": {
+   "halflife": 10.0,
+   "goalie_mode": "probable",
+   "lineup_mode": "off",
+   "shrink_k": 15.0,
+   "adv_window": 20,
+   "elo_k": 10.0,
+   "elo_home_adv": 25.0,
+   "elo_regress": 0.3
+  },
+  "p_source": "online_platt",
+  "walk_forward_metrics": {
+   "stack__online": {
+    "log_loss": 0.6824,
+    "brier": 0.24472,
+    "auc": 0.55523,
+    "ece": 0.02704,
+    "cal_slope": 0.90136
+   },
+   "elo": {
+    "log_loss": 0.68406,
+    "brier": 0.24556,
+    "auc": 0.56066,
+    "ece": 0.0459,
+    "cal_slope": 0.62512
+   },
+   "home_rate": {
+    "log_loss": 0.68894,
+    "brier": 0.2479,
+    "auc": 0.4749,
+    "ece": 0.03411,
+    "cal_slope": -4.73775
+   },
+   "walk_forward_n": 1492
+  },
+  "drift": {
+   "performance": {
+    "status": "WARN",
+    "n": 1856,
+    "recent_logloss": 0.7025145256961045,
+    "reference_logloss": 0.6810807443279858,
+    "z": 1.057849684019273,
+    "calibration_slope": -0.08077643150653065,
+    "reasons": [
+     "calibration slope -0.08 (<0.5): probabilities are over-confident"
+    ]
+   },
+   "features": {
+    "psi": {
+     "d_gf_season_shrunk": 0.018,
+     "d_gd_season_shrunk": 0.115,
+     "d_sos10": 0.018,
+     "d_ga_season_shrunk": 0.081,
+     "d_rest_days": 0.012
+    },
+    "flagged": {},
+    "status": "OK"
+   },
+   "status": "WARN"
+  }
+ }
+]

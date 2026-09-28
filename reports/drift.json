@@ -1,0 +1,26 @@
+{
+ "version": "20260202-ff8cd0",
+ "performance": {
+  "status": "WARN",
+  "n": 1856,
+  "recent_logloss": 0.7025145256961045,
+  "reference_logloss": 0.6810807443279858,
+  "z": 1.057849684019273,
+  "calibration_slope": -0.08077643150653065,
+  "reasons": [
+   "calibration slope -0.08 (<0.5): probabilities are over-confident"
+  ]
+ },
+ "features": {
+  "psi": {
+   "d_gf_season_shrunk": 0.018,
+   "d_gd_season_shrunk": 0.115,
+   "d_sos10": 0.018,
+   "d_ga_season_shrunk": 0.081,
+   "d_rest_days": 0.012
+  },
+  "flagged": {},
+  "status": "OK"
+ },
+ "status": "WARN"
+}

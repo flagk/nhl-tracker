@@ -1,5 +1,9 @@
 """Re-run the legacy walk-forward backtest unchanged and persist every bet.
 
+NOTE: the legacy ``src/`` package was removed in Phase 3. To reproduce, check out commit 7d0c7a1
+(`git checkout 7d0c7a1 -- src config`) and run this script from the repo root.
+
+
 Purpose: reproduce the headline README numbers (55.8% / 11.69% / 1,805 bets)
 with the repo's own code, and keep the per-bet records for the statistical audit.
 """
