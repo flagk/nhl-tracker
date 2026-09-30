@@ -18,7 +18,6 @@ from nhlbet.odds.consensus import consensus_snapshots
 from nhlbet.risk.bankroll import drawdown_stats, equity_curve, summarize_bets
 
 log = logging.getLogger(__name__)
-EXPORT_TABLES = {"recommendations": ["run_id", "game_id"], "odds_fetch_log": ["captured_at"], "goalie_confirmations": ["game_date", "team"]}
 
 
 def final_recommendations(store: Store) -> pd.DataFrame:
@@ -109,39 +108,65 @@ def plot_performance(store: Store, path: str | Path, start_bankroll: float = 100
 
 
 # ---------------------------------------------------------------- CSV export / restore (irreplaceable data lives in git)
+# Layout: every odds capture and every recommendation run gets its OWN small file, so two concurrent jobs (morning run, late run,
+# closing-line snapshot) add different files and git never has to merge lines of the same file. Only derived files (bet_log.csv)
+# and the tiny goalie_confirmations.csv are shared, and the workflows resolve those in favour of the newest output.
+PARTITIONED = {"recommendations": ("run_id", ["run_id", "game_id"]), "odds_fetch_log": ("captured_at", ["captured_at"])}
+SINGLE = {"goalie_confirmations": ["game_date", "team"]}
+ODDS_KEYS = ["captured_at", "event_id", "book", "market", "outcome", "point"]
+
+
+def _slug(value: str) -> str:
+    import re
+    return re.sub(r"[^0-9A-Za-z]+", "-", str(value)).strip("-")
+
+
 def export_logs(store: Store, root: str | Path = "data/logs") -> list[Path]:
-    root = Path(root); (root / "odds").mkdir(parents=True, exist_ok=True)
+    root = Path(root)
     written = []
-    for table in EXPORT_TABLES:
+    for table, (part_col, keys) in PARTITIONED.items():
+        df = store.df(f"SELECT * FROM {table}")
+        for value, part in df.groupby(part_col):
+            p = root / table / f"{_slug(value)}.csv"
+            p.parent.mkdir(parents=True, exist_ok=True)
+            part.sort_values(keys).to_csv(p, index=False)
+            written.append(p)
+    snaps = store.df("SELECT * FROM odds_snapshots")
+    for cap, part in snaps.groupby("captured_at"):
+        p = root / "odds" / f"{_slug(cap)}.csv"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        part.sort_values(["event_id", "book", "market", "outcome", "point"]).to_csv(p, index=False)
+        written.append(p)
+    for table, keys in SINGLE.items():
         df = store.df(f"SELECT * FROM {table}")
         if len(df):
-            p = root / f"{table}.csv"; df.sort_values(list(EXPORT_TABLES[table])).to_csv(p, index=False); written.append(p)
-    snaps = store.df("SELECT * FROM odds_snapshots")
-    if len(snaps):
-        snaps["month"] = snaps.captured_at.str[:7]
-        for month, part in snaps.groupby("month"):
-            p = root / "odds" / f"{month}.csv"
-            part.drop(columns="month").sort_values(["captured_at", "event_id", "book", "market", "outcome"]).to_csv(p, index=False)
-            written.append(p)
+            root.mkdir(parents=True, exist_ok=True)
+            p = root / f"{table}.csv"; df.sort_values(keys).to_csv(p, index=False); written.append(p)
     bl = resolved(store)
     if len(bl):
         cols = ["game_date", "home", "away", "team", "side", "book", "decimal", "stake", "p_model", "p_adj", "p_market", "edge", "ev", "close_home_prob",
                 "clv_ev", "bet_won", "profit", "home_win", "model_version"]
+        root.mkdir(parents=True, exist_ok=True)
         p = root / "bet_log.csv"; bl[bl.is_bet][cols].to_csv(p, index=False); written.append(p)
     return written
 
 
+def _read(p: Path) -> list[dict]:
+    df = pd.read_csv(p, float_precision="round_trip").astype(object)
+    return df.where(df.notna(), None).to_dict("records")
+
+
 def restore_logs(store: Store, root: str | Path = "data/logs") -> dict[str, int]:
+    """Upsert every exported file back into the database. Also reads the legacy single-file layout (recommendations.csv,
+    odds_fetch_log.csv, odds/<YYYY-MM>.csv) so history committed before the partitioned layout is not lost."""
     root = Path(root); n: dict[str, int] = {}
-    for table, keys in EXPORT_TABLES.items():
-        p = root / f"{table}.csv"
-        if p.exists():
-            df = pd.read_csv(p, float_precision="round_trip").astype(object).where(lambda x: x.notna(), None)
-            n[table] = store.upsert(table, df.to_dict("records"), keys)
-    total = 0
-    for p in sorted((root / "odds").glob("*.csv")) if (root / "odds").exists() else []:
-        df = pd.read_csv(p, float_precision="round_trip").astype(object).where(lambda x: x.notna(), None)
-        total += store.upsert("odds_snapshots", df.to_dict("records"), ["captured_at", "event_id", "book", "market", "outcome", "point"])
-    if total:
-        n["odds_snapshots"] = total
+    def load(table: str, files: list[Path], keys: list[str]):
+        total = sum(store.upsert(table, _read(p), keys) for p in files if p.exists())
+        if total:
+            n[table] = n.get(table, 0) + total
+    for table, (_, keys) in PARTITIONED.items():
+        load(table, [root / f"{table}.csv"] + sorted((root / table).glob("*.csv")), keys)
+    load("odds_snapshots", sorted((root / "odds").glob("*.csv")), ODDS_KEYS)
+    for table, keys in SINGLE.items():
+        load(table, [root / f"{table}.csv"], keys)
     return n

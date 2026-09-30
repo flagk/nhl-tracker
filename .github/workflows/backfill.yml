@@ -27,6 +27,8 @@ jobs:
     timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}    # branch tip at job start, not the (possibly stale) triggering commit
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -56,5 +58,9 @@ jobs:
           git add reports data/models
           if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
           git commit -m "Backfill and research refresh $(date -u +%F)"
-          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push && exit 0; sleep 5; done
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push && exit 0
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 4))
+          done
           exit 1

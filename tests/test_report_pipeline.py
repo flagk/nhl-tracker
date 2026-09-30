@@ -47,6 +47,14 @@ def test_report_has_every_required_field_and_the_disclaimer_twice():
     assert "No resolved recommendations yet" in txt
 
 
+def test_pass_rows_do_not_advertise_an_ev():
+    """A game the policy passes on must not show an 'EV per $1' (it is computed from the raw model probability)."""
+    txt = render_report("2024-01-04", "late", mk_slate(bet=False), RiskConfig(), "v1", {"drift": {"status": "OK"}})
+    row = [l for l in txt.splitlines() if l.startswith("| TOR @ BOS")][0]
+    assert "+3.5%" not in row and row.split("|")[7].strip() == "-"
+    assert "+5.0%" in row                                                             # the edge is still shown
+
+
 def test_report_no_bets_and_health_banners():
     txt = render_report("2024-01-04", "morning", mk_slate(bet=False), RiskConfig(), "v1",
                         {"drift": {"status": "ALERT", "performance": {"reasons": ["recent log loss worse than coin flip"]}}})
@@ -108,16 +116,56 @@ def test_performance_metrics_by_hand():
 def test_log_export_restore_roundtrip_is_idempotent(tmp_path):
     st = seeded_store()
     files = export_logs(st, tmp_path / "logs")
-    assert {p.name for p in files} >= {"recommendations.csv", "bet_log.csv", "2024-01.csv"}
+    names = {p.parent.name + "/" + p.name for p in files}
+    assert "recommendations/r1.csv" in names and "recommendations/r3.csv" in names and "logs/bet_log.csv" in names
+    assert sum(1 for p in files if p.parent.name == "odds") == 2                      # one file per odds capture
     fresh = Store(":memory:")
     n = restore_logs(fresh, tmp_path / "logs")
     assert n["recommendations"] == 5 and n["odds_snapshots"] == 6
-    before = {p.name: p.read_text() for p in (tmp_path / "logs").rglob("*.csv")}
+    before = {str(p.relative_to(tmp_path)): p.read_text() for p in (tmp_path / "logs").rglob("*.csv")}
     restore_logs(fresh, tmp_path / "logs"); restore_logs(fresh, tmp_path / "logs")          # repeated restores add nothing
     assert len(fresh.df("SELECT * FROM recommendations")) == 5 and len(fresh.df("SELECT * FROM odds_snapshots")) == 6
     export_logs(fresh, tmp_path / "logs")
-    after = {p.name: p.read_text() for p in (tmp_path / "logs").rglob("*.csv") if p.name != "bet_log.csv"}
-    assert all(after[k] == before[k] for k in after)                                          # byte-identical re-export
+    after = {str(p.relative_to(tmp_path)): p.read_text() for p in (tmp_path / "logs").rglob("*.csv") if p.name != "bet_log.csv"}
+    assert all(after[k] == before[k] for k in after) and set(after) == {k for k in before if not k.endswith("bet_log.csv")}   # byte-identical
+
+
+def test_concurrent_jobs_write_disjoint_files(tmp_path):
+    """Regression: the morning run, late run and closing-line job rewrote the SAME csv files, so a push after a concurrent job's
+    commit hit a git conflict. Every capture/run now owns its files, so two jobs' outputs can never overlap."""
+    base = seeded_store()
+    a, b = Store(":memory:"), Store(":memory:")
+    for st in (a, b):
+        restore_logs(st, export_and_dir(base, tmp_path / "origin"))
+    a.upsert("odds_snapshots", [dict(captured_at="2024-01-07T10:00:00+00:00", event_id="e9", commence_time="2024-01-07T23:00:00Z", home="H", away="A", book="bk",
+                                     market="h2h", outcome="H", point=0.0, price=1.9, book_updated=None, game_id=None)], ["captured_at", "event_id", "book", "market", "outcome", "point"])
+    a.upsert("odds_fetch_log", [dict(captured_at="2024-01-07T10:00:00+00:00", ok=1, source="live", remaining=9, used=1, events=1, note="h2h")], ["captured_at"])
+    b.upsert("odds_snapshots", [dict(captured_at="2024-01-07T22:30:00+00:00", event_id="e9", commence_time="2024-01-07T23:00:00Z", home="H", away="A", book="bk",
+                                     market="h2h", outcome="H", point=0.0, price=1.8, book_updated=None, game_id=None)], ["captured_at", "event_id", "book", "market", "outcome", "point"])
+    fa = {str(p.relative_to(tmp_path / "a")) for p in export_logs(a, tmp_path / "a")}
+    fb = {str(p.relative_to(tmp_path / "b")) for p in export_logs(b, tmp_path / "b")}
+    new_a, new_b = fa - {str(p.relative_to(tmp_path / "origin")) for p in (tmp_path / "origin").rglob("*.csv")}, fb - {str(p.relative_to(tmp_path / "origin")) for p in (tmp_path / "origin").rglob("*.csv")}
+    assert new_a and new_b and new_a.isdisjoint(new_b)                                # each job adds only its own new files
+    merged = Store(":memory:")                                                        # git would merge both file sets cleanly
+    for d in ("origin", "a", "b"):
+        restore_logs(merged, tmp_path / d)
+    assert len(merged.df("SELECT * FROM odds_snapshots WHERE event_id='e9'")) == 2
+
+
+def export_and_dir(store, path):
+    export_logs(store, path)
+    return path
+
+
+def test_restore_reads_the_legacy_single_file_layout(tmp_path):
+    """History committed by the first live runs used recommendations.csv / odds_fetch_log.csv / odds/<YYYY-MM>.csv."""
+    st = seeded_store()
+    root = tmp_path / "logs"; (root / "odds").mkdir(parents=True)
+    st.df("SELECT * FROM recommendations").to_csv(root / "recommendations.csv", index=False)
+    st.df("SELECT * FROM odds_snapshots").to_csv(root / "odds" / "2024-01.csv", index=False)
+    fresh = Store(":memory:")
+    n = restore_logs(fresh, root)
+    assert n["recommendations"] == 5 and n["odds_snapshots"] == 6
 
 
 # ---------------------------------------------------------------- goalies
@@ -176,7 +224,7 @@ def test_end_to_end_daily_run(league, tmp_path, monkeypatch):
     assert (tmp_path / "reports/daily" / f"{day}-morning.md").exists() and "TOR @ BOS" in rep and rep.count(DISCLAIMER) == 2
     recs = Store(str(tmp_path / "t.db")).df("SELECT * FROM recommendations")
     assert len(recs) == 1 and recs.action.iloc[0] in ("BET", "NO_BET") and recs.p_market.iloc[0] is not None
-    assert (tmp_path / "data/logs/recommendations.csv").exists() and any((tmp_path / "data/logs/odds").glob("*.csv"))
+    assert any((tmp_path / "data/logs/recommendations").glob("*.csv")) and any((tmp_path / "data/logs/odds").glob("*.csv"))
     # late run: no retrain, adds a second recommendation row for the same game (history kept, final = latest)
     r2 = run_daily(day, "late", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models")
     assert r2["model"] == r["model"]
@@ -240,7 +288,8 @@ def test_every_path_the_workflow_commits_is_not_gitignored():
     import subprocess
     if shutil.which("git") is None:
         pytest.skip("git not available")
-    must_track = ["data/logs/recommendations.csv", "data/logs/odds/2026-10.csv", "data/logs/bet_log.csv", "data/logs/odds_fetch_log.csv",
+    must_track = ["data/logs/recommendations/2026-10-08-morning-1430.csv", "data/logs/odds/2026-10-08T15-24-51-00-00.csv", "data/logs/bet_log.csv",
+                  "data/logs/odds_fetch_log/2026-10-08T15-24-51-00-00.csv", "data/logs/goalie_confirmations.csv",
                   "reports/latest.md", "reports/daily/2026-10-08-morning.md", "reports/performance.png", "site/index.html", "site/picks.json",
                   "data/models/registry.json", "data/models/model_20261008-abc123.joblib", "data/models/hyperparams.json"]
     r = subprocess.run(["git", "check-ignore", "--no-index", *must_track], cwd=ROOT, capture_output=True, text=True)
