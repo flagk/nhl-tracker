@@ -16,6 +16,7 @@ from nhlbet.models.bundle import ModelBundle
 from nhlbet.odds.consensus import latest_book_prices
 from nhlbet.odds.edge import SideQuote, evaluate_game
 from nhlbet.risk.policy import Recommendation, RiskConfig, recommend_slate
+from nhlbet.risk.shadow import shadow_bets
 
 log = logging.getLogger(__name__)
 
@@ -116,4 +117,5 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
             "team": s.rec.team, "book": s.rec.book, "decimal": s.rec.decimal, "stake": s.rec.stake, "edge": s.rec.edge, "ev": s.rec.ev,
             "reasons": " | ".join(s.rec.reasons), "odds_captured_at": s.odds_captured_at, "odds_stale": int(s.odds_stale), "model_status": model_status}
             for s in slate], ["run_id", "game_id"])
+        store.upsert("shadow_bets", shadow_bets(slate, cfg, run_id, now.isoformat(timespec="seconds"), date), ["run_id", "game_id", "strategy"])
     return slate

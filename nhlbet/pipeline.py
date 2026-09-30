@@ -19,7 +19,7 @@ from nhlbet.models.bundle import ModelBundle
 from nhlbet.odds.client import OddsAPIError, OddsClient, OddsConfigError
 from nhlbet.odds.snapshots import record_fetch
 from nhlbet.registry import ModelRegistry
-from nhlbet.report.betlog import export_logs, performance, plot_performance, restore_logs
+from nhlbet.report.betlog import export_logs, performance, plot_performance, restore_logs, shadow_performance
 from nhlbet.report.markdown import render_report
 from nhlbet.report.slate import build_slate
 from nhlbet.site.build import build_payload, build_site
@@ -97,19 +97,20 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
         notes.append(f"odds fetch failed ({odds_meta['error']})")
 
     perf = performance(store, bankroll)
+    shadow = shadow_performance(store)
     current = bankroll if fixed_bankroll else max(perf.get("bankroll", bankroll), 0.0)
     cfg = RiskConfig(bankroll=current)
     status = entry.get("drift", {}).get("status", "OK")
     slate = build_slate(store, bundle, date, cfg, run_type, "OK" if status == "INSUFFICIENT_DATA" else status)
 
-    text = render_report(date, run_type, slate, cfg, entry["version"], {**entry, "p_source": entry.get("p_source")}, perf, odds_meta if odds_meta.get("enabled") else None)
+    text = render_report(date, run_type, slate, cfg, entry["version"], {**entry, "p_source": entry.get("p_source")}, perf, odds_meta if odds_meta.get("enabled") else None, shadow=shadow)
     if notes:
         text = text.replace("## Summary", "> ⚠️ " + " · ".join(notes) + "\n\n## Summary", 1)
     out_dir = Path(report_dir) / "daily"; out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / f"{date}-{run_type}.md").write_text(text)
     Path(report_dir, "latest.md").write_text(text)
     plot_performance(store, Path(report_dir) / "performance.png", bankroll)
-    payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes)
+    payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow)
     build_site(payload, site_dir)
     written = export_logs(store, log_root)
     log.info("report written for %s (%d games, %d bets); exported %d log files", date, len(slate), sum(s.rec.action == "BET" for s in slate), len(written))

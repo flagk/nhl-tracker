@@ -65,6 +65,12 @@ CREATE TABLE IF NOT EXISTS recommendations (
     reasons TEXT, odds_captured_at TEXT, odds_stale INTEGER, model_status TEXT,
     PRIMARY KEY (run_id, game_id)
 );
+-- fake-money "paper trading" strategies evaluated on every slate (never real bets): used to measure what works, faster than real bets
+CREATE TABLE IF NOT EXISTS shadow_bets (
+    run_id TEXT NOT NULL, run_at TEXT NOT NULL, game_id INTEGER NOT NULL, strategy TEXT NOT NULL, game_date TEXT,
+    action TEXT, side TEXT, team TEXT, book TEXT, decimal REAL, stake REAL, p_model REAL, p_adj REAL, p_market REAL, edge REAL, ev REAL,
+    PRIMARY KEY (run_id, game_id, strategy)
+);
 CREATE TABLE IF NOT EXISTS goalie_confirmations (
     game_date TEXT NOT NULL, team TEXT NOT NULL, player_id INTEGER, name TEXT, source TEXT, captured_at TEXT,
     PRIMARY KEY (game_date, team)
