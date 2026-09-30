@@ -1,0 +1,94 @@
+"""Build the self-contained picks page (``site/index.html`` + ``site/picks.json``) from a day's slate.
+
+The page is static: the data is embedded, all unit/bankroll/stake/parlay maths runs in the browser (``core.js``, parity-tested
+against the Python policy), and no API key or server is involved. Open ``site/index.html`` from disk or any static host.
+"""
+from __future__ import annotations
+
+import json
+import math
+from datetime import datetime, timezone
+from pathlib import Path
+
+from nhlbet.report.markdown import DISCLAIMER
+from nhlbet.report.slate import SlateGame
+from nhlbet.risk.policy import RiskConfig, assess_sides, game_block_reason
+
+HERE = Path(__file__).parent
+PARLAY_MAX_LEGS = 4
+PARLAY_MAX_PCT = 0.005          # never suggest more than 0.5% of bankroll on a parlay
+
+
+def _clean(o):
+    """JSON-safe: NaN/inf -> None, numpy scalars -> python, Timestamps -> ISO strings."""
+    if isinstance(o, dict):
+        return {str(k): _clean(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [_clean(v) for v in o]
+    if hasattr(o, "item") and not isinstance(o, (str, bytes)):
+        try:
+            o = o.item()
+        except (ValueError, AttributeError):
+            pass
+    if isinstance(o, float) and (math.isnan(o) or math.isinf(o)):
+        return None
+    if hasattr(o, "isoformat"):
+        try:
+            return None if str(o) == "NaT" else o.isoformat()
+        except (ValueError, AttributeError):
+            return None
+    return o
+
+
+def game_payload(s: SlateGame, cfg: RiskConfig) -> dict:
+    from nhlbet.risk.kelly import kelly_fraction
+
+    blocked = game_block_reason(s.quotes, cfg, s.ctx)
+    sides: dict[str, dict] = {}
+    if s.quotes:
+        for q, p_adj, ev, fails in assess_sides(s.quotes, cfg, s.ctx):
+            books = {b["book"]: b[q.side] for b in s.books if b.get(q.side)}
+            sides[q.side] = {"team": q.team, "p_model": q.model_prob, "p_market": q.market_prob, "p_adj": p_adj, "edge": q.edge, "ev": ev,
+                             "kelly_full": kelly_fraction(p_adj, q.best_decimal), "best_book": q.best_book, "best_decimal": q.best_decimal,
+                             "books": books, "fails": ([blocked] if blocked else fails), "qualifies": blocked is None and not fails}
+    return {"game_id": s.game_id, "start_utc": s.start_utc, "home": s.home, "away": s.away, "home_goalie": s.home_goalie,
+            "away_goalie": s.away_goalie, "goalie_status": s.goalie_status, "p_home": s.p_home, "blocked": blocked, "notes": s.notes,
+            "odds_stale": s.odds_stale, "odds_captured_at": s.odds_captured_at, "sides": sides,
+            "server_action": s.rec.action, "server_side": s.rec.side, "server_stake": s.rec.stake}
+
+
+def build_payload(slate: list[SlateGame], cfg: RiskConfig, perf: dict | None, model_entry: dict, odds_meta: dict | None, date: str,
+                  run_type: str, now: datetime | None = None, notes: list[str] | None = None) -> dict:
+    now = now or datetime.now(timezone.utc)
+    perf = perf or {}
+    drift = model_entry.get("drift", {})
+    track = {"resolved_games": perf.get("resolved_games", 0), "bets": perf.get("bets"), "model": perf.get("model"), "vs_market": perf.get("vs_market"),
+             "clv": perf.get("clv"), "drawdown": perf.get("drawdown"), "no_bet_rate": perf.get("no_bet_rate")}
+    payload = {
+        "generated_at": now.isoformat(timespec="seconds"), "date": date, "run_type": run_type, "notes": notes or [],
+        "model": {"version": model_entry.get("version"), "p_source": model_entry.get("p_source"), "status": drift.get("status", "UNKNOWN"),
+                  "reasons": drift.get("performance", {}).get("reasons", []), "train_end": model_entry.get("train_end")},
+        "odds": odds_meta or {"enabled": False},
+        "policy": {"bankroll": cfg.bankroll, "max_bet_pct": cfg.max_bet_pct, "max_daily_exposure_pct": cfg.max_daily_exposure_pct,
+                   "max_bets_per_day": cfg.max_bets_per_day, "min_stake": cfg.min_stake, "min_edge": cfg.min_edge,
+                   "parlay_max_legs": PARLAY_MAX_LEGS, "parlay_max_pct": PARLAY_MAX_PCT},
+        "games": [game_payload(s, cfg) for s in slate],
+        "track": track,
+        "disclaimer": DISCLAIMER.replace("> ", "").replace("**", ""),
+    }
+    return _clean(payload)
+
+
+def render_html(payload: dict) -> str:
+    tpl = (HERE / "template.html").read_text()
+    data = json.dumps(payload, allow_nan=False).replace("</", "<\\/")      # cannot close the <script> tag
+    return (tpl.replace("/*__CORE__*/", (HERE / "core.js").read_text()).replace("/*__UI__*/", (HERE / "ui.js").read_text())
+               .replace("__DATA__", data).replace("__TITLE__", f"NHL picks {payload['date']}"))
+
+
+def build_site(payload: dict, out_dir: str | Path = "site") -> Path:
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "picks.json").write_text(json.dumps(payload, indent=1, allow_nan=False))
+    (out / "index.html").write_text(render_html(payload))
+    return out / "index.html"

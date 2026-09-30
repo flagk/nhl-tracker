@@ -80,6 +80,10 @@ Each game lists teams, goalies (confirmed/probable), model win probability, best
 stake and a plain-language reason. Confirmed goalies: add rows to `data/manual/confirmed_goalies.csv` (`date,team,name`); the free NHL API does
 not publish them, so this is an input, not automatic.
 
+## Picks page
+`site/index.html` is rebuilt by every daily run: pick your unit size and risk level, see the top 5 games by expected value (recommended vs lean),
+and use a parlay calculator with guardrails. See [docs/SITE.md](docs/SITE.md). It contains bookmaker prices, so keep the repo private.
+
 ## Automation (GitHub Actions)
 | Workflow | When | Does |
 |---|---|---|

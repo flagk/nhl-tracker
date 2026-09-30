@@ -36,6 +36,8 @@ class SlateGame:
     odds_captured_at: str | None
     odds_stale: bool
     notes: list[str] = field(default_factory=list)
+    books: list[dict] = field(default_factory=list)      # per-book decimal prices [{book, home, away}] for the site/parlay maths
+    ctx: dict = field(default_factory=dict)              # the policy context this game was evaluated under
 
 
 def context_notes(row: pd.Series, home: str, away: str) -> list[str]:
@@ -92,15 +94,16 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
         ctx = {"model_status": model_status, "odds_stale": stale, "goalie_confirmed": hs == "confirmed" and as_ == "confirmed",
                "games_played_min": float(min(row.get("h_gp_season", np.nan), row.get("a_gp_season", np.nan)))
                if row.get("h_gp_season") == row.get("h_gp_season") else None}
+        books = [{"book": r.book, "home": float(r.home), "away": float(r.away)} for r in prices.itertuples()] if len(prices) else []
         inputs.append((int(g.game_id), g.home, g.away, quotes, ctx))
         meta[int(g.game_id)] = dict(start=g.start_utc, hg=hg, ag=ag, status=status, p=p_home, p_raw=p_raw, quotes=quotes, cap=cap, stale=stale,
-                                    notes=context_notes(row, g.home, g.away), ctx=ctx)
+                                    notes=context_notes(row, g.home, g.away), ctx=ctx, books=books)
     recs = recommend_slate(inputs, cfg)
     slate = []
     for rec in recs:
         m = meta[rec.game_id]
         slate.append(SlateGame(rec.game_id, m["start"], rec.home, rec.away, m["hg"], m["ag"], m["status"], m["p"], m["p_raw"], m["quotes"], rec,
-                               m["cap"], m["stale"], m["notes"]))
+                               m["cap"], m["stale"], m["notes"], m["books"], m["ctx"]))
     epoch = pd.Timestamp(0, tz="UTC")
     slate.sort(key=lambda s: (pd.isna(s.start_utc), epoch if pd.isna(s.start_utc) else s.start_utc, s.game_id))
     if persist:
