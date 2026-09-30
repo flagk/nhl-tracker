@@ -28,7 +28,12 @@ def load_games(store: Store, include_unplayed: bool = True) -> pd.DataFrame:
     g = g[g.home != g.away]
     if not include_unplayed:
         g = g[g.home_score.notna()]
-    g["season"] = season_of(g.game_date)
+    derived = season_of(g.game_date)
+    # the API's own season id (e.g. 20192020 -> 2019) is authoritative: the 2019-20 bubble playoffs were played Aug-Sep 2020, which a
+    # date rule would wrongly file under the 2020-21 season. Legacy CSV rows carry no season, so they fall back to the date rule.
+    api = pd.to_numeric(g.season, errors="coerce")
+    api_year = api.where(api < 10000, api // 10000)              # accept 20192020 (API) or 2019 (plain start year)
+    g["season"] = api_year.where(api.notna(), derived).astype(int)
     g["start_utc"] = pd.to_datetime(g.start_utc, utc=True, errors="coerce")
     return g.sort_values(["game_date", "game_id"]).reset_index(drop=True)
 
