@@ -40,7 +40,8 @@ for g in games[-a.n:]:
         "pbp goals == official score (SO games excepted)": reg_score_ok,
         "pbp SOG == boxscore SOG": sog_ok,
         "exactly 2 starting goalies": len(starters) == 2,
-        "goalie xG faced populated": all(x["xg_faced"] is not None for x in starters if (x["shots_against"] or 0) > 0),
+        # ingestion joins play-by-play xG to boxscore goalies by player id; this proves the two payloads use the same ids
+        "goalie xG faced joins by player id": all(p["goalie_xg"].get(x["player_id"]) is not None for x in starters if (x["shots_against"] or 0) > 0),
         "attempts > SOG > goals": home.get("att_for", 0) >= home.get("sog_for", 0) >= goals_h,
         "skaters parsed (>=30)": len(b["skaters"]) >= 30,
     }
