@@ -66,7 +66,7 @@ md = ["# Goals model: walk-forward backtest (totals and puck line)", "",
       "## Totals and puck line vs base rates (log loss; negative diff = model better)", "", ev.round(4).to_markdown(index=False), "",
       "## After walk-forward recalibration (each block mapped by a Platt fit on strictly earlier out-of-sample predictions)", "",
       (evc.round(4).to_markdown(index=False) if len(evc) else "Not enough out-of-sample predictions to calibrate."), "",
-      "`lin_slope` is the coefficient of outcome on the model's logit: about 1 means calibrated, well below 1 means overconfident, near 0 means no signal. "
+      "`cal_slope` is the logistic calibration slope (outcome on the model's logit): 1 = calibrated, below 1 = overconfident, near 0 = no signal. "
       "The maps used in production (logit p' = a + b*logit p): " + json.dumps({k: {"a": round(v["a"], 3), "b": round(v["b"], 3)} for k, v in cal.items()}) + ".", "",
       f"Mean predicted total {P.p_total_mean.mean():.2f} vs actual {P.tot.mean():.2f}; predicted tie-after-60 rate {P.p_tie.mean():.3f} vs actual {(P.hr == P.ar).mean():.3f}.", "",
       "## Alpha comparison (mean Poisson NLL diff)", ""] + [f"- alpha {k}: {v[3]:+.5f}" for k, v in res.items()]
