@@ -23,6 +23,7 @@ from sklearn.linear_model import PoissonRegressor
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
+TARGET_COLS = ("hr", "ar", "ot", "so", "tot", "mar", "home_score", "away_score", "home_win")   # outcomes: never allowed as features
 GRID = 16                    # goals per team considered (P(>15) is negligible)
 DISPERSIONS = (0.0, 0.01, 0.02, 0.03, 0.05, 0.08, 0.12)
 LAMBDA_BOUNDS = (0.6, 6.0)
@@ -52,6 +53,12 @@ def add_goal_targets(F: pd.DataFrame, games: pd.DataFrame) -> pd.DataFrame:
     return F.join(t)
 
 
+def goal_feature_columns(F: pd.DataFrame) -> list[str]:
+    """Candidate predictors for the goals model: populated, non-constant as-of features, never the outcome columns added by ``add_goal_targets``."""
+    from nhlbet.analysis.importance import candidate_columns
+    return candidate_columns(F.drop(columns=[c for c in TARGET_COLS if c in F.columns]))
+
+
 def _pmf(mu: np.ndarray, k: float, n: int = GRID) -> np.ndarray:
     """(len(mu), n) probability of 0..n-1 goals; Poisson when k == 0 else negative binomial with variance mu + k*mu^2."""
     x = np.arange(n)[None, :]
@@ -66,6 +73,9 @@ class GoalsModel:
     """Fit: Poisson regressions for home and away regulation goals + a dispersion and the overtime split from training data."""
 
     def __init__(self, features: list[str], alpha: float = 50.0) -> None:
+        leaked = sorted(set(features) & set(TARGET_COLS))
+        if leaked:
+            raise ValueError(f"outcome columns cannot be goals-model features (target leakage): {leaked}")
         self.features, self.alpha = list(features), alpha
 
     def _reg(self):
