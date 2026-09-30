@@ -1,7 +1,7 @@
 {
- "generated_at": "2026-09-30T15:24:58+00:00",
+ "generated_at": "2026-09-30T15:26:38+00:00",
  "date": "2026-09-30",
- "run_type": "morning",
+ "run_type": "late",
  "notes": [],
  "model": {
   "version": "20260929-390a7e",
@@ -15,7 +15,7 @@
   "captured_at": "2026-09-30T15:24:51+00:00",
   "stale": false,
   "remaining": 497,
-  "source": "live"
+  "source": "cache"
  },
  "policy": {
   "bankroll": 1000.0,
