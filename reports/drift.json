@@ -1,12 +1,12 @@
 {
- "version": "20260929-390a7e",
+ "version": "20260929-3184e7",
  "performance": {
   "status": "OK",
-  "n": 2624,
-  "recent_logloss": 0.667787029496909,
-  "reference_logloss": 0.6765785708346952,
-  "z": -0.40299284333962365,
-  "calibration_slope": 1.456761519252831,
+  "n": 2629,
+  "recent_logloss": 0.6735217467684775,
+  "reference_logloss": 0.674829655154935,
+  "z": -0.0634161719809755,
+  "calibration_slope": 0.9136762502097097,
   "reasons": []
  },
  "features": {

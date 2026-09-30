@@ -1,21 +1,21 @@
 {
   "elo": {
-    "elo_k": 10.0,
-    "elo_home_adv": 35.0,
-    "elo_regress": 0.3
+    "elo_k": 8.0,
+    "elo_home_adv": 25.0,
+    "elo_regress": 0.2
   },
   "logistic": {
-    "C": 0.01
+    "C": 0.003
   },
   "rf": {
     "n_estimators": 300,
-    "min_samples_leaf": 40,
+    "min_samples_leaf": 80,
     "max_features": 0.3
   },
   "lgbm": {
-    "n_estimators": 60,
+    "n_estimators": 120,
     "learning_rate": 0.03,
-    "num_leaves": 5,
+    "num_leaves": 3,
     "min_child_samples": 120,
     "reg_lambda": 5.0
   },
@@ -23,12 +23,12 @@
     "n_estimators": 120,
     "learning_rate": 0.03,
     "max_depth": 2,
-    "min_child_weight": 10,
+    "min_child_weight": 30,
     "reg_lambda": 5.0
   },
   "_meta": {
     "tune_end": "2024-06-30",
-    "n_games": 1312,
+    "n_games": 7157,
     "method": "expanding-window time-series CV, one-SE rule"
   }
 }
