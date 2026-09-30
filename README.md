@@ -4,6 +4,18 @@
 > do not predict future results. Sports betting carries a real risk of loss: only stake money you can afford to lose, and check
 > that betting is legal where you live. Nothing in this repository is financial advice.
 
+<!-- PICKS:START -->
+
+### Today's picks
+
+*Filled in automatically by the first daily run.*
+
+<!-- PICKS:END -->
+
+> The **Interactive picks page** link uses GitHub Pages. Enable it once (Settings -> Pages -> Source: *GitHub Actions*); after that it updates itself
+> after every daily run. The repository is public, so published pages and logs are **public-safe**: model probabilities, edges and stakes, but
+> no bookmaker names or per-bookmaker prices.
+
 ## Honest status
 
 | | |

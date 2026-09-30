@@ -39,12 +39,19 @@ def mk_slate(bet=True):
 # ---------------------------------------------------------------- report rendering
 def test_report_has_every_required_field_and_the_disclaimer_twice():
     txt = render_report("2024-01-04", "late", mk_slate(), RiskConfig(), "v1", {"p_source": "online_platt", "drift": {"status": "OK"}}, None,
-                        {"captured_at": "2024-01-04T20:00:00+00:00", "stale": False, "remaining": 412})
+                        {"captured_at": "2024-01-04T20:00:00+00:00", "stale": False, "remaining": 412}, public_safe=False)
     assert txt.count(DISCLAIMER) == 2 and "educational" in txt and "afford to lose" in txt
     for needle in ("TOR @ BOS", "19:00 ET", "Stolarz / Swayman (confirmed)", "58.0%", "53.0%", "BOS 1.90 @ bookB", "+5.0%", "+3.5%", "$9.73", "BET BOS",
                    "NYR", "no odds", "edge +1.0% below the 3% minimum", "second night of a back-to-back", "1 recommended bet", "credits left: 412"):
         assert needle in txt, needle
     assert "No resolved recommendations yet" in txt
+
+
+def test_public_report_hides_bookmaker_names_but_keeps_the_numbers():
+    txt = render_report("2024-01-04", "late", mk_slate(), RiskConfig(), "v1", {"drift": {"status": "OK"}}, None, None, public_safe=True)
+    assert "bookB" not in txt and "bookA" not in txt
+    assert "BOS 1.90 |" in txt and "$9.73" in txt and "+5.0%" in txt                        # price, stake and edge are still there
+    assert "(bookB)" not in txt and "at 1.90." in txt                                      # the plain-language reason drops the book too
 
 
 def test_pass_rows_do_not_advertise_an_ev():
@@ -115,7 +122,7 @@ def test_performance_metrics_by_hand():
 
 def test_log_export_restore_roundtrip_is_idempotent(tmp_path):
     st = seeded_store()
-    files = export_logs(st, tmp_path / "logs")
+    files = export_logs(st, tmp_path / "logs", public_safe=False)
     names = {p.parent.name + "/" + p.name for p in files}
     assert "recommendations/r1.csv" in names and "recommendations/r3.csv" in names and "logs/bet_log.csv" in names
     assert sum(1 for p in files if p.parent.name == "odds") == 2                      # one file per odds capture
@@ -125,7 +132,7 @@ def test_log_export_restore_roundtrip_is_idempotent(tmp_path):
     before = {str(p.relative_to(tmp_path)): p.read_text() for p in (tmp_path / "logs").rglob("*.csv")}
     restore_logs(fresh, tmp_path / "logs"); restore_logs(fresh, tmp_path / "logs")          # repeated restores add nothing
     assert len(fresh.df("SELECT * FROM recommendations")) == 5 and len(fresh.df("SELECT * FROM odds_snapshots")) == 6
-    export_logs(fresh, tmp_path / "logs")
+    export_logs(fresh, tmp_path / "logs", public_safe=False)
     after = {str(p.relative_to(tmp_path)): p.read_text() for p in (tmp_path / "logs").rglob("*.csv") if p.name != "bet_log.csv"}
     assert all(after[k] == before[k] for k in after) and set(after) == {k for k in before if not k.endswith("bet_log.csv")}   # byte-identical
 
@@ -142,8 +149,8 @@ def test_concurrent_jobs_write_disjoint_files(tmp_path):
     a.upsert("odds_fetch_log", [dict(captured_at="2024-01-07T10:00:00+00:00", ok=1, source="live", remaining=9, used=1, events=1, note="h2h")], ["captured_at"])
     b.upsert("odds_snapshots", [dict(captured_at="2024-01-07T22:30:00+00:00", event_id="e9", commence_time="2024-01-07T23:00:00Z", home="H", away="A", book="bk",
                                      market="h2h", outcome="H", point=0.0, price=1.8, book_updated=None, game_id=None)], ["captured_at", "event_id", "book", "market", "outcome", "point"])
-    fa = {str(p.relative_to(tmp_path / "a")) for p in export_logs(a, tmp_path / "a")}
-    fb = {str(p.relative_to(tmp_path / "b")) for p in export_logs(b, tmp_path / "b")}
+    fa = {str(p.relative_to(tmp_path / "a")) for p in export_logs(a, tmp_path / "a", public_safe=False)}
+    fb = {str(p.relative_to(tmp_path / "b")) for p in export_logs(b, tmp_path / "b", public_safe=False)}
     new_a, new_b = fa - {str(p.relative_to(tmp_path / "origin")) for p in (tmp_path / "origin").rglob("*.csv")}, fb - {str(p.relative_to(tmp_path / "origin")) for p in (tmp_path / "origin").rglob("*.csv")}
     assert new_a and new_b and new_a.isdisjoint(new_b)                                # each job adds only its own new files
     merged = Store(":memory:")                                                        # git would merge both file sets cleanly
@@ -153,7 +160,7 @@ def test_concurrent_jobs_write_disjoint_files(tmp_path):
 
 
 def export_and_dir(store, path):
-    export_logs(store, path)
+    export_logs(store, path, public_safe=False)
     return path
 
 
@@ -218,13 +225,25 @@ def test_end_to_end_daily_run(league, tmp_path, monkeypatch):
     fx = type("Fx", (), {"events": [F.odds_event("e1", commence=f"{day}T23:00:00Z", books=books)], "captured_at": f"{day}T16:00:00+00:00", "remaining": 300, "used": 200, "source": "live"})()
     record_fetch(st, fx)
     assert (st.df("SELECT game_id FROM odds_snapshots").game_id == 99999).all()
+    from nhlbet.report.readme import END as _E, START as _S
+    (tmp_path / "README.md").write_text(f"# Test repo\n\n{_S}\nplaceholder\n{_E}\n\ntail\n")
     r = run_daily(day, "morning", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models")
     assert r["games"] == 1
     rep = (tmp_path / "reports" / "latest.md").read_text()
     assert (tmp_path / "reports/daily" / f"{day}-morning.md").exists() and "TOR @ BOS" in rep and rep.count(DISCLAIMER) == 2
     recs = Store(str(tmp_path / "t.db")).df("SELECT * FROM recommendations")
     assert len(recs) == 1 and recs.action.iloc[0] in ("BET", "NO_BET") and recs.p_market.iloc[0] is not None
-    assert any((tmp_path / "data/logs/recommendations").glob("*.csv")) and any((tmp_path / "data/logs/odds").glob("*.csv"))
+    assert any((tmp_path / "data/logs/recommendations").glob("*.csv")) and any((tmp_path / "data/logs/odds_consensus").glob("*.csv"))
+    assert not (tmp_path / "data/logs/odds").exists()                                   # public-safe by default: no raw per-book quotes exported
+    # front page, history and archive were produced, and a PUBLIC repo must never see a bookmaker name or per-book price
+    from nhlbet.report.readme import END as RM_END, START as RM_START
+    readme = (tmp_path / "README.md").read_text()
+    assert "TOR @ BOS" in readme and "(reports/HISTORY.md)" in readme and readme.startswith("# Test repo") and readme.rstrip().endswith("tail")
+    assert (tmp_path / "reports/HISTORY.md").exists() and (tmp_path / "site/history.html").exists() and (tmp_path / "site" / "archive" / f"{day}.html").exists()
+    published = {str(p.relative_to(tmp_path)): p.read_text(errors="ignore") for d in ("reports", "site", "data/logs") for p in (tmp_path / d).rglob("*") if p.is_file() and p.suffix in (".md", ".html", ".json", ".csv")}
+    published["README.md"] = readme
+    offenders = [k for k, v in published.items() if "bookA" in v or "bookB" in v]
+    assert not offenders, f"bookmaker names leaked into public-safe outputs: {offenders}"
     from nhlbet.risk.shadow import STRATEGIES
     assert len(Store(str(tmp_path / "t.db")).df("SELECT * FROM shadow_bets")) == len(STRATEGIES)      # paper trading ran on the slate
     assert any((tmp_path / "data/logs/shadow_bets").glob("*.csv")) and "Paper trading" in rep
@@ -299,3 +318,40 @@ def test_every_path_the_workflow_commits_is_not_gitignored():
     assert r.stdout.strip() == "", f"these must NOT be ignored: {r.stdout}"
     r2 = subprocess.run(["git", "check-ignore", "--no-index", "logs/nhlbet.log", "data/nhl.db"], cwd=ROOT, capture_output=True, text=True)
     assert set(r2.stdout.split()) == {"logs/nhlbet.log", "data/nhl.db"}             # the things we DO want ignored stay ignored
+
+
+def test_public_safe_exports_contain_no_bookmaker_quotes_or_names(tmp_path):
+    """Regression for a PUBLIC repository: the Odds API's terms restrict redistribution, so nothing committed may carry per-book quotes."""
+    st = seeded_store()
+    st.upsert("recommendations", [dict(run_id="rx", run_at="2024-01-06T21:00:00", run_type="late", game_id=9, game_date="2024-01-06", home="H", away="A",
+                                       home_goalie="x", away_goalie="y", goalie_status="probable", model_version="v", p_model=0.6, p_adj=0.55, p_market=0.5,
+                                       p_stack_raw=0.6, action="BET", side="home", team="H", book="SecretBook", decimal=1.95, stake=5.0, edge=0.1, ev=0.1,
+                                       reasons="", odds_captured_at=None, odds_stale=0, model_status="OK")], ["run_id", "game_id"])
+    from nhlbet.odds.consensus import persist_consensus
+    persist_consensus(st)
+    files = export_logs(st, tmp_path / "logs", public_safe=True)
+    text = "\n".join(p.read_text() for p in files)
+    assert "SecretBook" not in text and ",bk," not in text                              # neither the recommendation's book nor any raw quote row
+    assert not (tmp_path / "logs/odds").exists() and (tmp_path / "logs/odds_consensus").exists()
+    assert not any(p.parent.name == "odds" for p in files)
+    import pandas as pd
+    assert "book" not in pd.read_csv(tmp_path / "logs/bet_log.csv").columns
+    assert pd.read_csv(tmp_path / "logs/recommendations/rx.csv").book.isna().all()
+    # private mode still keeps the full detail
+    full = export_logs(st, tmp_path / "private", public_safe=False)
+    assert "SecretBook" in "\n".join(p.read_text() for p in full) and (tmp_path / "private/odds").exists()
+
+
+def test_clv_is_identical_when_restored_from_public_safe_logs_alone(tmp_path):
+    """The derived consensus is all CLV needs: a database rebuilt from public-safe logs must give the same closing-line value."""
+    from nhlbet.odds.consensus import persist_consensus
+    st = seeded_store()
+    persist_consensus(st)
+    export_logs(st, tmp_path / "logs", public_safe=True)
+    fresh = Store(":memory:")
+    fresh.upsert("games", st.df("SELECT * FROM games").to_dict("records"), ["game_id"])
+    restore_logs(fresh, tmp_path / "logs")
+    assert fresh.df("SELECT COUNT(*) n FROM odds_snapshots").n[0] == 0                    # no raw quotes came back
+    a, b = resolved(st).set_index("game_id"), resolved(fresh).set_index("game_id")
+    pd.testing.assert_series_equal(a.close_home_prob.sort_index(), b.close_home_prob.sort_index(), check_names=False)
+    pd.testing.assert_series_equal(a.clv_ev.sort_index(), b.clv_ev.sort_index(), check_names=False)

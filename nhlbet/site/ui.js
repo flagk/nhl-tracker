@@ -49,6 +49,8 @@
     var st = D.model.status, cls = st === "OK" ? "ok" : st === "ALERT" ? "alert" : "warn";
     var kids = [
       el("h1", { text: "NHL picks · " + D.date }),
+      el("div", { class: "sub" }, [el("a", { href: (location.pathname.indexOf("/archive/") >= 0 ? "../" : "") + "history.html", text: "Past picks & results" }),
+        location.pathname.indexOf("/archive/") >= 0 ? el("span", {}, [" · ", el("a", { href: "../index.html", text: "Today" })]) : null]),
       el("div", { class: "sub" }, ["Model ", el("b", { text: D.model.version || "?" }), " · health ", el("span", { class: "pill " + cls, text: st }),
         " · run: " + D.run_type + " · built " + new Date(D.generated_at).toLocaleString()]),
       el("div", { class: "banner disc", text: D.disclaimer })
@@ -87,7 +89,7 @@
       el("div", {}, [el("span", { class: "big", text: s.team + " " }), el("span", { class: "muted", text: (k === "home" ? "vs " + g.away : "@ " + g.home) + (g.start_utc ? " · " + when(g.start_utc) : "") })]),
       el("span", { class: "pill " + (rec ? "rec" : "lean"), text: rec ? "RECOMMENDED" : "LEAN – not recommended" })]);
     var m = [metric("Model win", pct(s.p_model)), metric("Market (no-vig)", pct(s.p_market)), metric("Edge", spct(s.edge)),
-             metric("EV per $1", spct(s.ev)), metric("Best price", price(s.best_decimal) + " @ " + s.best_book)];
+             metric("EV per $1", spct(s.ev)), metric("Best price", price(s.best_decimal) + (s.best_book ? " @ " + s.best_book : ""))];
     if (rec) m.push(metric("Stake", usd(a.stake) + " · " + a.units.toFixed(1) + " u"));
     var why = rec ? "Clears every check." + (a.scaled < 1 ? " Stake scaled down to respect your daily cap." : "") : (s.fails.length ? "Why not: " + s.fails.join("; ") + "." : "Below the recommendation rules.");
     var goalies = g.goalie_status === "unknown" ? "" : "Goalies: " + g.away_goalie + " (away) / " + g.home_goalie + " (home), " + g.goalie_status + ". ";
@@ -138,10 +140,10 @@
         el("div", { class: "metrics" }, [metric("Combined win probability", pct(r.p, 2)), metric("Fair odds", price(r.fair_decimal)),
           metric("Offered odds", price(r.offered_decimal) + (r.book ? " @ " + r.book : "")), metric("Parlay EV per $1", spct(r.ev)), metric("Same legs as singles (avg EV)", spct(r.singles_ev))]),
         el("div", { class: verdict[0], text: verdict[1] }),
-        el("div", { class: "sub", text: !r.single_book_available ? "No single book carries every leg at the listed prices, so the offered odds are only a reference." :
-          "Probabilities assume the legs are independent." }),
+        el("div", { class: "sub", text: !r.single_book_available ? (D.public_safe ? "Public view: bookmaker names are hidden, so the offered odds multiply the best available price per leg and are only illustrative; check that one book carries every leg." :
+          "No single book carries every leg at the listed prices, so the offered odds are only a reference.") : "Probabilities assume the legs are independent." }),
         el("div", { class: "sub", text: r.ev > 0 && allRec && r.single_book_available ? "If you still want it: stake no more than " + usd(stake) + " (" + (stake / c.unit).toFixed(1) + " u)." :
-          "No parlay stake suggested (" + (r.ev <= 0 ? "negative EV" : !allRec ? "a leg is not a recommended bet" : "no single book has all legs") + ")." })]));
+          "No parlay stake suggested (" + (r.ev <= 0 ? "negative EV" : !allRec ? "a leg is not a recommended bet" : D.public_safe ? "bookmaker detail is hidden in the public view" : "no single book has all legs") + ")." })]));
     }
     parlayBox.replaceChildren.apply(parlayBox, kids);
   }

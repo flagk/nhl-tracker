@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 
 import pandas as pd
 
+from nhlbet.privacy import is_public_safe
 from nhlbet.report.slate import SlateGame
 from nhlbet.risk.policy import RiskConfig
 
@@ -32,19 +33,21 @@ def _goalies(s: SlateGame) -> str:
     return f"{s.away_goalie} / {s.home_goalie} ({s.goalie_status})"
 
 
-def _best_line(s: SlateGame) -> tuple[str, str, str, str]:
+def _best_line(s: SlateGame, public_safe: bool = False) -> tuple[str, str, str, str]:
     """(price text, market no-vig home %, edge, ev) for the recommended side, else the side with the higher edge."""
     if not s.quotes:
         return "no odds", "-", "-", "-"
     q = s.quotes[s.rec.side] if s.rec.side else max(s.quotes.values(), key=lambda q: q.edge)
     mk = s.quotes["home"].market_prob
     # EV here uses the raw model probability; only show it for actual bets (for a pass it would read as an unkept promise)
-    return f"{q.team} {q.best_decimal:.2f} @ {q.best_book}", _pct(mk), _signed(q.edge), (_signed(q.ev) if s.rec.action == "BET" else "-")
+    where = "" if public_safe else f" @ {q.best_book}"
+    return f"{q.team} {q.best_decimal:.2f}{where}", _pct(mk), _signed(q.edge), (_signed(q.ev) if s.rec.action == "BET" else "-")
 
 
 def render_report(date: str, run_type: str, slate: list[SlateGame], cfg: RiskConfig, model_version: str, model_meta: dict,
-                  perf: dict | None = None, odds_meta: dict | None = None, now: datetime | None = None, shadow=None) -> str:
+                  perf: dict | None = None, odds_meta: dict | None = None, now: datetime | None = None, shadow=None, public_safe: bool | None = None) -> str:
     now = now or datetime.now(timezone.utc)
+    ps = is_public_safe() if public_safe is None else public_safe
     bets = [s for s in slate if s.rec.action == "BET"]
     staked = sum(s.rec.stake for s in bets)
     L = [f"# NHL model report: {date} ({run_type} run)", "", DISCLAIMER, ""]
@@ -75,13 +78,13 @@ def render_report(date: str, run_type: str, slate: list[SlateGame], cfg: RiskCon
         L += ["## Games", "", "| Game | Goalies (away / home) | Model home win | Market no-vig home | Best price | Edge | EV per $1 | Stake | Decision |",
               "|---|---|---|---|---|---|---|---|---|"]
         for s in slate:
-            price, mk, edge, ev = _best_line(s)
+            price, mk, edge, ev = _best_line(s, ps)
             dec = f"**BET {s.rec.team}**" if s.rec.action == "BET" else "no bet"
             L += [f"| {_matchup(s)} | {_goalies(s)} | {_pct(s.p_home)} | {mk} | {price} | {edge} | {ev} | "
                   f"{'$%.2f' % s.rec.stake if s.rec.action == 'BET' else '-'} | {dec} |"]
         L += ["", "## Why", ""]
         for s in slate:
-            L += [f"**{_matchup(s)}**: {s.rec.explain()}"]
+            L += [f"**{_matchup(s)}**: {s.rec.explain(show_book=not ps)}"]
             if s.notes:
                 L += ["  - Context: " + " ".join(s.notes)]
             if s.odds_stale:

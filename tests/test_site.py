@@ -163,3 +163,17 @@ def test_parlay_rules():
     fair = 1 / 0.5 / 1.05
     worse = parlay([{"game_id": i, "p": 0.5, "best_decimal": fair, "books": {"a": fair}} for i in range(3)])
     assert worse["ev"] < worse["singles_ev"] < 0 and worse["better_as_singles"]
+
+
+def test_public_payload_has_no_bookmaker_names_or_per_book_prices():
+    cfg = RiskConfig()
+    slate, _ = random_slate(np.random.default_rng(4), 5, cfg)
+    pub = build_payload(slate, cfg, None, {"version": "v", "drift": {"status": "OK"}}, {"enabled": True}, "2026-10-08", "morning", public_safe=True)
+    txt = json.dumps(pub)
+    assert "bookA" not in txt and "bookB" not in txt and pub["public_safe"] is True
+    for g in pub["games"]:
+        for sd in g["sides"].values():
+            assert sd["best_book"] is None and sd["books"] == {} and sd["best_decimal"] > 1      # one aggregated best price, no book
+    priv = build_payload(slate, cfg, None, {"version": "v", "drift": {"status": "OK"}}, {"enabled": True}, "2026-10-08", "morning", public_safe=False)
+    assert "bookA" in json.dumps(priv) and priv["public_safe"] is False
+    assert "bookA" not in render_html(pub)

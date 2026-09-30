@@ -25,17 +25,50 @@ def h2h_wide(store: Store, since: str | None = None) -> pd.DataFrame:
     return w.dropna(subset=["home", "away"]) if {"home", "away"} <= set(w.columns) else pd.DataFrame()
 
 
-def consensus_snapshots(store: Store, method: str = "shin", since: str | None = None) -> pd.DataFrame:
-    """game_id, captured_at, home_prob_novig (mean across books), n_books, best_home, best_away."""
+COLS = ["game_id", "event_id", "captured_at", "home_prob_novig", "n_books", "best_home", "best_away"]
+
+
+def _consensus_from_raw(store: Store, method: str = "shin", since: str | None = None) -> pd.DataFrame:
     w = h2h_wide(store, since)
     if w.empty:
-        return pd.DataFrame(columns=["game_id", "event_id", "captured_at", "home_prob_novig", "n_books", "best_home", "best_away"])
+        return pd.DataFrame(columns=COLS)
     w = w[w.game_id.notna()].copy()
+    if w.empty:
+        return pd.DataFrame(columns=COLS)
     w["p_home"] = [devig([h, a], method)[0] for h, a in zip(w.home, w.away)]
     g = w.groupby(["game_id", "event_id", "captured_at"])
     out = g.agg(home_prob_novig=("p_home", "mean"), n_books=("book", "nunique"), best_home=("home", "max"), best_away=("away", "max")).reset_index()
     out["game_id"] = out.game_id.astype(int)
-    return out.sort_values(["game_id", "captured_at"])
+    return out
+
+
+def consensus_snapshots(store: Store, method: str = "shin", since: str | None = None) -> pd.DataFrame:
+    """game_id, captured_at, home_prob_novig (mean across books), n_books [, event_id, best_home, best_away when raw quotes exist].
+
+    Raw per-book quotes (kept only in the local database) take precedence; the stored, publishable ``odds_consensus`` rows fill in
+    captures whose raw quotes are not available (e.g. after restoring a fresh database from the public-safe git logs).
+    """
+    raw = _consensus_from_raw(store, method, since)
+    stored = store.df("SELECT game_id, captured_at, home_prob_novig, n_books FROM odds_consensus" + (" WHERE captured_at >= ?" if since else ""),
+                      [since] if since else [])
+    if not stored.empty:
+        have = set(zip(raw.game_id, raw.captured_at)) if not raw.empty else set()
+        stored = stored[[(g, c) not in have for g, c in zip(stored.game_id, stored.captured_at)]]
+        for c in ("event_id", "best_home", "best_away"):
+            stored[c] = None
+        raw = pd.concat([raw, stored[COLS]], ignore_index=True) if not raw.empty else stored[COLS]
+    if raw.empty:
+        return pd.DataFrame(columns=COLS)
+    raw["game_id"] = raw.game_id.astype(int)
+    return raw.sort_values(["game_id", "captured_at"]).reset_index(drop=True)
+
+
+def persist_consensus(store: Store, method: str = "shin") -> int:
+    """Store the derived consensus of every linked capture (idempotent). This, not the raw quotes, is what gets committed."""
+    c = _consensus_from_raw(store, method)
+    rows = [{"game_id": int(r.game_id), "captured_at": r.captured_at, "home_prob_novig": float(r.home_prob_novig), "n_books": int(r.n_books)}
+            for r in c.itertuples()]
+    return store.upsert("odds_consensus", rows, ["game_id", "captured_at"])
 
 
 def latest_book_prices(store: Store, game_id: int, max_book_age_min: float = 90.0, fetch_max_age_min: float | None = None) -> pd.DataFrame:

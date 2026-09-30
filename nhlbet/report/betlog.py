@@ -157,7 +157,7 @@ def plot_performance(store: Store, path: str | Path, start_bankroll: float = 100
 # closing-line snapshot) add different files and git never has to merge lines of the same file. Only derived files (bet_log.csv)
 # and the tiny goalie_confirmations.csv are shared, and the workflows resolve those in favour of the newest output.
 PARTITIONED = {"recommendations": ("run_id", ["run_id", "game_id"]), "odds_fetch_log": ("captured_at", ["captured_at"]),
-               "shadow_bets": ("run_id", ["run_id", "game_id", "strategy"])}
+               "shadow_bets": ("run_id", ["run_id", "game_id", "strategy"]), "odds_consensus": ("captured_at", ["game_id", "captured_at"])}
 SINGLE = {"goalie_confirmations": ["game_date", "team"]}
 ODDS_KEYS = ["captured_at", "event_id", "book", "market", "outcome", "point"]
 
@@ -167,22 +167,32 @@ def _slug(value: str) -> str:
     return re.sub(r"[^0-9A-Za-z]+", "-", str(value)).strip("-")
 
 
-def export_logs(store: Store, root: str | Path = "data/logs") -> list[Path]:
+def export_logs(store: Store, root: str | Path = "data/logs", public_safe: bool | None = None) -> list[Path]:
+    """Write the irreplaceable logs as small per-capture/per-run CSVs.
+
+    In public-safe mode (the default unless the workflow has confirmed the repo is private) nothing written contains per-bookmaker
+    quotes or bookmaker names: raw odds captures are NOT exported (only the derived no-vig consensus is), and ``book`` columns are blanked.
+    """
+    from nhlbet.privacy import is_public_safe
+    public_safe = is_public_safe() if public_safe is None else public_safe
     root = Path(root)
     written = []
     for table, (part_col, keys) in PARTITIONED.items():
         df = store.df(f"SELECT * FROM {table}")
+        if public_safe and "book" in df.columns:
+            df = df.assign(book=None)
         for value, part in df.groupby(part_col):
             p = root / table / f"{_slug(value)}.csv"
             p.parent.mkdir(parents=True, exist_ok=True)
             part.sort_values(keys).to_csv(p, index=False)
             written.append(p)
-    snaps = store.df("SELECT * FROM odds_snapshots")
-    for cap, part in snaps.groupby("captured_at"):
-        p = root / "odds" / f"{_slug(cap)}.csv"
-        p.parent.mkdir(parents=True, exist_ok=True)
-        part.sort_values(["event_id", "book", "market", "outcome", "point"]).to_csv(p, index=False)
-        written.append(p)
+    if not public_safe:                                        # raw per-book quotes only ever leave the database for a private repo
+        snaps = store.df("SELECT * FROM odds_snapshots")
+        for cap, part in snaps.groupby("captured_at"):
+            p = root / "odds" / f"{_slug(cap)}.csv"
+            p.parent.mkdir(parents=True, exist_ok=True)
+            part.sort_values(["event_id", "book", "market", "outcome", "point"]).to_csv(p, index=False)
+            written.append(p)
     for table, keys in SINGLE.items():
         df = store.df(f"SELECT * FROM {table}")
         if len(df):
@@ -192,6 +202,8 @@ def export_logs(store: Store, root: str | Path = "data/logs") -> list[Path]:
     if len(bl):
         cols = ["game_date", "home", "away", "team", "side", "book", "decimal", "stake", "p_model", "p_adj", "p_market", "edge", "ev", "close_home_prob",
                 "clv_ev", "bet_won", "profit", "home_win", "model_version"]
+        if public_safe:
+            cols.remove("book")
         root.mkdir(parents=True, exist_ok=True)
         p = root / "bet_log.csv"; bl[bl.is_bet][cols].to_csv(p, index=False); written.append(p)
     return written
