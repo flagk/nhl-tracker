@@ -24,7 +24,7 @@ FLAT_PCT = 0.01   # flat strategies stake 1% of bankroll per bet
 class Strategy:
     name: str
     description: str
-    kind: str                    # 'policy' | 'flat_edge' | 'market_favorite'
+    kind: str                    # 'policy' | 'flat_edge' | 'model_side' | 'market_favorite'
     overrides: tuple = ()        # ((RiskConfig field, value), ...)
 
 
@@ -35,6 +35,7 @@ STRATEGIES: tuple[Strategy, ...] = (
     Strategy("no_shrink", "Live policy trusting the raw model fully (no shrinkage toward the market)", "policy",
              (("trust_w0", 1.0), ("trust_d0", 1e9), ("max_disagreement", 1.0))),
     Strategy("flat_model_side", "Flat 1% on every game where the model sees any positive edge", "flat_edge"),
+    Strategy("every_game", "Flat 1% on the model's preferred side of EVERY game that has fresh odds (no edge filter, even at a negative edge)", "model_side"),
     Strategy("market_favorite", "CONTROL: flat 1% on the market favourite (no skill; shows what the bookmaker margin costs)", "market_favorite"),
 )
 
@@ -74,8 +75,8 @@ def shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date
             if not _usable(g.quotes, cfg, g.ctx):
                 rows.append(_row(run_id, run_at, date, g.game_id, st.name))
                 continue
-            q = (max(g.quotes.values(), key=lambda x: x.edge) if st.kind == "flat_edge"
-                 else max(g.quotes.values(), key=lambda x: x.market_prob))
+            key = {"flat_edge": lambda x: x.edge, "model_side": lambda x: x.model_prob}.get(st.kind, lambda x: x.market_prob)
+            q = max(g.quotes.values(), key=key)
             if st.kind == "flat_edge" and q.edge <= 0:
                 rows.append(_row(run_id, run_at, date, g.game_id, st.name))
                 continue
