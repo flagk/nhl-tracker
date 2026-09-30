@@ -26,6 +26,12 @@ weeks of settled paper bets beat the no-skill control (`always_over`) by more th
 - Whole-number lines can push (stake refunded): probabilities are compared conditional on no push; EV uses the real win/lose/push split.
 
 ## Evidence
+First honest walk-forward results (6,565 games, 2021-22 to 2025-26; `reports/GOALS.md` has the live numbers):
+- **Goal rates:** about 1.9% better Poisson log-likelihood than the training average (CI excludes zero). Hockey scoring is mostly noise, so this is a small real signal.
+- **Puck line:** about 0.019 lower log loss than the base rate after recalibration (CI excludes zero); calibration slope about 0.8.
+- **Totals:** calibrated (slope about 1.0) but essentially no skill: 0.001-0.002 better than the base rate, CI touching zero. Expect the market to price totals better than this model.
+- A first version of this report was wrong (outcome columns leaked into the features); it was caught because the gains were implausibly large, fixed, and is covered by regression tests.
+
 `reports/GOALS.md` (workflow "Goals model backtest") holds the walk-forward test against base rates. There are **no historical sportsbook lines**, so
 it cannot say whether the model beats the market, only whether it beats naive rates and is calibrated. The market test is the paper trading:
 

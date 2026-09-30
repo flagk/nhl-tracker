@@ -52,6 +52,8 @@ def _logit(p):
 def fit_platt(p, y) -> dict:
     """logit(p') = a + b*logit(p), fit by (lightly regularised) logistic regression. b near 1 = calibrated; b < 1 = overconfident; b near 0 = no signal."""
     from sklearn.linear_model import LogisticRegression
+    if len(set(np.asarray(y, int).tolist())) < 2:          # a one-class outcome carries no calibration information
+        return {"a": 0.0, "b": float("nan"), "n": int(len(y))}
     m = LogisticRegression(C=100.0).fit(_logit(p).reshape(-1, 1), np.asarray(y, int))
     return {"a": float(m.intercept_[0]), "b": float(m.coef_[0, 0]), "n": int(len(y))}
 
@@ -72,7 +74,9 @@ def calibration_params(P: pd.DataFrame) -> dict:
     for kind in ("totals", "spreads"):
         p, y, _ = _pooled(P, kind)
         if len(p) >= 300:
-            out[kind] = fit_platt(p, y)
+            c = fit_platt(p, y)
+            if np.isfinite(c["b"]):
+                out[kind] = c
     return out
 
 
@@ -127,9 +131,9 @@ def evaluate(P: pd.DataFrame, calibrated: bool = False) -> pd.DataFrame:
         lm, lb = _ll(Q[pc], y), _ll(Q[bc], y)
         d = lm - lb
         lo, hi = _boot(d, Q.game_date)
-        slope = float(np.polyfit(np.log(np.clip(Q[pc], EPS, 1 - EPS) / (1 - np.clip(Q[pc], EPS, 1 - EPS))), y, 1)[0]) if len(Q) > 100 else np.nan
+        slope = fit_platt(Q[pc], y)["b"] if len(Q) > 100 else np.nan                  # logistic calibration slope (1 = calibrated)
         rows.append({"market": name, "n": len(Q), "hit_rate": float(y.mean()), "mean_p": float(Q[pc].mean()), "ll_model": float(lm.mean()),
-                     "ll_base": float(lb.mean()), "diff": float(d.mean()), "ci_low": lo, "ci_high": hi, "lin_slope": slope})
+                     "ll_base": float(lb.mean()), "diff": float(d.mean()), "ci_low": lo, "ci_high": hi, "cal_slope": slope})
     return pd.DataFrame(rows)
 
 
