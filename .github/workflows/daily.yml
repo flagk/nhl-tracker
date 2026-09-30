@@ -34,6 +34,13 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt && pip install -e .
 
+      - name: Detect repository visibility (public repos publish only public-safe outputs)
+        run: |
+          private=$(curl -s -H "Authorization: Bearer ${{ github.token }}" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}" | python3 -c "import sys,json; print(str(json.load(sys.stdin).get('private')).lower())" 2>/dev/null || echo unknown)
+          if [ "$private" = "true" ]; then echo "PUBLIC_SAFE=0" >> "$GITHUB_ENV"; else echo "PUBLIC_SAFE=1" >> "$GITHUB_ENV"; fi   # unknown -> safe
+          echo "repository private=$private"
+
       - name: Restore database + raw API cache (rebuildable; irreplaceable logs live in git under data/logs)
         uses: actions/cache@v4
         with:
@@ -72,7 +79,7 @@ jobs:
         run: |
           git config user.name "nhl-model-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add -A reports data/logs data/models site
+          git add -A reports data/logs data/models site README.md
           if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
           git commit -m "Daily ${{ steps.rt.outputs.type }} run $(date -u +%F)"
           for i in 1 2 3 4 5; do

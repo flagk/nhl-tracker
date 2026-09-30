@@ -59,10 +59,11 @@ class Recommendation:
     kelly_full: float | None = None
     reasons: list[str] = field(default_factory=list)
 
-    def explain(self) -> str:
+    def explain(self, show_book: bool = True) -> str:
         if self.action != "BET":
             return "No bet: " + "; ".join(self.reasons) if self.reasons else "No bet."
-        return (f"Bet ${self.stake:,.2f} ({self.stake_pct:.2%} of bankroll) on {self.team} at {self.decimal:.2f} ({self.book}). "
+        at = f"{self.decimal:.2f} ({self.book})" if show_book and self.book else f"{self.decimal:.2f}"
+        return (f"Bet ${self.stake:,.2f} ({self.stake_pct:.2%} of bankroll) on {self.team} at {at}. "
                 f"The model gives {self.team} {self.model_prob:.1%} vs the market's no-vig {self.market_prob:.1%} (edge {self.edge:+.1%}); "
                 f"after shrinking toward the market the working probability is {self.adj_prob:.1%}, worth {self.ev:+.1%} per $1 at that price."
                 + (" " + " ".join(self.reasons) if self.reasons else ""))

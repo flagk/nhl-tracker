@@ -20,7 +20,9 @@ from nhlbet.odds.client import OddsAPIError, OddsClient, OddsConfigError
 from nhlbet.odds.snapshots import record_fetch
 from nhlbet.registry import ModelRegistry
 from nhlbet.report.betlog import export_logs, performance, plot_performance, restore_logs, shadow_performance
+from nhlbet.report.history import render_history_html, render_history_md
 from nhlbet.report.markdown import render_report
+from nhlbet.report.readme import render_block, update_readme
 from nhlbet.report.slate import build_slate
 from nhlbet.site.build import build_payload, build_site
 from nhlbet.risk.policy import RiskConfig
@@ -66,7 +68,7 @@ def fetch_and_store_odds(store: Store, markets=("h2h",), regions: str = "us") ->
 
 def run_daily(date: str | None = None, run_type: str = "morning", db: str = "data/nhl.db", bankroll: float = 1000.0, fixed_bankroll: bool = False,
               refresh: bool = True, odds: bool = True, do_retrain: bool | None = None, log_root: str = "data/logs", report_dir: str = "reports",
-              model_dir: str = "data/models", site_dir: str = "site") -> dict:
+              model_dir: str = "data/models", site_dir: str = "site", readme_path: str = "README.md") -> dict:
     date = date or game_day()
     store = Store(db)
     restored = restore_logs(store, log_root)
@@ -112,6 +114,13 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     plot_performance(store, Path(report_dir) / "performance.png", bankroll)
     payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow)
     build_site(payload, site_dir)
+    # history (markdown for GitHub, html for the site) and the front-page block with clickable links
+    Path(report_dir, "HISTORY.md").write_text(render_history_md(store, report_dir))
+    Path(site_dir, "history.html").write_text(render_history_html(store, report_dir))
+    if Path(readme_path).exists():
+        block = render_block(date, run_type, slate, status, datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"), sum(s.rec.action == "BET" for s in slate))
+        if not update_readme(readme_path, block):
+            log.warning("README has no picks markers; front-page block not updated")
     written = export_logs(store, log_root)
     log.info("report written for %s (%d games, %d bets); exported %d log files", date, len(slate), sum(s.rec.action == "BET" for s in slate), len(written))
     return {"date": date, "games": len(slate), "bets": sum(s.rec.action == "BET" for s in slate), "model": entry["version"], "status": status, "notes": notes}

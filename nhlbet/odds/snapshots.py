@@ -74,4 +74,6 @@ def record_fetch(store: Store, fetch: OddsFetch, market_note: str = "") -> int:
                                          "used": fetch.used, "events": len({r["event_id"] for r in rows}), "note": market_note}],
                      ["captured_at"])
     link_games(store)
+    from nhlbet.odds.consensus import persist_consensus
+    persist_consensus(store)
     return n

@@ -10,6 +10,7 @@ import math
 from datetime import datetime, timezone
 from pathlib import Path
 
+from nhlbet.privacy import is_public_safe
 from nhlbet.report.markdown import DISCLAIMER
 from nhlbet.report.slate import SlateGame
 from nhlbet.risk.policy import RiskConfig, assess_sides, game_block_reason
@@ -40,7 +41,7 @@ def _clean(o):
     return o
 
 
-def game_payload(s: SlateGame, cfg: RiskConfig) -> dict:
+def game_payload(s: SlateGame, cfg: RiskConfig, public_safe: bool = False) -> dict:
     from nhlbet.risk.kelly import kelly_fraction
 
     blocked = game_block_reason(s.quotes, cfg, s.ctx)
@@ -49,8 +50,8 @@ def game_payload(s: SlateGame, cfg: RiskConfig) -> dict:
         for q, p_adj, ev, fails in assess_sides(s.quotes, cfg, s.ctx):
             books = {b["book"]: b[q.side] for b in s.books if b.get(q.side)}
             sides[q.side] = {"team": q.team, "p_model": q.model_prob, "p_market": q.market_prob, "p_adj": p_adj, "edge": q.edge, "ev": ev,
-                             "kelly_full": kelly_fraction(p_adj, q.best_decimal), "best_book": q.best_book, "best_decimal": q.best_decimal,
-                             "books": books, "fails": ([blocked] if blocked else fails), "qualifies": blocked is None and not fails}
+                             "kelly_full": kelly_fraction(p_adj, q.best_decimal), "best_book": None if public_safe else q.best_book,
+                             "best_decimal": q.best_decimal, "books": {} if public_safe else books, "fails": ([blocked] if blocked else fails), "qualifies": blocked is None and not fails}
     return {"game_id": s.game_id, "start_utc": s.start_utc, "home": s.home, "away": s.away, "home_goalie": s.home_goalie,
             "away_goalie": s.away_goalie, "goalie_status": s.goalie_status, "p_home": s.p_home, "blocked": blocked, "notes": s.notes,
             "odds_stale": s.odds_stale, "odds_captured_at": s.odds_captured_at, "sides": sides,
@@ -58,21 +59,23 @@ def game_payload(s: SlateGame, cfg: RiskConfig) -> dict:
 
 
 def build_payload(slate: list[SlateGame], cfg: RiskConfig, perf: dict | None, model_entry: dict, odds_meta: dict | None, date: str,
-                  run_type: str, now: datetime | None = None, notes: list[str] | None = None, shadow=None) -> dict:
+                  run_type: str, now: datetime | None = None, notes: list[str] | None = None, shadow=None,
+                  public_safe: bool | None = None) -> dict:
     now = now or datetime.now(timezone.utc)
+    ps = is_public_safe() if public_safe is None else public_safe
     perf = perf or {}
     drift = model_entry.get("drift", {})
     track = {"resolved_games": perf.get("resolved_games", 0), "bets": perf.get("bets"), "model": perf.get("model"), "vs_market": perf.get("vs_market"),
              "clv": perf.get("clv"), "drawdown": perf.get("drawdown"), "no_bet_rate": perf.get("no_bet_rate")}
     payload = {
-        "generated_at": now.isoformat(timespec="seconds"), "date": date, "run_type": run_type, "notes": notes or [],
+        "generated_at": now.isoformat(timespec="seconds"), "public_safe": ps, "date": date, "run_type": run_type, "notes": notes or [],
         "model": {"version": model_entry.get("version"), "p_source": model_entry.get("p_source"), "status": drift.get("status", "UNKNOWN"),
                   "reasons": drift.get("performance", {}).get("reasons", []), "train_end": model_entry.get("train_end")},
         "odds": odds_meta or {"enabled": False},
         "policy": {"bankroll": cfg.bankroll, "max_bet_pct": cfg.max_bet_pct, "max_daily_exposure_pct": cfg.max_daily_exposure_pct,
                    "max_bets_per_day": cfg.max_bets_per_day, "min_stake": cfg.min_stake, "min_edge": cfg.min_edge,
                    "parlay_max_legs": PARLAY_MAX_LEGS, "parlay_max_pct": PARLAY_MAX_PCT},
-        "games": [game_payload(s, cfg) for s in slate],
+        "games": [game_payload(s, cfg, ps) for s in slate],
         "track": track,
         "paper": ([] if shadow is None or len(shadow) == 0 else
                   [{"strategy": k, **{c: (None if v != v else v) for c, v in r.items()}} for k, r in shadow.iterrows()]),
@@ -92,5 +95,8 @@ def build_site(payload: dict, out_dir: str | Path = "site") -> Path:
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     (out / "picks.json").write_text(json.dumps(payload, indent=1, allow_nan=False))
-    (out / "index.html").write_text(render_html(payload))
+    page = render_html(payload)
+    (out / "index.html").write_text(page)
+    (out / "archive").mkdir(exist_ok=True)
+    (out / "archive" / f"{payload['date']}.html").write_text(page)            # the last run of each day stays browsable as history
     return out / "index.html"

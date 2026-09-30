@@ -54,6 +54,11 @@ CREATE TABLE IF NOT EXISTS odds_snapshots (
     PRIMARY KEY (captured_at, event_id, book, market, outcome, point)
 );
 CREATE INDEX IF NOT EXISTS ix_odds_game ON odds_snapshots(game_id, captured_at);
+-- derived, publishable summary of each odds capture: mean no-vig home probability across books (no per-book quotes)
+CREATE TABLE IF NOT EXISTS odds_consensus (
+    game_id INTEGER NOT NULL, captured_at TEXT NOT NULL, home_prob_novig REAL NOT NULL, n_books INTEGER,
+    PRIMARY KEY (game_id, captured_at)
+);
 CREATE TABLE IF NOT EXISTS odds_fetch_log (
     captured_at TEXT PRIMARY KEY, ok INTEGER, source TEXT, remaining INTEGER, used INTEGER, events INTEGER, note TEXT
 );
