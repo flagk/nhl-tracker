@@ -33,6 +33,7 @@ def render_block(date: str, run_type: str, slate, model_status: str, generated: 
          "| 📄 **[Today's full report](reports/latest.md)** | every game: model vs market, edge, stake and the reason for each decision |",
          f"| 🌐 **[Interactive picks page]({pages or 'site/index.html'})** | choose your unit size and staking, top picks, parlay calculator |",
          "| 🗂️ **[Pick history](reports/HISTORY.md)** | every day's picks and how they settled ([web version](" + (f"{pages}history.html" if pages else "site/history.html") + ")) |",
+         f"| 🧾 **[My bets & fake bets]({(pages + 'bets.html') if pages else 'site/bets.html'})** | log your own bets (kept only in your browser) and see the pretend-money bets on every game |",
          ("| 📈 [Bet log (CSV)](data/logs/bet_log.csv) | all settled recommended bets |" if bet_log_exists
           else "| 📈 Bet log (CSV) | appears here after the first recommended bet settles |"), ""]
     if slate:

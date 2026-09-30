@@ -49,7 +49,8 @@
     var st = D.model.status, cls = st === "OK" ? "ok" : st === "ALERT" ? "alert" : "warn";
     var kids = [
       el("h1", { text: "NHL picks · " + D.date }),
-      el("div", { class: "sub" }, [el("a", { href: (location.pathname.indexOf("/archive/") >= 0 ? "../" : "") + "history.html", text: "Past picks & results" }),
+      el("div", { class: "sub" }, [el("a", { href: (location.pathname.indexOf("/archive/") >= 0 ? "../" : "") + "history.html", text: "Past picks & results" }), " · ",
+        el("a", { href: (location.pathname.indexOf("/archive/") >= 0 ? "../" : "") + "bets.html", text: "My bets & fake bets" }),
         location.pathname.indexOf("/archive/") >= 0 ? el("span", {}, [" · ", el("a", { href: "../index.html", text: "Today" })]) : null]),
       el("div", { class: "sub" }, ["Model ", el("b", { text: D.model.version || "?" }), " · health ", el("span", { class: "pill " + cls, text: st }),
         " · run: " + D.run_type + " · built " + new Date(D.generated_at).toLocaleString()]),
