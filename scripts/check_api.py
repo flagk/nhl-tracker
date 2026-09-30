@@ -20,6 +20,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--season", type=int, default=20242025)
 ap.add_argument("--team", default="BOS")
 ap.add_argument("--n", type=int, default=5)
+ap.add_argument("--lenient", action="store_true", help="treat xG/goalie-join checks as warnings (older seasons may lack those fields)")
 a = ap.parse_args()
 
 c = NHLClient()
@@ -48,8 +49,10 @@ for g in games[-a.n:]:
     print(f"\n{g['game_date']} {g['away']} @ {g['home']}  {g['away_score']}-{g['home_score']}  "
           f"CF% {home['att_for'] / max(1, home['att_for'] + home['att_against']):.2f}  xG {home.get('xg_for', 0):.2f}-{home.get('xg_against', 0):.2f}  "
           f"PP {home.get('pp_goals', 0):.0f}/{home.get('pp_opps', 0):.0f}")
+    soft = {"goalie xG faced joins by player id"} if a.lenient else set()
     for k, v in checks.items():
-        print(f"   [{'PASS' if v else ('SKIP' if v is None else 'FAIL')}] {k}")
-        bad += v is False
+        label = "PASS" if v else ("SKIP" if v is None else ("WARN" if k in soft else "FAIL"))
+        print(f"   [{label}] {k}")
+        bad += (v is False) and k not in soft
 print("\nALL CHECKS PASSED" if not bad else f"\n{bad} CHECK(S) FAILED - parsers need adjusting to the live payload")
 sys.exit(1 if bad else 0)

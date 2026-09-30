@@ -43,6 +43,10 @@ jobs:
           restore-keys: nhl-data-
       - name: Validate parsers against the live NHL API (gate)
         run: python scripts/check_api.py --season 20242025 --team BOS --n 5
+      - name: Validate older seasons (lenient on xG-specific fields)
+        run: |
+          python scripts/check_api.py --season 20182019 --team BOS --n 3 --lenient
+          python scripts/check_api.py --season 20202021 --team TOR --n 3 --lenient
       - name: Backfill
         run: python -m nhlbet.data.ingest --seasons ${{ github.event.inputs.seasons }}
       - name: Feature selection, tuning, walk-forward backtest, retrain

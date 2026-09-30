@@ -118,3 +118,21 @@ def test_circuit_breaker_stops_hammering_a_dead_api(tmp_path):
     with pytest.raises(NHLAPIError, match="circuit open"):
         c.get("/v1/a3")
     assert len(sess.calls) == calls                                   # no further network attempts
+
+
+def test_season_comes_from_the_api_id_not_the_calendar():
+    """The 2019-20 bubble playoffs were played Aug-Sep 2020; a date rule files them under 2020-21. The API's id is authoritative,
+    and legacy rows (no season id) still use the date rule."""
+    from nhlbet.data.loaders import load_games
+    st = Store(":memory:")
+    base = dict(game_type=2, start_utc=None, home_score=3, away_score=1, status="FINAL", last_period="REG", home_win=1, updated_at=None)
+    st.upsert("games", [
+        dict(game_id=1, season=20192020, game_date="2019-10-03", home="BOS", away="TOR", source="nhl_api", **base),
+        dict(game_id=2, season=20192020, game_date="2020-08-15", home="BOS", away="TBL", source="nhl_api", **{**base, "game_type": 3}),   # bubble playoff
+        dict(game_id=3, season=20202021, game_date="2021-01-14", home="TOR", away="MTL", source="nhl_api", **base),
+        dict(game_id=-1, season=None, game_date="2023-10-10", home="NYR", away="PIT", source="legacy_csv", **base),
+        dict(game_id=-2, season=None, game_date="2024-03-10", home="NYR", away="BOS", source="legacy_csv", **base)], ["game_id"])
+    g = load_games(st).set_index("game_id").season
+    assert g[1] == 2019 and g[2] == 2019 and g[3] == 2020          # bubble playoff stays in 2019-20
+    assert g[-1] == 2023 and g[-2] == 2023                          # legacy fallback: Aug-1 boundary
+    assert str(g.dtype).startswith("int")
