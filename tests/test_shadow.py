@@ -135,3 +135,14 @@ def test_report_explains_the_control_and_small_samples():
 def test_old_seasons_do_not_request_seattle():
     assert "SEA" not in ingest.season_teams(20192020) and "SEA" in ingest.season_teams(20212022)
     assert len(ingest.season_teams(20192020)) == 31 and len(ingest.season_teams(20232024)) == 32
+
+
+def test_every_game_bets_the_models_side_even_at_negative_edge_and_is_listed():
+    cfg = RiskConfig(bankroll=1000)
+    games = [G(1, q(0.60, 0.64, 1.55, 2.60)), G(2, q(0.45, 0.50, 1.95, 1.95)), G(3, None)]   # game 1: model likes home but the price is too short (edge -4%)
+    eg = by_strategy(shadow_bets(games, cfg, "r", "t", "d"))["every_game"]
+    assert eg[1]["action"] == "BET" and eg[1]["side"] == "home" and eg[1]["stake"] == 10.0 and eg[1]["edge"] < 0
+    assert eg[2]["side"] == "away" and eg[2]["stake"] == 10.0 and eg[3]["action"] == "NO_BET"
+    from nhlbet.report.markdown import _fake_bets_today
+    md = "\n".join(_fake_bets_today(games, cfg, "d"))
+    assert "NOT recommendations" in md and "A1 @ H1" in md and "A2 @ H2" in md and "A3" not in md and "Total pretend stake $20.00" in md

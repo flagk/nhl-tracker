@@ -93,6 +93,7 @@ def render_report(date: str, run_type: str, slate: list[SlateGame], cfg: RiskCon
     L += ["## Track record (all logged recommendations that have resolved)", ""]
     L += _perf_section(perf)
     L += _shadow_section(shadow)
+    L += _fake_bets_today(slate, cfg, date)
     L += ["", "---", DISCLAIMER, ""]
     return "\n".join(L)
 
@@ -140,4 +141,20 @@ def _shadow_section(shadow) -> list[str]:
     small = int(shadow.bets.max()) < 100
     if small:
         L += ["", "*Samples are still small: ROI over fewer than ~100 bets is mostly luck. Compare strategies on CLV and against the control, and wait for volume.*"]
+    return L
+
+
+def _fake_bets_today(slate: list[SlateGame], cfg: RiskConfig, date: str) -> list[str]:
+    """Today's pretend bets on every game (strategy ``every_game``): shown so the fake money is visible, never a recommendation."""
+    from nhlbet.risk.shadow import STRATEGIES, shadow_bets
+    rows = [r for r in shadow_bets(slate, cfg, "", "", date, [s for s in STRATEGIES if s.name == "every_game"]) if r["action"] == "BET"]
+    if not rows:
+        return []
+    games = {s.game_id: s for s in slate}
+    L = ["", "### Today's fake bets on every game (pretend money, NOT recommendations)", "",
+         "| Game | Pretend pick | Pretend stake | Price | Model | Market |", "|---|---|---|---|---|---|"]
+    for r in rows:
+        g = games[r["game_id"]]
+        L += [f"| {g.away} @ {g.home} | {r['team']} | ${r['stake']:.2f} | {r['decimal']:.2f} | {r['p_model']:.1%} | {r['p_market']:.1%} |"]
+    L += ["", f"Total pretend stake ${sum(r['stake'] for r in rows):,.2f}. Settled results feed the `every_game` row above; real bets follow the normal policy only."]
     return L

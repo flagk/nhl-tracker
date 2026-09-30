@@ -14,6 +14,7 @@ lines automatically, and shown in the daily report and on the picks page.
 |---|---|
 | `market_favorite` (**control**) | What does "no skill" cost? Flat bets on the market favourite lose roughly the bookmaker's margin (~4%). Everything is judged against this. |
 | `flat_model_side` | Does betting every game where the model sees any positive edge make money, or only the selective bets? |
+| `every_game` | Flat 1% on the model's preferred side of EVERY game with fresh odds, even at a negative edge. Today's pretend stakes are listed in the daily report ("Today's fake bets"). Expect it to lose about the bookmaker margin unless the model beats the market; that is the point of measuring it. |
 | `edge_1pct` | Is the 3% minimum edge too strict (or too loose)? |
 | `no_shrink` | Is shrinking the model toward the market helping or hurting? |
 | `no_guard` | Does the early-season guard (no bets until each team has 10 games) actually protect us? |
