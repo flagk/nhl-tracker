@@ -2,7 +2,7 @@
 
 > **Disclaimer.** This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.
 
-*Generated 2026-09-30 19:31 UTC · model `20260929-3184e7` · probability source `online_platt` · bankroll $1,000.00 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
+*Generated 2026-09-30 19:38 UTC · model `20260929-3184e7` · probability source `online_platt` · bankroll $1,000.00 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
 
 *Odds snapshot: 2026-09-30T19:31:34+00:00 · API credits left: 491*
 
