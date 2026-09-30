@@ -66,8 +66,12 @@ def record_fetch(store: Store, fetch: OddsFetch, market_note: str = "") -> int:
     """Store a fetch (skipping re-storage of identical stale/cached data) and log quota state."""
     rows = parse_events(fetch.events, fetch.captured_at)
     n = store.upsert("odds_snapshots", rows, ["captured_at", "event_id", "book", "market", "outcome", "point"]) if rows else 0
-    store.upsert("odds_fetch_log", [{"captured_at": fetch.captured_at, "ok": 1, "source": fetch.source, "remaining": fetch.remaining,
-                                     "used": fetch.used, "events": len({r["event_id"] for r in rows}), "note": market_note}],
-                 ["captured_at"])
+    # A capture is logged once, with how it was really obtained. Re-reading the cached response later (same captured_at) must not
+    # overwrite a 'live' row with 'cache', or the audit trail would lose the fact that this capture was a real API call.
+    exists = store.df("SELECT 1 FROM odds_fetch_log WHERE captured_at=?", [fetch.captured_at]).shape[0]
+    if not exists or fetch.source == "live":
+        store.upsert("odds_fetch_log", [{"captured_at": fetch.captured_at, "ok": 1, "source": fetch.source, "remaining": fetch.remaining,
+                                         "used": fetch.used, "events": len({r["event_id"] for r in rows}), "note": market_note}],
+                     ["captured_at"])
     link_games(store)
     return n
