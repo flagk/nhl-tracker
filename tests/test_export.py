@@ -1,11 +1,11 @@
 import pandas as pd
 
 from nhlbet.data.store import Store
-from nhlbet.report.export import (DAILY_COLS, GAMES_COLS, MODEL_COLS, OOS_COLS, PAPER_COLS, PAPER_SUMMARY_COLS, export_dataset)
+from nhlbet.report.export import (DAILY_COLS, GAMES_COLS, MODEL_COLS, OOS_COLS, PAPER_COLS, PAPER_SUMMARY_COLS, ALT_COLS, export_dataset)
 from tests.test_report_pipeline import seeded_store
 
 EXPECT = {"games_predictions": GAMES_COLS, "daily_summary": DAILY_COLS, "paper_trading": PAPER_COLS, "paper_summary": PAPER_SUMMARY_COLS,
-          "model_versions": MODEL_COLS, "oos_predictions": OOS_COLS}
+          "model_versions": MODEL_COLS, "oos_predictions": OOS_COLS, "alt_market_predictions": ALT_COLS}
 
 
 def run(st, tmp_path):

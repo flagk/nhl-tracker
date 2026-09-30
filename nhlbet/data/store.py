@@ -74,7 +74,15 @@ CREATE TABLE IF NOT EXISTS recommendations (
 CREATE TABLE IF NOT EXISTS shadow_bets (
     run_id TEXT NOT NULL, run_at TEXT NOT NULL, game_id INTEGER NOT NULL, strategy TEXT NOT NULL, game_date TEXT,
     action TEXT, side TEXT, team TEXT, book TEXT, decimal REAL, stake REAL, p_model REAL, p_adj REAL, p_market REAL, edge REAL, ev REAL,
+    market TEXT, point REAL, label TEXT,              -- NULL market = moneyline; 'totals' / 'spreads' for the goals-model strategies
     PRIMARY KEY (run_id, game_id, strategy)
+);
+-- every run's model-vs-market view of totals and puck lines for EVERY game with odds (bets and passes): for calibration and paper trading
+CREATE TABLE IF NOT EXISTS alt_quotes (
+    run_id TEXT NOT NULL, run_at TEXT NOT NULL, game_id INTEGER NOT NULL, game_date TEXT, market TEXT NOT NULL, side TEXT NOT NULL, label TEXT,
+    point REAL, p_model REAL, p_market REAL, p_push REAL, book TEXT, decimal REAL, edge REAL, ev REAL, n_books INTEGER,
+    lam_home REAL, lam_away REAL, exp_total REAL, odds_captured_at TEXT,
+    PRIMARY KEY (run_id, game_id, market, side)
 );
 CREATE TABLE IF NOT EXISTS goalie_confirmations (
     game_date TEXT NOT NULL, team TEXT NOT NULL, player_id INTEGER, name TEXT, source TEXT, captured_at TEXT,
@@ -94,6 +102,18 @@ class Store:
         self.conn = sqlite3.connect(self.path)
         self.conn.row_factory = sqlite3.Row
         self.conn.executescript(SCHEMA)
+        self._migrate()
+
+    # columns added after first release: CREATE TABLE IF NOT EXISTS leaves an existing (cached) database unchanged, so add them here
+    MIGRATIONS = {"shadow_bets": {"market": "TEXT", "point": "REAL", "label": "TEXT"}}
+
+    def _migrate(self) -> None:
+        for table, cols in self.MIGRATIONS.items():
+            have = {r[1] for r in self.conn.execute(f"PRAGMA table_info({table})")}
+            for col, typ in cols.items():
+                if col not in have:
+                    self.conn.execute(f"ALTER TABLE {table} ADD COLUMN {col} {typ}")
+        self.conn.commit()
 
     @contextmanager
     def tx(self) -> Iterator[sqlite3.Connection]:

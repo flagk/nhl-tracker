@@ -92,6 +92,7 @@ def render_report(date: str, run_type: str, slate: list[SlateGame], cfg: RiskCon
             L += [""]
     L += ["## Track record (all logged recommendations that have resolved)", ""]
     L += _perf_section(perf)
+    L += _other_markets(slate, ps)
     L += _shadow_section(shadow)
     L += _fake_bets_today(slate, cfg, date)
     L += ["", "---", DISCLAIMER, ""]
@@ -144,17 +145,36 @@ def _shadow_section(shadow) -> list[str]:
     return L
 
 
+def _other_markets(slate: list[SlateGame], public_safe: bool) -> list[str]:
+    rows = [(s, q) for s in slate for q in getattr(s, "alt", None) or []]
+    if not rows:
+        return []
+    L = ["", "## Other markets: totals and puck line (experimental, paper-trading only)", "",
+         "The goals model prices the over/under and the puck line. **No real stakes are suggested here**: this model has no track record against the "
+         "market yet, so it is only paper-traded (see below) until results, not backtests, say otherwise.", "",
+         "| Game | Market | Side | Model | Market (no-vig) | Edge | EV per $1 | Best price |", "|---|---|---|---|---|---|---|---|"]
+    for s, q in sorted(rows, key=lambda x: -x[1].edge):
+        price = f"{q.best_decimal:.2f}" + ("" if public_safe else f" ({q.best_book})")
+        L += [f"| {_matchup(s)} | {'Total' if q.market == 'totals' else 'Puck line'} | {q.label} | {q.model_prob:.1%} | {q.market_prob:.1%} | "
+              f"{q.edge * 100:+.1f} pts | {q.ev:+.1%} | {price} |"]
+    L += [""]
+    return L
+
+
 def _fake_bets_today(slate: list[SlateGame], cfg: RiskConfig, date: str) -> list[str]:
-    """Today's pretend bets on every game (strategy ``every_game``): shown so the fake money is visible, never a recommendation."""
+    """Today's pretend bets on every game (strategies ``every_*``): shown so the fake money is visible, never a recommendation."""
     from nhlbet.risk.shadow import STRATEGIES, shadow_bets
-    rows = [r for r in shadow_bets(slate, cfg, "", "", date, [s for s in STRATEGIES if s.name == "every_game"]) if r["action"] == "BET"]
+    names = ("every_game", "every_total", "every_puckline")
+    rows = [r for r in shadow_bets(slate, cfg, "", "", date, [s for s in STRATEGIES if s.name in names]) if r["action"] == "BET"]
     if not rows:
         return []
     games = {s.game_id: s for s in slate}
+    kind = {"every_game": "Moneyline", "every_total": "Total", "every_puckline": "Puck line"}
     L = ["", "### Today's fake bets on every game (pretend money, NOT recommendations)", "",
-         "| Game | Pretend pick | Pretend stake | Price | Model | Market |", "|---|---|---|---|---|---|"]
+         "| Game | Type | Pretend pick | Pretend stake | Price | Model | Market |", "|---|---|---|---|---|---|---|"]
     for r in rows:
         g = games[r["game_id"]]
-        L += [f"| {g.away} @ {g.home} | {r['team']} | ${r['stake']:.2f} | {r['decimal']:.2f} | {r['p_model']:.1%} | {r['p_market']:.1%} |"]
-    L += ["", f"Total pretend stake ${sum(r['stake'] for r in rows):,.2f}. Settled results feed the `every_game` row above; real bets follow the normal policy only."]
+        pick = r["label"] if r.get("label") else f"{r['team']} moneyline"
+        L += [f"| {g.away} @ {g.home} | {kind[r['strategy']]} | {pick} | ${r['stake']:.2f} | {r['decimal']:.2f} | {r['p_model']:.1%} | {r['p_market']:.1%} |"]
+    L += ["", f"Total pretend stake ${sum(r['stake'] for r in rows):,.2f}. Settled results feed the `every_*` rows above; real bets follow the normal policy only."]
     return L

@@ -13,6 +13,7 @@ from nhlbet.data.store import Store
 from nhlbet.features.builder import build_features
 from nhlbet.models.base import load_params, make_zoo
 from nhlbet.models.bundle import ModelBundle, train_bundle
+from nhlbet.models.goals import add_goal_targets
 from nhlbet.monitor import feature_drift, performance_drift
 from nhlbet.registry import ModelRegistry, data_fingerprint
 
@@ -45,12 +46,15 @@ def retrain(db: str = "data/nhl.db", force: bool = False, model_dir: str = "data
     fp = data_fingerprint(done.index, done.game_date.max())
     reg = ModelRegistry(Path(model_dir) / "registry.json")
     last = reg.latest()
-    if last and last.get("data_fingerprint") == fp and not force:
+    if last and last.get("data_fingerprint") == fp and last.get("has_goals") and not force:      # a bundle without the goals model is retrained once
         log.info("no new completed games since %s - model unchanged", last["version"])
         return {"retrained": False, "version": last["version"], "drift": last.get("drift", {})}
 
     features = load_selected_features()
-    zoo = make_zoo(features, candidate_columns(done))
+    done = add_goal_targets(done, store.df("SELECT game_id, home_score, away_score, last_period FROM games"))
+    gpath = Path(report_dir) / "goals_model.json"
+    galpha = json.loads(gpath.read_text()).get("alpha", 50.0) if gpath.exists() else 50.0
+    zoo = make_zoo(features, candidate_columns(done.drop(columns=["hr", "ar", "ot", "so", "tot", "mar"])))
     hist = resolved_history(live_log=Path(live_log) if live_log else None)
     version = f"{pd.Timestamp(done.game_date.max()).strftime('%Y%m%d')}-{fp.split('@')[0][:6]}"
     taken = {e["version"] for e in reg.history()}
@@ -59,6 +63,7 @@ def retrain(db: str = "data/nhl.db", force: bool = False, model_dir: str = "data
         rev += 1
         version = f"{base}-r{rev}"
     bundle = train_bundle(done, zoo, version, features, cfg.__dict__, hist[["stack", "y"]] if len(hist) else None,
+                          goals_features=candidate_columns(done.drop(columns=["hr", "ar", "ot", "so", "tot", "mar"])), goals_alpha=galpha,
                           meta={"n_train": len(done), "train_start": str(done.game_date.min().date()),
                                 "train_end": str(done.game_date.max().date())})
     art = Path(model_dir) / f"model_{version}.joblib"
@@ -88,7 +93,7 @@ def retrain(db: str = "data/nhl.db", force: bool = False, model_dir: str = "data
     entry = reg.register({"version": version, "artifact": str(art), "data_fingerprint": fp, **bundle.meta,
                           "features": features, "hyperparameters": {m: load_params(m) for m in ("logistic", "rf", "lgbm", "xgb")},
                           "builder_config": cfg.__dict__, "p_source": "online_platt" if bundle.online_cal is not None else "inner_oof_platt",
-                          "walk_forward_metrics": metrics, "drift": drift})
+                          "walk_forward_metrics": metrics, "drift": drift, "has_goals": bundle.goals is not None})
     reg.prune_artifacts(keep=3)
     Path(report_dir).mkdir(exist_ok=True)
     Path(report_dir, "drift.json").write_text(json.dumps({"version": version, **drift}, indent=1, default=str))

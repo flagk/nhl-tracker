@@ -160,6 +160,24 @@
       el("thead", {}, [el("tr", {}, ["Game", "Model", "Market (no-vig)", "Best side · edge", "Decision"].map(function (h) { return el("th", { text: h }); }))]), el("tbody", {}, rows)])])]);
   }
 
+  function otherMarkets() {
+    var rows = [];
+    D.games.forEach(function (g) {
+      (g.alt || []).forEach(function (q) { rows.push({ g: g, q: q }); });
+    });
+    var kids = [el("h2", { text: "Totals & puck line (experimental)" }),
+      el("div", { class: "sub", text: "A separate goals model prices the over/under and the puck line. It has no track record against the market yet, so these are NOT recommendations and no stake is suggested: they are paper-traded (see the Bets page) until real results support them. Edges of several points are more likely model error than opportunity." })];
+    if (!rows.length) return el("div", {}, kids.concat([el("div", { class: "card muted", text: "No totals or puck-line odds are available for today's games yet." })]));
+    rows.sort(function (a, b) { return b.q.edge - a.q.edge; });
+    var trs = rows.map(function (r) {
+      return el("tr", {}, [el("td", { text: r.g.away + " @ " + r.g.home }), el("td", { text: r.q.market === "totals" ? "Total" : "Puck line" }), el("td", { text: r.q.label }),
+        el("td", { text: pct(r.q.p_model) }), el("td", { text: pct(r.q.p_market) }), el("td", { text: spct(r.q.edge) }), el("td", { text: spct(r.q.ev) }),
+        el("td", { text: price(r.q.best_decimal) + (r.q.best_book ? " @ " + r.q.best_book : "") })]);
+    });
+    kids.push(el("div", { class: "card scroll" }, [el("table", {}, [el("thead", {}, [el("tr", {}, ["Game", "Market", "Side", "Model", "Market (no-vig)", "Edge", "EV per $1", "Best price"].map(function (h) { return el("th", { text: h }); }))]), el("tbody", {}, trs)])]));
+    return el("div", {}, kids);
+  }
+
   function track() {
     var t = D.track, kids = [el("h2", { text: "Track record" })];
     if (!t || !t.resolved_games) return el("div", {}, kids.concat([el("div", { class: "card muted", text: "No resolved recommendations yet. Every recommendation is logged before its game, so this fills in automatically. Judge the model by closing-line value and log loss against the market, not by early profit." })]));
@@ -191,7 +209,7 @@
   var dynamic = el("div", { id: "dynamic" });
   function render(keepFocus) {
     var alloc = C.allocate(D.games, cfg());
-    dynamic.replaceChildren(topPicks(alloc), parlayBox, allGames(alloc), track(), paper());
+    dynamic.replaceChildren(topPicks(alloc), parlayBox, allGames(alloc), otherMarkets(), track(), paper());
     renderParlay();
   }
   app.replaceChildren(header(), settingsPanel(), dynamic, footer());
