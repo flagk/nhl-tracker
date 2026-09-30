@@ -2,9 +2,9 @@
 
 > **Disclaimer.** This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.
 
-*Generated 2026-09-30 19:38 UTC · model `20260929-3184e7` · probability source `online_platt` · bankroll $1,000.00 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
+*Generated 2026-09-30 21:09 UTC · model `20260929-3184e7` · probability source `online_platt` · bankroll $1,000.00 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
 
-*Odds snapshot: 2026-09-30T19:31:34+00:00 · API credits left: 491*
+*Odds snapshot: 2026-09-30T21:08:51+00:00 · API credits left: 490*
 
 ## Summary
 
@@ -15,9 +15,9 @@
 
 | Game | Goalies (away / home) | Model home win | Market no-vig home | Best price | Edge | EV per $1 | Stake | Decision |
 |---|---|---|---|---|---|---|---|---|
-| PIT @ PHI (19:30 ET) | S. Skinner / D. Vladar (probable) | 49.4% | 56.9% | PIT 2.25 | +7.6% | - | - | no bet |
+| PIT @ PHI (19:30 ET) | S. Skinner / D. Vladar (probable) | 49.4% | 57.1% | PIT 2.25 | +7.8% | - | - | no bet |
 | NYI @ TOR (19:30 ET) | I. Sorokin / J. Woll (probable) | 38.6% | 54.5% | NYI 2.14 | +15.9% | - | - | no bet |
-| LAK @ COL (22:00 ET) | A. Forsberg / S. Wedgewood (probable) | 62.7% | 63.9% | LAK 2.70 | +1.2% | - | - | no bet |
+| LAK @ COL (22:00 ET) | A. Forsberg / S. Wedgewood (probable) | 62.7% | 64.1% | LAK 2.71 | +1.5% | - | - | no bet |
 
 ## Why
 
@@ -39,6 +39,16 @@ No resolved recommendations yet. Odds snapshots and recommendations are logged f
 Every slate is also run through several alternative strategies with pretend stakes. They never affect real recommendations; they exist to learn what works faster than the selective live policy can. **`market_favorite` is a no-skill control**: a strategy only means something if it beats it by more than the noise.
 
 No settled paper bets yet.
+
+### Today's fake bets on every game (pretend money, NOT recommendations)
+
+| Game | Pretend pick | Pretend stake | Price | Model | Market |
+|---|---|---|---|---|---|
+| PIT @ PHI | PIT | $10.00 | 2.25 | 50.6% | 42.9% |
+| NYI @ TOR | NYI | $10.00 | 2.14 | 61.4% | 45.5% |
+| LAK @ COL | COL | $10.00 | 1.53 | 62.7% | 64.1% |
+
+Total pretend stake $30.00. Settled results feed the `every_game` row above; real bets follow the normal policy only.
 
 ---
 > **Disclaimer.** This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.
