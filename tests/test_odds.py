@@ -244,3 +244,28 @@ def test_market_features_consume_consensus_without_closing_leak():
     out = attach_market_features(feats, cons, lead_minutes=90)          # decision time 21:30 -> 23:30 snapshot excluded
     assert out.mkt_open_p[1] == pytest.approx(cons.home_prob_novig.iloc[0])
     assert out.mkt_move[1] == pytest.approx(cons.home_prob_novig.iloc[1] - cons.home_prob_novig.iloc[0])
+
+
+def test_wide_table_scales_to_a_real_slate_and_keeps_null_keys():
+    """Regression: pivot_table(dropna=False) built the cartesian product of 8 index columns and needed ~40 GiB on a live
+    15-game slate with 8 books and several snapshots. Must be fast, exactly one row per (snapshot, event, book), NULL keys kept."""
+    import time
+    st = Store(":memory:")
+    rows = []
+    for c in range(6):
+        for e in range(15):
+            for b in range(8):
+                for side, price in (("H", 1.9), ("A", 1.95)):
+                    rows.append(dict(captured_at=f"2026-09-30T{10 + c:02d}:00:00+00:00", event_id=f"e{e}", commence_time=f"2026-09-30T23:{e:02d}:00Z",
+                                     home=f"H{e}", away=f"A{e}", book=f"bk{b}", market="h2h", outcome=f"{side}{e}", point=0.0, price=price,
+                                     book_updated=None if b == 0 else f"2026-09-30T{10 + c:02d}:{b:02d}:00Z", game_id=None if e == 0 else e))
+    st.upsert("odds_snapshots", rows, ["captured_at", "event_id", "book", "market", "outcome", "point"])
+    t = time.time()
+    from nhlbet.odds.consensus import h2h_wide
+    w = h2h_wide(st)
+    assert time.time() - t < 3.0
+    assert len(w) == 6 * 15 * 8 and w.home.notna().all() and w.away.notna().all()
+    assert w.book_updated.isna().sum() == 6 * 15 and w.game_id.isna().sum() == 6 * 8        # rows with NULL keys survive
+    cons = consensus_snapshots(st)
+    assert len(cons) == 6 * 14 and set(cons.n_books) == {8}                                   # event e0 has no game link yet -> excluded
+    assert len(latest_book_prices(st, 3)) == 8
