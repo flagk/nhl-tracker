@@ -38,7 +38,8 @@ def _best_line(s: SlateGame) -> tuple[str, str, str, str]:
         return "no odds", "-", "-", "-"
     q = s.quotes[s.rec.side] if s.rec.side else max(s.quotes.values(), key=lambda q: q.edge)
     mk = s.quotes["home"].market_prob
-    return f"{q.team} {q.best_decimal:.2f} @ {q.best_book}", _pct(mk), _signed(q.edge), _signed(q.ev)
+    # EV here uses the raw model probability; only show it for actual bets (for a pass it would read as an unkept promise)
+    return f"{q.team} {q.best_decimal:.2f} @ {q.best_book}", _pct(mk), _signed(q.edge), (_signed(q.ev) if s.rec.action == "BET" else "-")
 
 
 def render_report(date: str, run_type: str, slate: list[SlateGame], cfg: RiskConfig, model_version: str, model_meta: dict,

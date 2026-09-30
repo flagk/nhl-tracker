@@ -47,6 +47,14 @@ def test_report_has_every_required_field_and_the_disclaimer_twice():
     assert "No resolved recommendations yet" in txt
 
 
+def test_pass_rows_do_not_advertise_an_ev():
+    """A game the policy passes on must not show an 'EV per $1' (it is computed from the raw model probability)."""
+    txt = render_report("2024-01-04", "late", mk_slate(bet=False), RiskConfig(), "v1", {"drift": {"status": "OK"}})
+    row = [l for l in txt.splitlines() if l.startswith("| TOR @ BOS")][0]
+    assert "+3.5%" not in row and row.split("|")[7].strip() == "-"
+    assert "+5.0%" in row                                                             # the edge is still shown
+
+
 def test_report_no_bets_and_health_banners():
     txt = render_report("2024-01-04", "morning", mk_slate(bet=False), RiskConfig(), "v1",
                         {"drift": {"status": "ALERT", "performance": {"reasons": ["recent log loss worse than coin flip"]}}})
