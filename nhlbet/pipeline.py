@@ -25,6 +25,7 @@ from nhlbet.report.history import render_history_html, render_history_md
 from nhlbet.report.markdown import render_report
 from nhlbet.report.readme import render_block, update_readme
 from nhlbet.report.slate import build_slate
+from nhlbet.site.bets import build_bets_page
 from nhlbet.site.build import build_payload, build_site
 from nhlbet.risk.policy import RiskConfig
 from nhlbet.train import retrain
@@ -115,6 +116,7 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     plot_performance(store, Path(report_dir) / "performance.png", bankroll)
     payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow)
     build_site(payload, site_dir)
+    build_bets_page(store, payload["games"], cfg.bankroll, payload["generated_at"], date, site_dir)
     # history (markdown for GitHub, html for the site) and the front-page block with clickable links
     Path(report_dir, "HISTORY.md").write_text(render_history_md(store, report_dir))
     Path(site_dir, "history.html").write_text(render_history_html(store, report_dir))

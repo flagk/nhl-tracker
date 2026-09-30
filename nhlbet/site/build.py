@@ -54,7 +54,7 @@ def game_payload(s: SlateGame, cfg: RiskConfig, public_safe: bool = False) -> di
                              "best_decimal": q.best_decimal, "books": {} if public_safe else books, "fails": ([blocked] if blocked else fails), "qualifies": blocked is None and not fails}
     return {"game_id": s.game_id, "start_utc": s.start_utc, "home": s.home, "away": s.away, "home_goalie": s.home_goalie,
             "away_goalie": s.away_goalie, "goalie_status": s.goalie_status, "p_home": s.p_home, "blocked": blocked, "notes": s.notes,
-            "odds_stale": s.odds_stale, "odds_captured_at": s.odds_captured_at, "sides": sides,
+            "model_side": ("home" if s.p_home >= 0.5 else "away") if sides else None, "odds_stale": s.odds_stale, "odds_captured_at": s.odds_captured_at, "sides": sides,
             "server_action": s.rec.action, "server_side": s.rec.side, "server_stake": s.rec.stake}
 
 
