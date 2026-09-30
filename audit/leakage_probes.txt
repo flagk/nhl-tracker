@@ -1,0 +1,28 @@
+== 1. Dataset shape / coverage ==
+games=2987 teams=28 range=2023-10-10..2026-02-02
+missing teams vs current 32: ['CBJ', 'SEA', 'TBL', 'UTA']
+home win rate (whole file): 0.54
+{'2023-24': 1081, '2024-25': 1155, '2025-26': 751} (full regular seasons are ~1,312 games each)
+
+== 2. Are Points/GoalDiff/GoalsFor/GoalsAgainst home-perspective? ==
+GoalsFor==HomeScore: 1.0 | GoalsAgainst==AwayScore: 1.0 | Points==2 iff home won: 1.0
+
+== 3. Consequence: legacy team features on a team's AWAY games use the opponent's numbers ==
+  ppg           corr(legacy, correct) across 28 teams = -0.07   mean|diff|=0.175
+  goal_diff_pg  corr(legacy, correct) across 28 teams = +0.12   mean|diff|=0.440
+  gf_pg         corr(legacy, correct) across 28 teams = +0.44   mean|diff|=0.220
+  ga_pg         corr(legacy, correct) across 28 teams = +0.33   mean|diff|=0.220
+  win_pct       corr(legacy, correct) across 28 teams = +1.00   mean|diff|=0.000
+
+== 4. Win-streak function ==
+legacy streak == correct streak in 59/300 sampled team-dates
+
+== 5. As-of invariance: corrupt every game on/after the target date; features must not move ==
+features changed by future corruption: 0/200  (0 => date filter is leak-free)
+
+== 6. Same-day games / index slicing ==
+games sharing a date with an earlier game in file: 2398 -> same-day results excluded by strict '<' (good, conservative)
+history[:idx] equals positional slice when index is RangeIndex: True
+
+== 7. Season handling ==
+feature windows reset each season? No: 'ppg','gf_pg','win_pct' etc. are career-to-date over all rows before the game (up to ~2.3 seasons).

@@ -1,0 +1,46 @@
+name: Closing-line odds snapshots
+# Cheap fetch-only runs near puck drop so closing-line value (CLV) can be measured. Uses 1 API credit per run.
+on:
+  schedule:
+    - cron: "45 22 * * *"   # ~18:45 ET, just before the main 19:00 ET wave
+    - cron: "45 1 * * *"    # ~21:45 ET, before west-coast starts
+  workflow_dispatch:
+
+concurrency:
+  group: nhl-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e .
+      - uses: actions/cache@v4
+        with:
+          path: |
+            data/nhl.db
+            data/cache
+          key: nhl-data-${{ github.run_id }}
+          restore-keys: nhl-data-
+      - name: Fetch odds snapshot
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: python scripts/fetch_odds.py --force
+      - name: Commit snapshots
+        run: |
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/logs
+          if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+          git commit -m "Odds snapshot $(date -u +%FT%H:%MZ)"
+          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push && exit 0; sleep 5; done
+          exit 1
