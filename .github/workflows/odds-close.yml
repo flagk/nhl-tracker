@@ -1,8 +1,10 @@
 name: Closing-line odds snapshots
-# Cheap fetch-only runs near puck drop so closing-line value (CLV) can be measured. Uses 1 API credit per run.
+# Cheap fetch-only runs near puck drop so closing-line value (CLV) can be measured. Uses 1 API credit per run
+# (3 here + morning and late daily runs = 5/day, ~150/month of the 500 free credits).
 on:
   schedule:
-    - cron: "45 22 * * *"   # ~18:45 ET, just before the main 19:00 ET wave
+    - cron: "45 22 * * *"   # ~18:45 ET, before the main 19:00 ET wave
+    - cron: "20 23 * * *"   # ~19:20 ET, minutes before 19:30/20:00 ET starts: the closest snapshot to the close for most games
     - cron: "45 1 * * *"    # ~21:45 ET, before west-coast starts
   workflow_dispatch:
 
