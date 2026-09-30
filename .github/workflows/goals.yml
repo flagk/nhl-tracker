@@ -1,0 +1,50 @@
+name: Goals model backtest
+# Walk-forward test of the totals / puck-line goals model against base rates -> reports/GOALS.md (manual; needs the backfilled database).
+on:
+  workflow_dispatch:
+    inputs:
+      eval_start:
+        description: "First out-of-sample date"
+        default: "2021-10-01"
+
+concurrency:
+  group: nhl-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  goals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e .
+      - uses: actions/cache@v4
+        with:
+          path: |
+            data/nhl.db
+            data/cache
+          key: nhl-data-${{ github.run_id }}
+          restore-keys: nhl-data-
+      - run: python scripts/goals_backtest.py --eval-start "${{ github.event.inputs.eval_start }}"
+      - name: Commit
+        run: |
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add reports/GOALS.md reports/goals_model.json
+          if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+          git commit -m "Goals model backtest"
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push && exit 0
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 4))
+          done
+          exit 1

@@ -55,7 +55,11 @@ def refresh_data(store: Store, days_back: int = 7, days_ahead: int = 2) -> str |
         return str(e)
 
 
-def fetch_and_store_odds(store: Store, markets=("h2h",), regions: str = "us") -> dict:
+DEFAULT_MARKETS = ("h2h", "spreads", "totals")      # 3 credits per fetch; with 2 daily runs + 3 h2h-only closing snapshots ~9 credits/day (~270 of 500/month)
+
+
+def fetch_and_store_odds(store: Store, markets: tuple[str, ...] | None = None, regions: str = "us") -> dict:
+    markets = markets or tuple(m.strip() for m in os.environ.get("ODDS_MARKETS", ",".join(DEFAULT_MARKETS)).split(",") if m.strip())
     if not os.environ.get("ODDS_API_KEY"):
         log.warning("ODDS_API_KEY not set: odds disabled (games will be reported as 'no odds -> no bet')")
         return {"enabled": False}

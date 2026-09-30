@@ -55,6 +55,9 @@ def game_payload(s: SlateGame, cfg: RiskConfig, public_safe: bool = False) -> di
     return {"game_id": s.game_id, "start_utc": s.start_utc, "home": s.home, "away": s.away, "home_goalie": s.home_goalie,
             "away_goalie": s.away_goalie, "goalie_status": s.goalie_status, "p_home": s.p_home, "blocked": blocked, "notes": s.notes,
             "model_side": ("home" if s.p_home >= 0.5 else "away") if sides else None, "odds_stale": s.odds_stale, "odds_captured_at": s.odds_captured_at, "sides": sides,
+            "alt": [{"market": q.market, "side": q.side, "label": q.label, "point": q.point, "p_model": q.model_prob, "p_market": q.market_prob,
+                     "p_push": q.p_push, "edge": q.edge, "ev": q.ev, "best_decimal": q.best_decimal, "best_book": None if public_safe else q.best_book,
+                     "n_books": q.n_books} for q in (getattr(s, "alt", None) or [])], "goals": getattr(s, "goals", None) or None,
             "server_action": s.rec.action, "server_side": s.rec.side, "server_stake": s.rec.stake}
 
 

@@ -28,3 +28,8 @@ overfitting this project tries to avoid.
 ## Extending
 Add a `Strategy(...)` to `STRATEGIES` (a `RiskConfig` override, or a new `kind`). Tests in `tests/test_shadow.py` include a property test that the
 control loses about the margin on a fair market. Stakes are always pretend; nothing here places a bet.
+
+## Totals and puck-line strategies
+`totals_edge`, `puckline_edge`, `every_total`, `every_puckline` and the control `always_over` use the goals model (see [MARKETS.md](MARKETS.md)).
+They settle on the score (totals exclude the shootout goal, the puck line uses the official margin; pushes refund the stake), and have no CLV because
+closing snapshots only fetch moneylines.

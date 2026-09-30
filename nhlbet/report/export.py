@@ -23,7 +23,9 @@ GAMES_COLS = ["game_id", "game_date", "away", "home", "home_goalie", "away_goali
               "clv_ev", "reasons", "home_rest_days", "away_rest_days", "home_b2b", "away_b2b", "home_games_played", "away_games_played", "elo_prob_home",
               "is_rivalry", "days_into_season"]
 DAILY_COLS = ["date", "games", "bets", "staked", "profit", "roi", "cum_staked", "cum_profit", "model_log_loss", "market_close_log_loss", "avg_clv"]
-PAPER_COLS = ["date", "strategy", "game_id", "away", "home", "side", "team", "price", "stake", "won", "profit", "clv_ev"]
+PAPER_COLS = ["date", "strategy", "game_id", "market", "point", "away", "home", "side", "team", "price", "stake", "won", "profit", "clv_ev"]
+ALT_COLS = ["game_id", "game_date", "away", "home", "market", "side", "label", "point", "p_model", "p_market", "p_push", "edge", "ev", "best_price", "n_books",
+            "lam_home", "lam_away", "exp_total", "outcome"]
 PAPER_SUMMARY_COLS = ["strategy", "bets", "staked", "profit", "roi", "roi_lo", "roi_hi", "win_rate", "avg_clv", "n_clv"]
 MODEL_COLS = ["version", "created_at", "n_train", "train_start", "train_end", "p_source", "drift_status", "log_loss", "brier", "auc", "ece", "cal_slope"]
 OOS_COLS = ["game_id", "game_date", "home_win", "home_rate", "elo", "logistic", "rf", "lgbm", "xgb", "stack", "wavg", "stack__online"]
@@ -91,9 +93,27 @@ def paper_trading(store: Store) -> pd.DataFrame:
         return pd.DataFrame(columns=PAPER_COLS)
     games = store.df("SELECT game_id, home, away FROM games")
     d = d[d.is_bet].merge(games, on="game_id", how="left")
-    out = pd.DataFrame({"date": d.game_date, "strategy": d.strategy, "game_id": d.game_id, "away": d.away, "home": d.home, "side": d.side, "team": d.team,
+    mk = d["market"].fillna("moneyline").replace({"h2h": "moneyline"})
+    out = pd.DataFrame({"date": d.game_date, "strategy": d.strategy, "game_id": d.game_id, "market": mk, "point": d["point"], "away": d.away, "home": d.home, "side": d.side,
+                        "team": d["label"].fillna(d.team),
                         "price": d.decimal, "stake": d.stake, "won": d.won, "profit": d.profit, "clv_ev": d.clv_ev})
     return out[PAPER_COLS].sort_values(["date", "strategy", "game_id"]).reset_index(drop=True)
+
+
+def alt_market_predictions(store: Store) -> pd.DataFrame:
+    """Totals / puck-line quotes from the latest run per game (passes included) with the settled outcome (won / lost / push): for calibration."""
+    from nhlbet.report.betlog import alt_value
+    q = store.df("SELECT * FROM alt_quotes")
+    if q.empty:
+        return pd.DataFrame(columns=ALT_COLS)
+    q = q.sort_values("run_at").groupby(["game_id", "market", "side"], as_index=False).tail(1)
+    g = store.df("SELECT game_id, home, away, home_score, away_score, last_period, home_win FROM games")
+    d = q.merge(g, on="game_id", how="left")
+    done = d.home_win.notna()
+    val = alt_value(d.market.to_numpy(), d.side.to_numpy(), d.point.to_numpy(), d.home_score, d.away_score, d.last_period)
+    d["outcome"] = np.where(done, np.where(val > 0, "won", np.where(val < 0, "lost", "push")), None)
+    d["best_price"] = d["decimal"]
+    return d[ALT_COLS].sort_values(["game_date", "game_id", "market", "side"]).reset_index(drop=True)
 
 
 def paper_summary(store: Store) -> pd.DataFrame:
@@ -135,7 +155,7 @@ def export_dataset(store: Store, root: str | Path = "data/export", features: pd.
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
     tables = {"games_predictions": games_predictions(store, features), "daily_summary": daily_summary(store), "paper_trading": paper_trading(store),
-              "paper_summary": paper_summary(store), "model_versions": model_versions(registry_path), "oos_predictions": oos_predictions(oos_path)}
+              "paper_summary": paper_summary(store), "alt_market_predictions": alt_market_predictions(store), "model_versions": model_versions(registry_path), "oos_predictions": oos_predictions(oos_path)}
     for name, df in tables.items():
         df.to_csv(root / f"{name}.csv", index=False, float_format="%.6g")
     return {k: len(v) for k, v in tables.items()}

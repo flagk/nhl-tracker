@@ -78,23 +78,44 @@ def performance(store: Store, start_bankroll: float = 1000.0, cons: pd.DataFrame
     return out
 
 
+def alt_value(market, side, point, home_score, away_score, last_period) -> np.ndarray:
+    """>0 the bet won, <0 lost, 0 pushed, for totals / puck-line bets (arrays). Totals exclude the shootout goal; the puck line uses the official margin."""
+    hs, as_ = np.asarray(home_score, float), np.asarray(away_score, float)
+    side, market, point = np.asarray(side), np.asarray(market), np.asarray(point, float)
+    total = hs + as_ - (np.asarray(last_period) == "SO").astype(float)
+    margin = np.where(side == "away", as_ - hs, hs - as_)
+    return np.where(market == "totals", np.where(side == "over", total - point, point - total), margin + point)
+
+
 def shadow_resolved(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFrame:
-    """Paper-trading rows joined with results, profit and CLV (latest run per game and strategy)."""
+    """Paper-trading rows joined with results, profit and CLV (latest run per game and strategy).
+
+    Moneyline rows settle on the winner. Totals settle on regulation + overtime goals (shootout goal excluded) and the puck line on the
+    official margin; a push (whole-number line landing exactly) refunds the stake and is not counted as a bet. CLV exists for moneylines only.
+    """
     r = store.df("SELECT * FROM shadow_bets")
     if r.empty:
         return r
     final = r.sort_values("run_at").groupby(["game_id", "strategy"], as_index=False).tail(1)
-    g = store.df("SELECT game_id, start_utc, home_win FROM games WHERE home_win IS NOT NULL")
+    g = store.df("SELECT game_id, start_utc, home_win, home_score, away_score, last_period FROM games WHERE home_win IS NOT NULL")
     d = final.merge(g, on="game_id", how="inner")
     if d.empty:
         return d
     cons = consensus_snapshots(store) if cons is None else cons
-    d["close_home_prob"] = [closing_consensus(cons, gid, st) if len(cons) else None for gid, st in zip(d.game_id, d.start_utc)]
+    mk = d["market"].fillna("h2h") if "market" in d else pd.Series("h2h", index=d.index)
+    ml = (mk == "h2h").to_numpy()
+    d["close_home_prob"] = [closing_consensus(cons, gid, st) if (len(cons) and is_ml) else None for gid, st, is_ml in zip(d.game_id, d.start_utc, ml)]
     d["is_bet"] = (d.action == "BET") & (d.stake > 0)
-    d["won"] = np.where(d.is_bet, ((d.side == "home") == (d.home_win == 1)).astype(float), np.nan)
+    won_ml = ((d.side == "home") == (d.home_win == 1)).astype(float).to_numpy()
+    point = d["point"].astype(float).to_numpy() if "point" in d else np.full(len(d), np.nan)
+    val = alt_value(mk.to_numpy(), d.side.to_numpy(), point, d.home_score, d.away_score, d.last_period)
+    push = (~ml) & d.is_bet.to_numpy() & (val == 0)
+    d["push"] = push
+    d["is_bet"] = d.is_bet & ~push                        # a push refunds the stake: not a settled bet
+    d["won"] = np.where(d.is_bet, np.where(ml, won_ml, (val > 0).astype(float)), np.nan)
     d["profit"] = np.where(d.is_bet, np.where(d.won == 1, d.stake * (d.decimal - 1), -d.stake), 0.0)
-    d["clv_ev"] = [bet_clv(s, dec, c)["clv_ev"] if (b and c is not None and not pd.isna(c)) else np.nan
-                   for b, s, dec, c in zip(d.is_bet, d.side, d.decimal, d.close_home_prob)]
+    d["clv_ev"] = [bet_clv(s, dec, c)["clv_ev"] if (b and m and c is not None and not pd.isna(c)) else np.nan
+                   for b, m, s, dec, c in zip(d.is_bet, ml, d.side, d.decimal, d.close_home_prob)]
     return d
 
 
@@ -157,7 +178,8 @@ def plot_performance(store: Store, path: str | Path, start_bankroll: float = 100
 # closing-line snapshot) add different files and git never has to merge lines of the same file. Only derived files (bet_log.csv)
 # and the tiny goalie_confirmations.csv are shared, and the workflows resolve those in favour of the newest output.
 PARTITIONED = {"recommendations": ("run_id", ["run_id", "game_id"]), "odds_fetch_log": ("captured_at", ["captured_at"]),
-               "shadow_bets": ("run_id", ["run_id", "game_id", "strategy"]), "odds_consensus": ("captured_at", ["game_id", "captured_at"])}
+               "shadow_bets": ("run_id", ["run_id", "game_id", "strategy"]), "odds_consensus": ("captured_at", ["game_id", "captured_at"]),
+               "alt_quotes": ("run_id", ["run_id", "game_id", "market", "side"])}
 SINGLE = {"goalie_confirmations": ["game_date", "team"]}
 ODDS_KEYS = ["captured_at", "event_id", "book", "market", "outcome", "point"]
 

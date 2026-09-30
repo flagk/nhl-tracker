@@ -43,25 +43,36 @@
     var f = { date: el("input", { type: "date", value: D.date }), game: el("select", {}), pick: el("input", { type: "text", placeholder: "e.g. BOS moneyline" }),
       fmt: el("select", {}, [el("option", { value: "american", text: "American (-110)" }), el("option", { value: "decimal", text: "Decimal (1.91)" })]),
       odds: el("input", { type: "number", step: "any", placeholder: "-110" }), stake: el("input", { type: "number", step: "0.01", min: "0", placeholder: "10" }),
-      note: el("input", { type: "text", placeholder: "optional note" }) };
+      note: el("input", { type: "text", placeholder: "optional note" }),
+      type: el("select", {}, ["Moneyline", "Puck line", "Total (over/under)", "Parlay", "Player prop", "Other"].map(function (t) { return el("option", { value: t, text: t }); })) };
     f.game.appendChild(el("option", { value: "", text: "(custom bet)" }));
     games.forEach(function (g, i) { f.game.appendChild(el("option", { value: String(i), text: g.away + " @ " + g.home })); });
-    f.game.addEventListener("change", function () {
+    var HINTS = { "Moneyline": "e.g. BOS moneyline", "Puck line": "e.g. BOS -1.5", "Total (over/under)": "e.g. Over 6.5", "Parlay": "e.g. BOS ML + TOR ML + Over 6.5", "Player prop": "e.g. McDavid over 1.5 points", "Other": "describe the bet" };
+    function prefill() {                    // fill pick/odds from today's prices for the chosen game and bet type (the model's preferred side; you can overwrite)
+      f.pick.placeholder = HINTS[f.type.value] || "";
       var g = games[Number(f.game.value)]; if (!g) return;
-      var side = g.model_side; if (side && g.sides[side]) { f.pick.value = g.sides[side].team + " moneyline"; f.fmt.value = "decimal"; f.odds.value = g.sides[side].best_decimal.toFixed(2); }
-    });
+      var t = f.type.value, cand = null;
+      if (t === "Moneyline") { var side = g.model_side; if (side && g.sides[side]) cand = { label: g.sides[side].team + " moneyline", dec: g.sides[side].best_decimal }; }
+      else if (t === "Puck line" || t === "Total (over/under)") {
+        var mk = t === "Puck line" ? "spreads" : "totals", qs = (g.alt || []).filter(function (q) { return q.market === mk; }).sort(function (a, b) { return b.p_model - a.p_model; });
+        if (qs.length) cand = { label: qs[0].label, dec: qs[0].best_decimal };
+      }
+      if (cand) { f.pick.value = cand.label; f.fmt.value = "decimal"; f.odds.value = cand.dec.toFixed(2); }
+    }
+    f.game.addEventListener("change", prefill); f.type.addEventListener("change", prefill);
     var err = el("div", { class: "banner bad", style: "display:none" });
     var add = el("button", { text: "Add bet" });
     add.addEventListener("click", function () {
       var dec = C.toDecimal(f.odds.value, f.fmt.value), stake = Number(f.stake.value);
       if (!f.pick.value.trim() || dec === null || !(stake > 0)) { err.textContent = "Enter a pick, valid odds and a stake above zero."; err.style.display = ""; return; }
       var g = games[Number(f.game.value)];
-      bets.push({ id: Date.now() + "-" + Math.random().toString(36).slice(2, 7), date: f.date.value || D.date, game: g ? g.away + " @ " + g.home : "", pick: f.pick.value.trim(), decimal: dec, stake: stake, result: "pending", note: f.note.value.trim() });
+      bets.push({ id: Date.now() + "-" + Math.random().toString(36).slice(2, 7), date: f.date.value || D.date, type: f.type.value, game: g ? g.away + " @ " + g.home : "", pick: f.pick.value.trim(), decimal: dec, stake: stake, result: "pending", note: f.note.value.trim() });
       if (!save(bets)) { err.textContent = "Could not save in this browser (private mode?). Use Export to keep your bets."; err.style.display = ""; return; }
       rerender();
     });
     var form = el("div", { class: "card" }, [el("div", { class: "grid" }, [
-      el("div", {}, [el("label", { text: "Date" }), f.date]), el("div", {}, [el("label", { text: "Today's game (optional)" }), f.game]), el("div", {}, [el("label", { text: "Pick" }), f.pick]),
+      el("div", {}, [el("label", { text: "Date" }), f.date]), el("div", {}, [el("label", { text: "Bet type" }), f.type]), el("div", {}, [el("label", { text: "Today's game (optional)" }), f.game]),
+      el("div", {}, [el("label", { text: "Pick / line" }), f.pick]),
       el("div", {}, [el("label", { text: "Odds format" }), f.fmt]), el("div", {}, [el("label", { text: "Odds" }), f.odds]), el("div", {}, [el("label", { text: "Stake ($)" }), f.stake]),
       el("div", {}, [el("label", { text: "Note" }), f.note])]), err, el("div", { style: "margin-top:10px" }, [add])]);
     var s = C.summarize(bets), rows = bets.slice().sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; }).map(function (b) {
@@ -69,7 +80,7 @@
       sel.addEventListener("change", function () { b.result = sel.value; save(bets); rerender(); });
       var del = el("button", { text: "Delete" }); del.addEventListener("click", function () { bets = bets.filter(function (x) { return x.id !== b.id; }); save(bets); rerender(); });
       var p = C.settle(b);
-      return tr([b.date, b.game || "-", b.pick, b.decimal.toFixed(2), money(b.stake), sel, p === null ? "-" : signed(p), del]);
+      return tr([b.date, b.type || "Moneyline", b.game || "-", b.pick, b.decimal.toFixed(2), money(b.stake), sel, p === null ? "-" : signed(p), del]);
     });
     var exp = el("button", { text: "Export JSON" });
     exp.addEventListener("click", function () { var a = el("a", { href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(bets, null, 1)), download: "my-bets.json" }); document.body.appendChild(a); a.click(); a.remove(); });
@@ -80,7 +91,7 @@
         try {
           var v = JSON.parse(fr.result), ok = Array.isArray(v) ? v.filter(function (b) { return b && typeof b.pick === "string" && b.decimal > 1 && b.stake > 0 && ["pending", "won", "lost", "push"].indexOf(b.result) >= 0; }) : [];
           var have = {}; bets.forEach(function (b) { have[b.id] = 1; });
-          ok.forEach(function (b) { if (!b.id || have[b.id]) b.id = Date.now() + "-" + Math.random().toString(36).slice(2, 7); bets.push({ id: String(b.id), date: String(b.date || D.date).slice(0, 10), game: String(b.game || ""), pick: b.pick, decimal: Number(b.decimal), stake: Number(b.stake), result: b.result, note: String(b.note || "") }); });
+          ok.forEach(function (b) { if (!b.id || have[b.id]) b.id = Date.now() + "-" + Math.random().toString(36).slice(2, 7); bets.push({ id: String(b.id), date: String(b.date || D.date).slice(0, 10), type: String(b.type || "Moneyline"), game: String(b.game || ""), pick: b.pick, decimal: Number(b.decimal), stake: Number(b.stake), result: b.result, note: String(b.note || "") }); });
           save(bets); rerender();
         } catch (e) { err.textContent = "That file is not a valid export."; err.style.display = ""; }
       };
@@ -89,7 +100,7 @@
     box.appendChild(el("div", { class: "banner info", text: "Your bets are stored only in this browser (localStorage). They are never sent anywhere or written to the repository. Use Export to back them up or move them to another device." }));
     box.appendChild(form); box.appendChild(el("h2", { text: "My results" })); box.appendChild(el("div", { class: "card" }, [metrics(s), chart(C.cumulative(bets), "My cumulative profit")]));
     box.appendChild(el("h2", { text: "My bets" }));
-    box.appendChild(el("div", { class: "card" }, [table(["Date", "Game", "Pick", "Price", "Stake", "Result", "Profit", ""], rows), el("div", { style: "display:flex;gap:10px;margin-top:10px;align-items:center;flex-wrap:wrap" }, [exp, el("label", { text: "Import JSON:" }), imp])]));
+    box.appendChild(el("div", { class: "card" }, [table(["Date", "Type", "Game", "Pick", "Price", "Stake", "Result", "Profit", ""], rows), el("div", { style: "display:flex;gap:10px;margin-top:10px;align-items:center;flex-wrap:wrap" }, [exp, el("label", { text: "Import JSON:" }), imp])]));
     return box;
   }
 
@@ -107,14 +118,14 @@
       body.appendChild(el("div", { class: "card" }, [metrics(sm), chart(C.cumulative(all), "Cumulative fake profit")]));
       var pend = all.filter(function (b) { return b.result === "pending"; });
       body.appendChild(el("h2", { text: "Open fake bets (" + pend.length + ", " + money(sm.open_stake) + " pretend stake)" }));
-      body.appendChild(el("div", { class: "card" }, [table(["Date", "Game", "Pretend pick", "Price", "Pretend stake"], pend.map(function (b) { return tr([b.date, b.game, b.pick, b.decimal.toFixed(2), money(b.stake)]); }))]));
+      body.appendChild(el("div", { class: "card" }, [table(["Date", "Type", "Game", "Pretend pick", "Price", "Pretend stake"], pend.map(function (b) { return tr([b.date, b.type, b.game, b.pick, b.decimal.toFixed(2), money(b.stake)]); }))]));
       var done = all.filter(function (b) { return b.result !== "pending"; }).sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; }).slice(0, 200);
       body.appendChild(el("h2", { text: "Settled fake bets (latest 200)" }));
-      body.appendChild(el("div", { class: "card" }, [table(["Date", "Game", "Pretend pick", "Price", "Stake", "Result", "Profit"], done.map(function (b) { return tr([b.date, b.game, b.pick, b.decimal.toFixed(2), money(b.stake), b.result, signed(C.settle(b))]); }))]));
+      body.appendChild(el("div", { class: "card" }, [table(["Date", "Type", "Game", "Pretend pick", "Price", "Stake", "Result", "Profit"], done.map(function (b) { return tr([b.date, b.type, b.game, b.pick, b.decimal.toFixed(2), money(b.stake), b.result, signed(C.settle(b))]); }))]));
     }
     sel.addEventListener("change", draw);
     var rows = (D.paper_strategies || []).map(function (s) { var x = C.summarize(D.paper_bets.filter(function (b) { return b.strategy === s.name; })); return tr([s.name, x.n, x.pending, x.settled, signed(x.profit), pct(x.roi), x.hit === null ? "-" : (x.hit * 100).toFixed(0) + "%"]); });
-    box.appendChild(el("div", { class: "banner info", text: "Fake money for measurement only. Every strategy stakes 1% of a $" + D.bankroll.toFixed(0) + " pretend bankroll per bet (the live-policy copies use their own sizing). The no-skill control is market_favorite; every_game bets the model's side of every game, even at a negative edge." }));
+    box.appendChild(el("div", { class: "banner info", text: "Fake money for measurement only. Every strategy stakes 1% of a $" + D.bankroll.toFixed(0) + " pretend bankroll per bet (the live-policy copies use their own sizing). The no-skill control is market_favorite; every_game, every_total and every_puckline bet the model's side of every game in that market, even at a negative edge (totals and puck line are experimental)." }));
     box.appendChild(el("div", { class: "card" }, [table(["Strategy", "Bets", "Open", "Settled", "Profit", "ROI", "Hit rate"], rows)]));
     box.appendChild(el("h2", { text: "Strategy detail" })); box.appendChild(el("div", {}, [el("label", { text: "Strategy" }), sel])); box.appendChild(body); draw();
     return box;

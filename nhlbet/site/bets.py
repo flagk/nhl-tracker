@@ -18,27 +18,41 @@ from nhlbet.site.build import HERE, _clean
 MAX_BETS = 4000          # keep the page small: the most recent paper bets only
 
 
+TYPE_NAMES = {"h2h": "Moneyline", "totals": "Total", "spreads": "Puck line"}
+
+
 def paper_bets(store: Store, limit: int = MAX_BETS) -> pd.DataFrame:
-    """Latest pretend bet per (game, strategy) including unsettled ones. result: pending | won | lost."""
+    """Latest pretend bet per (game, strategy) including unsettled ones. result: pending | won | lost | push (settled like the real thing)."""
+    from nhlbet.report.betlog import shadow_resolved
+
     r = store.df("SELECT * FROM shadow_bets")
     if r.empty:
         return pd.DataFrame()
     final = r.sort_values("run_at").groupby(["game_id", "strategy"], as_index=False).tail(1)
     final = final[(final.action == "BET") & (final.stake > 0)]
-    g = store.df("SELECT game_id, home, away, home_win FROM games")
+    g = store.df("SELECT game_id, home, away FROM games")
     d = final.merge(g, on="game_id", how="left")
-    d["result"] = np.where(d.home_win.isna(), "pending", np.where((d.side == "home") == (d.home_win == 1), "won", "lost"))
+    res = shadow_resolved(store)
+    if len(res):
+        d = d.merge(res[["game_id", "strategy", "won", "push"]], on=["game_id", "strategy"], how="left")
+        d["result"] = np.where(d.push == True, "push", np.where(d.won == 1, "won", np.where(d.won == 0, "lost", "pending")))   # noqa: E712
+    else:
+        d["result"] = "pending"
+    mk = d["market"].fillna("h2h")
+    d["type"] = mk.map(TYPE_NAMES).fillna("Moneyline")
     d["game"] = d.away.fillna("?") + " @ " + d.home.fillna("?")
-    d["pick"] = d.team.fillna("?") + " moneyline"
+    d["pick"] = np.where(mk == "h2h", d.team.fillna("?") + " moneyline", d["label"].fillna(d.team).astype(str))
     d = d.rename(columns={"game_date": "date"})
-    return d.sort_values(["date", "game_id"]).tail(limit)[["date", "strategy", "game_id", "game", "pick", "decimal", "stake", "result"]].reset_index(drop=True)
+    return d.sort_values(["date", "game_id"]).tail(limit)[["date", "strategy", "game_id", "type", "game", "pick", "decimal", "stake", "result"]].reset_index(drop=True)
 
 
 def build_bets_payload(store: Store, games_payload: list[dict], bankroll: float, generated_at: str, date: str) -> dict:
     pb = paper_bets(store)
     return _clean({"generated_at": generated_at, "date": date, "bankroll": bankroll, "games": [
                        {"away": g["away"], "home": g["home"], "model_side": g.get("model_side"),
-                        "sides": {k: {"team": v["team"], "best_decimal": v["best_decimal"]} for k, v in g["sides"].items()}} for g in games_payload],
+                        "sides": {k: {"team": v["team"], "best_decimal": v["best_decimal"]} for k, v in g["sides"].items()},
+                        "alt": [{"market": q["market"], "side": q["side"], "label": q["label"], "p_model": q["p_model"], "best_decimal": q["best_decimal"]}
+                                for q in g.get("alt", [])]} for g in games_payload],
                    "paper_strategies": [{"name": s.name, "description": s.description} for s in STRATEGIES],
                    "paper_bets": pb.to_dict("records") if len(pb) else [],
                    "disclaimer": DISCLAIMER.replace("> ", "").replace("**", "")})

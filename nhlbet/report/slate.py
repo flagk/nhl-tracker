@@ -15,6 +15,7 @@ from nhlbet.features.builder import BuilderConfig, FeatureBuilder
 from nhlbet.models.bundle import ModelBundle
 from nhlbet.odds.consensus import latest_book_prices
 from nhlbet.odds.edge import SideQuote, evaluate_game
+from nhlbet.odds.markets import MarketQuote, alt_quotes, latest_alt_prices
 from nhlbet.risk.policy import Recommendation, RiskConfig, recommend_slate
 from nhlbet.risk.shadow import shadow_bets
 
@@ -39,6 +40,8 @@ class SlateGame:
     notes: list[str] = field(default_factory=list)
     books: list[dict] = field(default_factory=list)      # per-book decimal prices [{book, home, away}] for the site/parlay maths
     ctx: dict = field(default_factory=dict)              # the policy context this game was evaluated under
+    alt: list[MarketQuote] = field(default_factory=list)  # totals / puck-line quotes from the goals model (experimental: paper-traded only)
+    goals: dict = field(default_factory=dict)            # {lam_home, lam_away, exp_total} from the goals model
 
 
 def context_notes(row: pd.Series, home: str, away: str) -> list[str]:
@@ -78,6 +81,8 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
     F = FeatureBuilder(bcfg).build(tables, starter_override=overrides)
     rows = F.loc[today.game_id]
     preds = bundle.predict(rows)
+    dists = bundle.score_distributions(rows, preds["p"].to_numpy())
+    dist_by_game = dict(zip(rows.index, dists)) if dists is not None else {}
 
     log_row = store.df("SELECT source, captured_at FROM odds_fetch_log ORDER BY captured_at DESC LIMIT 1")
     fetch_stale = bool(len(log_row) and log_row.source.iloc[0] == "stale_cache")
@@ -96,15 +101,18 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
                "games_played_min": float(min(row.get("h_gp_season", np.nan), row.get("a_gp_season", np.nan)))
                if row.get("h_gp_season") == row.get("h_gp_season") else None}
         books = [{"book": r.book, "home": float(r.home), "away": float(r.away)} for r in prices.itertuples()] if len(prices) else []
+        dist = dist_by_game.get(g.game_id)
+        alt = alt_quotes(latest_alt_prices(store, g.game_id), dist, g.home, g.away) if dist is not None else []
+        goals = {"lam_home": dist.lam_home, "lam_away": dist.lam_away, "exp_total": dist.expected_total()} if dist is not None else {}
         inputs.append((int(g.game_id), g.home, g.away, quotes, ctx))
         meta[int(g.game_id)] = dict(start=g.start_utc, hg=hg, ag=ag, status=status, p=p_home, p_raw=p_raw, quotes=quotes, cap=cap, stale=stale,
-                                    notes=context_notes(row, g.home, g.away), ctx=ctx, books=books)
+                                    notes=context_notes(row, g.home, g.away), ctx=ctx, books=books, alt=alt, goals=goals)
     recs = recommend_slate(inputs, cfg)
     slate = []
     for rec in recs:
         m = meta[rec.game_id]
         slate.append(SlateGame(rec.game_id, m["start"], rec.home, rec.away, m["hg"], m["ag"], m["status"], m["p"], m["p_raw"], m["quotes"], rec,
-                               m["cap"], m["stale"], m["notes"], m["books"], m["ctx"]))
+                               m["cap"], m["stale"], m["notes"], m["books"], m["ctx"], m["alt"], m["goals"]))
     epoch = pd.Timestamp(0, tz="UTC")
     slate.sort(key=lambda s: (pd.isna(s.start_utc), epoch if pd.isna(s.start_utc) else s.start_utc, s.game_id))
     if persist:
@@ -117,5 +125,10 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
             "team": s.rec.team, "book": s.rec.book, "decimal": s.rec.decimal, "stake": s.rec.stake, "edge": s.rec.edge, "ev": s.rec.ev,
             "reasons": " | ".join(s.rec.reasons), "odds_captured_at": s.odds_captured_at, "odds_stale": int(s.odds_stale), "model_status": model_status}
             for s in slate], ["run_id", "game_id"])
+        store.upsert("alt_quotes", [{"run_id": run_id, "run_at": now.isoformat(timespec="seconds"), "game_id": s.game_id, "game_date": date, "market": q.market,
+                                    "side": q.side, "label": q.label, "point": q.point, "p_model": q.model_prob, "p_market": q.market_prob, "p_push": q.p_push,
+                                    "book": q.best_book, "decimal": q.best_decimal, "edge": q.edge, "ev": q.ev, "n_books": q.n_books,
+                                    "lam_home": s.goals.get("lam_home"), "lam_away": s.goals.get("lam_away"), "exp_total": s.goals.get("exp_total"),
+                                    "odds_captured_at": s.odds_captured_at} for s in slate for q in s.alt], ["run_id", "game_id", "market", "side"])
         store.upsert("shadow_bets", shadow_bets(slate, cfg, run_id, now.isoformat(timespec="seconds"), date), ["run_id", "game_id", "strategy"])
     return slate

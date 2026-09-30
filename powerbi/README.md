@@ -11,6 +11,7 @@ The daily run publishes tidy CSVs to `data/export/`. Power BI reads them straigh
 | `paper_trading.csv` / `paper_summary.csv` | fake-money bet / strategy | which strategies work, with ROI confidence interval |
 | `model_versions.csv` | trained model | log loss, Brier, AUC, calibration slope, drift status |
 | `oos_predictions.csv` | historical game | walk-forward out-of-sample predictions for calibration charts |
+| `alt_market_predictions.csv` | game x market x side | totals / puck-line model vs market with the settled outcome (won / lost / push) |
 | `tendencies.csv` | tested segment | weekly tendency analysis (q-values, replication verdict) |
 
 ## Connect (about 5 minutes)

@@ -156,3 +156,6 @@ MIT
 
 - **Power BI / Excel:** the daily run publishes tidy CSVs to [`data/export/`](data/export); setup steps, `.pbids` connectors and DAX measures are in [`powerbi/`](powerbi/README.md).
 - **Tendencies:** a weekly job ([`reports/TENDENCIES.md`](reports/TENDENCIES.md)) looks for segments where the model is systematically off, corrected for multiple testing and required to replicate across both halves of the data. It is descriptive only and never changes the model or staking.
+
+## Other bet types
+Beyond moneylines, a separate goals model prices **totals (over/under)** and the **puck line**. These are experimental and paper-traded only (no real stake suggestions) until settled results support them; see [`docs/MARKETS.md`](docs/MARKETS.md). On the [bets page](site/bets.html) you can log your own bets of any type (moneyline, puck line, total, parlay, prop).
