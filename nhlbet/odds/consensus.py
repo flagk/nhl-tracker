@@ -17,8 +17,10 @@ def h2h_wide(store: Store, since: str | None = None) -> pd.DataFrame:
         return df
     df["side"] = np.where(df.outcome == df.home, "home", np.where(df.outcome == df.away, "away", "other"))
     df = df[df.side != "other"].rename(columns={"home": "home_team", "away": "away_team"})
-    w = df.pivot_table(index=["captured_at", "event_id", "book", "game_id", "commence_time", "home_team", "away_team", "book_updated"],
-                       columns="side", values="price", aggfunc="max", dropna=False).reset_index()
+    keys = ["captured_at", "event_id", "book", "game_id", "commence_time", "home_team", "away_team", "book_updated"]
+    # groupby+unstack only materialises combinations that exist (pivot_table(dropna=False) builds the full cartesian product
+    # of all index columns and ran out of memory on a real 15-game slate); dropna=False keeps rows with NULL game_id/book_updated
+    w = df.groupby(keys + ["side"], dropna=False).price.max().unstack("side").reset_index()
     w.columns.name = None
     return w.dropna(subset=["home", "away"]) if {"home", "away"} <= set(w.columns) else pd.DataFrame()
 
