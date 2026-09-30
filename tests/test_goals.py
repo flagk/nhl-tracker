@@ -83,7 +83,7 @@ def test_add_goal_targets_joins_on_game_id():
 
 
 def _league_frame(days=260):
-    from nhlbet.analysis.importance import candidate_columns
+    from nhlbet.models.goals import goal_feature_columns
     from nhlbet.data.store import Store
     from nhlbet.features.builder import BuilderConfig, build_features
     from tests.conftest import make_league
@@ -96,10 +96,10 @@ def _league_frame(days=260):
         d.to_sql(t, st.conn, if_exists="append", index=False)
     F = build_features(st, BuilderConfig())
     F = add_goal_targets(F[(F.game_type == 2) & F.home_score.notna()], st.df("select game_id, home_score, away_score, last_period from games"))
-    return F, candidate_columns(F)
+    return F, goal_feature_columns(F)
 
 
-def test_walk_forward_never_uses_the_future_and_beats_base_rates():
+def test_walk_forward_never_uses_the_future():
     from nhlbet.models.goals_eval import evaluate, walk_forward_goals
     F, feats = _league_frame()
     start = "2024-01-01"
@@ -113,4 +113,24 @@ def test_walk_forward_never_uses_the_future_and_beats_base_rates():
     early = P.index[P.game_date < cut]
     pd.testing.assert_frame_equal(P.loc[early, ["lam_home", "lam_away", "p_over_5.5", "p_cover_-1.5"]], P2.loc[early, ["lam_home", "lam_away", "p_over_5.5", "p_cover_-1.5"]])
     ev = evaluate(P)
-    assert (ev["diff"] < 0).all() and set(ev.market) >= {"total over 5.5", "home -1.5 cover"}
+    assert (ev["diff"] < 0.01).all() and set(ev.market) >= {"total over 5.5", "home -1.5 cover"}       # no leak: any gain is small (goals are hard to predict)
+
+
+def test_outcome_columns_can_never_be_features():
+    """Regression: the first backtest accidentally included hr/ar/tot/mar as predictors and reported an impossible +0.3 nat/game improvement."""
+    with pytest.raises(ValueError, match="leakage"):
+        GoalsModel(["a", "hr"])
+    F, feats = _league_frame(120)
+    assert not set(feats) & {"hr", "ar", "ot", "so", "tot", "mar", "home_score", "away_score", "home_win"}
+
+
+def test_walk_forward_gain_is_small_and_realistic_on_pure_noise():
+    """With features that carry no information about goals the model must not beat the base rate by anything like a leak would."""
+    from nhlbet.models.goals_eval import evaluate, goal_rate_table, walk_forward_goals
+    F, _ = _league_frame()
+    rng = np.random.default_rng(0)
+    F = F.copy()
+    for c in ("n1", "n2", "n3"):
+        F[c] = rng.normal(size=len(F))
+    P = walk_forward_goals(F, ["n1", "n2", "n3"], "2024-01-01", 14, min_train=200)
+    assert abs(goal_rate_table(P)["diff"]).max() < 0.03 and evaluate(P)["diff"].abs().max() < 0.03

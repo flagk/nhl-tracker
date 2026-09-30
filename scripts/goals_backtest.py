@@ -16,11 +16,10 @@ warnings.filterwarnings("ignore")
 
 import pandas as pd
 
-from nhlbet.analysis.importance import candidate_columns
 from nhlbet.config import load_builder_config
 from nhlbet.data.store import Store
 from nhlbet.features.builder import build_features
-from nhlbet.models.goals import add_goal_targets
+from nhlbet.models.goals import add_goal_targets, goal_feature_columns
 from nhlbet.models.goals_eval import evaluate, goal_rate_table, walk_forward_goals
 
 ap = argparse.ArgumentParser()
@@ -36,7 +35,7 @@ store = Store(a.db)
 F = build_features(store, load_builder_config())
 F = F[(F.game_type == 2) & F.home_score.notna()]
 F = add_goal_targets(F, store.df("SELECT game_id, home_score, away_score, last_period FROM games"))
-feats = candidate_columns(F[F.game_date < pd.Timestamp(a.eval_start)])
+feats = goal_feature_columns(F[F.game_date < pd.Timestamp(a.eval_start)])
 p_home = None
 if Path(a.wf).exists():
     w = pd.read_csv(a.wf, index_col=0)

@@ -13,7 +13,7 @@ from nhlbet.data.store import Store
 from nhlbet.features.builder import build_features
 from nhlbet.models.base import load_params, make_zoo
 from nhlbet.models.bundle import ModelBundle, train_bundle
-from nhlbet.models.goals import add_goal_targets
+from nhlbet.models.goals import add_goal_targets, goal_feature_columns
 from nhlbet.monitor import feature_drift, performance_drift
 from nhlbet.registry import ModelRegistry, data_fingerprint
 
@@ -63,7 +63,7 @@ def retrain(db: str = "data/nhl.db", force: bool = False, model_dir: str = "data
         rev += 1
         version = f"{base}-r{rev}"
     bundle = train_bundle(done, zoo, version, features, cfg.__dict__, hist[["stack", "y"]] if len(hist) else None,
-                          goals_features=candidate_columns(done.drop(columns=["hr", "ar", "ot", "so", "tot", "mar"])), goals_alpha=galpha,
+                          goals_features=goal_feature_columns(done), goals_alpha=galpha,
                           meta={"n_train": len(done), "train_start": str(done.game_date.min().date()),
                                 "train_end": str(done.game_date.max().date())})
     art = Path(model_dir) / f"model_{version}.joblib"
