@@ -1,0 +1,274 @@
+{
+ "generated_at": "2026-09-30T15:24:58+00:00",
+ "date": "2026-09-30",
+ "run_type": "morning",
+ "notes": [],
+ "model": {
+  "version": "20260929-390a7e",
+  "p_source": "online_platt",
+  "status": "OK",
+  "reasons": [],
+  "train_end": "2026-09-29"
+ },
+ "odds": {
+  "enabled": true,
+  "captured_at": "2026-09-30T15:24:51+00:00",
+  "stale": false,
+  "remaining": 497,
+  "source": "live"
+ },
+ "policy": {
+  "bankroll": 1000.0,
+  "max_bet_pct": 0.02,
+  "max_daily_exposure_pct": 0.05,
+  "max_bets_per_day": 5,
+  "min_stake": 1.0,
+  "min_edge": 0.03,
+  "parlay_max_legs": 4,
+  "parlay_max_pct": 0.005
+ },
+ "games": [
+  {
+   "game_id": 2026020006,
+   "start_utc": "2026-09-30T23:30:00+00:00",
+   "home": "PHI",
+   "away": "PIT",
+   "home_goalie": "D. Vladar",
+   "away_goalie": "S. Skinner",
+   "goalie_status": "probable",
+   "p_home": 0.5006858649322915,
+   "blocked": "early-season sample size: a team has only played 0 games (< 10)",
+   "notes": [
+    "PIT are creating the better share of expected goals recently.",
+    "Division/rival game.",
+    "Early in the season: team ratings lean on last year's results and are less reliable."
+   ],
+   "odds_stale": false,
+   "odds_captured_at": "2026-09-30T15:24:51+00:00",
+   "sides": {
+    "home": {
+     "team": "PHI",
+     "p_model": 0.5006858649322915,
+     "p_market": 0.5670929594271994,
+     "p_adj": 0.5521698346352459,
+     "edge": -0.06640709449490789,
+     "ev": -0.055789582773729474,
+     "kelly_full": 0.0,
+     "best_book": "betonlineag",
+     "best_decimal": 1.71,
+     "books": {
+      "betmgm": 1.69,
+      "betonlineag": 1.71,
+      "betrivers": 1.7,
+      "betus": 1.71,
+      "bovada": 1.71,
+      "draftkings": 1.7,
+      "fanduel": 1.68,
+      "lowvig": 1.71,
+      "mybookieag": 1.7
+     },
+     "fails": [
+      "early-season sample size: a team has only played 0 games (< 10)"
+     ],
+     "qualifies": false
+    },
+    "away": {
+     "team": "PIT",
+     "p_model": 0.4993141350677085,
+     "p_market": 0.4329070405728006,
+     "p_adj": 0.44783016536475406,
+     "edge": 0.06640709449490789,
+     "ev": 0.0031395704170491534,
+     "kelly_full": 0.0025319116266525428,
+     "best_book": "betonlineag",
+     "best_decimal": 2.24,
+     "books": {
+      "betmgm": 2.2,
+      "betonlineag": 2.24,
+      "betrivers": 2.18,
+      "betus": 2.2,
+      "bovada": 2.2,
+      "draftkings": 2.2,
+      "fanduel": 2.22,
+      "lowvig": 2.24,
+      "mybookieag": 2.16
+     },
+     "fails": [
+      "early-season sample size: a team has only played 0 games (< 10)"
+     ],
+     "qualifies": false
+    }
+   },
+   "server_action": "NO_BET",
+   "server_side": null,
+   "server_stake": 0.0
+  },
+  {
+   "game_id": 2026020008,
+   "start_utc": "2026-09-30T23:30:00+00:00",
+   "home": "TOR",
+   "away": "NYI",
+   "home_goalie": "J. Woll",
+   "away_goalie": "I. Sorokin",
+   "goalie_status": "probable",
+   "p_home": 0.4327098356291741,
+   "blocked": "early-season sample size: a team has only played 0 games (< 10)",
+   "notes": [
+    "NYI have the clearly better goal differential this season (gap 0.28 goals/game).",
+    "TOR is on the second night of a back-to-back.",
+    "NYI are creating the better share of expected goals recently.",
+    "Early in the season: team ratings lean on last year's results and are less reliable."
+   ],
+   "odds_stale": false,
+   "odds_captured_at": "2026-09-30T15:24:51+00:00",
+   "sides": {
+    "home": {
+     "team": "TOR",
+     "p_model": 0.4327098356291741,
+     "p_market": 0.5450036630088263,
+     "p_adj": 0.5325341941317382,
+     "edge": -0.11229382737965221,
+     "ev": -0.046763792504188606,
+     "kelly_full": 0.0,
+     "best_book": "mybookieag",
+     "best_decimal": 1.79,
+     "books": {
+      "betmgm": 1.74,
+      "betonlineag": 1.77,
+      "betrivers": 1.75,
+      "betus": 1.77,
+      "bovada": 1.77,
+      "draftkings": 1.77,
+      "fanduel": 1.77,
+      "lowvig": 1.77,
+      "mybookieag": 1.79
+     },
+     "fails": [
+      "early-season sample size: a team has only played 0 games (< 10)"
+     ],
+     "qualifies": false
+    },
+    "away": {
+     "team": "NYI",
+     "p_model": 0.5672901643708259,
+     "p_market": 0.4549963369911737,
+     "p_adj": 0.46746580586826175,
+     "edge": 0.11229382737965221,
+     "ev": 0.0050514826167626925,
+     "kelly_full": 0.004392593579793646,
+     "best_book": "betonlineag",
+     "best_decimal": 2.15,
+     "books": {
+      "betmgm": 2.1,
+      "betonlineag": 2.15,
+      "betrivers": 2.1,
+      "betus": 2.1,
+      "bovada": 2.1,
+      "draftkings": 2.1,
+      "fanduel": 2.08,
+      "lowvig": 2.15,
+      "mybookieag": 2.03
+     },
+     "fails": [
+      "early-season sample size: a team has only played 0 games (< 10)"
+     ],
+     "qualifies": false
+    }
+   },
+   "server_action": "NO_BET",
+   "server_side": null,
+   "server_stake": 0.0
+  },
+  {
+   "game_id": 2026020007,
+   "start_utc": "2026-10-01T02:00:00+00:00",
+   "home": "COL",
+   "away": "LAK",
+   "home_goalie": "S. Wedgewood",
+   "away_goalie": "A. Forsberg",
+   "goalie_status": "probable",
+   "p_home": 0.5992943668203773,
+   "blocked": "early-season sample size: a team has only played 0 games (< 10)",
+   "notes": [
+    "COL have the clearly better goal differential this season (gap 0.73 goals/game).",
+    "Early in the season: team ratings lean on last year's results and are less reliable."
+   ],
+   "odds_stale": false,
+   "odds_captured_at": "2026-09-30T15:24:51+00:00",
+   "sides": {
+    "home": {
+     "team": "COL",
+     "p_model": 0.5992943668203773,
+     "p_market": 0.6401937960740612,
+     "p_adj": 0.626231672556919,
+     "edge": -0.04089942925368395,
+     "ev": -0.041865540987913896,
+     "kelly_full": 0.0,
+     "best_book": "betonlineag",
+     "best_decimal": 1.53,
+     "books": {
+      "betmgm": 1.5,
+      "betonlineag": 1.53,
+      "betrivers": 1.5,
+      "betus": 1.53,
+      "bovada": 1.51,
+      "draftkings": 1.52,
+      "fanduel": 1.5,
+      "lowvig": 1.53,
+      "mybookieag": 1.52
+     },
+     "fails": [
+      "early-season sample size: a team has only played 0 games (< 10)"
+     ],
+     "qualifies": false
+    },
+    "away": {
+     "team": "LAK",
+     "p_model": 0.4007056331796227,
+     "p_market": 0.35980620392593876,
+     "p_adj": 0.373768327443081,
+     "edge": 0.04089942925368395,
+     "ev": 0.0016991175474571074,
+     "kelly_full": 0.0010113794925339925,
+     "best_book": "bovada",
+     "best_decimal": 2.68,
+     "books": {
+      "betmgm": 2.65,
+      "betonlineag": 2.66,
+      "betrivers": 2.63,
+      "betus": 2.63,
+      "bovada": 2.68,
+      "draftkings": 2.6,
+      "fanduel": 2.64,
+      "lowvig": 2.66,
+      "mybookieag": 2.57
+     },
+     "fails": [
+      "early-season sample size: a team has only played 0 games (< 10)"
+     ],
+     "qualifies": false
+    }
+   },
+   "server_action": "NO_BET",
+   "server_side": null,
+   "server_stake": 0.0
+  }
+ ],
+ "track": {
+  "resolved_games": 0,
+  "bets": {
+   "n": 0,
+   "staked": 0.0,
+   "profit": 0.0,
+   "roi": null,
+   "win_rate": null,
+   "avg_decimal": null
+  },
+  "model": null,
+  "vs_market": null,
+  "clv": null,
+  "drawdown": null,
+  "no_bet_rate": null
+ },
+ "disclaimer": "Disclaimer. This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice."
+}

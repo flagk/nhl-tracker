@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NHL picks 2026-09-30</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #14181f; --muted: #5b6573; --line: #e2e6ec; --accent: #1f5fbf;
+    --good: #1a7f4b; --good-bg: #e6f4ec; --warn: #9a6700; --warn-bg: #fff4d6; --bad: #b42318; --bad-bg: #fde8e6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1319; --card: #171d26; --ink: #e8ecf2; --muted: #98a3b3; --line: #283140; --accent: #6ea4ff;
+      --good: #4cc38a; --good-bg: #14291f; --warn: #e3b341; --warn-bg: #2b2411; --bad: #ff8a80; --bad-bg: #2f1715;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1319; --card: #171d26; --ink: #e8ecf2; --muted: #98a3b3; --line: #283140; --accent: #6ea4ff;
+    --good: #4cc38a; --good-bg: #14291f; --warn: #e3b341; --warn-bg: #2b2411; --bad: #ff8a80; --bad-bg: #2f1715;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 1.4rem; margin: 8px 0 2px; } h2 { font-size: 1.1rem; margin: 26px 0 10px; }
+  .sub { color: var(--muted); font-size: .9rem; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 10px 0; }
+  .banner { border-radius: 10px; padding: 10px 14px; margin: 10px 0; font-size: .92rem; }
+  .banner.disc { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn); }
+  .banner.bad { background: var(--bad-bg); color: var(--bad); border: 1px solid var(--bad); }
+  .banner.info { background: var(--card); border: 1px solid var(--line); color: var(--muted); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px 14px; }
+  label { display: block; font-size: .8rem; color: var(--muted); margin-bottom: 3px; }
+  input, select, button { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; width: 100%; }
+  button { cursor: pointer; width: auto; } button:hover { border-color: var(--accent); }
+  .pill { display: inline-block; border-radius: 999px; padding: 1px 10px; font-size: .78rem; font-weight: 600; }
+  .pill.rec { background: var(--good-bg); color: var(--good); } .pill.lean { background: var(--warn-bg); color: var(--warn); }
+  .pill.ok { background: var(--good-bg); color: var(--good); } .pill.warn { background: var(--warn-bg); color: var(--warn); } .pill.alert { background: var(--bad-bg); color: var(--bad); }
+  .row { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+  .big { font-size: 1.05rem; font-weight: 650; } .muted { color: var(--muted); } .good { color: var(--good); } .bad { color: var(--bad); }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin: 10px 0 4px; }
+  .metric .v { font-size: 1.05rem; font-weight: 650; } .metric .k { font-size: .75rem; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; } th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; } .scroll { overflow-x: auto; }
+  ul { margin: 6px 0 0 18px; padding: 0; } .check { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-size: .88rem; }
+  .check input { width: auto; }
+</style>
+</head>
+<body>
+<main id="app"><noscript>This page needs JavaScript (it recalculates stakes in your browser).</noscript></main>
+<script id="payload" type="application/json">{"generated_at": "2026-09-30T15:24:58+00:00", "date": "2026-09-30", "run_type": "morning", "notes": [], "model": {"version": "20260929-390a7e", "p_source": "online_platt", "status": "OK", "reasons": [], "train_end": "2026-09-29"}, "odds": {"enabled": true, "captured_at": "2026-09-30T15:24:51+00:00", "stale": false, "remaining": 497, "source": "live"}, "policy": {"bankroll": 1000.0, "max_bet_pct": 0.02, "max_daily_exposure_pct": 0.05, "max_bets_per_day": 5, "min_stake": 1.0, "min_edge": 0.03, "parlay_max_legs": 4, "parlay_max_pct": 0.005}, "games": [{"game_id": 2026020006, "start_utc": "2026-09-30T23:30:00+00:00", "home": "PHI", "away": "PIT", "home_goalie": "D. Vladar", "away_goalie": "S. Skinner", "goalie_status": "probable", "p_home": 0.5006858649322915, "blocked": "early-season sample size: a team has only played 0 games (< 10)", "notes": ["PIT are creating the better share of expected goals recently.", "Division/rival game.", "Early in the season: team ratings lean on last year's results and are less reliable."], "odds_stale": false, "odds_captured_at": "2026-09-30T15:24:51+00:00", "sides": {"home": {"team": "PHI", "p_model": 0.5006858649322915, "p_market": 0.5670929594271994, "p_adj": 0.5521698346352459, "edge": -0.06640709449490789, "ev": -0.055789582773729474, "kelly_full": 0.0, "best_book": "betonlineag", "best_decimal": 1.71, "books": {"betmgm": 1.69, "betonlineag": 1.71, "betrivers": 1.7, "betus": 1.71, "bovada": 1.71, "draftkings": 1.7, "fanduel": 1.68, "lowvig": 1.71, "mybookieag": 1.7}, "fails": ["early-season sample size: a team has only played 0 games (< 10)"], "qualifies": false}, "away": {"team": "PIT", "p_model": 0.4993141350677085, "p_market": 0.4329070405728006, "p_adj": 0.44783016536475406, "edge": 0.06640709449490789, "ev": 0.0031395704170491534, "kelly_full": 0.0025319116266525428, "best_book": "betonlineag", "best_decimal": 2.24, "books": {"betmgm": 2.2, "betonlineag": 2.24, "betrivers": 2.18, "betus": 2.2, "bovada": 2.2, "draftkings": 2.2, "fanduel": 2.22, "lowvig": 2.24, "mybookieag": 2.16}, "fails": ["early-season sample size: a team has only played 0 games (< 10)"], "qualifies": false}}, "server_action": "NO_BET", "server_side": null, "server_stake": 0.0}, {"game_id": 2026020008, "start_utc": "2026-09-30T23:30:00+00:00", "home": "TOR", "away": "NYI", "home_goalie": "J. Woll", "away_goalie": "I. Sorokin", "goalie_status": "probable", "p_home": 0.4327098356291741, "blocked": "early-season sample size: a team has only played 0 games (< 10)", "notes": ["NYI have the clearly better goal differential this season (gap 0.28 goals/game).", "TOR is on the second night of a back-to-back.", "NYI are creating the better share of expected goals recently.", "Early in the season: team ratings lean on last year's results and are less reliable."], "odds_stale": false, "odds_captured_at": "2026-09-30T15:24:51+00:00", "sides": {"home": {"team": "TOR", "p_model": 0.4327098356291741, "p_market": 0.5450036630088263, "p_adj": 0.5325341941317382, "edge": -0.11229382737965221, "ev": -0.046763792504188606, "kelly_full": 0.0, "best_book": "mybookieag", "best_decimal": 1.79, "books": {"betmgm": 1.74, "betonlineag": 1.77, "betrivers": 1.75, "betus": 1.77, "bovada": 1.77, "draftkings": 1.77, "fanduel": 1.77, "lowvig": 1.77, "mybookieag": 1.79}, "fails": ["early-season sample size: a team has only played 0 games (< 10)"], "qualifies": false}, "away": {"team": "NYI", "p_model": 0.5672901643708259, "p_market": 0.4549963369911737, "p_adj": 0.46746580586826175, "edge": 0.11229382737965221, "ev": 0.0050514826167626925, "kelly_full": 0.004392593579793646, "best_book": "betonlineag", "best_decimal": 2.15, "books": {"betmgm": 2.1, "betonlineag": 2.15, "betrivers": 2.1, "betus": 2.1, "bovada": 2.1, "draftkings": 2.1, "fanduel": 2.08, "lowvig": 2.15, "mybookieag": 2.03}, "fails": ["early-season sample size: a team has only played 0 games (< 10)"], "qualifies": false}}, "server_action": "NO_BET", "server_side": null, "server_stake": 0.0}, {"game_id": 2026020007, "start_utc": "2026-10-01T02:00:00+00:00", "home": "COL", "away": "LAK", "home_goalie": "S. Wedgewood", "away_goalie": "A. Forsberg", "goalie_status": "probable", "p_home": 0.5992943668203773, "blocked": "early-season sample size: a team has only played 0 games (< 10)", "notes": ["COL have the clearly better goal differential this season (gap 0.73 goals/game).", "Early in the season: team ratings lean on last year's results and are less reliable."], "odds_stale": false, "odds_captured_at": "2026-09-30T15:24:51+00:00", "sides": {"home": {"team": "COL", "p_model": 0.5992943668203773, "p_market": 0.6401937960740612, "p_adj": 0.626231672556919, "edge": -0.04089942925368395, "ev": -0.041865540987913896, "kelly_full": 0.0, "best_book": "betonlineag", "best_decimal": 1.53, "books": {"betmgm": 1.5, "betonlineag": 1.53, "betrivers": 1.5, "betus": 1.53, "bovada": 1.51, "draftkings": 1.52, "fanduel": 1.5, "lowvig": 1.53, "mybookieag": 1.52}, "fails": ["early-season sample size: a team has only played 0 games (< 10)"], "qualifies": false}, "away": {"team": "LAK", "p_model": 0.4007056331796227, "p_market": 0.35980620392593876, "p_adj": 0.373768327443081, "edge": 0.04089942925368395, "ev": 0.0016991175474571074, "kelly_full": 0.0010113794925339925, "best_book": "bovada", "best_decimal": 2.68, "books": {"betmgm": 2.65, "betonlineag": 2.66, "betrivers": 2.63, "betus": 2.63, "bovada": 2.68, "draftkings": 2.6, "fanduel": 2.64, "lowvig": 2.66, "mybookieag": 2.57}, "fails": ["early-season sample size: a team has only played 0 games (< 10)"], "qualifies": false}}, "server_action": "NO_BET", "server_side": null, "server_stake": 0.0}], "track": {"resolved_games": 0, "bets": {"n": 0, "staked": 0.0, "profit": 0.0, "roi": null, "win_rate": null, "avg_decimal": null}, "model": null, "vs_market": null, "clv": null, "drawdown": null, "no_bet_rate": null}, "disclaimer": "Disclaimer. This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice."}</script>
+<script>/* Pure, DOM-free logic for the picks page. Mirrors nhlbet/risk/policy.py + parlay.py and is parity-tested against them
+ * with Node (tests/test_site.py). Stakes are recomputed in the browser from the user's unit/bankroll/risk settings. */
+(function (root) {
+  "use strict";
+
+  function kelly(p, d) {
+    var b = d - 1;
+    return Math.max(0, (b * p - (1 - p)) / b);
+  }
+  function round2(x) { return Math.round(x * 100) / 100; }
+  function floor2(x) { return Math.floor(x * 100 + 1e-9) / 100; }
+
+  /* settings: {bankroll, unit, mode: 'quarter'|'half'|'flat', maxPct, dailyPct, maxBets, minStake} */
+  function kellyMultiplier(mode) { return mode === "half" ? 0.5 : 0.25; }
+
+  function rawStake(side, s) {
+    var pct;
+    if (s.mode === "flat") pct = Math.min(s.unit / s.bankroll, s.maxPct);
+    else pct = Math.min(kellyMultiplier(s.mode) * side.kelly_full, s.maxPct);
+    return round2(s.bankroll * pct);
+  }
+
+  /* games: payload.games. Returns {gameId: {side, stake, units, scaled}} for qualifying games, after portfolio caps. */
+  function allocate(games, s) {
+    var cands = [];
+    games.forEach(function (g) {
+      var best = null;
+      ["home", "away"].forEach(function (k) {
+        var sd = g.sides[k];
+        if (sd && sd.qualifies && (best === null || sd.ev > best.sd.ev)) best = { k: k, sd: sd };
+      });
+      if (!best) return;
+      var st = rawStake(best.sd, s);
+      if (st < s.minStake) return;
+      cands.push({ id: g.game_id, side: best.k, ev: best.sd.ev, stake: st, scaled: 1 });
+    });
+    cands.sort(function (a, b) { return b.ev - a.ev; });
+    cands = cands.slice(0, s.maxBets);
+    var total = cands.reduce(function (t, c) { return t + c.stake; }, 0);
+    var cap = s.bankroll * s.dailyPct;
+    if (total > cap && cap > 0) {
+      var scale = cap / total;
+      cands.forEach(function (c) { c.stake = floor2(c.stake * scale); c.scaled = scale; });
+      cands = cands.filter(function (c) { return c.stake >= s.minStake; });
+    }
+    var out = {};
+    cands.forEach(function (c) { out[c.id] = { side: c.side, stake: c.stake, units: s.unit > 0 ? c.stake / s.unit : 0, scaled: c.scaled }; });
+    return out;
+  }
+
+  function prodOf(a) { return a.reduce(function (t, x) { return t * x; }, 1); }
+
+  /* legs: [{game_id, p, best_decimal, books: {book: decimal}}] */
+  function parlay(legs, maxLegs) {
+    maxLegs = maxLegs || 4;
+    if (legs.length < 2) throw new Error("a parlay needs at least 2 legs");
+    if (legs.length > maxLegs) throw new Error("at most " + maxLegs + " legs");
+    var ids = legs.map(function (l) { return l.game_id; });
+    if (new Set(ids).size !== ids.length) throw new Error("legs must come from different games");
+    var p = prodOf(legs.map(function (l) { return l.p; }));
+    var common = Object.keys(legs[0].books).filter(function (b) { return legs.every(function (l) { return b in l.books; }); }).sort();
+    var offered = 0, book = null;
+    common.forEach(function (b) {
+      var o = prodOf(legs.map(function (l) { return l.books[b]; }));
+      if (o > offered) { offered = o; book = b; }
+    });
+    if (book === null) offered = prodOf(legs.map(function (l) { return l.best_decimal; }));
+    var singles = legs.reduce(function (t, l) { return t + l.p * l.best_decimal - 1; }, 0) / legs.length;
+    var ev = p * offered - 1;
+    return { legs: legs.length, p: p, fair_decimal: 1 / p, offered_decimal: offered, book: book, single_book_available: book !== null,
+             ev: ev, singles_ev: singles, better_as_singles: singles >= ev };
+  }
+
+  var api = { kelly: kelly, allocate: allocate, rawStake: rawStake, parlay: parlay };
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  else root.NHLCore = api;
+})(typeof window !== "undefined" ? window : this);
+</script>
+<script>(function () {
+  "use strict";
+  var D = JSON.parse(document.getElementById("payload").textContent);
+  var C = window.NHLCore;
+  var app = document.getElementById("app");
+  var P = D.policy;
+
+  /* ---------- settings (remembered per browser; storage may be unavailable) ---------- */
+  var defaults = { bankroll: P.bankroll, unit: Math.max(1, Math.round(P.bankroll / 100)), mode: "quarter", maxPct: P.max_bet_pct * 100, dailyPct: P.max_daily_exposure_pct * 100 };
+  var S = Object.assign({}, defaults);
+  try { Object.assign(S, JSON.parse(localStorage.getItem("nhlSettings") || "{}")); } catch (e) { /* ignore */ }
+  var legs = {};   // game_id -> side
+
+  function save() { try { localStorage.setItem("nhlSettings", JSON.stringify(S)); } catch (e) { /* ignore */ } }
+  function num(x, d) { var v = parseFloat(x); return isFinite(v) && v >= 0 ? v : d; }
+  function cfg() {
+    return { bankroll: Math.max(1, num(S.bankroll, defaults.bankroll)), unit: Math.max(0.01, num(S.unit, defaults.unit)), mode: S.mode,
+             maxPct: Math.min(num(S.maxPct, 2), 25) / 100, dailyPct: Math.min(num(S.dailyPct, 5), 100) / 100, maxBets: P.max_bets_per_day, minStake: P.min_stake };
+  }
+
+  /* ---------- helpers ---------- */
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === "class") n.className = attrs[k]; else if (k === "text") n.textContent = attrs[k];
+      else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), attrs[k]); else n.setAttribute(k, attrs[k]);
+    });
+    (kids || []).forEach(function (c) { if (c !== null && c !== undefined) n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return n;
+  }
+  function pct(x, d) { return x === null || x === undefined ? "–" : (x * 100).toFixed(d === undefined ? 1 : d) + "%"; }
+  function spct(x) { return x === null || x === undefined ? "–" : (x >= 0 ? "+" : "") + (x * 100).toFixed(1) + "%"; }
+  function usd(x) { return "$" + x.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function american(d) { return d >= 2 ? "+" + Math.round((d - 1) * 100) : String(Math.round(-100 / (d - 1))); }
+  function price(d) { return d.toFixed(2) + " (" + american(d) + ")"; }
+  function when(iso) {
+    if (!iso) return "";
+    var t = new Date(iso); return isNaN(t) ? "" : t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  }
+  function bestSide(g) {
+    var b = null;
+    ["home", "away"].forEach(function (k) { var s = g.sides[k]; if (s && (b === null || s.ev > g.sides[b].ev)) b = k; });
+    return b;
+  }
+  function metric(k, v) { return el("div", { class: "metric" }, [el("div", { class: "v", text: v }), el("div", { class: "k", text: k })]); }
+
+  /* ---------- sections ---------- */
+  function header() {
+    var st = D.model.status, cls = st === "OK" ? "ok" : st === "ALERT" ? "alert" : "warn";
+    var kids = [
+      el("h1", { text: "NHL picks · " + D.date }),
+      el("div", { class: "sub" }, ["Model ", el("b", { text: D.model.version || "?" }), " · health ", el("span", { class: "pill " + cls, text: st }),
+        " · run: " + D.run_type + " · built " + new Date(D.generated_at).toLocaleString()]),
+      el("div", { class: "banner disc", text: D.disclaimer })
+    ];
+    if (st === "ALERT") kids.push(el("div", { class: "banner bad", text: "Model health is ALERT (" + (D.model.reasons.join("; ") || "performance drift") + "). Recommendations are suspended." }));
+    else if (st === "WARN") kids.push(el("div", { class: "banner info", text: "Model health WARN: " + (D.model.reasons.join("; ") || "see report") + ". Treat picks with extra scepticism." }));
+    if (D.odds && D.odds.stale) kids.push(el("div", { class: "banner bad", text: "Odds are STALE (the odds API was unreachable). No bets are recommended on stale prices." }));
+    if (D.odds && D.odds.enabled === false) kids.push(el("div", { class: "banner info", text: "Odds are disabled (no ODDS_API_KEY), so every game is 'no odds → no bet'." }));
+    (D.notes || []).forEach(function (n) { kids.push(el("div", { class: "banner info", text: n })); });
+    return el("div", {}, kids);
+  }
+
+  function field(label, input) { return el("div", {}, [el("label", { text: label }), input]); }
+  function settingsPanel() {
+    function inp(key, step) {
+      return el("input", { type: "number", min: "0", step: step || "any", value: String(S[key]), oninput: function (e) { S[key] = e.target.value; save(); render(true); } });
+    }
+    var mode = el("select", { onchange: function (e) { S.mode = e.target.value; save(); render(true); } }, [
+      el("option", { value: "quarter", text: "Quarter Kelly (default)" }), el("option", { value: "half", text: "Half Kelly (more aggressive)" }),
+      el("option", { value: "flat", text: "Flat: 1 unit" })]);
+    mode.value = S.mode;
+    return el("div", { class: "card", id: "settings" }, [
+      el("div", { class: "row" }, [el("b", { text: "Your betting units" }), el("span", { class: "muted", text: "saved in this browser only" })]),
+      el("div", { class: "grid", style: "margin-top:8px" }, [
+        field("1 unit = $", inp("unit")), field("Bankroll $", inp("bankroll")), field("Staking", mode),
+        field("Max per bet (% bankroll)", inp("maxPct")), field("Max per day (% bankroll)", inp("dailyPct"))]),
+      el("div", { class: "sub", style: "margin-top:8px", text: "A bet only appears if the model's edge over the market's no-vig price is at least " + pct(P.min_edge, 0) +
+        " after safety checks; stakes shrink the model toward the market and are capped. Zero picks is a normal day." })
+    ]);
+  }
+
+  function pickCard(g, alloc) {
+    var k = bestSide(g), s = g.sides[k], a = alloc[g.game_id];
+    var rec = !!a && a.side === k;
+    var head = el("div", { class: "row" }, [
+      el("div", {}, [el("span", { class: "big", text: s.team + " " }), el("span", { class: "muted", text: (k === "home" ? "vs " + g.away : "@ " + g.home) + (g.start_utc ? " · " + when(g.start_utc) : "") })]),
+      el("span", { class: "pill " + (rec ? "rec" : "lean"), text: rec ? "RECOMMENDED" : "LEAN – not recommended" })]);
+    var m = [metric("Model win", pct(s.p_model)), metric("Market (no-vig)", pct(s.p_market)), metric("Edge", spct(s.edge)),
+             metric("EV per $1", spct(s.ev)), metric("Best price", price(s.best_decimal) + " @ " + s.best_book)];
+    if (rec) m.push(metric("Stake", usd(a.stake) + " · " + a.units.toFixed(1) + " u"));
+    var why = rec ? "Clears every check." + (a.scaled < 1 ? " Stake scaled down to respect your daily cap." : "") : (s.fails.length ? "Why not: " + s.fails.join("; ") + "." : "Below the recommendation rules.");
+    var goalies = g.goalie_status === "unknown" ? "" : "Goalies: " + g.away_goalie + " (away) / " + g.home_goalie + " (home), " + g.goalie_status + ". ";
+    var box = [head, el("div", { class: "metrics" }, m), el("div", { class: "sub", text: goalies + why })];
+    if (g.notes && g.notes.length) box.push(el("ul", { class: "sub" }, g.notes.map(function (n) { return el("li", { text: n }); })));
+    if (s.edge > 0) {
+      var cb = el("input", { type: "checkbox", onchange: function (e) { if (e.target.checked) legs[g.game_id] = k; else delete legs[g.game_id]; renderParlay(); } });
+      cb.checked = legs[g.game_id] === k;
+      box.push(el("label", { class: "check" }, [cb, "Add to parlay calculator"]));
+    }
+    return el("div", { class: "card" }, box);
+  }
+
+  function topPicks(alloc) {
+    var ranked = D.games.filter(function (g) { var k = bestSide(g); return k && g.sides[k].ev > 0; })
+      .sort(function (a, b) { return (isRec(b, alloc) - isRec(a, alloc)) || (g_ev(b) - g_ev(a)); }).slice(0, 5);
+    var nrec = Object.keys(alloc).length;
+    var kids = [el("h2", { text: "Top picks" }),
+      el("div", { class: "sub", text: nrec ? nrec + " recommended bet(s) today; other entries are leans shown for information only." : "No recommended bets today. Below are the best leans by expected value, for information only." })];
+    if (!D.games.length) kids.push(el("div", { class: "card", text: "No regular-season games to show for this date." }));
+    else if (!ranked.length) kids.push(el("div", { class: "card", text: "No game has a positive expected value against the current odds." }));
+    ranked.forEach(function (g) { kids.push(pickCard(g, alloc)); });
+    return el("div", {}, kids);
+  }
+  function g_ev(g) { return g.sides[bestSide(g)].ev; }
+  function isRec(g, alloc) { var a = alloc[g.game_id]; return a && a.side === bestSide(g) ? 1 : 0; }
+
+  var parlayBox = el("div", { id: "parlay" });
+  function renderParlay() {
+    var sel = Object.keys(legs).map(function (id) {
+      var g = D.games.filter(function (x) { return String(x.game_id) === String(id); })[0]; var s = g.sides[legs[id]];
+      return { g: g, s: s, leg: { game_id: g.game_id, p: s.p_adj, best_decimal: s.best_decimal, books: s.books } };
+    });
+    var c = cfg(), kids = [el("h2", { text: "Parlay calculator" }),
+      el("div", { class: "sub", text: "Parlays multiply every leg's bookmaker margin, so they are usually worse than betting the same picks separately. Only legs with a positive edge can be added, each from a different game (no same-game parlays), up to " + P.parlay_max_legs + " legs. Tick 'Add to parlay calculator' on a pick above." })];
+    if (sel.length < 2) { kids.push(el("div", { class: "card", text: sel.length ? "Add at least one more leg." : "No legs selected." })); }
+    else if (sel.length > P.parlay_max_legs) { kids.push(el("div", { class: "banner bad", text: "Too many legs (max " + P.parlay_max_legs + ")." })); }
+    else {
+      var r = C.parlay(sel.map(function (x) { return x.leg; }), P.parlay_max_legs);
+      var allRec = sel.every(function (x) { return x.s.qualifies; });
+      var stake = Math.min(0.5 * c.unit, P.parlay_max_pct * c.bankroll);
+      var verdict;
+      if (r.ev <= 0) verdict = ["bad", "Negative expected value: the parlay is expected to lose money on the model's numbers."];
+      else if (r.better_as_singles) verdict = ["warn", "Betting these legs separately has a higher expected value per dollar than the parlay (" + spct(r.singles_ev) + " vs " + spct(r.ev) + ")."];
+      else verdict = ["good", "Positive expected value, and higher per dollar than betting the legs separately - but it only wins " + pct(r.p, 0) + " of the time, so results swing a lot."];
+      kids.push(el("div", { class: "card" }, [
+        el("div", { class: "sub", text: sel.map(function (x) { return x.s.team + " @ " + price(x.s.best_decimal); }).join("  +  ") }),
+        el("div", { class: "metrics" }, [metric("Combined win probability", pct(r.p, 2)), metric("Fair odds", price(r.fair_decimal)),
+          metric("Offered odds", price(r.offered_decimal) + (r.book ? " @ " + r.book : "")), metric("Parlay EV per $1", spct(r.ev)), metric("Same legs as singles (avg EV)", spct(r.singles_ev))]),
+        el("div", { class: verdict[0], text: verdict[1] }),
+        el("div", { class: "sub", text: !r.single_book_available ? "No single book carries every leg at the listed prices, so the offered odds are only a reference." :
+          "Probabilities assume the legs are independent." }),
+        el("div", { class: "sub", text: r.ev > 0 && allRec && r.single_book_available ? "If you still want it: stake no more than " + usd(stake) + " (" + (stake / c.unit).toFixed(1) + " u)." :
+          "No parlay stake suggested (" + (r.ev <= 0 ? "negative EV" : !allRec ? "a leg is not a recommended bet" : "no single book has all legs") + ")." })]));
+    }
+    parlayBox.replaceChildren.apply(parlayBox, kids);
+  }
+
+  function allGames(alloc) {
+    var rows = D.games.map(function (g) {
+      var k = bestSide(g), s = k ? g.sides[k] : null, a = alloc[g.game_id];
+      return el("tr", {}, [el("td", { text: g.away + " @ " + g.home + (g.start_utc ? " (" + when(g.start_utc) + ")" : "") }), el("td", { text: pct(g.p_home) + " home" }),
+        el("td", { text: g.sides.home ? pct(g.sides.home.p_market) + " home" : "no odds" }),
+        el("td", { text: s ? s.team + " " + spct(s.edge) : "–" }), el("td", { text: a ? usd(a.stake) + " · " + a.units.toFixed(1) + " u" : g.blocked || (s && s.fails[0]) || "no bet" })]);
+    });
+    return el("div", {}, [el("h2", { text: "All games" }), el("div", { class: "card scroll" }, [el("table", {}, [
+      el("thead", {}, [el("tr", {}, ["Game", "Model", "Market (no-vig)", "Best side · edge", "Decision"].map(function (h) { return el("th", { text: h }); }))]), el("tbody", {}, rows)])])]);
+  }
+
+  function track() {
+    var t = D.track, kids = [el("h2", { text: "Track record" })];
+    if (!t || !t.resolved_games) return el("div", {}, kids.concat([el("div", { class: "card muted", text: "No resolved recommendations yet. Every recommendation is logged before its game, so this fills in automatically. Judge the model by closing-line value and log loss against the market, not by early profit." })]));
+    var m = [metric("Resolved games", String(t.resolved_games))];
+    if (t.bets && t.bets.n) { m.push(metric("Bets", String(t.bets.n)), metric("ROI", spct(t.bets.roi)), metric("Win rate", pct(t.bets.win_rate))); }
+    if (t.clv && t.clv.n >= 5) m.push(metric("Avg CLV per $1", spct(t.clv.mean)), metric("Beat the close", pct(t.clv.beat_close, 0)));
+    if (t.model) m.push(metric("Model log loss", t.model.log_loss.toFixed(4)));
+    if (t.vs_market) m.push(metric("Market-close log loss", t.vs_market.market_close_log_loss.toFixed(4)));
+    kids.push(el("div", { class: "card" }, [el("div", { class: "metrics" }, m),
+      el("div", { class: "sub", text: (t.bets && t.bets.n < 500 ? "Fewer than 500 bets cannot separate skill from luck (about 6,900 are needed to detect a true 3% ROI). " : "") + "Coin-flip log loss is 0.6931." })]));
+    return el("div", {}, kids);
+  }
+
+  function footer() { return el("div", { class: "banner disc", style: "margin-top:24px", text: D.disclaimer }); }
+
+  var dynamic = el("div", { id: "dynamic" });
+  function render(keepFocus) {
+    var alloc = C.allocate(D.games, cfg());
+    dynamic.replaceChildren(topPicks(alloc), parlayBox, allGames(alloc), track());
+    renderParlay();
+  }
+  app.replaceChildren(header(), settingsPanel(), dynamic, footer());
+  render();
+})();
+</script>
+</body>
+</html>

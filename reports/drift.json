@@ -1,5 +1,5 @@
 {
- "version": "20260416-e46f44",
+ "version": "20260929-390a7e",
  "performance": {
   "status": "OK",
   "n": 2624,
@@ -10,25 +10,8 @@
   "reasons": []
  },
  "features": {
-  "psi": {
-   "d_xga_pg": 0.09,
-   "d_ff_pct": 0.062,
-   "d_g_rest": 0.034,
-   "d_g_sv_l5": 0.016,
-   "d_xgf_pg": 0.021,
-   "d_ga_season_shrunk": 0.09,
-   "d_gd_season_shrunk": 0.038,
-   "is_rivalry": null,
-   "d_pp_pct": 0.085,
-   "d_hd_share": 0.019,
-   "d_sh_pct": 0.027,
-   "d_rest_days": 0.023,
-   "h_g3in4": null,
-   "d_games_last_7d": 0.011,
-   "a_road_trip_n": 0.002
-  },
-  "flagged": {},
-  "status": "OK"
+  "status": "OK",
+  "flagged": {}
  },
  "status": "OK"
 }
