@@ -82,23 +82,22 @@ def _screen(q: SideQuote, cfg: RiskConfig, ctx: Mapping) -> list[str]:
     return fails
 
 
-def recommend_game(game_id, home: str, away: str, quotes: Mapping[str, SideQuote] | None, cfg: RiskConfig,
-                   ctx: Mapping | None = None) -> Recommendation:
-    """Evaluate one game. ``ctx`` keys: model_status ('OK'|'WARN'|'ALERT'), odds_stale (bool), goalie_confirmed (bool)."""
-    ctx = ctx or {}
-    rec = Recommendation(game_id, home, away)
+def game_block_reason(quotes, cfg: RiskConfig, ctx: Mapping) -> str | None:
+    """Game-level reasons to pass regardless of price (model health, early season, no/stale odds)."""
     if ctx.get("model_status") == "ALERT":
-        rec.reasons.append("model health check is ALERT (performance drift) - recommendations suspended")
-        return rec
+        return "model health check is ALERT (performance drift) - recommendations suspended"
     if ctx.get("games_played_min") is not None and ctx["games_played_min"] < cfg.min_games_played:
-        rec.reasons.append(f"early-season sample size: a team has only played {int(ctx['games_played_min'])} games (< {cfg.min_games_played})")
-        return rec
+        return f"early-season sample size: a team has only played {int(ctx['games_played_min'])} games (< {cfg.min_games_played})"
     if not quotes:
-        rec.reasons.append("no usable odds available")
-        return rec
+        return "no usable odds available"
     if ctx.get("odds_stale") and not cfg.allow_stale_odds:
-        rec.reasons.append("odds are stale (API unavailable) - will not bet on old prices")
-        return rec
+        return "odds are stale (API unavailable) - will not bet on old prices"
+    return None
+
+
+def assess_sides(quotes: Mapping[str, SideQuote], cfg: RiskConfig, ctx: Mapping) -> list[tuple]:
+    """Per side: (quote, shrunk prob, EV at best price using the shrunk prob, list of failed screens). Single source of truth
+    for both the recommender and the website payload."""
     cands = []
     for q in quotes.values():
         fails = _screen(q, cfg, ctx)
@@ -107,6 +106,19 @@ def recommend_game(game_id, home: str, away: str, quotes: Mapping[str, SideQuote
         if not fails and ev < cfg.min_ev:
             fails = [f"expected value after shrinkage toward the market is only {ev:+.1%} (< {cfg.min_ev:.0%})"]
         cands.append((q, p_adj, ev, fails))
+    return cands
+
+
+def recommend_game(game_id, home: str, away: str, quotes: Mapping[str, SideQuote] | None, cfg: RiskConfig,
+                   ctx: Mapping | None = None) -> Recommendation:
+    """Evaluate one game. ``ctx`` keys: model_status ('OK'|'WARN'|'ALERT'), odds_stale (bool), goalie_confirmed (bool)."""
+    ctx = ctx or {}
+    rec = Recommendation(game_id, home, away)
+    blocked = game_block_reason(quotes, cfg, ctx)
+    if blocked:
+        rec.reasons.append(blocked)
+        return rec
+    cands = assess_sides(quotes, cfg, ctx)
     passing = [c for c in cands if not c[3]]
     if not passing:
         q, _, _, fails = max(cands, key=lambda c: c[0].edge)          # explain using the side closest to qualifying
