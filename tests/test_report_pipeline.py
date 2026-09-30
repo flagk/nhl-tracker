@@ -231,3 +231,19 @@ def test_no_hardcoded_secrets_anywhere():
     assert not offenders, offenders
     daily = (ROOT / ".github/workflows/daily.yml").read_text()
     assert "secrets.ODDS_API_KEY" in daily and "ODDS_API_KEY:" in daily
+
+
+def test_every_path_the_workflow_commits_is_not_gitignored():
+    """Regression: an over-broad `logs/` pattern in .gitignore also ignored data/logs/ (odds snapshots, recommendations), so the
+    daily job's commit step failed and nothing irreplaceable would ever have been saved."""
+    import shutil
+    import subprocess
+    if shutil.which("git") is None:
+        pytest.skip("git not available")
+    must_track = ["data/logs/recommendations.csv", "data/logs/odds/2026-10.csv", "data/logs/bet_log.csv", "data/logs/odds_fetch_log.csv",
+                  "reports/latest.md", "reports/daily/2026-10-08-morning.md", "reports/performance.png", "site/index.html", "site/picks.json",
+                  "data/models/registry.json", "data/models/model_20261008-abc123.joblib", "data/models/hyperparams.json"]
+    r = subprocess.run(["git", "check-ignore", "--no-index", *must_track], cwd=ROOT, capture_output=True, text=True)
+    assert r.stdout.strip() == "", f"these must NOT be ignored: {r.stdout}"
+    r2 = subprocess.run(["git", "check-ignore", "--no-index", "logs/nhlbet.log", "data/nhl.db"], cwd=ROOT, capture_output=True, text=True)
+    assert set(r2.stdout.split()) == {"logs/nhlbet.log", "data/nhl.db"}             # the things we DO want ignored stay ignored

@@ -22,6 +22,7 @@ from nhlbet.registry import ModelRegistry
 from nhlbet.report.betlog import export_logs, performance, plot_performance, restore_logs
 from nhlbet.report.markdown import render_report
 from nhlbet.report.slate import build_slate
+from nhlbet.site.build import build_payload, build_site
 from nhlbet.risk.policy import RiskConfig
 from nhlbet.train import retrain
 
@@ -65,7 +66,7 @@ def fetch_and_store_odds(store: Store, markets=("h2h",), regions: str = "us") ->
 
 def run_daily(date: str | None = None, run_type: str = "morning", db: str = "data/nhl.db", bankroll: float = 1000.0, fixed_bankroll: bool = False,
               refresh: bool = True, odds: bool = True, do_retrain: bool | None = None, log_root: str = "data/logs", report_dir: str = "reports",
-              model_dir: str = "data/models") -> dict:
+              model_dir: str = "data/models", site_dir: str = "site") -> dict:
     date = date or game_day()
     store = Store(db)
     restored = restore_logs(store, log_root)
@@ -108,6 +109,8 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     (out_dir / f"{date}-{run_type}.md").write_text(text)
     Path(report_dir, "latest.md").write_text(text)
     plot_performance(store, Path(report_dir) / "performance.png", bankroll)
+    payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes)
+    build_site(payload, site_dir)
     written = export_logs(store, log_root)
     log.info("report written for %s (%d games, %d bets); exported %d log files", date, len(slate), sum(s.rec.action == "BET" for s in slate), len(written))
     return {"date": date, "games": len(slate), "bets": sum(s.rec.action == "BET" for s in slate), "model": entry["version"], "status": status, "notes": notes}
