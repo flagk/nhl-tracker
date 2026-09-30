@@ -269,3 +269,15 @@ def test_wide_table_scales_to_a_real_slate_and_keeps_null_keys():
     cons = consensus_snapshots(st)
     assert len(cons) == 6 * 14 and set(cons.n_books) == {8}                                   # event e0 has no game link yet -> excluded
     assert len(latest_book_prices(st, 3)) == 8
+
+
+def test_fetch_log_keeps_live_provenance_when_the_cache_is_reread():
+    st = games_store()
+    mk = lambda src, rem: type("Fx", (), {"events": [F.odds_event()], "captured_at": "2023-10-11T14:00:00+00:00", "remaining": rem, "used": 500 - rem, "source": src})()
+    record_fetch(st, mk("live", 499))
+    record_fetch(st, mk("cache", 499))                     # a later run within the cache TTL re-reads the same capture
+    row = st.df("SELECT * FROM odds_fetch_log").iloc[0]
+    assert len(st.df("SELECT * FROM odds_fetch_log")) == 1 and row.source == "live"
+    st2 = games_store()
+    record_fetch(st2, mk("stale_cache", 3))                # a first-seen stale capture is still recorded, as stale
+    assert st2.df("SELECT source FROM odds_fetch_log").source.iloc[0] == "stale_cache"
