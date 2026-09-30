@@ -170,12 +170,25 @@
     return el("div", {}, kids);
   }
 
+  function paper() {
+    var kids = [el("h2", { text: "Paper trading (fake money)" }),
+      el("div", { class: "sub", text: "Alternative strategies run on every slate with pretend stakes, to measure what works faster than the selective live policy can. market_favorite is a no-skill control: a strategy only means something if it beats it by more than the noise." })];
+    if (!D.paper || !D.paper.length) return el("div", {}, kids.concat([el("div", { class: "card muted", text: "No settled paper bets yet." })]));
+    var rows = D.paper.map(function (r) {
+      return el("tr", {}, [el("td", { text: r.strategy }), el("td", { text: String(r.bets) }), el("td", { text: r.bets ? spct(r.roi) : "–" }),
+        el("td", { text: r.roi_lo === null || r.roi_lo === undefined ? "–" : spct(r.roi_lo) + " to " + spct(r.roi_hi) }),
+        el("td", { text: r.bets ? pct(r.win_rate, 0) : "–" }), el("td", { text: r.n_clv ? spct(r.avg_clv) : "–" })]);
+    });
+    kids.push(el("div", { class: "card scroll" }, [el("table", {}, [el("thead", {}, [el("tr", {}, ["Strategy", "Bets", "ROI", "95% CI", "Win rate", "Avg CLV"].map(function (h) { return el("th", { text: h }); }))]), el("tbody", {}, rows)])]));
+    return el("div", {}, kids);
+  }
+
   function footer() { return el("div", { class: "banner disc", style: "margin-top:24px", text: D.disclaimer }); }
 
   var dynamic = el("div", { id: "dynamic" });
   function render(keepFocus) {
     var alloc = C.allocate(D.games, cfg());
-    dynamic.replaceChildren(topPicks(alloc), parlayBox, allGames(alloc), track());
+    dynamic.replaceChildren(topPicks(alloc), parlayBox, allGames(alloc), track(), paper());
     renderParlay();
   }
   app.replaceChildren(header(), settingsPanel(), dynamic, footer());

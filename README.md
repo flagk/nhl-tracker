@@ -84,6 +84,10 @@ not publish them, so this is an input, not automatic.
 `site/index.html` is rebuilt by every daily run: pick your unit size and risk level, see the top 5 games by expected value (recommended vs lean),
 and use a parlay calculator with guardrails. See [docs/SITE.md](docs/SITE.md). It contains bookmaker prices, so keep the repo private.
 
+## Paper trading
+Every slate is also run through five fake-money strategies (including a no-skill control that bets the market favourite), settled automatically, to
+measure what works faster than the selective live policy can. It is for measurement, not training. See [docs/PAPER_TRADING.md](docs/PAPER_TRADING.md).
+
 ## Automation (GitHub Actions)
 | Workflow | When | Does |
 |---|---|---|

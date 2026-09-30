@@ -225,6 +225,9 @@ def test_end_to_end_daily_run(league, tmp_path, monkeypatch):
     recs = Store(str(tmp_path / "t.db")).df("SELECT * FROM recommendations")
     assert len(recs) == 1 and recs.action.iloc[0] in ("BET", "NO_BET") and recs.p_market.iloc[0] is not None
     assert any((tmp_path / "data/logs/recommendations").glob("*.csv")) and any((tmp_path / "data/logs/odds").glob("*.csv"))
+    from nhlbet.risk.shadow import STRATEGIES
+    assert len(Store(str(tmp_path / "t.db")).df("SELECT * FROM shadow_bets")) == len(STRATEGIES)      # paper trading ran on the slate
+    assert any((tmp_path / "data/logs/shadow_bets").glob("*.csv")) and "Paper trading" in rep
     # late run: no retrain, adds a second recommendation row for the same game (history kept, final = latest)
     r2 = run_daily(day, "late", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models")
     assert r2["model"] == r["model"]

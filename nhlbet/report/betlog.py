@@ -78,6 +78,51 @@ def performance(store: Store, start_bankroll: float = 1000.0, cons: pd.DataFrame
     return out
 
 
+def shadow_resolved(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Paper-trading rows joined with results, profit and CLV (latest run per game and strategy)."""
+    r = store.df("SELECT * FROM shadow_bets")
+    if r.empty:
+        return r
+    final = r.sort_values("run_at").groupby(["game_id", "strategy"], as_index=False).tail(1)
+    g = store.df("SELECT game_id, start_utc, home_win FROM games WHERE home_win IS NOT NULL")
+    d = final.merge(g, on="game_id", how="inner")
+    if d.empty:
+        return d
+    cons = consensus_snapshots(store) if cons is None else cons
+    d["close_home_prob"] = [closing_consensus(cons, gid, st) if len(cons) else None for gid, st in zip(d.game_id, d.start_utc)]
+    d["is_bet"] = (d.action == "BET") & (d.stake > 0)
+    d["won"] = np.where(d.is_bet, ((d.side == "home") == (d.home_win == 1)).astype(float), np.nan)
+    d["profit"] = np.where(d.is_bet, np.where(d.won == 1, d.stake * (d.decimal - 1), -d.stake), 0.0)
+    d["clv_ev"] = [bet_clv(s, dec, c)["clv_ev"] if (b and c is not None and not pd.isna(c)) else np.nan
+                   for b, s, dec, c in zip(d.is_bet, d.side, d.decimal, d.close_home_prob)]
+    return d
+
+
+def shadow_performance(store: Store, cons: pd.DataFrame | None = None, B: int = 2000, seed: int = 0) -> pd.DataFrame:
+    """One row per paper-trading strategy: bets, staked, profit, ROI (+bootstrap CI), win rate, mean CLV. Fake money."""
+    d = shadow_resolved(store, cons)
+    if d.empty:
+        return pd.DataFrame()
+    rng = np.random.default_rng(seed)
+    rows = []
+    for name, part in d.groupby("strategy"):
+        b = part[part.is_bet]
+        if b.empty:
+            rows.append({"strategy": name, "bets": 0, "staked": 0.0, "profit": 0.0, "roi": np.nan, "roi_lo": np.nan, "roi_hi": np.nan,
+                         "win_rate": np.nan, "avg_clv": np.nan, "n_clv": 0})
+            continue
+        stake, profit = b.stake.to_numpy(), b.profit.to_numpy()
+        lo = hi = np.nan
+        if len(b) >= 20:
+            idx = rng.integers(0, len(b), (B, len(b)))
+            rois = profit[idx].sum(1) / stake[idx].sum(1)
+            lo, hi = np.percentile(rois, [2.5, 97.5])
+        rows.append({"strategy": name, "bets": int(len(b)), "staked": float(stake.sum()), "profit": float(profit.sum()), "roi": float(profit.sum() / stake.sum()),
+                     "roi_lo": float(lo), "roi_hi": float(hi), "win_rate": float((profit > 0).mean()), "avg_clv": float(b.clv_ev.mean()) if b.clv_ev.notna().any() else np.nan,
+                     "n_clv": int(b.clv_ev.notna().sum())})
+    return pd.DataFrame(rows).set_index("strategy")
+
+
 def plot_performance(store: Store, path: str | Path, start_bankroll: float = 1000.0) -> bool:
     """Bankroll/drawdown, cumulative CLV and model-vs-market log loss over time. Returns False if there is nothing to plot."""
     d = resolved(store)
@@ -111,7 +156,8 @@ def plot_performance(store: Store, path: str | Path, start_bankroll: float = 100
 # Layout: every odds capture and every recommendation run gets its OWN small file, so two concurrent jobs (morning run, late run,
 # closing-line snapshot) add different files and git never has to merge lines of the same file. Only derived files (bet_log.csv)
 # and the tiny goalie_confirmations.csv are shared, and the workflows resolve those in favour of the newest output.
-PARTITIONED = {"recommendations": ("run_id", ["run_id", "game_id"]), "odds_fetch_log": ("captured_at", ["captured_at"])}
+PARTITIONED = {"recommendations": ("run_id", ["run_id", "game_id"]), "odds_fetch_log": ("captured_at", ["captured_at"]),
+               "shadow_bets": ("run_id", ["run_id", "game_id", "strategy"])}
 SINGLE = {"goalie_confirmations": ["game_date", "team"]}
 ODDS_KEYS = ["captured_at", "event_id", "book", "market", "outcome", "point"]
 

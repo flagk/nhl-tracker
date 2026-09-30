@@ -58,7 +58,7 @@ def game_payload(s: SlateGame, cfg: RiskConfig) -> dict:
 
 
 def build_payload(slate: list[SlateGame], cfg: RiskConfig, perf: dict | None, model_entry: dict, odds_meta: dict | None, date: str,
-                  run_type: str, now: datetime | None = None, notes: list[str] | None = None) -> dict:
+                  run_type: str, now: datetime | None = None, notes: list[str] | None = None, shadow=None) -> dict:
     now = now or datetime.now(timezone.utc)
     perf = perf or {}
     drift = model_entry.get("drift", {})
@@ -74,6 +74,8 @@ def build_payload(slate: list[SlateGame], cfg: RiskConfig, perf: dict | None, mo
                    "parlay_max_legs": PARLAY_MAX_LEGS, "parlay_max_pct": PARLAY_MAX_PCT},
         "games": [game_payload(s, cfg) for s in slate],
         "track": track,
+        "paper": ([] if shadow is None or len(shadow) == 0 else
+                  [{"strategy": k, **{c: (None if v != v else v) for c, v in r.items()}} for k, r in shadow.iterrows()]),
         "disclaimer": DISCLAIMER.replace("> ", "").replace("**", ""),
     }
     return _clean(payload)

@@ -28,9 +28,10 @@ XG_PATH = Path("data/manual/xg_model.json")
 
 
 def season_teams(season: int) -> list[str]:
-    """Teams that existed in ``season`` (e.g. 20232024). ARI became UTA in 2024-25; SEA from 2021-22."""
+    """Teams that existed in ``season`` (e.g. 20232024). ARI became UTA in 2024-25; SEA joined in 2021-22."""
     start = season // 10000
-    return sorted(t for t in TEAMS if not (t == "ARI" and start >= 2024) and not (t == "UTA" and start < 2024))
+    return sorted(t for t in TEAMS if not (t == "ARI" and start >= 2024) and not (t == "UTA" and start < 2024)
+                  and not (t == "SEA" and start < 2021))      # Seattle's first season is 2021-22
 
 
 def ingest_schedule(client: NHLClient, store: Store, season: int) -> int:
