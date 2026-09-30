@@ -22,3 +22,9 @@ Each daily run writes a self-contained page: `site/index.html` (data embedded, n
   so the page and the daily report cannot disagree.
 - Data is embedded so it cannot break out of its `<script>` block; the UI only writes text nodes (no `innerHTML`).
 - Loaded in headless Chromium during development: no JavaScript errors; unit changes update stakes; parlay legs compute.
+
+## Price in your app
+Each pick (and each totals / puck-line row) has a "Price in your app" box. Type the price your own sportsbook app shows (American or decimal) and the page
+recalculates expected value, and for moneyline picks the suggested stake, at that price; it also shows the minimum price at which the bet is worth taking.
+Nothing per-book is published (the odds feed's terms and the public repo rule that out), so the page cannot know which app you use. It works from the model
+probability and the price you type, and remembers your entries in this browser.

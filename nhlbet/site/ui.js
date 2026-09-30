@@ -37,6 +37,22 @@
     if (!iso) return "";
     var t = new Date(iso); return isNaN(t) ? "" : t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   }
+  /* ---------- "price in my app" (remembered per browser; no bookmaker data is published, the user types what their app shows) ---------- */
+  var MY = {};
+  try { MY = JSON.parse(localStorage.getItem("nhlMyPrices") || "{}"); } catch (e) { MY = {}; }
+  function saveMy() { try { localStorage.setItem("nhlMyPrices", JSON.stringify(MY)); } catch (e) { /* ignore */ } }
+  function myKey(id) { return D.date + ":" + id; }
+  function priceBox(id, onChange) {
+    var st = MY[myKey(id)] || { fmt: "american", v: "" };
+    var fmt = el("select", {}, [el("option", { value: "american", text: "American" }), el("option", { value: "decimal", text: "Decimal" })]);
+    fmt.value = st.fmt;
+    var inp = el("input", { type: "number", step: "any", placeholder: st.fmt === "american" ? "e.g. -115" : "e.g. 1.87", value: String(st.v) });
+    function fire() { MY[myKey(id)] = { fmt: fmt.value, v: inp.value }; saveMy(); inp.placeholder = fmt.value === "american" ? "e.g. -115" : "e.g. 1.87"; onChange(C.toDecimal(inp.value, fmt.value)); }
+    inp.addEventListener("input", fire); fmt.addEventListener("change", fire);
+    var box = el("div", { class: "row", style: "gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap" }, [el("label", { text: "Price in your app", style: "margin:0" }), fmt, inp]);
+    return { box: box, current: function () { return C.toDecimal(inp.value, fmt.value); } };
+  }
+
   function bestSide(g) {
     var b = null;
     ["home", "away"].forEach(function (k) { var s = g.sides[k]; if (s && (b === null || s.ev > g.sides[b].ev)) b = k; });
@@ -96,6 +112,20 @@
     var goalies = g.goalie_status === "unknown" ? "" : "Goalies: " + g.away_goalie + " (away) / " + g.home_goalie + " (home), " + g.goalie_status + ". ";
     var box = [head, el("div", { class: "metrics" }, m), el("div", { class: "sub", text: goalies + why })];
     if (g.notes && g.notes.length) box.push(el("ul", { class: "sub" }, g.notes.map(function (n) { return el("li", { text: n }); })));
+    var minD = C.minDecimal(s.p_adj, 0);
+    box.push(el("div", { class: "sub", text: "Only worth betting at " + price(minD) + " or better (the model's break-even price after shrinking toward the market). Compare it with the price in your own app." }));
+    var out = el("div", { class: "sub", style: "margin-top:4px" });
+    function showMine(d) {
+      if (!d) { out.textContent = ""; return; }
+      var ev = C.evAt(s.p_adj, 0, d), c = cfg();
+      var msg = "At " + price(d) + " in your app: expected value " + spct(ev) + " per $1";
+      if (ev <= 0) msg += ". Not worth betting at this price.";
+      else if (!s.qualifies) msg += ". Positive at this price, but this pick still fails the checks above, so no stake is suggested.";
+      else { var st = C.stakeAt(s.p_adj, d, c); msg += ". Suggested stake at this price: " + usd(st) + " (" + (st / c.unit).toFixed(1) + " u)."; }
+      out.textContent = msg;
+    }
+    var mine = priceBox(g.game_id + ":" + k, showMine);
+    box.push(mine.box, out); showMine(mine.current());
     if (s.edge > 0) {
       var cb = el("input", { type: "checkbox", onchange: function (e) { if (e.target.checked) legs[g.game_id] = k; else delete legs[g.game_id]; renderParlay(); } });
       cb.checked = legs[g.game_id] === k;
@@ -170,11 +200,17 @@
     if (!rows.length) return el("div", {}, kids.concat([el("div", { class: "card muted", text: "No totals or puck-line odds are available for today's games yet." })]));
     rows.sort(function (a, b) { return b.q.edge - a.q.edge; });
     var trs = rows.map(function (r) {
+      var pw = r.q.p_model * (1 - (r.q.p_push || 0)), minD = C.minDecimal(pw, r.q.p_push);
+      var evCell = el("td", { text: "–" });
+      var mine = priceBox(r.g.game_id + ":" + r.q.market + ":" + r.q.side, function (d) { evCell.textContent = d ? spct(C.evAt(pw, r.q.p_push, d)) : "–"; });
+      evCell.textContent = mine.current() ? spct(C.evAt(pw, r.q.p_push, mine.current())) : "–";
+      var box = mine.box; box.style.marginTop = "0";
+      box.removeChild(box.firstChild);                                                   // the column header already says "Your price"
       return el("tr", {}, [el("td", { text: r.g.away + " @ " + r.g.home }), el("td", { text: r.q.market === "totals" ? "Total" : "Puck line" }), el("td", { text: r.q.label }),
         el("td", { text: pct(r.q.p_model) }), el("td", { text: pct(r.q.p_market) }), el("td", { text: spct(r.q.edge) }), el("td", { text: spct(r.q.ev) }),
-        el("td", { text: price(r.q.best_decimal) + (r.q.best_book ? " @ " + r.q.best_book : "") })]);
+        el("td", { text: price(r.q.best_decimal) + (r.q.best_book ? " @ " + r.q.best_book : "") }), el("td", { text: price(minD) }), el("td", {}, [box]), evCell]);
     });
-    kids.push(el("div", { class: "card scroll" }, [el("table", {}, [el("thead", {}, [el("tr", {}, ["Game", "Market", "Side", "Model", "Market (no-vig)", "Edge", "EV per $1", "Best price"].map(function (h) { return el("th", { text: h }); }))]), el("tbody", {}, trs)])]));
+    kids.push(el("div", { class: "card scroll" }, [el("table", {}, [el("thead", {}, [el("tr", {}, ["Game", "Market", "Side", "Model", "Market (no-vig)", "Edge", "EV per $1", "Best price", "Min price to bet", "Your price", "EV at your price"].map(function (h) { return el("th", { text: h }); }))]), el("tbody", {}, trs)])]));
     return el("div", {}, kids);
   }
 
