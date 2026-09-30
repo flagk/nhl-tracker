@@ -72,11 +72,14 @@ def _pmf(mu: np.ndarray, k: float, n: int = GRID) -> np.ndarray:
 class GoalsModel:
     """Fit: Poisson regressions for home and away regulation goals + a dispersion and the overtime split from training data."""
 
+    RECENT = 400                          # games used to re-centre the goal level (league scoring drifts from season to season)
+
     def __init__(self, features: list[str], alpha: float = 50.0) -> None:
         leaked = sorted(set(features) & set(TARGET_COLS))
         if leaked:
             raise ValueError(f"outcome columns cannot be goals-model features (target leakage): {leaked}")
         self.features, self.alpha = list(features), alpha
+        self.cal: dict | None = None          # {"totals": {"a", "b"}, "spreads": {...}}: Platt maps fit on walk-forward predictions (see goals_eval)
 
     def _reg(self):
         return make_pipeline(SimpleImputer(strategy="median", keep_empty_features=True), StandardScaler(), PoissonRegressor(alpha=self.alpha, max_iter=500))
@@ -84,6 +87,10 @@ class GoalsModel:
     def fit(self, X: pd.DataFrame, hr, ar, ot=None, so=None) -> "GoalsModel":
         hr, ar = np.asarray(hr, float), np.asarray(ar, float)
         self.home_, self.away_ = self._reg().fit(X[self.features], hr), self._reg().fit(X[self.features], ar)
+        self.level_ = (1.0, 1.0)
+        mh, ma = self._lam(X)
+        k = min(self.RECENT, len(hr))                     # X is in date order: match the model's mean to the most recent games' actual scoring
+        self.level_ = (float(np.clip(hr[-k:].mean() / mh[-k:].mean(), 0.9, 1.1)), float(np.clip(ar[-k:].mean() / ma[-k:].mean(), 0.9, 1.1)))
         mh, ma = self._lam(X)
         ll = {k: float(np.sum(np.log(np.maximum(_pmf(mh, k)[np.arange(len(hr)), np.clip(hr, 0, GRID - 1).astype(int)], 1e-12)) +
                               np.log(np.maximum(_pmf(ma, k)[np.arange(len(ar)), np.clip(ar, 0, GRID - 1).astype(int)], 1e-12)))) for k in DISPERSIONS}
@@ -99,7 +106,8 @@ class GoalsModel:
 
     def _lam(self, X: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
         lo, hi = LAMBDA_BOUNDS
-        return (np.clip(self.home_.predict(X[self.features]), lo, hi), np.clip(self.away_.predict(X[self.features]), lo, hi))
+        ch, ca = getattr(self, "level_", (1.0, 1.0))
+        return (np.clip(ch * self.home_.predict(X[self.features]), lo, hi), np.clip(ca * self.away_.predict(X[self.features]), lo, hi))
 
     def predict_lambdas(self, X: pd.DataFrame) -> pd.DataFrame:
         mh, ma = self._lam(X)

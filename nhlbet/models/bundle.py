@@ -52,7 +52,7 @@ class ModelBundle:
 
 def train_bundle(F: pd.DataFrame, zoo: dict[str, Factory], version: str, features: list[str], builder_cfg: dict,
                  resolved_history: pd.DataFrame | None = None, min_online: int = 300, meta: dict | None = None,
-                 goals_features: list[str] | None = None, goals_alpha: float = 50.0) -> ModelBundle:
+                 goals_features: list[str] | None = None, goals_alpha: float = 50.0, goals_cal: dict | None = None) -> ModelBundle:
     """Fit on every completed game in ``F``. ``resolved_history`` = past out-of-sample predictions of the deployed
     stack (columns ``stack``, ``y``); when it has >= ``min_online`` rows a Platt calibrator is fit on it."""
     F = F[F.home_win.notna()].sort_values("game_date")
@@ -65,5 +65,6 @@ def train_bundle(F: pd.DataFrame, zoo: dict[str, Factory], version: str, feature
     if goals_features and {"hr", "ar"} <= set(F.columns) and F.hr.notna().sum() > 300:
         from nhlbet.models.goals import GoalsModel
         G = F[F.hr.notna()]
-        goals = GoalsModel(goals_features, goals_alpha).fit(G, G.hr, G.ar, G.ot, G.so)
+        goals = GoalsModel(goals_features, goals_alpha).fit(G, G.hr, G.ar, G.ot, G.so)       # G is in date order (F was sorted above)
+        goals.cal = goals_cal
     return ModelBundle(version, list(features), dict(builder_cfg), fitted, stack, wavg, cals, online, meta or {}, goals)

@@ -44,6 +44,59 @@ def walk_forward_goals(F: pd.DataFrame, features: list[str], first_test: str, st
     return pd.concat(rows) if rows else pd.DataFrame()
 
 
+def _logit(p):
+    p = np.clip(np.asarray(p, float), EPS, 1 - EPS)
+    return np.log(p / (1 - p))
+
+
+def fit_platt(p, y) -> dict:
+    """logit(p') = a + b*logit(p), fit by (lightly regularised) logistic regression. b near 1 = calibrated; b < 1 = overconfident; b near 0 = no signal."""
+    from sklearn.linear_model import LogisticRegression
+    m = LogisticRegression(C=100.0).fit(_logit(p).reshape(-1, 1), np.asarray(y, int))
+    return {"a": float(m.intercept_[0]), "b": float(m.coef_[0, 0]), "n": int(len(y))}
+
+
+def _pooled(P: pd.DataFrame, kind: str) -> tuple[pd.Series, pd.Series, pd.Series]:
+    """(p, y, date) stacked over the lines of one market type, pushes excluded. kind: 'totals' (5.5, 6.5) or 'spreads' (-1.5, +1.5)."""
+    parts = []
+    specs = [(f"p_over_{l}", P.tot > l, P.tot != l) for l in (5.5, 6.5)] if kind == "totals" else [(f"p_cover_{pt}", (P.mar + pt) > 0, (P.mar + pt) != 0) for pt in SPREADS]
+    for col, y, keep in specs:
+        parts.append(pd.DataFrame({"p": P.loc[keep, col], "y": y[keep].astype(int), "d": P.loc[keep, "game_date"]}))
+    Q = pd.concat(parts)
+    return Q.p, Q.y, Q.d
+
+
+def calibration_params(P: pd.DataFrame) -> dict:
+    """Platt maps per market type from ALL walk-forward predictions: what production applies to live totals / puck-line probabilities."""
+    out = {}
+    for kind in ("totals", "spreads"):
+        p, y, _ = _pooled(P, kind)
+        if len(p) >= 300:
+            out[kind] = fit_platt(p, y)
+    return out
+
+
+def online_calibrate_goals(P: pd.DataFrame, step_days: int = 14, burn_in: int = 1000) -> pd.DataFrame:
+    """Add ``*_cal`` columns: each block's probabilities are mapped by a Platt fit on strictly EARLIER out-of-sample predictions only."""
+    P = P.sort_values("game_date").copy()
+    dates = pd.to_datetime(P.game_date)
+    for kind, cols in (("totals", [f"p_over_{l}" for l in TOTAL_LINES]), ("spreads", [f"p_cover_{pt}" for pt in SPREADS])):
+        p, y, d = _pooled(P, kind)
+        for c in cols:
+            P[c + "_cal"] = np.nan
+        start, end = dates.min(), dates.max()
+        while start <= end:
+            stop = start + pd.Timedelta(days=step_days)
+            past = pd.to_datetime(d) < start
+            blk = ((dates >= start) & (dates < stop)).to_numpy()
+            if past.sum() >= burn_in and blk.any():
+                cal = fit_platt(p[past.to_numpy()], y[past.to_numpy()])
+                for c in cols:
+                    P.loc[blk, c + "_cal"] = 1.0 / (1.0 + np.exp(-(cal["a"] + cal["b"] * _logit(P.loc[blk, c]))))
+            start = stop
+    return P
+
+
 def _ll(p, y):
     p = np.clip(np.asarray(p, float), EPS, 1 - EPS)
     return -(y * np.log(p) + (1 - y) * np.log(1 - p))
@@ -56,12 +109,18 @@ def _boot(d: np.ndarray, dates: pd.Series, B: int = 2000, seed: int = 0) -> tupl
     return float(np.percentile(means, 2.5)), float(np.percentile(means, 97.5))
 
 
-def evaluate(P: pd.DataFrame) -> pd.DataFrame:
-    """One row per market/line: log loss of the model vs the training base rate, paired difference with a week-cluster bootstrap CI."""
+def evaluate(P: pd.DataFrame, calibrated: bool = False) -> pd.DataFrame:
+    """One row per market/line: log loss of the model vs the training base rate, paired difference with a week-cluster bootstrap CI.
+
+    ``calibrated=True`` scores the ``*_cal`` columns from ``online_calibrate_goals`` (rows before the calibration burn-in are skipped)."""
     rows = []
-    specs = [(f"total over {l}", f"p_over_{l}", f"base_over_{l}", (P.tot > l), (P.tot != l)) for l in TOTAL_LINES]
-    specs += [(f"home {pt:+} cover", f"p_cover_{pt}", f"base_cover_{pt}", ((P.mar + pt) > 0), ((P.mar + pt) != 0)) for pt in SPREADS]
+    sfx = "_cal" if calibrated else ""
+    specs = [(f"total over {l}", f"p_over_{l}{sfx}", f"base_over_{l}", (P.tot > l), (P.tot != l)) for l in TOTAL_LINES]
+    specs += [(f"home {pt:+} cover", f"p_cover_{pt}{sfx}", f"base_cover_{pt}", ((P.mar + pt) > 0), ((P.mar + pt) != 0)) for pt in SPREADS]
     for name, pc, bc, y, keep in specs:
+        if pc not in P:
+            continue
+        keep = keep & P[pc].notna()
         Q, y = P[keep], y[keep].astype(float).to_numpy()
         if len(Q) < 50:
             continue

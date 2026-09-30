@@ -77,11 +77,20 @@ def _modal(points: pd.Series, prefer: float) -> float:
     return float(min(top, key=lambda p: abs(abs(p) - abs(prefer))))
 
 
+def recalibrate(cond: float, cal: dict | None) -> float:
+    """Apply a fitted Platt map (logit(p') = a + b*logit(p)) to a conditional win probability; identity when no map is given."""
+    if not cal:
+        return cond
+    z = np.log(np.clip(cond, 1e-6, 1 - 1e-6) / (1 - np.clip(cond, 1e-6, 1 - 1e-6)))
+    return float(1.0 / (1.0 + np.exp(-(cal["a"] + cal["b"] * z))))
+
+
 def _pair_quotes(market: str, pairs: pd.DataFrame, cols: tuple[str, str], labels: tuple[str, str], sides: tuple[str, str], points: tuple[float, float],
-                 probs: tuple[float, float, float], method: str) -> list[MarketQuote]:
-    """``probs`` = model (P(A wins), P(B wins), P(push)). Returns the two sides' quotes."""
+                 probs: tuple[float, float, float], method: str, cal: dict | None = None) -> list[MarketQuote]:
+    """``probs`` = model (P(A wins), P(B wins), P(push)). ``cal`` recalibrates the conditional probability. Returns the two sides' quotes."""
     pa, pb, pp = probs
-    cond_a = pa / max(1e-12, pa + pb)
+    cond_a = recalibrate(pa / max(1e-12, pa + pb), cal)
+    pa, pb = cond_a * (1.0 - pp), (1.0 - cond_a) * (1.0 - pp)
     mk = float(np.mean([devig([x, y], method)[0] for x, y in zip(pairs[cols[0]], pairs[cols[1]])]))
     out = []
     for i, (side, label, point, p_win, p_lose, cond, mprob) in enumerate(
@@ -92,7 +101,7 @@ def _pair_quotes(market: str, pairs: pd.DataFrame, cols: tuple[str, str], labels
     return out
 
 
-def alt_quotes(prices: dict[str, pd.DataFrame], dist: ScoreDistribution, home: str, away: str, method: str = "shin") -> list[MarketQuote]:
+def alt_quotes(prices: dict[str, pd.DataFrame], dist: ScoreDistribution, home: str, away: str, method: str = "shin", cal: dict | None = None) -> list[MarketQuote]:
     quotes: list[MarketQuote] = []
     t = prices.get("totals", pd.DataFrame())
     t = t[(t.over > 1) & (t.under > 1)] if len(t) else t
@@ -100,12 +109,12 @@ def alt_quotes(prices: dict[str, pd.DataFrame], dist: ScoreDistribution, home: s
         pt = _modal(t.point, 6.0)
         pairs = t[t.point == pt]
         o, u, p = dist.total_probs(pt)
-        quotes += _pair_quotes("totals", pairs, ("over", "under"), (f"Over {pt:g}", f"Under {pt:g}"), ("over", "under"), (pt, pt), (o, u, p), method)
+        quotes += _pair_quotes("totals", pairs, ("over", "under"), (f"Over {pt:g}", f"Under {pt:g}"), ("over", "under"), (pt, pt), (o, u, p), method, (cal or {}).get("totals"))
     s = prices.get("spreads", pd.DataFrame())
     s = s[(s.home > 1) & (s.away > 1)] if len(s) else s
     if len(s):
         hp = _modal(s.home_point, 1.5)
         pairs = s[s.home_point == hp]
         c, a, p = dist.spread_probs(hp)
-        quotes += _pair_quotes("spreads", pairs, ("home", "away"), (f"{home} {hp:+g}", f"{away} {-hp:+g}"), ("home", "away"), (hp, -hp), (c, a, p), method)
+        quotes += _pair_quotes("spreads", pairs, ("home", "away"), (f"{home} {hp:+g}", f"{away} {-hp:+g}"), ("home", "away"), (hp, -hp), (c, a, p), method, (cal or {}).get("spreads"))
     return quotes

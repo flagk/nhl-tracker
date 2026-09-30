@@ -134,3 +134,44 @@ def test_walk_forward_gain_is_small_and_realistic_on_pure_noise():
         F[c] = rng.normal(size=len(F))
     P = walk_forward_goals(F, ["n1", "n2", "n3"], "2024-01-01", 14, min_train=200)
     assert abs(goal_rate_table(P)["diff"]).max() < 0.03 and evaluate(P)["diff"].abs().max() < 0.03
+
+
+def test_platt_recovers_overconfidence_and_online_calibration_uses_only_the_past():
+    from nhlbet.models.goals_eval import calibration_params, evaluate, fit_platt, online_calibrate_goals
+    rng = np.random.default_rng(1)
+    n = 6000
+    true_z = rng.normal(0, 0.4, n)
+    y = (rng.random(n) < 1 / (1 + np.exp(-true_z))).astype(int)
+    p_over = 1 / (1 + np.exp(-(3.0 * true_z)))                                    # a model that is 3x too confident
+    cal = fit_platt(p_over, y)
+    assert cal["b"] == pytest.approx(1 / 3, abs=0.06) and abs(cal["a"]) < 0.06
+    tot = np.where(y == 1, 7, 4).astype(float)
+    P = pd.DataFrame({"game_date": pd.date_range("2022-01-01", periods=n, freq="8h"), "tot": tot, "mar": np.where(y == 1, 2.0, 0.0)})
+    for l in (5.5, 6.0, 6.5):
+        P[f"p_over_{l}"] = p_over
+        P[f"base_over_{l}"] = 0.5
+    for pt in (-1.5, 1.5):
+        P[f"p_cover_{pt}"] = p_over
+        P[f"base_cover_{pt}"] = 0.5
+    Pc = online_calibrate_goals(P)
+    assert Pc["p_over_5.5_cal"].iloc[:400].isna().all() and Pc["p_over_5.5_cal"].iloc[-1] == Pc["p_over_5.5_cal"].iloc[-1]   # burn-in rows stay empty
+    raw, fixed = evaluate(P).set_index("market"), evaluate(Pc, calibrated=True).set_index("market")
+    assert fixed.loc["total over 5.5", "ll_model"] < raw.loc["total over 5.5", "ll_model"] - 0.02                            # recalibration repairs the overconfidence
+    assert calibration_params(P)["totals"]["b"] == pytest.approx(1 / 3, abs=0.06)
+    # corrupting the LAST block's outcomes must not change any earlier block's calibrated probability
+    P2 = P.copy()
+    P2.loc[P2.index[-200:], "tot"] = 4.0
+    Pc2 = online_calibrate_goals(P2)
+    a, b = Pc["p_over_5.5_cal"].iloc[:-400], Pc2["p_over_5.5_cal"].iloc[:-400]
+    pd.testing.assert_series_equal(a, b)
+
+
+def test_level_correction_recentres_a_drifting_league():
+    rng = np.random.default_rng(2)
+    n = 3000
+    X = pd.DataFrame({"a": rng.normal(size=n)}, index=np.arange(n))
+    lam = np.linspace(2.8, 3.2, n)                                              # league scoring climbs over time
+    hr, ar = rng.poisson(lam), rng.poisson(lam)
+    m = GoalsModel(["a"], alpha=10.0).fit(X, hr, ar)
+    recent = m.predict_lambdas(X.tail(400)).lam_home.mean()
+    assert recent == pytest.approx(hr[-400:].mean(), abs=0.05) and m.level_[0] > 1.0
