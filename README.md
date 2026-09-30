@@ -6,9 +6,26 @@
 
 <!-- PICKS:START -->
 
-### Today's picks
+### Today's picks: 2026-09-30
 
-*Filled in automatically by the first daily run.*
+**3 game(s) · 0 recommended bet(s)** · late run · model health **OK** · updated 2026-09-30 18:52 UTC
+
+| | |
+|---|---|
+| 📄 **[Today's full report](reports/latest.md)** | every game: model vs market, edge, stake and the reason for each decision |
+| 🌐 **[Interactive picks page](https://flagk.github.io/nhl-tracker/)** | choose your unit size and staking, top picks, parlay calculator |
+| 🗂️ **[Pick history](reports/HISTORY.md)** | every day's picks and how they settled ([web version](https://flagk.github.io/nhl-tracker/history.html)) |
+| 📈 [Bet log (CSV)](data/logs/bet_log.csv) | all settled recommended bets |
+
+| Game | Model: home win | Market (no-vig) | Decision |
+|---|---|---|---|
+| PIT @ PHI | 49.4% | 56.8% | no bet |
+| NYI @ TOR | 38.6% | 54.5% | no bet |
+| LAK @ COL | 62.7% | 63.8% | no bet |
+
+*No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
+
+*Research and educational project; no guarantee of profit. The numbers above are not betting advice.*
 
 <!-- PICKS:END -->
 
