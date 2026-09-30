@@ -20,7 +20,7 @@ from nhlbet.config import load_builder_config
 from nhlbet.data.store import Store
 from nhlbet.features.builder import build_features
 from nhlbet.models.goals import add_goal_targets, goal_feature_columns
-from nhlbet.models.goals_eval import evaluate, goal_rate_table, walk_forward_goals
+from nhlbet.models.goals_eval import calibration_params, evaluate, goal_rate_table, online_calibrate_goals, walk_forward_goals
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--db", default="data/nhl.db")
@@ -52,6 +52,9 @@ for alpha in a.alphas:
     if best is None or score < res[best][3]:
         best = alpha
 P, ev, rate, _ = res[best]
+cal = calibration_params(P)
+Pc = online_calibrate_goals(P, a.step_days)
+evc = evaluate(Pc, calibrated=True)
 Path(a.out).mkdir(exist_ok=True)
 P.to_csv(Path(a.out) / "goals_walkforward.csv")
 md = ["# Goals model: walk-forward backtest (totals and puck line)", "",
@@ -61,8 +64,13 @@ md = ["# Goals model: walk-forward backtest (totals and puck line)", "",
       f"{len(feats)} candidate features; regularisation alpha chosen: **{best}** (of {a.alphas}).", "",
       "## Goal rates (Poisson negative log-likelihood per team-game; negative diff = model better than the training average)", "", rate.round(4).to_markdown(index=False), "",
       "## Totals and puck line vs base rates (log loss; negative diff = model better)", "", ev.round(4).to_markdown(index=False), "",
+      "## After walk-forward recalibration (each block mapped by a Platt fit on strictly earlier out-of-sample predictions)", "",
+      (evc.round(4).to_markdown(index=False) if len(evc) else "Not enough out-of-sample predictions to calibrate."), "",
+      "`lin_slope` is the coefficient of outcome on the model's logit: about 1 means calibrated, well below 1 means overconfident, near 0 means no signal. "
+      "The maps used in production (logit p' = a + b*logit p): " + json.dumps({k: {"a": round(v["a"], 3), "b": round(v["b"], 3)} for k, v in cal.items()}) + ".", "",
       f"Mean predicted total {P.p_total_mean.mean():.2f} vs actual {P.tot.mean():.2f}; predicted tie-after-60 rate {P.p_tie.mean():.3f} vs actual {(P.hr == P.ar).mean():.3f}.", "",
       "## Alpha comparison (mean Poisson NLL diff)", ""] + [f"- alpha {k}: {v[3]:+.5f}" for k, v in res.items()]
 Path(a.out, "GOALS.md").write_text("\n".join(md) + "\n")
 Path(a.out, "goals_model.json").write_text(json.dumps({"alpha": best, "features_n": len(feats)}))
+Path(a.out, "goals_calibration.json").write_text(json.dumps(cal))
 print("\n".join(md))

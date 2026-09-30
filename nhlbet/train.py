@@ -54,6 +54,8 @@ def retrain(db: str = "data/nhl.db", force: bool = False, model_dir: str = "data
     done = add_goal_targets(done, store.df("SELECT game_id, home_score, away_score, last_period FROM games"))
     gpath = Path(report_dir) / "goals_model.json"
     galpha = json.loads(gpath.read_text()).get("alpha", 50.0) if gpath.exists() else 50.0
+    cpath = Path(report_dir) / "goals_calibration.json"
+    gcal = json.loads(cpath.read_text()) if cpath.exists() else None
     zoo = make_zoo(features, candidate_columns(done.drop(columns=["hr", "ar", "ot", "so", "tot", "mar"])))
     hist = resolved_history(live_log=Path(live_log) if live_log else None)
     version = f"{pd.Timestamp(done.game_date.max()).strftime('%Y%m%d')}-{fp.split('@')[0][:6]}"
@@ -63,7 +65,7 @@ def retrain(db: str = "data/nhl.db", force: bool = False, model_dir: str = "data
         rev += 1
         version = f"{base}-r{rev}"
     bundle = train_bundle(done, zoo, version, features, cfg.__dict__, hist[["stack", "y"]] if len(hist) else None,
-                          goals_features=goal_feature_columns(done), goals_alpha=galpha,
+                          goals_features=goal_feature_columns(done), goals_alpha=galpha, goals_cal=gcal,
                           meta={"n_train": len(done), "train_start": str(done.game_date.min().date()),
                                 "train_end": str(done.game_date.max().date())})
     art = Path(model_dir) / f"model_{version}.joblib"
