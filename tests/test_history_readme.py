@@ -39,7 +39,7 @@ def test_history_html_links_to_archive_pages_and_escapes():
 def test_readme_block_links_and_table():
     slate = mk_slate()
     env = {"GITHUB_REPOSITORY": "FlagK/nhl-tracker"}
-    blk = render_block("2026-10-08", "late", slate, "OK", "2026-10-08 18:00 UTC", 1, env)
+    blk = render_block("2026-10-08", "late", slate, "OK", "2026-10-08 18:00 UTC", 1, env, bet_log_exists=True)
     assert blk.startswith(START) and blk.endswith(END)
     for link in ("(reports/latest.md)", "(reports/HISTORY.md)", "(data/logs/bet_log.csv)", "(https://flagk.github.io/nhl-tracker/)",
                  "(https://flagk.github.io/nhl-tracker/history.html)"):
@@ -70,3 +70,10 @@ def test_repo_readme_has_markers_and_public_safe_note():
     txt = (Path(__file__).resolve().parent.parent / "README.md").read_text()
     assert START in txt and END in txt and txt.index(START) < txt.index("## Honest status")
     assert "public-safe" in txt and "Settings -> Pages" in txt
+
+
+def test_bet_log_link_only_when_the_file_exists():
+    """A front-page link must never be dead: the bet log is only linked once it exists."""
+    with_log = render_block("d", "m", [], "OK", "t", 0, {}, bet_log_exists=True)
+    without = render_block("d", "m", [], "OK", "t", 0, {}, bet_log_exists=False)
+    assert "(data/logs/bet_log.csv)" in with_log and "(data/logs/bet_log.csv)" not in without and "after the first recommended bet settles" in without

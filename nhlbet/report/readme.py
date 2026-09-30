@@ -22,16 +22,19 @@ def run_url(env=None) -> str | None:
     return f"{env.get('GITHUB_SERVER_URL', 'https://github.com')}/{repo}/actions/runs/{rid}" if repo and rid else None
 
 
-def render_block(date: str, run_type: str, slate, model_status: str, generated: str, bets_today: int, env=None) -> str:
+def render_block(date: str, run_type: str, slate, model_status: str, generated: str, bets_today: int, env=None, bet_log_exists: bool | None = None) -> str:
     """``slate``: list of SlateGame-like objects (home, away, p_home, quotes, rec)."""
     pages = pages_url(env)
+    if bet_log_exists is None:
+        bet_log_exists = Path("data/logs/bet_log.csv").exists()
     L = [START, "", f"### Today's picks: {date}", "",
          f"**{len(slate)} game(s) · {bets_today} recommended bet(s)** · {run_type} run · model health **{model_status}** · updated {generated}", "",
          "| | |", "|---|---|",
          "| 📄 **[Today's full report](reports/latest.md)** | every game: model vs market, edge, stake and the reason for each decision |",
          f"| 🌐 **[Interactive picks page]({pages or 'site/index.html'})** | choose your unit size and staking, top picks, parlay calculator |",
          "| 🗂️ **[Pick history](reports/HISTORY.md)** | every day's picks and how they settled ([web version](" + (f"{pages}history.html" if pages else "site/history.html") + ")) |",
-         "| 📈 [Bet log (CSV)](data/logs/bet_log.csv) | all settled recommended bets |", ""]
+         ("| 📈 [Bet log (CSV)](data/logs/bet_log.csv) | all settled recommended bets |" if bet_log_exists
+          else "| 📈 Bet log (CSV) | appears here after the first recommended bet settles |"), ""]
     if slate:
         L += ["| Game | Model: home win | Market (no-vig) | Decision |", "|---|---|---|---|"]
         for s in slate:
