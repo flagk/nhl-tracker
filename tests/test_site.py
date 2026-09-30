@@ -177,3 +177,20 @@ def test_public_payload_has_no_bookmaker_names_or_per_book_prices():
     priv = build_payload(slate, cfg, None, {"version": "v", "drift": {"status": "OK"}}, {"enabled": True}, "2026-10-08", "morning", public_safe=False)
     assert "bookA" in json.dumps(priv) and priv["public_safe"] is False
     assert "bookA" not in render_html(pub)
+
+
+@pytest.mark.skipif(NODE is None, reason="node not installed")
+def test_js_price_in_my_app_maths_by_hand():
+    """The user's own price drives EV, break-even price and stake; nothing depends on other books."""
+    r = node_eval("[C.toDecimal(-115,'american'), C.toDecimal(150,'american'), C.toDecimal(50,'american'), C.toDecimal(1.87,'decimal'), C.toDecimal(0.9,'decimal')]", {})
+    assert r[0] == pytest.approx(1 + 100 / 115) and r[1] == pytest.approx(2.5) and r[2] is None and r[3] == 1.87 and r[4] is None
+    # 55% to win at 1.95: EV = 0.55*0.95 - 0.45 = 0.0725; break-even price 1/0.55
+    assert node_eval("C.evAt(0.55, 0, 1.95)", {}) == pytest.approx(0.0725) and node_eval("C.minDecimal(0.55, 0)", {}) == pytest.approx(1 / 0.55)
+    # a whole-number total: 45% win, 12% push, 43% lose at 2.0 -> EV = 0.45*1 - 0.43 = 0.02; break-even (1-0.12)/0.45
+    assert node_eval("C.evAt(0.45, 0.12, 2.0)", {}) == pytest.approx(0.02) and node_eval("C.minDecimal(0.45, 0.12)", {}) == pytest.approx(0.88 / 0.45)
+    assert node_eval("C.evAt(0.45, 0.12, C.minDecimal(0.45, 0.12))", {}) == pytest.approx(0, abs=1e-12)            # EV is exactly zero at the break-even price
+    # quarter Kelly at p=0.55, d=1.95: full Kelly = (0.95*0.55-0.45)/0.95 = 0.07632; 25% of it = 1.908% of $1000 = $19.08 (below the 2% cap); a 1% cap gives $10.00
+    s = {"bankroll": 1000, "unit": 10, "mode": "quarter", "maxPct": 0.02, "dailyPct": 0.05, "maxBets": 5, "minStake": 1}
+    assert node_eval(f"C.stakeAt(0.55, 1.95, {json.dumps(s)})", {}) == pytest.approx(19.08, abs=0.01)
+    assert node_eval(f"C.stakeAt(0.55, 1.95, {json.dumps({**s, 'maxPct': 0.01})})", {}) == pytest.approx(10.0)
+    assert node_eval(f"C.stakeAt(0.50, 1.90, {json.dumps(s)})", {}) == 0                                        # negative EV at this price -> no stake

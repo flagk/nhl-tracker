@@ -71,7 +71,21 @@
              ev: ev, singles_ev: singles, better_as_singles: singles >= ev };
   }
 
-  var api = { kelly: kelly, allocate: allocate, rawStake: rawStake, parlay: parlay };
+  /* ---- "price in MY app": everything below depends only on the model probability and the price the user types, never on other books ---- */
+  function toDecimal(odds, format) {
+    var x = Number(odds);
+    if (!isFinite(x)) return null;
+    if (format === "american") return (x === 0 || (x > -100 && x < 100)) ? null : (x > 0 ? 1 + x / 100 : 1 + 100 / -x);
+    return x > 1 ? x : null;
+  }
+  /* pWin / pPush: probability the bet wins / pushes (stake refunded). EV per $1 staked. */
+  function evAt(pWin, pPush, d) { return pWin * (d - 1) - (1 - pWin - (pPush || 0)); }
+  /* the lowest decimal price at which the bet has non-negative expected value */
+  function minDecimal(pWin, pPush) { return pWin > 0 ? (1 - (pPush || 0)) / pWin : Infinity; }
+  /* stake for a moneyline pick at the user's own price, same sizing rules as rawStake (Kelly multiplier, per-bet cap, or flat unit) */
+  function stakeAt(pAdj, d, s) { return rawStake({ kelly_full: kelly(pAdj, d) }, s); }
+
+  var api = { kelly: kelly, allocate: allocate, rawStake: rawStake, parlay: parlay, toDecimal: toDecimal, evAt: evAt, minDecimal: minDecimal, stakeAt: stakeAt };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.NHLCore = api;
 })(typeof window !== "undefined" ? window : this);
