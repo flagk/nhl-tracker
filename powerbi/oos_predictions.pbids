@@ -1,0 +1,1 @@
+{"version":"0.1","connections":[{"details":{"protocol":"http","address":{"url":"https://raw.githubusercontent.com/flagk/nhl-tracker/main/data/export/oos_predictions.csv"}},"mode":"Import"}]}

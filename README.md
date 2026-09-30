@@ -150,3 +150,8 @@ including a Monte Carlo of how often even a *real* 3% edge finishes a 500-bet st
 
 ## License
 MIT
+
+## Dashboards and tendencies
+
+- **Power BI / Excel:** the daily run publishes tidy CSVs to [`data/export/`](data/export); setup steps, `.pbids` connectors and DAX measures are in [`powerbi/`](powerbi/README.md).
+- **Tendencies:** a weekly job ([`reports/TENDENCIES.md`](reports/TENDENCIES.md)) looks for segments where the model is systematically off, corrected for multiple testing and required to replicate across both halves of the data. It is descriptive only and never changes the model or staking.

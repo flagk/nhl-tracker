@@ -79,7 +79,7 @@ jobs:
         run: |
           git config user.name "nhl-model-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add -A reports data/logs data/models site README.md
+          git add -A reports data/logs data/models data/export site README.md
           if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
           git commit -m "Daily ${{ steps.rt.outputs.type }} run $(date -u +%F)"
           for i in 1 2 3 4 5; do

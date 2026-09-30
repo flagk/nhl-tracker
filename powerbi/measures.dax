@@ -1,0 +1,11 @@
+// Paste into Power BI (New measure). Table names match the CSV names.
+Bets = CALCULATE(COUNTROWS(games_predictions), games_predictions[decision] = "BET")
+Staked = CALCULATE(SUM(games_predictions[stake]), NOT ISBLANK(games_predictions[profit]))
+Profit = SUM(games_predictions[profit])
+ROI = DIVIDE([Profit], [Staked])
+Win Rate = DIVIDE(CALCULATE(COUNTROWS(games_predictions), games_predictions[bet_won] = 1), CALCULATE(COUNTROWS(games_predictions), NOT ISBLANK(games_predictions[bet_won])))
+Avg CLV = AVERAGE(games_predictions[clv_ev])
+Pass Rate = DIVIDE(CALCULATE(COUNTROWS(games_predictions), games_predictions[decision] = "NO_BET"), COUNTROWS(games_predictions))
+Model vs Market Gap = AVERAGE(games_predictions[edge_home])
+Brier Model = AVERAGEX(FILTER(games_predictions, NOT ISBLANK(games_predictions[home_win])), POWER(games_predictions[p_model_home] - games_predictions[home_win], 2))
+Brier Market = AVERAGEX(FILTER(games_predictions, NOT ISBLANK(games_predictions[home_win]) && NOT ISBLANK(games_predictions[p_market_home])), POWER(games_predictions[p_market_home] - games_predictions[home_win], 2))

@@ -19,6 +19,7 @@ from nhlbet.models.bundle import ModelBundle
 from nhlbet.odds.client import OddsAPIError, OddsClient, OddsConfigError
 from nhlbet.odds.snapshots import record_fetch
 from nhlbet.registry import ModelRegistry
+from nhlbet.report.export import export_dataset
 from nhlbet.report.betlog import export_logs, performance, plot_performance, restore_logs, shadow_performance
 from nhlbet.report.history import render_history_html, render_history_md
 from nhlbet.report.markdown import render_report
@@ -68,7 +69,7 @@ def fetch_and_store_odds(store: Store, markets=("h2h",), regions: str = "us") ->
 
 def run_daily(date: str | None = None, run_type: str = "morning", db: str = "data/nhl.db", bankroll: float = 1000.0, fixed_bankroll: bool = False,
               refresh: bool = True, odds: bool = True, do_retrain: bool | None = None, log_root: str = "data/logs", report_dir: str = "reports",
-              model_dir: str = "data/models", site_dir: str = "site", readme_path: str = "README.md") -> dict:
+              model_dir: str = "data/models", site_dir: str = "site", readme_path: str = "README.md", export_dir: str = "data/export") -> dict:
     date = date or game_day()
     store = Store(db)
     restored = restore_logs(store, log_root)
@@ -122,5 +123,12 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
         if not update_readme(readme_path, block):
             log.warning("README has no picks markers; front-page block not updated")
     written = export_logs(store, log_root)
+    try:                                   # BI datasets (Power BI / Excel); context columns come from the as-of features
+        from nhlbet.data.loaders import load_tables
+        from nhlbet.features.builder import BuilderConfig, FeatureBuilder
+        feats = FeatureBuilder(BuilderConfig(**bundle.builder_cfg)).build(load_tables(store))
+        export_dataset(store, export_dir, feats, Path(model_dir) / "registry.json", Path(report_dir) / "walkforward_predictions.csv")
+    except Exception as e:                 # never let a dashboard export break the daily report
+        log.warning("BI export failed: %s", e)
     log.info("report written for %s (%d games, %d bets); exported %d log files", date, len(slate), sum(s.rec.action == "BET" for s in slate), len(written))
     return {"date": date, "games": len(slate), "bets": sum(s.rec.action == "BET" for s in slate), "model": entry["version"], "status": status, "notes": notes}
