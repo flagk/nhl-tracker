@@ -2,9 +2,9 @@
 
 > **Disclaimer.** This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.
 
-*Generated 2026-09-30 15:57 UTC · model `20260929-390a7e` · probability source `online_platt` · bankroll $1,000.00 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
+*Generated 2026-09-30 17:42 UTC · model `20260929-3184e7` · probability source `online_platt` · bankroll $1,000.00 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
 
-*Odds snapshot: 2026-09-30T15:57:14+00:00 · API credits left: 494*
+*Odds snapshot: 2026-09-30T17:42:02+00:00 · API credits left: 493*
 
 ## Summary
 
@@ -15,9 +15,9 @@
 
 | Game | Goalies (away / home) | Model home win | Market no-vig home | Best price | Edge | EV per $1 | Stake | Decision |
 |---|---|---|---|---|---|---|---|---|
-| PIT @ PHI (19:30 ET) | S. Skinner / D. Vladar (probable) | 50.1% | 56.8% | PIT 2.24 @ betonlineag | +6.7% | - | - | no bet |
-| NYI @ TOR (19:30 ET) | I. Sorokin / J. Woll (probable) | 43.3% | 54.4% | NYI 2.14 @ betonlineag | +11.1% | - | - | no bet |
-| LAK @ COL (22:00 ET) | A. Forsberg / S. Wedgewood (probable) | 59.9% | 63.8% | LAK 2.68 @ bovada | +3.9% | - | - | no bet |
+| PIT @ PHI (19:30 ET) | S. Skinner / D. Vladar (probable) | 49.4% | 56.9% | PIT 2.27 @ bovada | +7.6% | - | - | no bet |
+| NYI @ TOR (19:30 ET) | I. Sorokin / J. Woll (probable) | 38.6% | 54.5% | NYI 2.14 @ betonlineag | +15.9% | - | - | no bet |
+| LAK @ COL (22:00 ET) | A. Forsberg / S. Wedgewood (probable) | 62.7% | 63.8% | LAK 2.68 @ bovada | +1.1% | - | - | no bet |
 
 ## Why
 
