@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NHL bets tracker</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#14181f; --muted:#5b6573; --line:#e2e6ec; --accent:#1f5fbf; --good:#1a7f4b; --good-bg:#e6f4ec; --warn:#9a6700; --warn-bg:#fff4d6; --bad:#b42318; --bad-bg:#fde8e6; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0f1319; --card:#171d26; --ink:#e8ecf2; --muted:#98a3b3; --line:#283140; --accent:#6ea4ff; --good:#4cc38a; --good-bg:#14291f; --warn:#e3b341; --warn-bg:#2b2411; --bad:#ff8a80; --bad-bg:#2f1715; } }
+  :root[data-theme="dark"] { --bg:#0f1319; --card:#171d26; --ink:#e8ecf2; --muted:#98a3b3; --line:#283140; --accent:#6ea4ff; --good:#4cc38a; --good-bg:#14291f; --warn:#e3b341; --warn-bg:#2b2411; --bad:#ff8a80; --bad-bg:#2f1715; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:980px; margin:0 auto; padding:16px; }
+  h1 { font-size:1.4rem; margin:8px 0 2px; } h2 { font-size:1.1rem; margin:26px 0 10px; } a { color:var(--accent); }
+  .sub,.muted { color:var(--muted); font-size:.9rem; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:10px 0; }
+  .banner { border-radius:10px; padding:10px 14px; margin:10px 0; font-size:.92rem; }
+  .banner.disc { background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
+  .banner.bad { background:var(--bad-bg); color:var(--bad); border:1px solid var(--bad); }
+  .banner.info { background:var(--card); border:1px solid var(--line); color:var(--muted); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px 14px; }
+  label { display:block; font-size:.8rem; color:var(--muted); margin-bottom:3px; }
+  input,select,button { font:inherit; color:var(--ink); background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:7px 9px; width:100%; }
+  button { cursor:pointer; width:auto; } button:hover { border-color:var(--accent); }
+  .tabs { display:flex; gap:8px; margin:14px 0; } .tabs button.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px; margin:4px 0 10px; }
+  .metric .v { font-size:1.05rem; font-weight:650; } .metric .k { font-size:.75rem; color:var(--muted); } .good { color:var(--good); } .bad { color:var(--bad); }
+  table { width:100%; border-collapse:collapse; font-size:.88rem; } th,td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); } th { color:var(--muted); font-weight:600; } .scroll { overflow-x:auto; }
+  td select,td button { padding:3px 6px; }
+</style>
+</head>
+<body>
+<main id="app"><noscript>This page needs JavaScript.</noscript></main>
+<script id="payload" type="application/json">{"generated_at": "2026-09-30T21:09:09+00:00", "date": "2026-09-30", "bankroll": 1000.0, "games": [{"away": "PIT", "home": "PHI", "model_side": "away", "sides": {"home": {"team": "PHI", "best_decimal": 1.7}, "away": {"team": "PIT", "best_decimal": 2.25}}}, {"away": "NYI", "home": "TOR", "model_side": "away", "sides": {"home": {"team": "TOR", "best_decimal": 1.78}, "away": {"team": "NYI", "best_decimal": 2.14}}}, {"away": "LAK", "home": "COL", "model_side": "home", "sides": {"home": {"team": "COL", "best_decimal": 1.53}, "away": {"team": "LAK", "best_decimal": 2.71}}}], "paper_strategies": [{"name": "no_guard", "description": "Live policy without the early-season guard (does the guard help?)"}, {"name": "edge_1pct", "description": "Live policy at a 1% raw-edge threshold instead of 3%"}, {"name": "no_shrink", "description": "Live policy trusting the raw model fully (no shrinkage toward the market)"}, {"name": "flat_model_side", "description": "Flat 1% on every game where the model sees any positive edge"}, {"name": "every_game", "description": "Flat 1% on the model's preferred side of EVERY game that has fresh odds (no edge filter, even at a negative edge)"}, {"name": "market_favorite", "description": "CONTROL: flat 1% on the market favourite (no skill; shows what the bookmaker margin costs)"}], "paper_bets": [{"date": "2026-09-30", "strategy": "market_favorite", "game_id": 2026020006, "game": "PIT @ PHI", "pick": "PHI moneyline", "decimal": 1.7, "stake": 10.0, "result": "pending"}, {"date": "2026-09-30", "strategy": "every_game", "game_id": 2026020006, "game": "PIT @ PHI", "pick": "PIT moneyline", "decimal": 2.25, "stake": 10.0, "result": "pending"}, {"date": "2026-09-30", "strategy": "flat_model_side", "game_id": 2026020006, "game": "PIT @ PHI", "pick": "PIT moneyline", "decimal": 2.25, "stake": 10.0, "result": "pending"}, {"date": "2026-09-30", "strategy": "every_game", "game_id": 2026020007, "game": "LAK @ COL", "pick": "COL moneyline", "decimal": 1.53, "stake": 10.0, "result": "pending"}, {"date": "2026-09-30", "strategy": "flat_model_side", "game_id": 2026020007, "game": "LAK @ COL", "pick": "LAK moneyline", "decimal": 2.71, "stake": 10.0, "result": "pending"}, {"date": "2026-09-30", "strategy": "market_favorite", "game_id": 2026020007, "game": "LAK @ COL", "pick": "COL moneyline", "decimal": 1.53, "stake": 10.0, "result": "pending"}, {"date": "2026-09-30", "strategy": "every_game", "game_id": 2026020008, "game": "NYI @ TOR", "pick": "NYI moneyline", "decimal": 2.14, "stake": 10.0, "result": "pending"}, {"date": "2026-09-30", "strategy": "flat_model_side", "game_id": 2026020008, "game": "NYI @ TOR", "pick": "NYI moneyline", "decimal": 2.14, "stake": 10.0, "result": "pending"}, {"date": "2026-09-30", "strategy": "market_favorite", "game_id": 2026020008, "game": "NYI @ TOR", "pick": "TOR moneyline", "decimal": 1.78, "stake": 10.0, "result": "pending"}], "disclaimer": "Disclaimer. This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice."}</script>
+<script>/* Pure bet-tracking maths shared by the browser page and the Node tests. No DOM here. */
+(function (root) {
+  "use strict";
+  function toDecimal(odds, format) {
+    var x = Number(odds);
+    if (!isFinite(x)) return null;
+    if (format === "american") {
+      if (x === 0 || (x > -100 && x < 100)) return null;
+      return x > 0 ? 1 + x / 100 : 1 + 100 / -x;
+    }
+    return x > 1 ? x : null;
+  }
+  function settle(bet) {                      // bet: {stake, decimal, result: pending|won|lost|push}
+    var s = Number(bet.stake), d = Number(bet.decimal);
+    if (bet.result === "won") return s * (d - 1);
+    if (bet.result === "lost") return -s;
+    if (bet.result === "push") return 0;
+    return null;
+  }
+  function summarize(bets) {
+    var r = { n: bets.length, pending: 0, settled: 0, won: 0, lost: 0, push: 0, staked: 0, profit: 0, roi: null, hit: null, open_stake: 0 };
+    bets.forEach(function (b) {
+      var p = settle(b);
+      if (p === null) { r.pending++; r.open_stake += Number(b.stake); return; }
+      r.settled++; r[b.result]++; r.profit += p;
+      if (b.result !== "push") r.staked += Number(b.stake);
+    });
+    if (r.staked > 0) r.roi = r.profit / r.staked;
+    if (r.won + r.lost > 0) r.hit = r.won / (r.won + r.lost);
+    return r;
+  }
+  function cumulative(bets) {                 // settled bets in date order -> [{date, profit, cum}]
+    var out = [], cum = 0;
+    bets.filter(function (b) { return settle(b) !== null; })
+        .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; })
+        .forEach(function (b) { cum += settle(b); out.push({ date: b.date, profit: settle(b), cum: cum }); });
+    return out;
+  }
+  var api = { toDecimal: toDecimal, settle: settle, summarize: summarize, cumulative: cumulative };
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  else root.BetsCore = api;
+})(typeof window !== "undefined" ? window : this);
+</script>
+<script>(function () {
+  "use strict";
+  var D = JSON.parse(document.getElementById("payload").textContent), C = window.BetsCore, KEY = "nhl-my-bets-v1";
+  function el(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) { if (k === "text") e.textContent = attrs[k]; else if (k === "class") e.className = attrs[k]; else e.setAttribute(k, attrs[k]); });
+    (kids || []).forEach(function (c) { if (c !== null && c !== undefined) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  var money = function (x) { return (x < 0 ? "-$" : "$") + Math.abs(x).toFixed(2); }, signed = function (x) { return (x >= 0 ? "+$" : "-$") + Math.abs(x).toFixed(2); };
+  var pct = function (x) { return x === null || x === undefined ? "-" : (x >= 0 ? "+" : "") + (x * 100).toFixed(1) + "%"; };
+  function load() { try { var v = JSON.parse(localStorage.getItem(KEY) || "[]"); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
+  function save(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); return true; } catch (e) { return false; } }
+  function metric(k, v, cls) { return el("div", { class: "metric" }, [el("div", { class: "v " + (cls || ""), text: v }), el("div", { class: "k", text: k })]); }
+  function metrics(s) {
+    return el("div", { class: "metrics" }, [metric("Bets", String(s.n)), metric("Pending", s.pending + (s.open_stake ? " (" + money(s.open_stake) + ")" : "")),
+      metric("Record", s.won + "-" + s.lost + (s.push ? "-" + s.push : "")), metric("Staked", money(s.staked)),
+      metric("Profit", signed(s.profit), s.profit >= 0 ? "good" : "bad"), metric("ROI", pct(s.roi), s.roi !== null && s.roi < 0 ? "bad" : "good")]);
+  }
+  function chart(points, label) {
+    var W = 640, H = 160, P = 28, ns = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(ns, "svg"); svg.setAttribute("viewBox", "0 0 " + W + " " + H); svg.setAttribute("width", "100%"); svg.setAttribute("role", "img"); svg.setAttribute("aria-label", label);
+    if (points.length < 2) { var t = document.createElementNS(ns, "text"); t.setAttribute("x", 10); t.setAttribute("y", 30); t.setAttribute("fill", "currentColor"); t.textContent = "Needs at least two settled bets to draw a curve."; svg.appendChild(t); return svg; }
+    var ys = points.map(function (p) { return p.cum; }).concat([0]), lo = Math.min.apply(null, ys), hi = Math.max.apply(null, ys), span = hi - lo || 1;
+    var X = function (i) { return P + (W - 2 * P) * i / (points.length - 1); }, Y = function (v) { return H - P - (H - 2 * P) * (v - lo) / span; };
+    var z = document.createElementNS(ns, "line"); [["x1", P], ["x2", W - P], ["y1", Y(0)], ["y2", Y(0)], ["stroke", "currentColor"], ["stroke-opacity", ".3"], ["stroke-dasharray", "4 4"]].forEach(function (a) { z.setAttribute(a[0], a[1]); }); svg.appendChild(z);
+    var pl = document.createElementNS(ns, "polyline"); pl.setAttribute("fill", "none"); pl.setAttribute("stroke", "var(--accent)"); pl.setAttribute("stroke-width", "2");
+    pl.setAttribute("points", points.map(function (p, i) { return X(i).toFixed(1) + "," + Y(p.cum).toFixed(1); }).join(" ")); svg.appendChild(pl);
+    [[hi, P - 4], [lo, H - P + 14]].forEach(function (a) { var t = document.createElementNS(ns, "text"); t.setAttribute("x", 4); t.setAttribute("y", a[1] + (a[0] === hi ? 8 : 0)); t.setAttribute("font-size", "11"); t.setAttribute("fill", "currentColor"); t.textContent = signed(a[0]); svg.appendChild(t); });
+    return svg;
+  }
+  function table(head, rows) {
+    return el("div", { class: "scroll" }, [el("table", {}, [el("thead", {}, [el("tr", {}, head.map(function (h) { return el("th", { text: h }); }))]),
+      el("tbody", {}, rows.length ? rows : [el("tr", {}, [el("td", { colspan: String(head.length), class: "muted", text: "Nothing here yet." })])])])]);
+  }
+  var tr = function (cells) { return el("tr", {}, cells.map(function (c) { return el("td", {}, [c instanceof Node ? c : document.createTextNode(String(c))]); })); };
+
+  /* ---------- my bets (stored only in this browser) ---------- */
+  function myBets() {
+    var bets = load(), box = el("div", {});
+    function rerender() { var p = box.parentNode; var n = myBets(); p.replaceChild(n, box); }
+    var games = D.games || [];
+    var f = { date: el("input", { type: "date", value: D.date }), game: el("select", {}), pick: el("input", { type: "text", placeholder: "e.g. BOS moneyline" }),
+      fmt: el("select", {}, [el("option", { value: "american", text: "American (-110)" }), el("option", { value: "decimal", text: "Decimal (1.91)" })]),
+      odds: el("input", { type: "number", step: "any", placeholder: "-110" }), stake: el("input", { type: "number", step: "0.01", min: "0", placeholder: "10" }),
+      note: el("input", { type: "text", placeholder: "optional note" }) };
+    f.game.appendChild(el("option", { value: "", text: "(custom bet)" }));
+    games.forEach(function (g, i) { f.game.appendChild(el("option", { value: String(i), text: g.away + " @ " + g.home })); });
+    f.game.addEventListener("change", function () {
+      var g = games[Number(f.game.value)]; if (!g) return;
+      var side = g.model_side; if (side && g.sides[side]) { f.pick.value = g.sides[side].team + " moneyline"; f.fmt.value = "decimal"; f.odds.value = g.sides[side].best_decimal.toFixed(2); }
+    });
+    var err = el("div", { class: "banner bad", style: "display:none" });
+    var add = el("button", { text: "Add bet" });
+    add.addEventListener("click", function () {
+      var dec = C.toDecimal(f.odds.value, f.fmt.value), stake = Number(f.stake.value);
+      if (!f.pick.value.trim() || dec === null || !(stake > 0)) { err.textContent = "Enter a pick, valid odds and a stake above zero."; err.style.display = ""; return; }
+      var g = games[Number(f.game.value)];
+      bets.push({ id: Date.now() + "-" + Math.random().toString(36).slice(2, 7), date: f.date.value || D.date, game: g ? g.away + " @ " + g.home : "", pick: f.pick.value.trim(), decimal: dec, stake: stake, result: "pending", note: f.note.value.trim() });
+      if (!save(bets)) { err.textContent = "Could not save in this browser (private mode?). Use Export to keep your bets."; err.style.display = ""; return; }
+      rerender();
+    });
+    var form = el("div", { class: "card" }, [el("div", { class: "grid" }, [
+      el("div", {}, [el("label", { text: "Date" }), f.date]), el("div", {}, [el("label", { text: "Today's game (optional)" }), f.game]), el("div", {}, [el("label", { text: "Pick" }), f.pick]),
+      el("div", {}, [el("label", { text: "Odds format" }), f.fmt]), el("div", {}, [el("label", { text: "Odds" }), f.odds]), el("div", {}, [el("label", { text: "Stake ($)" }), f.stake]),
+      el("div", {}, [el("label", { text: "Note" }), f.note])]), err, el("div", { style: "margin-top:10px" }, [add])]);
+    var s = C.summarize(bets), rows = bets.slice().sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; }).map(function (b) {
+      var sel = el("select", {}, ["pending", "won", "lost", "push"].map(function (r) { var o = el("option", { value: r, text: r }); if (r === b.result) o.selected = true; return o; }));
+      sel.addEventListener("change", function () { b.result = sel.value; save(bets); rerender(); });
+      var del = el("button", { text: "Delete" }); del.addEventListener("click", function () { bets = bets.filter(function (x) { return x.id !== b.id; }); save(bets); rerender(); });
+      var p = C.settle(b);
+      return tr([b.date, b.game || "-", b.pick, b.decimal.toFixed(2), money(b.stake), sel, p === null ? "-" : signed(p), del]);
+    });
+    var exp = el("button", { text: "Export JSON" });
+    exp.addEventListener("click", function () { var a = el("a", { href: "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(bets, null, 1)), download: "my-bets.json" }); document.body.appendChild(a); a.click(); a.remove(); });
+    var imp = el("input", { type: "file", accept: "application/json" });
+    imp.addEventListener("change", function () {
+      var fr = new FileReader();
+      fr.onload = function () {
+        try {
+          var v = JSON.parse(fr.result), ok = Array.isArray(v) ? v.filter(function (b) { return b && typeof b.pick === "string" && b.decimal > 1 && b.stake > 0 && ["pending", "won", "lost", "push"].indexOf(b.result) >= 0; }) : [];
+          var have = {}; bets.forEach(function (b) { have[b.id] = 1; });
+          ok.forEach(function (b) { if (!b.id || have[b.id]) b.id = Date.now() + "-" + Math.random().toString(36).slice(2, 7); bets.push({ id: String(b.id), date: String(b.date || D.date).slice(0, 10), game: String(b.game || ""), pick: b.pick, decimal: Number(b.decimal), stake: Number(b.stake), result: b.result, note: String(b.note || "") }); });
+          save(bets); rerender();
+        } catch (e) { err.textContent = "That file is not a valid export."; err.style.display = ""; }
+      };
+      fr.readAsText(imp.files[0]);
+    });
+    box.appendChild(el("div", { class: "banner info", text: "Your bets are stored only in this browser (localStorage). They are never sent anywhere or written to the repository. Use Export to back them up or move them to another device." }));
+    box.appendChild(form); box.appendChild(el("h2", { text: "My results" })); box.appendChild(el("div", { class: "card" }, [metrics(s), chart(C.cumulative(bets), "My cumulative profit")]));
+    box.appendChild(el("h2", { text: "My bets" }));
+    box.appendChild(el("div", { class: "card" }, [table(["Date", "Game", "Pick", "Price", "Stake", "Result", "Profit", ""], rows), el("div", { style: "display:flex;gap:10px;margin-top:10px;align-items:center;flex-wrap:wrap" }, [exp, el("label", { text: "Import JSON:" }), imp])]));
+    return box;
+  }
+
+  /* ---------- fake (paper) bets ---------- */
+  function fakeBets() {
+    var box = el("div", {}), names = (D.paper_strategies || []).map(function (s) { return s.name; }), cur = names.indexOf("every_game") >= 0 ? "every_game" : names[0];
+    var sel = el("select", {}, (D.paper_strategies || []).map(function (s) { var o = el("option", { value: s.name, text: s.name }); if (s.name === cur) o.selected = true; return o; }));
+    var body = el("div", {});
+    function draw() {
+      body.textContent = "";
+      var st = (D.paper_strategies || []).filter(function (s) { return s.name === sel.value; })[0];
+      if (!st) { body.appendChild(el("div", { class: "banner info", text: "No paper bets have been logged yet. They appear after the next daily run." })); return; }
+      var all = D.paper_bets.filter(function (b) { return b.strategy === sel.value; }), sm = C.summarize(all);
+      body.appendChild(el("div", { class: "banner info", text: st.description }));
+      body.appendChild(el("div", { class: "card" }, [metrics(sm), chart(C.cumulative(all), "Cumulative fake profit")]));
+      var pend = all.filter(function (b) { return b.result === "pending"; });
+      body.appendChild(el("h2", { text: "Open fake bets (" + pend.length + ", " + money(sm.open_stake) + " pretend stake)" }));
+      body.appendChild(el("div", { class: "card" }, [table(["Date", "Game", "Pretend pick", "Price", "Pretend stake"], pend.map(function (b) { return tr([b.date, b.game, b.pick, b.decimal.toFixed(2), money(b.stake)]); }))]));
+      var done = all.filter(function (b) { return b.result !== "pending"; }).sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; }).slice(0, 200);
+      body.appendChild(el("h2", { text: "Settled fake bets (latest 200)" }));
+      body.appendChild(el("div", { class: "card" }, [table(["Date", "Game", "Pretend pick", "Price", "Stake", "Result", "Profit"], done.map(function (b) { return tr([b.date, b.game, b.pick, b.decimal.toFixed(2), money(b.stake), b.result, signed(C.settle(b))]); }))]));
+    }
+    sel.addEventListener("change", draw);
+    var rows = (D.paper_strategies || []).map(function (s) { var x = C.summarize(D.paper_bets.filter(function (b) { return b.strategy === s.name; })); return tr([s.name, x.n, x.pending, x.settled, signed(x.profit), pct(x.roi), x.hit === null ? "-" : (x.hit * 100).toFixed(0) + "%"]); });
+    box.appendChild(el("div", { class: "banner info", text: "Fake money for measurement only. Every strategy stakes 1% of a $" + D.bankroll.toFixed(0) + " pretend bankroll per bet (the live-policy copies use their own sizing). The no-skill control is market_favorite; every_game bets the model's side of every game, even at a negative edge." }));
+    box.appendChild(el("div", { class: "card" }, [table(["Strategy", "Bets", "Open", "Settled", "Profit", "ROI", "Hit rate"], rows)]));
+    box.appendChild(el("h2", { text: "Strategy detail" })); box.appendChild(el("div", {}, [el("label", { text: "Strategy" }), sel])); box.appendChild(body); draw();
+    return box;
+  }
+
+  function main() {
+    var app = document.getElementById("app"), view = el("div", {}), tab = "mine";
+    function show() { view.textContent = ""; view.appendChild(tab === "mine" ? myBets() : fakeBets()); b1.className = tab === "mine" ? "on" : ""; b2.className = tab === "fake" ? "on" : ""; }
+    var b1 = el("button", { text: "My bets" }), b2 = el("button", { text: "Fake bets (paper trading)" });
+    b1.addEventListener("click", function () { tab = "mine"; show(); }); b2.addEventListener("click", function () { tab = "fake"; show(); });
+    var base = location.pathname.indexOf("/archive/") >= 0 ? "../" : "";
+    app.appendChild(el("h1", { text: "Bets tracker" }));
+    app.appendChild(el("div", { class: "sub" }, [el("a", { href: base + "index.html", text: "Today's picks" }), " · ", el("a", { href: base + "history.html", text: "Past picks & results" }), " · built " + new Date(D.generated_at).toLocaleString()]));
+    app.appendChild(el("div", { class: "banner disc", text: D.disclaimer }));
+    app.appendChild(el("div", { class: "tabs" }, [b1, b2])); app.appendChild(view); show();
+  }
+  main();
+})();
+</script>
+</body>
+</html>

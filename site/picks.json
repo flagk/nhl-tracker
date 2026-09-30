@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-30T19:38:42+00:00",
+ "generated_at": "2026-09-30T21:09:09+00:00",
  "public_safe": true,
  "date": "2026-09-30",
  "run_type": "morning",
@@ -13,10 +13,10 @@
  },
  "odds": {
   "enabled": true,
-  "captured_at": "2026-09-30T19:31:34+00:00",
+  "captured_at": "2026-09-30T21:08:51+00:00",
   "stale": false,
-  "remaining": 491,
-  "source": "cache"
+  "remaining": 490,
+  "source": "live"
  },
  "policy": {
   "bankroll": 1000.0,
@@ -44,19 +44,20 @@
     "Division/rival game.",
     "Early in the season: team ratings lean on last year's results and are less reliable."
    ],
+   "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-09-30T19:31:34+00:00",
+   "odds_captured_at": "2026-09-30T21:08:51+00:00",
    "sides": {
     "home": {
      "team": "PHI",
      "p_model": 0.49354042042457724,
-     "p_market": 0.569085883428311,
-     "p_adj": 0.5544753618573048,
-     "edge": -0.07554546300373377,
-     "ev": -0.05184713122400875,
+     "p_market": 0.5713765352716538,
+     "p_adj": 0.5568706000097098,
+     "edge": -0.07783611484707653,
+     "ev": -0.053319979983493415,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.71,
+     "best_decimal": 1.7,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -66,11 +67,11 @@
     "away": {
      "team": "PIT",
      "p_model": 0.5064595795754228,
-     "p_market": 0.430914116571689,
-     "p_adj": 0.44552463814269516,
-     "edge": 0.07554546300373377,
-     "ev": 0.0024304358210640586,
-     "kelly_full": 0.0019443486568512468,
+     "p_market": 0.4286234647283462,
+     "p_adj": 0.44312939999029016,
+     "edge": 0.07783611484707653,
+     "ev": -0.002958850021847148,
+     "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 2.25,
      "books": {},
@@ -100,16 +101,17 @@
     "NYI are creating the better share of expected goals recently.",
     "Early in the season: team ratings lean on last year's results and are less reliable."
    ],
+   "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-09-30T19:31:34+00:00",
+   "odds_captured_at": "2026-09-30T21:08:51+00:00",
    "sides": {
     "home": {
      "team": "TOR",
      "p_model": 0.38610144307157473,
-     "p_market": 0.5454790838088969,
-     "p_adj": 0.5355870988857435,
-     "edge": -0.15937764073732213,
-     "ev": -0.04665496398337654,
+     "p_market": 0.5446221919631739,
+     "p_adj": 0.5346901004172973,
+     "edge": -0.15852074889159912,
+     "ev": -0.048251621257210886,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.78,
@@ -122,10 +124,10 @@
     "away": {
      "team": "NYI",
      "p_model": 0.6138985569284252,
-     "p_market": 0.45452091619110313,
-     "p_adj": 0.4644129011142564,
-     "edge": 0.15937764073732208,
-     "ev": -0.006156391615491197,
+     "p_market": 0.45537780803682615,
+     "p_adj": 0.46530989958270275,
+     "edge": 0.15852074889159906,
+     "ev": -0.004236814893016083,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 2.14,
@@ -154,16 +156,17 @@
     "COL have the clearly better goal differential this season (gap 0.73 goals/game).",
     "Early in the season: team ratings lean on last year's results and are less reliable."
    ],
+   "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-09-30T19:31:34+00:00",
+   "odds_captured_at": "2026-09-30T21:08:51+00:00",
    "sides": {
     "home": {
      "team": "COL",
      "p_model": 0.6267958487936823,
-     "p_market": 0.6386230473800025,
-     "p_adj": 0.6329306341194646,
-     "edge": -0.011827198586320198,
-     "ev": -0.03161612979721917,
+     "p_market": 0.641323416896054,
+     "p_adj": 0.6344618902899946,
+     "edge": -0.014527568102371657,
+     "ev": -0.029273307856308328,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.53,
@@ -176,13 +179,13 @@
     "away": {
      "team": "LAK",
      "p_model": 0.37320415120631767,
-     "p_market": 0.36137695261999747,
-     "p_adj": 0.36706936588053546,
-     "edge": 0.011827198586320198,
-     "ev": -0.008912712122554178,
+     "p_market": 0.358676583103946,
+     "p_adj": 0.3655381097100054,
+     "edge": 0.014527568102371657,
+     "ev": -0.009391722685885395,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.7,
+     "best_decimal": 2.71,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
