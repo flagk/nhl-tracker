@@ -12,29 +12,32 @@ import pandas as pd
 
 from nhlbet.data.store import Store
 from nhlbet.report.markdown import DISCLAIMER
-from nhlbet.risk.shadow import STRATEGIES
+from nhlbet.risk.shadow import PROP_STRATEGIES, STRATEGIES
 from nhlbet.site.build import HERE, _clean
 
 MAX_BETS = 4000          # keep the page small: the most recent paper bets only
 
 
-TYPE_NAMES = {"h2h": "Moneyline", "totals": "Total", "spreads": "Puck line"}
+TYPE_NAMES = {"h2h": "Moneyline", "totals": "Total", "spreads": "Puck line", "player_sog": "Player shots"}
 
 
 def paper_bets(store: Store, limit: int = MAX_BETS) -> pd.DataFrame:
     """Latest pretend bet per (game, strategy) including unsettled ones. result: pending | won | lost | push (settled like the real thing)."""
     from nhlbet.report.betlog import shadow_resolved
 
-    r = store.df("SELECT * FROM shadow_bets")
+    from nhlbet.report.betlog import all_shadow_rows
+
+    r = all_shadow_rows(store)
     if r.empty:
         return pd.DataFrame()
-    final = r.sort_values("run_at").groupby(["game_id", "strategy"], as_index=False).tail(1)
+    r["player_id"] = r["player_id"].fillna(0)
+    final = r.sort_values("run_at").groupby(["game_id", "strategy", "player_id"], as_index=False).tail(1)
     final = final[(final.action == "BET") & (final.stake > 0)]
     g = store.df("SELECT game_id, home, away FROM games")
     d = final.merge(g, on="game_id", how="left")
     res = shadow_resolved(store)
     if len(res):
-        d = d.merge(res[["game_id", "strategy", "won", "push"]], on=["game_id", "strategy"], how="left")
+        d = d.merge(res[["game_id", "strategy", "player_id", "side", "won", "push"]], on=["game_id", "strategy", "player_id", "side"], how="left")
         d["result"] = np.where(d.push == True, "push", np.where(d.won == 1, "won", np.where(d.won == 0, "lost", "pending")))   # noqa: E712
     else:
         d["result"] = "pending"
@@ -53,7 +56,7 @@ def build_bets_payload(store: Store, games_payload: list[dict], bankroll: float,
                         "sides": {k: {"team": v["team"], "best_decimal": v["best_decimal"]} for k, v in g["sides"].items()},
                         "alt": [{"market": q["market"], "side": q["side"], "label": q["label"], "p_model": q["p_model"], "best_decimal": q["best_decimal"]}
                                 for q in g.get("alt", [])]} for g in games_payload],
-                   "paper_strategies": [{"name": s.name, "description": s.description} for s in STRATEGIES],
+                   "paper_strategies": [{"name": s.name, "description": s.description} for s in (*STRATEGIES, *PROP_STRATEGIES)],
                    "paper_bets": pb.to_dict("records") if len(pb) else [],
                    "disclaimer": DISCLAIMER.replace("> ", "").replace("**", "")})
 

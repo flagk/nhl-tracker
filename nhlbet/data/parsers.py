@@ -92,7 +92,7 @@ def parse_boxscore(box: dict) -> dict:
                 skaters.append({"game_id": gid, "team": teams[side], "player_id": p.get("playerId"),
                                 "name": _name(p.get("name")), "position": p.get("position"),
                                 "toi_sec": toi, "goals": p.get("goals", 0), "assists": p.get("assists", 0),
-                                "points": p.get("points", 0)})
+                                "points": p.get("points", 0), "sog": p.get("sog")})
     return {"goalies": goalies, "skaters": skaters}
 
 

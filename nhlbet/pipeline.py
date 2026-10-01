@@ -7,12 +7,12 @@ from __future__ import annotations
 
 import logging
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from nhlbet.data.goalies import load_confirmations
-from nhlbet.data.ingest import current_season, import_legacy_csv, ingest_day, ingest_details, ingest_schedule
+from nhlbet.data.ingest import current_season, import_legacy_csv, ingest_day, ingest_details, ingest_schedule, reparse_skaters
 from nhlbet.data.client import NHLClient
 from nhlbet.data.store import Store
 from nhlbet.hygiene import purge_inplay
@@ -50,24 +50,50 @@ def refresh_data(store: Store, days_back: int = 7, days_ahead: int = 2) -> str |
             ingest_day(c, store, (_d.today() + timedelta(days=k)).isoformat())
         ok, bad = ingest_details(c, store)
         log.info("data refresh: %d new games ingested, %d failed", ok, bad)
+        reparse_skaters(c, store, limit=2500)          # one-off catch-up for shots on goal; a no-op once every game has them
         return None if (ok or not bad) else f"{bad} game detail fetches failed"
     except Exception as e:  # noqa: BLE001 - stage must not take the job down
         log.error("data refresh failed: %s", e)
         return str(e)
 
 
-DEFAULT_MARKETS = ("h2h", "spreads", "totals")      # 3 credits per fetch; with 2 daily runs + 3 h2h-only closing snapshots ~9 credits/day (~270 of 500/month)
+DEFAULT_MARKETS = ("h2h", "spreads", "totals")      # 3 credits per fetch
+MORNING_MARKETS = ("h2h",)                          # the morning run only needs moneylines: spreads, totals and props are priced closer to game time (late run)
+PROPS_MAX_GAMES = 3                                 # props cost 1 credit per game; 3 a day keeps the whole plan near ~12 credits/day (~360 of the 500 free monthly credits)
 
 
-def fetch_and_store_odds(store: Store, markets: tuple[str, ...] | None = None, regions: str = "us") -> dict:
-    markets = markets or tuple(m.strip() for m in os.environ.get("ODDS_MARKETS", ",".join(DEFAULT_MARKETS)).split(",") if m.strip())
+def fetch_player_props(store: Store, client: OddsClient, events: list[dict], max_games: int, now: datetime | None = None, regions: str = "us") -> dict:
+    """Shots-on-goal prop prices for the next few games to start (one credit per game). Never raises: a plan without prop access just reports why."""
+    from nhlbet.odds.props import SOG_MARKET
+    now = now or datetime.now(timezone.utc)
+    upcoming = sorted((e for e in events if e.get("commence_time") and datetime.fromisoformat(e["commence_time"].replace("Z", "+00:00")) > now
+                       and datetime.fromisoformat(e["commence_time"].replace("Z", "+00:00")) < now + timedelta(hours=6)), key=lambda e: e["commence_time"])[:max_games]
+    got = 0
+    for e in upcoming:
+        try:
+            f = client.fetch_event_odds(e["id"], (SOG_MARKET,), regions)
+            record_fetch(store, f, SOG_MARKET)
+            got += 1
+        except (OddsAPIError, OddsConfigError) as err:
+            log.warning("player props unavailable: %s", err)
+            return {"games": got, "error": str(err)}
+    return {"games": got}
+
+
+def fetch_and_store_odds(store: Store, markets: tuple[str, ...] | None = None, regions: str = "us", run_type: str = "late") -> dict:
+    markets = markets or tuple(m.strip() for m in os.environ.get("ODDS_MARKETS", ",".join(MORNING_MARKETS if run_type == "morning" else DEFAULT_MARKETS)).split(",") if m.strip())
     if not os.environ.get("ODDS_API_KEY"):
         log.warning("ODDS_API_KEY not set: odds disabled (games will be reported as 'no odds -> no bet')")
         return {"enabled": False}
     try:
-        f = OddsClient().fetch_odds(markets, regions)
+        client = OddsClient()
+        f = client.fetch_odds(markets, regions)
         record_fetch(store, f, ",".join(markets))
-        return {"enabled": True, "captured_at": f.captured_at, "stale": f.stale, "remaining": f.remaining, "source": f.source}
+        meta = {"enabled": True, "captured_at": f.captured_at, "stale": f.stale, "remaining": f.remaining, "source": f.source}
+        max_props = int(os.environ.get("ODDS_PROPS_MAX_GAMES", PROPS_MAX_GAMES if run_type != "morning" else 0))
+        if max_props > 0 and not f.stale:
+            meta["props"] = fetch_player_props(store, client, f.events, max_props, regions=regions)
+        return meta
     except (OddsAPIError, OddsConfigError) as e:
         log.error("odds fetch failed: %s", e)
         return {"enabled": True, "error": str(e)}
@@ -102,7 +128,7 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     if entry is None:
         raise RuntimeError("no trained model available; run `python scripts/train.py` first")
     bundle = ModelBundle.load(entry["artifact"])
-    odds_meta = fetch_and_store_odds(store) if odds else {"enabled": False}
+    odds_meta = fetch_and_store_odds(store, run_type=run_type) if odds else {"enabled": False}
     if odds_meta.get("error"):
         notes.append(f"odds fetch failed ({odds_meta['error']})")
 

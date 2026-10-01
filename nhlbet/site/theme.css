@@ -157,6 +157,14 @@ details.gamebox > summary::after { margin-left: .5rem; }
 a.more { font-size: .88rem; font-weight: 600; }
 @media (max-width: 640px) { .drow, .irow { grid-template-columns: 1fr; gap: .15rem; } .dval { text-align: left; } .srow { font-size: .85rem; } }
 
+/* ---- player prop history strip ---- */
+.hist { position: relative; display: flex; align-items: flex-end; gap: 5px; height: 64px; padding: 0 0 0 1.4rem; border-bottom: 1px solid var(--line-strong); }
+.hbar { flex: 1; min-width: 8px; max-width: 28px; border-radius: 3px 3px 0 0; display: flex; justify-content: center; align-items: flex-start; font-size: .68rem; color: var(--surface); font-weight: 700; }
+.hbar.over { background: var(--good); } .hbar.under { background: var(--line-strong); color: var(--ink); }
+.hbar span { margin-top: -1.05rem; color: var(--muted); }
+.hline { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--accent); pointer-events: none; }
+.hline span { position: absolute; left: 0; top: -.95rem; font-size: .68rem; color: var(--accent); font-weight: 700; }
+
 /* ---- forms ---- */
 label { display: block; font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: .25rem; }
 input, select, button { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 8px; padding: .45rem .6rem; min-width: 0; }

@@ -9,7 +9,8 @@ Research/education only. No model guarantees profit; stake only what you can aff
 | Moneyline | win-probability stack (see RESULTS.md) | Yes, under the normal risk policy |
 | Total (over/under) | goals model | **No. Paper-traded only** |
 | Puck line (spread) | goals model | **No. Paper-traded only** |
-| Parlay, player props, anything else | none | Not modelled. You can log them on the My bets page |
+| Player shots on goal (over/under) | player shots model | **No. Paper-traded only** |
+| Parlay, other props, anything else | none | Not modelled. You can log them on the My bets page |
 
 Totals and puck lines are experimental on purpose. The goals model has no record against sportsbook prices yet, so the site and report show
 its edges for information and run fake-money strategies on it. They become candidates for real recommendations only after
@@ -50,3 +51,12 @@ credits/day (~270 of the 500 free monthly credits). Override with `ODDS_MARKETS=
 - Bets page: choose a bet type (moneyline, puck line, total, parlay, player prop, other) for your own bets; the fake-bets tab lists every
   strategy's pretend bets by type.
 - BI export: `alt_market_predictions.csv` (every game's quotes with outcome) and a `market` column in `paper_trading.csv`.
+
+
+## Player props: shots on goal
+- **Data:** the boxscore's per-skater shots on goal are now stored (`skater_game.sog`). Games ingested earlier are filled from their cached boxscores (`python -m nhlbet.data.ingest --reparse-skaters`; the daily run catches up automatically).
+- **Model (`nhlbet/models/props.py`, features in `nhlbet/features/players.py`):** each player's shots are negative-binomial. The mean is a Poisson regression on his own recent shot rate (exponentially weighted and shrunk toward his position's average), how many shots tonight's opponent has been allowing, home ice, recent ice time and rest. Everything is as of the game date.
+- **Prices:** The Odds API serves player props per game and charges one credit per game, so only the first few games to start are priced (`ODDS_PROPS_MAX_GAMES`, default 3, late run only). The morning run fetches moneylines only. That keeps the plan near 12 credits a day (about 360 of the free 500 a month). If your plan has no prop access, the run records that and carries on.
+- **What the page shows:** each priced player with the line, the model's expected shots, model vs market probability of the over, the suggested side, the price, and a strip of his last 10 games (green bars went over the line) with averages and hit rates.
+- **Paper strategies:** `sog_edge` ($5-$30 on the side with a 3%+ edge, at most 8 a day, 10+ games of history) and the control `sog_over_control` (flat $10 on the Over for the 8 highest lines, no model). A player who does not dress voids the bet.
+- **Evidence:** `reports/PROPS.md` (workflow "Player props backtest") tests the model against the player's own rate and checks calibration; there are no historical prop lines, so the market test is the paper trading.

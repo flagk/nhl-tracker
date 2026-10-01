@@ -72,7 +72,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 | **Unit / stake** | Your own bet size. The page suggests a stake as a fraction of your bankroll (quarter Kelly, capped at 2% per bet). |
 | **No bet** | The most common result. The model only bets when it sees a big enough edge that survives its safety checks. |
 | **CLV (closing-line value)** | Did you get a better price than the final price before puck drop? The fastest honest sign of a real edge. |
-| **Puck line / total** | The -1.5 / +1.5 goal spread and the over/under on goals. These are **experimental here and paper-traded only**. |
+| **Puck line / total / player props** | The -1.5 / +1.5 goal spread, the over/under on goals, and players' shots-on-goal over/unders. These are **experimental here and paper-traded only**. |
 | **Fake bets (paper trading)** | Pretend-money strategies run on every game to measure what works, including a no-skill control. They never touch real recommendations. |
 | **Parlay** | Several bets that must all win. The margin of every leg stacks up, so the calculator warns you when singles are better. |
 
@@ -82,6 +82,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 |---|---|
 | **Has an edge over the betting market been shown?** | **No.** The model has never been compared with enough real closing lines yet. Treat it as a research system that *measures* whether it has an edge, not one that has it. |
 | **What the model can do (walk-forward on real NHL API data: trained on 8 seasons, 2,269 out-of-sample games with calibration history, Oct 2024 to Sep 2026)** | Production model log loss **0.6759** vs 0.6896 for "always the base rate" and 0.6812 for plain Elo. The gap to Elo (-0.0053, 95% CI -0.0100 to -0.0003) and to the base rate (-0.0137) both exclude zero. A coin flip is 0.6931. **Against the market: unknown.** |
+| **Player props (shots on goal)** | A separate player-level model, shown with each player's recent history. Paper-traded only until real results exist; see [docs/MARKETS.md](docs/MARKETS.md). |
 | **Totals and puck line** | A separate goals model. It is calibrated and beats naive base rates on the puck line (about 0.019 better log loss), but has **essentially no skill on totals**. Both are paper-traded only. See [docs/MARKETS.md](docs/MARKETS.md). |
 | **The original README's "55.8% win rate / +11.69% ROI / proven edge"** | **Not valid.** It assumed even-money payouts (no odds, no vig), had corrupted features, and did no better than always picking the home team. See [AUDIT.md](AUDIT.md). |
 | **Most likely daily output** | **"No bet."** By design. |

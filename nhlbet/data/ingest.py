@@ -103,6 +103,29 @@ def ingest_details(client: NHLClient, store: Store, limit: int | None = None) ->
     return ok, bad
 
 
+def reparse_skaters(client: NHLClient, store: Store, limit: int | None = None) -> int:
+    """Fill ``skater_game.sog`` (shots on goal) for games ingested before it was captured, by re-reading their boxscores (cached raw JSON: no
+    network when the cache is present). Returns the number of games updated. Safe to repeat; ``limit`` bounds one run."""
+    todo = store.df("SELECT DISTINCT s.game_id FROM skater_game s WHERE s.sog IS NULL AND s.game_id > 0 ORDER BY s.game_id")
+    ids = list(todo.game_id)
+    if limit:
+        ids = ids[:limit]
+    done = 0
+    for gid in ids:
+        try:
+            bx = parse_boxscore(client.boxscore(int(gid)))
+        except Exception as e:  # noqa: BLE001 - one bad game must not stop the pass
+            log.warning("reparse failed for game %s: %s", gid, e)
+            continue
+        rows = [r for r in bx["skaters"] if r.get("sog") is not None]
+        if rows:
+            store.upsert("skater_game", rows, ["game_id", "player_id"])
+            done += 1
+    if ids:
+        log.info("reparsed skater shots for %d of %d games", done, len(ids))
+    return done
+
+
 def import_legacy_csv(store: Store, path: str | Path) -> int:
     """Load the legacy score-only CSV as a fallback data source (``source='legacy_csv'``).
 
@@ -138,6 +161,7 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--update", action="store_true", help="refresh current season schedule + new finals")
     ap.add_argument("--legacy-csv")
     ap.add_argument("--limit", type=int, help="max games to fetch detail for (debug)")
+    ap.add_argument("--reparse-skaters", action="store_true", help="fill shots on goal for already-ingested games from their cached boxscores")
     ap.add_argument("-v", "--verbose", action="store_true")
     a = ap.parse_args(argv)
     logging.basicConfig(level=logging.DEBUG if a.verbose else logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -153,6 +177,8 @@ def main(argv: list[str] | None = None) -> None:
                 ingest_day(client, store, (date.today() + timedelta(days=k)).isoformat())
             except NHLAPIError as e:
                 log.warning("day schedule failed: %s", e)
+    if a.reparse_skaters:
+        reparse_skaters(client, store, a.limit)
     if seasons or a.update:
         ok, bad = ingest_details(client, store, a.limit)
         log.info("detail ingest finished: ok=%d failed=%d", ok, bad)

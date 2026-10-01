@@ -36,7 +36,7 @@ def boxscore(with_flag=True):
         return g
 
     def skater(pid, toi, pts):
-        return {"playerId": pid, "name": {"default": f"S{pid}"}, "position": "C", "toi": toi, "goals": pts, "assists": 0, "points": pts}
+        return {"playerId": pid, "name": {"default": f"S{pid}"}, "position": "C", "toi": toi, "goals": pts, "assists": 0, "points": pts, "sog": pid % 4 + 1}
 
     return {"id": 2023020001, "homeTeam": {"abbrev": "BOS"}, "awayTeam": {"abbrev": "TOR"},
             "playerByGameStats": {
@@ -49,6 +49,7 @@ def boxscore(with_flag=True):
 class FakeResp:
     def __init__(self, status=200, data=None, headers=None):
         self.status_code, self._d, self.headers = status, data, headers or {}
+        self.text = str(data)
 
     def json(self):
         return self._d
