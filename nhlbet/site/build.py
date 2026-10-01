@@ -90,7 +90,8 @@ def build_payload(slate: list[SlateGame], cfg: RiskConfig, perf: dict | None, mo
 def render_html(payload: dict) -> str:
     tpl = (HERE / "template.html").read_text()
     data = json.dumps(payload, allow_nan=False).replace("</", "<\\/")      # cannot close the <script> tag
-    return (tpl.replace("/*__CORE__*/", (HERE / "core.js").read_text()).replace("/*__UI__*/", (HERE / "ui.js").read_text())
+    return (tpl.replace("/*__THEME__*/", (HERE / "theme.css").read_text()).replace("/*__CORE__*/", (HERE / "core.js").read_text())
+               .replace("/*__CHROME__*/", (HERE / "chrome.js").read_text()).replace("/*__UI__*/", (HERE / "ui.js").read_text())
                .replace("__DATA__", data).replace("__TITLE__", f"NHL picks {payload['date']}"))
 
 

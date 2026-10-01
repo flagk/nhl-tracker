@@ -60,8 +60,8 @@ def build_bets_payload(store: Store, games_payload: list[dict], bankroll: float,
 
 def render_bets_html(payload: dict) -> str:
     data = json.dumps(payload, allow_nan=False).replace("</", "<\\/")
-    return ((HERE / "bets_template.html").read_text().replace("/*__CORE__*/", (HERE / "bets_core.js").read_text())
-            .replace("/*__UI__*/", (HERE / "bets_ui.js").read_text()).replace("__DATA__", data))
+    return ((HERE / "bets_template.html").read_text().replace("/*__THEME__*/", (HERE / "theme.css").read_text()).replace("/*__CORE__*/", (HERE / "bets_core.js").read_text())
+            .replace("/*__CHROME__*/", (HERE / "chrome.js").read_text()).replace("/*__UI__*/", (HERE / "bets_ui.js").read_text()).replace("__DATA__", data))
 
 
 def build_bets_page(store: Store, games_payload: list[dict], bankroll: float, generated_at: str, date: str, out_dir: str | Path = "site") -> Path:

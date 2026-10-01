@@ -1,6 +1,6 @@
 (function () {
   "use strict";
-  var D = JSON.parse(document.getElementById("payload").textContent), C = window.BetsCore, KEY = "nhl-my-bets-v1";
+  var D = JSON.parse(document.getElementById("payload").textContent), C = window.BetsCore, CH = window.NHLChrome, KEY = "nhl-my-bets-v1";
   function el(tag, attrs, kids) {
     var e = document.createElement(tag);
     Object.keys(attrs || {}).forEach(function (k) { if (k === "text") e.textContent = attrs[k]; else if (k === "class") e.className = attrs[k]; else e.setAttribute(k, attrs[k]); });
@@ -18,26 +18,38 @@
       metric("Profit", signed(s.profit), s.profit >= 0 ? "good" : "bad"), metric("ROI", pct(s.roi), s.roi !== null && s.roi < 0 ? "bad" : "good")]);
   }
   function chart(points, label) {
-    var W = 640, H = 160, P = 28, ns = "http://www.w3.org/2000/svg";
-    var svg = document.createElementNS(ns, "svg"); svg.setAttribute("viewBox", "0 0 " + W + " " + H); svg.setAttribute("width", "100%"); svg.setAttribute("role", "img"); svg.setAttribute("aria-label", label);
-    if (points.length < 2) { var t = document.createElementNS(ns, "text"); t.setAttribute("x", 10); t.setAttribute("y", 30); t.setAttribute("fill", "currentColor"); t.textContent = "Needs at least two settled bets to draw a curve."; svg.appendChild(t); return svg; }
-    var ys = points.map(function (p) { return p.cum; }).concat([0]), lo = Math.min.apply(null, ys), hi = Math.max.apply(null, ys), span = hi - lo || 1;
-    var X = function (i) { return P + (W - 2 * P) * i / (points.length - 1); }, Y = function (v) { return H - P - (H - 2 * P) * (v - lo) / span; };
-    var z = document.createElementNS(ns, "line"); [["x1", P], ["x2", W - P], ["y1", Y(0)], ["y2", Y(0)], ["stroke", "currentColor"], ["stroke-opacity", ".3"], ["stroke-dasharray", "4 4"]].forEach(function (a) { z.setAttribute(a[0], a[1]); }); svg.appendChild(z);
-    var pl = document.createElementNS(ns, "polyline"); pl.setAttribute("fill", "none"); pl.setAttribute("stroke", "var(--accent)"); pl.setAttribute("stroke-width", "2");
-    pl.setAttribute("points", points.map(function (p, i) { return X(i).toFixed(1) + "," + Y(p.cum).toFixed(1); }).join(" ")); svg.appendChild(pl);
-    [[hi, P - 4], [lo, H - P + 14]].forEach(function (a) { var t = document.createElementNS(ns, "text"); t.setAttribute("x", 4); t.setAttribute("y", a[1] + (a[0] === hi ? 8 : 0)); t.setAttribute("font-size", "11"); t.setAttribute("fill", "currentColor"); t.textContent = signed(a[0]); svg.appendChild(t); });
+    var W = 680, H = 210, L = 58, R = 16, T = 16, B = 26, ns = "http://www.w3.org/2000/svg";
+    function node(tag, attrs, text) { var n = document.createElementNS(ns, tag); Object.keys(attrs).forEach(function (k) { n.setAttribute(k, attrs[k]); }); if (text !== undefined) n.textContent = text; return n; }
+    var svg = node("svg", { viewBox: "0 0 " + W + " " + H, class: "chart", role: "img", "aria-label": label });
+    if (points.length < 2) { svg.appendChild(node("text", { x: 12, y: 34, fill: "currentColor", "font-size": 14 }, "Needs at least two settled bets to draw a curve.")); return svg; }
+    var ys = points.map(function (p) { return p.cum; }).concat([0]), lo = Math.min.apply(null, ys), hi = Math.max.apply(null, ys), pad = (hi - lo || 1) * 0.08;
+    lo -= pad; hi += pad;
+    var X = function (i) { return L + (W - L - R) * i / (points.length - 1); }, Y = function (v) { return H - B - (H - T - B) * (v - lo) / (hi - lo); };
+    var ticks = [lo + pad, 0, hi - pad].filter(function (v, i, a) { return a.indexOf(v) === i; });
+    ticks.forEach(function (v) {
+      svg.appendChild(node("line", { x1: L, x2: W - R, y1: Y(v), y2: Y(v), stroke: "var(--line-strong)", "stroke-width": v === 0 ? 1.5 : 1, "stroke-dasharray": v === 0 ? "" : "3 4" }));
+      svg.appendChild(node("text", { x: L - 8, y: Y(v) + 4, "text-anchor": "end", "font-size": 12, fill: "currentColor" }, signed(v)));
+    });
+    var pts = points.map(function (p, i) { return X(i).toFixed(1) + "," + Y(p.cum).toFixed(1); });
+    svg.appendChild(node("polygon", { points: X(0).toFixed(1) + "," + Y(0).toFixed(1) + " " + pts.join(" ") + " " + X(points.length - 1).toFixed(1) + "," + Y(0).toFixed(1), fill: "var(--blue)", "fill-opacity": 0.13 }));
+    svg.appendChild(node("polyline", { points: pts.join(" "), fill: "none", stroke: "var(--blue)", "stroke-width": 2.5, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+    var last = points[points.length - 1];
+    svg.appendChild(node("circle", { cx: X(points.length - 1), cy: Y(last.cum), r: 5, fill: last.cum >= 0 ? "var(--good)" : "var(--bad)", stroke: "var(--surface)", "stroke-width": 2 }));
+    svg.appendChild(node("text", { x: L, y: H - 6, "font-size": 12, fill: "currentColor" }, points[0].date));
+    svg.appendChild(node("text", { x: W - R, y: H - 6, "text-anchor": "end", "font-size": 12, fill: "currentColor" }, last.date));
     return svg;
   }
   function table(head, rows) {
-    return el("div", { class: "scroll" }, [el("table", {}, [el("thead", {}, [el("tr", {}, head.map(function (h) { return el("th", { text: h }); }))]),
+    rows.forEach(function (r) { Array.prototype.forEach.call(r.children, function (td, i) { if (head[i]) td.setAttribute("data-label", head[i]); }); });   // phones show each row as a card
+    return el("div", { class: "card flat scroll" }, [el("table", { class: "rtable" }, [el("thead", {}, [el("tr", {}, head.map(function (h) { return el("th", { text: h }); }))]),
       el("tbody", {}, rows.length ? rows : [el("tr", {}, [el("td", { colspan: String(head.length), class: "muted", text: "Nothing here yet." })])])])]);
   }
+  function sec(title, count, kids) { return el("section", { class: "section" }, [el("h2", {}, [title, count ? el("span", { class: "count", text: count }) : null])].concat(kids)); }
   var tr = function (cells) { return el("tr", {}, cells.map(function (c) { return el("td", {}, [c instanceof Node ? c : document.createTextNode(String(c))]); })); };
 
   /* ---------- my bets (stored only in this browser) ---------- */
   function myBets() {
-    var bets = load(), box = el("div", {});
+    var bets = load(), box = el("div", { class: "stack", style: "gap:1.5rem" });
     function rerender() { var p = box.parentNode; var n = myBets(); p.replaceChild(n, box); }
     var games = D.games || [];
     var f = { date: el("input", { type: "date", value: D.date }), game: el("select", {}), pick: el("input", { type: "text", placeholder: "e.g. BOS moneyline" }),
@@ -61,7 +73,7 @@
     }
     f.game.addEventListener("change", prefill); f.type.addEventListener("change", prefill);
     var err = el("div", { class: "banner bad", style: "display:none" });
-    var add = el("button", { text: "Add bet" });
+    var add = el("button", { class: "btn-primary", type: "button", text: "Add bet" });
     add.addEventListener("click", function () {
       var dec = C.toDecimal(f.odds.value, f.fmt.value), stake = Number(f.stake.value);
       if (!f.pick.value.trim() || dec === null || !(stake > 0)) { err.textContent = "Enter a pick, valid odds and a stake above zero."; err.style.display = ""; return; }
@@ -97,50 +109,52 @@
       };
       fr.readAsText(imp.files[0]);
     });
-    box.appendChild(el("div", { class: "banner info", text: "Your bets are stored only in this browser (localStorage). They are never sent anywhere or written to the repository. Use Export to back them up or move them to another device." }));
-    box.appendChild(form); box.appendChild(el("h2", { text: "My results" })); box.appendChild(el("div", { class: "card" }, [metrics(s), chart(C.cumulative(bets), "My cumulative profit")]));
-    box.appendChild(el("h2", { text: "My bets" }));
-    box.appendChild(el("div", { class: "card" }, [table(["Date", "Type", "Game", "Pick", "Price", "Stake", "Result", "Profit", ""], rows), el("div", { style: "display:flex;gap:10px;margin-top:10px;align-items:center;flex-wrap:wrap" }, [exp, el("label", { text: "Import JSON:" }), imp])]));
+    var storeNote = el("div", { class: "banner", text: "Your bets are stored only in this browser (localStorage). They are never sent anywhere or written to the repository. Use Export to back them up or move them to another device." });
+    box.appendChild(sec("Log a bet", "", [storeNote, form]));
+    box.appendChild(sec("My results", "", [el("div", { class: "card stack" }, [metrics(s), chart(C.cumulative(bets), "My cumulative profit")])]));
+    box.appendChild(sec("My bets", String(bets.length), [table(["Date", "Type", "Game", "Pick", "Price", "Stake", "Result", "Profit", ""], rows),
+      el("div", { class: "row", style: "justify-content:flex-start;align-items:center;gap:.75rem" }, [exp, el("label", { text: "Import JSON", style: "margin:0" }), imp])]));
     return box;
   }
 
   /* ---------- fake (paper) bets ---------- */
   function fakeBets() {
-    var box = el("div", {}), names = (D.paper_strategies || []).map(function (s) { return s.name; }), cur = names.indexOf("every_game") >= 0 ? "every_game" : names[0];
-    var sel = el("select", {}, (D.paper_strategies || []).map(function (s) { var o = el("option", { value: s.name, text: s.name }); if (s.name === cur) o.selected = true; return o; }));
-    var body = el("div", {});
+    var box = el("div", { class: "stack", style: "gap:1.5rem" }), names = (D.paper_strategies || []).map(function (s) { return s.name; }), cur = names.indexOf("every_game") >= 0 ? "every_game" : names[0];
+    var sel = el("select", { id: "strat" }, (D.paper_strategies || []).map(function (s) { var o = el("option", { value: s.name, text: s.name }); if (s.name === cur) o.selected = true; return o; }));
+    var body = el("div", { class: "stack", style: "gap:1.5rem" });
     function draw() {
       body.textContent = "";
       var st = (D.paper_strategies || []).filter(function (s) { return s.name === sel.value; })[0];
       if (!st) { body.appendChild(el("div", { class: "banner info", text: "No paper bets have been logged yet. They appear after the next daily run." })); return; }
       var all = D.paper_bets.filter(function (b) { return b.strategy === sel.value; }), sm = C.summarize(all);
       body.appendChild(el("div", { class: "banner info", text: st.description }));
-      body.appendChild(el("div", { class: "card" }, [metrics(sm), chart(C.cumulative(all), "Cumulative fake profit")]));
+      body.appendChild(el("div", { class: "card stack" }, [metrics(sm), chart(C.cumulative(all), "Cumulative fake profit")]));
       var pend = all.filter(function (b) { return b.result === "pending"; });
-      body.appendChild(el("h2", { text: "Open fake bets (" + pend.length + ", " + money(sm.open_stake) + " pretend stake)" }));
-      body.appendChild(el("div", { class: "card" }, [table(["Date", "Type", "Game", "Pretend pick", "Price", "Pretend stake"], pend.map(function (b) { return tr([b.date, b.type, b.game, b.pick, b.decimal.toFixed(2), money(b.stake)]); }))]));
+      body.appendChild(sec("Open fake bets", pend.length + " · " + money(sm.open_stake) + " pretend stake", [table(["Date", "Type", "Game", "Pretend pick", "Price", "Pretend stake"], pend.map(function (b) { return tr([b.date, b.type, b.game, b.pick, b.decimal.toFixed(2), money(b.stake)]); }))]));
       var done = all.filter(function (b) { return b.result !== "pending"; }).sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; }).slice(0, 200);
-      body.appendChild(el("h2", { text: "Settled fake bets (latest 200)" }));
-      body.appendChild(el("div", { class: "card" }, [table(["Date", "Type", "Game", "Pretend pick", "Price", "Stake", "Result", "Profit"], done.map(function (b) { return tr([b.date, b.type, b.game, b.pick, b.decimal.toFixed(2), money(b.stake), b.result, signed(C.settle(b))]); }))]));
+      body.appendChild(sec("Settled fake bets", "latest 200", [table(["Date", "Type", "Game", "Pretend pick", "Price", "Stake", "Result", "Profit"], done.map(function (b) { return tr([b.date, b.type, b.game, b.pick, b.decimal.toFixed(2), money(b.stake), b.result, signed(C.settle(b))]); }))]));
     }
     sel.addEventListener("change", draw);
-    var rows = (D.paper_strategies || []).map(function (s) { var x = C.summarize(D.paper_bets.filter(function (b) { return b.strategy === s.name; })); return tr([s.name, x.n, x.pending, x.settled, signed(x.profit), pct(x.roi), x.hit === null ? "-" : (x.hit * 100).toFixed(0) + "%"]); });
+    var rows = (D.paper_strategies || []).map(function (s) { var x = C.summarize(D.paper_bets.filter(function (b) { return b.strategy === s.name; })); var pr = el("span", { class: x.profit > 0 ? "good" : x.profit < 0 ? "bad" : "muted", text: signed(x.profit) }); return { n: x.n, row: tr([el("b", { text: s.name }), x.n, x.pending, x.settled, pr, pct(x.roi), x.hit === null ? "-" : (x.hit * 100).toFixed(0) + "%"]) }; })
+      .sort(function (a, b) { return b.n - a.n; }).map(function (o) { return o.row; });
     box.appendChild(el("div", { class: "banner info", text: "Fake money for measurement only. Every strategy stakes 1% of a $" + D.bankroll.toFixed(0) + " pretend bankroll per bet (the live-policy copies use their own sizing). The no-skill control is market_favorite; every_game, every_total and every_puckline bet the model's side of every game in that market, even at a negative edge (totals and puck line are experimental)." }));
-    box.appendChild(el("div", { class: "card" }, [table(["Strategy", "Bets", "Open", "Settled", "Profit", "ROI", "Hit rate"], rows)]));
-    box.appendChild(el("h2", { text: "Strategy detail" })); box.appendChild(el("div", {}, [el("label", { text: "Strategy" }), sel])); box.appendChild(body); draw();
+    box.appendChild(sec("All strategies", String(rows.length), [table(["Strategy", "Bets", "Open", "Settled", "Profit", "ROI", "Hit rate"], rows)]));
+    box.appendChild(sec("Strategy detail", "", [el("div", { style: "max-width:18rem" }, [el("label", { text: "Strategy", for: "strat" }), sel])]));
+    box.appendChild(body); draw();
     return box;
   }
 
   function main() {
     var app = document.getElementById("app"), view = el("div", {}), tab = "mine";
     function show() { view.textContent = ""; view.appendChild(tab === "mine" ? myBets() : fakeBets()); b1.className = tab === "mine" ? "on" : ""; b2.className = tab === "fake" ? "on" : ""; }
-    var b1 = el("button", { text: "My bets" }), b2 = el("button", { text: "Fake bets (paper trading)" });
+    var b1 = el("button", { type: "button", text: "My bets" }), b2 = el("button", { type: "button", text: "Fake bets" });
     b1.addEventListener("click", function () { tab = "mine"; show(); }); b2.addEventListener("click", function () { tab = "fake"; show(); });
-    var base = location.pathname.indexOf("/archive/") >= 0 ? "../" : "";
-    app.appendChild(el("h1", { text: "Bets tracker" }));
-    app.appendChild(el("div", { class: "sub" }, [el("a", { href: base + "index.html", text: "Today's picks" }), " · ", el("a", { href: base + "history.html", text: "Past picks & results" }), " · built " + new Date(D.generated_at).toLocaleString()]));
-    app.appendChild(el("div", { class: "banner disc", text: D.disclaimer }));
-    app.appendChild(el("div", { class: "tabs" }, [b1, b2])); app.appendChild(view); show();
+    document.body.insertBefore(CH.topbar("bets"), app);
+    app.appendChild(el("div", { class: "pagehead" }, [el("div", { class: "stack" }, [el("h1", { text: "Bets" }),
+      el("div", { class: "when", text: "Your own bets, and the pretend-money bets the model places on every game · built " + new Date(D.generated_at).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) })]),
+      el("div", { class: "tabs", role: "group", "aria-label": "View" }, [b1, b2])]));
+    app.appendChild(view); show();
+    app.appendChild(el("footer", { class: "footer" }, [el("div", { class: "banner disc", text: D.disclaimer })]));
   }
   main();
 })();

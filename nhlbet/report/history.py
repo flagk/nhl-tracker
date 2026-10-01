@@ -104,27 +104,38 @@ def render_history_md(store: Store, report_dir: str | Path = "reports", site_arc
 
 
 def render_history_html(store: Store, report_dir: str | Path = "reports", public_safe: bool | None = None) -> str:
-    """Small standalone page for the site (links to the per-day archive pages)."""
+    """Standalone history page for the site: same look as the picks and bets pages, no script (links to the per-day archive pages)."""
+    from nhlbet.site.build import HERE
+
     ps = is_public_safe() if public_safe is None else public_safe
     days, bets = _day_table(store), _bet_table(store, 100)
     e = html.escape
+    money = lambda x: f"${x:+,.2f}"  # noqa: E731
+    cls = lambda x: "good" if x > 0 else "bad" if x < 0 else ""  # noqa: E731
     rows = "".join(
-        f"<tr><td><a href='archive/{e(r.date)}.html'>{e(r.date)}</a></td><td>{r.games}</td><td>{r.bets}</td>"
-        f"<td>{'-' if not r.staked else f'${r.staked:,.2f}'}</td><td>{'-' if not r.staked else f'${r.profit:+,.2f}'}</td>"
-        f"<td>{'-' if r.roi != r.roi else f'{r.roi:+.1%}'}</td><td>{r.pending or '-'}</td></tr>" for r in days.itertuples()) or "<tr><td colspan=7>No days yet.</td></tr>"
+        f"<tr><td><a href='archive/{e(r.date)}.html'>{e(r.date)}</a></td><td class='num' data-label='Games'>{r.games}</td><td class='num' data-label='Bets'>{r.bets}</td>"
+        f"<td class='num' data-label='Staked'>{'-' if not r.staked else f'${r.staked:,.2f}'}</td><td class='num {cls(r.profit) if r.staked else ''}' data-label='Profit'>{'-' if not r.staked else money(r.profit)}</td>"
+        f"<td class='num {cls(r.roi) if r.roi == r.roi else ''}' data-label='ROI'>{'-' if r.roi != r.roi else f'{r.roi:+.1%}'}</td><td class='num' data-label='Pending'>{r.pending or '-'}</td></tr>" for r in days.itertuples()
+    ) or "<tr><td colspan=7>No days yet.</td></tr>"
+    def pill(res: str) -> str:
+        k = {"won": "ok", "lost": "alert", "pending": "mute"}.get(res, "mute")
+        return f"<span class='pill {k}'>{e(res)}</span>"
     brows = "".join(
-        f"<tr><td>{e(r.game_date)}</td><td>{e(r.away)} @ {e(r.home)}</td><td>{e(r.team)}</td>"
-        f"<td>{r.decimal:.2f}{'' if ps or not r.book else ' (' + e(str(r.book)) + ')'}</td><td>${r.stake:,.2f}</td><td>{e(_result(r))}</td>"
-        f"<td>{'-' if pd.isna(r.profit) or _result(r) == 'pending' else f'${r.profit:+,.2f}'}</td></tr>" for r in bets.itertuples()) or "<tr><td colspan=7>No recommended bets yet.</td></tr>"
+        f"<tr><td>{e(r.game_date)}</td><td data-label='Game'>{e(r.away)} @ {e(r.home)}</td><td data-label='Pick'><b>{e(r.team)}</b></td>"
+        f"<td class='num' data-label='Price'>{r.decimal:.2f}{'' if ps or not r.book else ' (' + e(str(r.book)) + ')'}</td><td class='num' data-label='Stake'>${r.stake:,.2f}</td><td data-label='Result'>{pill(_result(r))}</td>"
+        f"<td class='num {'' if pd.isna(r.profit) or _result(r) == 'pending' else cls(r.profit)}' data-label='Profit'>{'-' if pd.isna(r.profit) or _result(r) == 'pending' else money(r.profit)}</td></tr>" for r in bets.itertuples()
+    ) or "<tr><td colspan=7>No recommended bets yet.</td></tr>"
     disc = e(DISCLAIMER.replace("> ", "").replace("**", ""))
-    return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NHL pick history</title>
-<style>:root{{--bg:#f6f7f9;--card:#fff;--ink:#14181f;--muted:#5b6573;--line:#e2e6ec;--accent:#1f5fbf;--warn:#9a6700;--warn-bg:#fff4d6}}
-@media(prefers-color-scheme:dark){{:root{{--bg:#0f1319;--card:#171d26;--ink:#e8ecf2;--muted:#98a3b3;--line:#283140;--accent:#6ea4ff;--warn:#e3b341;--warn-bg:#2b2411}}}}
-body{{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}}main{{max-width:980px;margin:0 auto;padding:16px}}
-a{{color:var(--accent)}}h1{{font-size:1.4rem}}h2{{font-size:1.1rem;margin-top:24px}}.card{{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;overflow-x:auto}}
-table{{width:100%;border-collapse:collapse;font-size:.88rem}}th,td{{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}}th{{color:var(--muted)}}
-.disc{{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:.92rem}}</style></head>
-<body><main><h1>NHL pick history</h1><p><a href="index.html">&larr; Today's picks</a></p><div class="disc">{disc}</div>
-<h2>By day</h2><div class="card"><table><thead><tr><th>Date</th><th>Games</th><th>Bets</th><th>Staked</th><th>Profit</th><th>ROI</th><th>Pending</th></tr></thead><tbody>{rows}</tbody></table></div>
-<h2>Recommended bets</h2><div class="card"><table><thead><tr><th>Date</th><th>Game</th><th>Pick</th><th>Price</th><th>Stake</th><th>Result</th><th>Profit</th></tr></thead><tbody>{brows}</tbody></table></div>
-<div class="disc" style="margin-top:24px">{disc}</div></main></body></html>"""
+    css = (HERE / "theme.css").read_text()
+    return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NHL Model: History</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap">
+<style>{css}</style></head>
+<body><header class="topbar"><div class="topbar-in"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>NHL Model</a>
+<nav class="nav" aria-label="Pages"><a href="index.html">Picks</a><a href="bets.html">Bets</a><a href="history.html" aria-current="page">History</a></nav></div></header>
+<main class="wrap"><div class="pagehead"><div class="stack"><h1>History</h1><div class="when">Every day's picks and how they settled. Open a day to see that day's full page.</div></div></div>
+<div class="note">Research and education only. Not betting advice. Stake only what you can afford to lose.</div>
+<nav class="chips" aria-label="Sections"><a class="chip" href="#by-day">By day</a><a class="chip" href="#bets">Recommended bets</a></nav>
+<section class="section" id="by-day"><h2>By day <span class="count">{len(days)}</span></h2><div class="card flat scroll"><table class="rtable"><thead><tr><th>Date</th><th class="num">Games</th><th class="num">Bets</th><th class="num">Staked</th><th class="num">Profit</th><th class="num">ROI</th><th class="num">Pending</th></tr></thead><tbody>{rows}</tbody></table></div></section>
+<section class="section" id="bets"><h2>Recommended bets <span class="count">latest 100</span></h2><div class="card flat scroll"><table class="rtable"><thead><tr><th>Date</th><th>Game</th><th>Pick</th><th class="num">Price</th><th class="num">Stake</th><th>Result</th><th class="num">Profit</th></tr></thead><tbody>{brows}</tbody></table></div></section>
+<footer class="footer"><div class="banner disc">{disc}</div></footer></main></body></html>"""
