@@ -28,3 +28,10 @@ Each pick (and each totals / puck-line row) has a "Price in your app" box. Type 
 recalculates expected value, and for moneyline picks the suggested stake, at that price; it also shows the minimum price at which the bet is worth taking.
 Nothing per-book is published (the odds feed's terms and the public repo rule that out), so the page cannot know which app you use. It works from the model
 probability and the price you type, and remembers your entries in this browser.
+
+## Scheduling (why there are so many cron lines)
+GitHub's scheduled triggers are best-effort and have arrived 3-6 hours late on this repository (a "late" run fired after puck drop; closing-line snapshots meant
+for 22:45 UTC fired at 01:35). So the daily and closing-line workflows are triggered often and `scripts/gate.py` (standard library only, runs before anything is
+installed) decides whether *now* is a useful moment: one morning run per game day; one late run 20 minutes to 3 hours before the first unstarted game; a closing
+snapshot only when a game starts within 35 minutes and no live capture happened in the last 20. Triggers that arrive too late exit immediately and spend no API
+credits. Manual dispatches always run.

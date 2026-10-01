@@ -1,11 +1,12 @@
 name: Closing-line odds snapshots
-# Cheap fetch-only runs near puck drop so closing-line value (CLV) can be measured. Uses 1 API credit per run
-# (3 here + morning and late daily runs = 5/day, ~150/month of the 500 free credits).
+# Fetch-only runs just before puck drop so closing-line value (CLV) can be measured; 1 API credit per capture.
+# GitHub cron is best-effort (triggers have arrived 3-6 h late here), so this is triggered every 15 minutes through the evening and
+# `scripts/gate.py --kind close` lets a trigger fetch only if a game starts within 35 minutes and no live capture happened in the last 20.
+# Triggers that arrive late do nothing and cost nothing; about 1-2 captures per start wave (~3 waves a day).
 on:
   schedule:
-    - cron: "45 22 * * *"   # ~18:45 ET, before the main 19:00 ET wave
-    - cron: "20 23 * * *"   # ~19:20 ET, minutes before 19:30/20:00 ET starts: the closest snapshot to the close for most games
-    - cron: "45 1 * * *"    # ~21:45 ET, before west-coast starts
+    - cron: "*/15 16-23 * * *"   # 12:00-19:45 ET (matinees and the main waves)
+    - cron: "*/15 0-2 * * *"     # 20:00-22:45 ET (late and west-coast starts)
   workflow_dispatch:
 
 concurrency:
@@ -23,19 +24,32 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}    # branch tip at job start, not the (possibly stale) triggering commit
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: pip
-      - run: pip install -r requirements.txt && pip install -e .
-      - uses: actions/cache@v4
+
+      - name: Restore database (rebuildable; irreplaceable logs live in git under data/logs)
+        uses: actions/cache/restore@v4
         with:
           path: |
             data/nhl.db
             data/cache
           key: nhl-data-${{ github.run_id }}
           restore-keys: nhl-data-
+
+      - name: Gate (is a game about to start?)
+        id: gate
+        run: |
+          FORCE=""; if [ "${{ github.event_name }}" != "schedule" ]; then FORCE="--force"; fi
+          python3 scripts/gate.py --kind close $FORCE      # standard library only: runs before dependencies are installed
+
+      - uses: actions/setup-python@v5
+        if: steps.gate.outputs.run == 'true'
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e .
+        if: steps.gate.outputs.run == 'true'
+
       - name: Detect repository visibility (public repos publish only public-safe outputs)
+        if: steps.gate.outputs.run == 'true'
         run: |
           private=$(curl -s -H "Authorization: Bearer ${{ github.token }}" -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${{ github.repository }}" | python3 -c "import sys,json; print(str(json.load(sys.stdin).get('private')).lower())" 2>/dev/null || echo unknown)
@@ -43,10 +57,12 @@ jobs:
           echo "repository private=$private"
 
       - name: Fetch odds snapshot
+        if: steps.gate.outputs.run == 'true'
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python scripts/fetch_odds.py --force
       - name: Commit snapshots
+        if: steps.gate.outputs.run == 'true'
         run: |
           git config user.name "nhl-model-bot"
           git config user.email "actions@users.noreply.github.com"
@@ -59,3 +75,12 @@ jobs:
             sleep $((i * 4))
           done
           exit 1
+
+      - name: Save database cache
+        if: steps.gate.outputs.run == 'true' && success()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            data/nhl.db
+            data/cache
+          key: nhl-data-${{ github.run_id }}
