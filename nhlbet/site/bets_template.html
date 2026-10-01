@@ -3,36 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NHL bets tracker</title>
+<title>NHL Model: Bets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap">
 <style>
-  :root { --bg:#f6f7f9; --card:#fff; --ink:#14181f; --muted:#5b6573; --line:#e2e6ec; --accent:#1f5fbf; --good:#1a7f4b; --good-bg:#e6f4ec; --warn:#9a6700; --warn-bg:#fff4d6; --bad:#b42318; --bad-bg:#fde8e6; }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0f1319; --card:#171d26; --ink:#e8ecf2; --muted:#98a3b3; --line:#283140; --accent:#6ea4ff; --good:#4cc38a; --good-bg:#14291f; --warn:#e3b341; --warn-bg:#2b2411; --bad:#ff8a80; --bad-bg:#2f1715; } }
-  :root[data-theme="dark"] { --bg:#0f1319; --card:#171d26; --ink:#e8ecf2; --muted:#98a3b3; --line:#283140; --accent:#6ea4ff; --good:#4cc38a; --good-bg:#14291f; --warn:#e3b341; --warn-bg:#2b2411; --bad:#ff8a80; --bad-bg:#2f1715; }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  main { max-width:980px; margin:0 auto; padding:16px; }
-  h1 { font-size:1.4rem; margin:8px 0 2px; } h2 { font-size:1.1rem; margin:26px 0 10px; } a { color:var(--accent); }
-  .sub,.muted { color:var(--muted); font-size:.9rem; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:10px 0; }
-  .banner { border-radius:10px; padding:10px 14px; margin:10px 0; font-size:.92rem; }
-  .banner.disc { background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn); }
-  .banner.bad { background:var(--bad-bg); color:var(--bad); border:1px solid var(--bad); }
-  .banner.info { background:var(--card); border:1px solid var(--line); color:var(--muted); }
-  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px 14px; }
-  label { display:block; font-size:.8rem; color:var(--muted); margin-bottom:3px; }
-  input,select,button { font:inherit; color:var(--ink); background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:7px 9px; width:100%; }
-  button { cursor:pointer; width:auto; } button:hover { border-color:var(--accent); }
-  .tabs { display:flex; gap:8px; margin:14px 0; } .tabs button.on { background:var(--accent); color:#fff; border-color:var(--accent); }
-  .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px; margin:4px 0 10px; }
-  .metric .v { font-size:1.05rem; font-weight:650; } .metric .k { font-size:.75rem; color:var(--muted); } .good { color:var(--good); } .bad { color:var(--bad); }
-  table { width:100%; border-collapse:collapse; font-size:.88rem; } th,td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); } th { color:var(--muted); font-weight:600; } .scroll { overflow-x:auto; }
-  td select,td button { padding:3px 6px; }
+/*__THEME__*/
 </style>
 </head>
 <body>
-<main id="app"><noscript>This page needs JavaScript.</noscript></main>
+<main id="app" class="wrap"><noscript>This page needs JavaScript.</noscript></main>
 <script id="payload" type="application/json">__DATA__</script>
 <script>/*__CORE__*/</script>
-<script>/*__UI__*/</script>
+<script>/*__CHROME__*/
+/*__UI__*/</script>
 </body>
 </html>

@@ -95,7 +95,7 @@ def test_html_embeds_data_safely(tmp_path):
 
 @pytest.mark.skipif(NODE is None, reason="node not installed")
 def test_js_syntax():
-    for f in ("core.js", "ui.js"):
+    for f in ("core.js", "chrome.js", "ui.js", "bets_core.js", "bets_ui.js"):
         r = subprocess.run([NODE, "--check", str(CORE.parent / f)], capture_output=True, text=True)
         assert r.returncode == 0, r.stderr
 
