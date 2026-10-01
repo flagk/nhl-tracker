@@ -41,6 +41,24 @@ class ModelBundle:
             return None
         return self.goals.distributions(F, p_home)
 
+    def drivers(self, F: pd.DataFrame, top: int = 6) -> dict:
+        """Per game, which inputs push the *linear* (logistic) component toward the home or away team, in logit units; ``F`` rows are games.
+
+        This is one of the five models blended into the final probability, so it explains the direction and rough size of each input's pull, not the exact final number.
+        """
+        lg = (self.fitted or {}).get("logistic")
+        if lg is None or not hasattr(lg, "m_"):
+            return {}
+        imp, sc, lr = lg.m_[0], lg.m_[1], lg.m_[-1]
+        X = F[lg.features]
+        Z = sc.transform(imp.transform(X))
+        contrib = Z * lr.coef_[0]
+        out = {}
+        for i, gid in enumerate(F.index):
+            order = sorted(range(len(lg.features)), key=lambda j: -abs(contrib[i, j]))[:top]
+            out[gid] = [{"feature": lg.features[j], "value": float(contrib[i, j]), "raw": None if pd.isna(X.iloc[i, j]) else float(X.iloc[i, j])} for j in order]
+        return out
+
     def save(self, path: str | Path) -> None:
         Path(path).parent.mkdir(parents=True, exist_ok=True)
         joblib.dump(self, path, compress=3)

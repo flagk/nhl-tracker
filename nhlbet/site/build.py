@@ -13,6 +13,7 @@ from pathlib import Path
 from nhlbet.privacy import is_public_safe
 from nhlbet.report.markdown import DISCLAIMER
 from nhlbet.report.slate import SlateGame
+from nhlbet.report.stats import feature_label, model_inputs
 from nhlbet.risk.policy import RiskConfig, assess_sides, game_block_reason
 
 HERE = Path(__file__).parent
@@ -58,6 +59,8 @@ def game_payload(s: SlateGame, cfg: RiskConfig, public_safe: bool = False) -> di
             "alt": [{"market": q.market, "side": q.side, "label": q.label, "point": q.point, "p_model": q.model_prob, "p_market": q.market_prob,
                      "p_push": q.p_push, "edge": q.edge, "ev": q.ev, "best_decimal": q.best_decimal, "best_book": None if public_safe else q.best_book,
                      "n_books": q.n_books} for q in (getattr(s, "alt", None) or [])], "goals": getattr(s, "goals", None) or None,
+            "stats": getattr(s, "stats", None) or [],
+            "drivers": [{"feature": d["feature"], "label": feature_label(d["feature"]), "value": d["value"], "raw": d.get("raw")} for d in (getattr(s, "drivers", None) or [])],
             "server_action": s.rec.action, "server_side": s.rec.side, "server_stake": s.rec.stake}
 
 
@@ -73,7 +76,8 @@ def build_payload(slate: list[SlateGame], cfg: RiskConfig, perf: dict | None, mo
     payload = {
         "generated_at": now.isoformat(timespec="seconds"), "public_safe": ps, "date": date, "run_type": run_type, "notes": notes or [],
         "model": {"version": model_entry.get("version"), "p_source": model_entry.get("p_source"), "status": drift.get("status", "UNKNOWN"),
-                  "reasons": drift.get("performance", {}).get("reasons", []), "train_end": model_entry.get("train_end")},
+                  "reasons": drift.get("performance", {}).get("reasons", []), "train_end": model_entry.get("train_end"),
+                  "inputs": model_inputs(list(model_entry.get("features") or []))},
         "odds": odds_meta or {"enabled": False},
         "policy": {"bankroll": cfg.bankroll, "max_bet_pct": cfg.max_bet_pct, "max_daily_exposure_pct": cfg.max_daily_exposure_pct,
                    "max_bets_per_day": cfg.max_bets_per_day, "min_stake": cfg.min_stake, "min_edge": cfg.min_edge,
