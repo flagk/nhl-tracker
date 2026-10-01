@@ -8,7 +8,7 @@
 
 ### Today's picks: 2026-09-30
 
-**3 game(s) · 0 recommended bet(s)** · morning run · model health **OK** · updated 2026-09-30 22:28 UTC
+**3 game(s) · 0 recommended bet(s)** · late run · model health **OK** · updated 2026-10-01 00:32 UTC
 
 | | |
 |---|---|
@@ -20,9 +20,9 @@
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| PIT @ PHI | 49.4% | 57.2% | no bet |
-| NYI @ TOR | 38.6% | 55.7% | no bet |
-| LAK @ COL | 62.7% | 64.1% | no bet |
+| PIT @ PHI | 49.4% | 21.8% | no bet |
+| NYI @ TOR | 38.6% | 86.1% | no bet |
+| LAK @ COL | 62.7% | 64.5% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
