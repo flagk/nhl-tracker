@@ -1,11 +1,181 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NHL pick history</title>
-<style>:root{--bg:#f6f7f9;--card:#fff;--ink:#14181f;--muted:#5b6573;--line:#e2e6ec;--accent:#1f5fbf;--warn:#9a6700;--warn-bg:#fff4d6}
-@media(prefers-color-scheme:dark){:root{--bg:#0f1319;--card:#171d26;--ink:#e8ecf2;--muted:#98a3b3;--line:#283140;--accent:#6ea4ff;--warn:#e3b341;--warn-bg:#2b2411}}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}main{max-width:980px;margin:0 auto;padding:16px}
-a{color:var(--accent)}h1{font-size:1.4rem}h2{font-size:1.1rem;margin-top:24px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:.88rem}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}th{color:var(--muted)}
-.disc{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:.92rem}</style></head>
-<body><main><h1>NHL pick history</h1><p><a href="index.html">&larr; Today's picks</a></p><div class="disc">Disclaimer. This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.</div>
-<h2>By day</h2><div class="card"><table><thead><tr><th>Date</th><th>Games</th><th>Bets</th><th>Staked</th><th>Profit</th><th>ROI</th><th>Pending</th></tr></thead><tbody><tr><td><a href='archive/2026-10-01.html'>2026-10-01</a></td><td>8</td><td>0</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td><a href='archive/2026-09-30.html'>2026-09-30</a></td><td>3</td><td>0</td><td>-</td><td>-</td><td>-</td><td>-</td></tr></tbody></table></div>
-<h2>Recommended bets</h2><div class="card"><table><thead><tr><th>Date</th><th>Game</th><th>Pick</th><th>Price</th><th>Stake</th><th>Result</th><th>Profit</th></tr></thead><tbody><tr><td colspan=7>No recommended bets yet.</td></tr></tbody></table></div>
-<div class="disc" style="margin-top:24px">Disclaimer. This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.</div></main></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NHL Model: History</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap">
+<style>/* Shared look for the picks, bets and history pages. Rink-side data sheet: ice-blue neutrals, navy ink, one red-line accent.
+   Layout concept: sticky top bar (brand, page nav, theme) over a single readable column; sections are headed by a condensed
+   scoreboard face and jump-linked from a chip row; probabilities are drawn as bars, not just printed. */
+:root {
+  --bg: #edf1f6; --surface: #ffffff; --surface-2: #f4f7fb; --ink: #0d1a2b; --muted: #54657b; --line: #d6dfea; --line-strong: #bccadb;
+  --accent: #cf2f2a; --accent-ink: #ffffff; --blue: #1d5fa8; --blue-soft: #dce9f8;
+  --good: #167447; --good-bg: #e3f4ea; --warn: #8f5200; --warn-bg: #fff0d1; --bad: #b4281f; --bad-bg: #fde7e4;
+  --shadow: 0 1px 2px rgba(13, 26, 43, .06), 0 6px 18px rgba(13, 26, 43, .05);
+  --display: "Barlow Condensed", "Roboto Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a1018; --surface: #121b27; --surface-2: #172230; --ink: #e8eff7; --muted: #92a4b8; --line: #223142; --line-strong: #31465d;
+    --accent: #ff6a5c; --accent-ink: #1a0a08; --blue: #74aaf0; --blue-soft: #16304d;
+    --good: #4cc38a; --good-bg: #12301f; --warn: #e6b13b; --warn-bg: #30270f; --bad: #ff8e84; --bad-bg: #33171a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 22px rgba(0, 0, 0, .25); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a1018; --surface: #121b27; --surface-2: #172230; --ink: #e8eff7; --muted: #92a4b8; --line: #223142; --line-strong: #31465d;
+  --accent: #ff6a5c; --accent-ink: #1a0a08; --blue: #74aaf0; --blue-soft: #16304d;
+  --good: #4cc38a; --good-bg: #12301f; --warn: #e6b13b; --warn-bg: #30270f; --bad: #ff8e84; --bad-bg: #33171a;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 22px rgba(0, 0, 0, .25); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.5 var(--body); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
+a { color: var(--blue); text-underline-offset: 2px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.1; margin: 0; text-wrap: balance; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+
+/* ---- top bar ---- */
+.topbar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.topbar-in { max-width: 1080px; margin: 0 auto; padding: .55rem 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: .55rem; text-decoration: none; color: var(--ink); font-family: var(--display); font-weight: 800; font-size: 1.35rem; letter-spacing: .02em; text-transform: uppercase; }
+.brand-mark { width: 12px; height: 26px; border-radius: 2px; background: linear-gradient(90deg, var(--accent) 0 40%, transparent 40% 60%, var(--accent) 60% 100%); }
+.nav { display: flex; gap: .15rem; margin-left: .5rem; flex: 1; min-width: 0; }
+.nav a { color: var(--muted); text-decoration: none; padding: .4rem .8rem; border-radius: 999px; font-weight: 600; font-size: .95rem; }
+.nav a:hover { color: var(--ink); background: var(--surface-2); }
+.nav a[aria-current="page"] { color: var(--ink); background: var(--surface-2); box-shadow: inset 0 -2px 0 var(--accent); border-radius: 8px 8px 0 0; }
+.theme-btn { font: inherit; font-size: .8rem; font-weight: 600; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: .3rem .75rem; cursor: pointer; }
+.theme-btn:hover { color: var(--ink); border-color: var(--line-strong); }
+
+/* ---- page ---- */
+.wrap { max-width: 1080px; margin: 0 auto; padding: 1.25rem 1rem 3rem; display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
+.pagehead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .5rem 1rem; }
+.pagehead h1 { font-size: clamp(2rem, 5vw, 3rem); text-transform: uppercase; letter-spacing: .01em; }
+.pagehead .when { color: var(--muted); font-size: .95rem; }
+.note { color: var(--muted); font-size: .88rem; }
+.statusbar { display: flex; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+.stat { flex: 1 1 140px; padding: .8rem 1rem; display: flex; flex-direction: column; gap: .1rem; border-right: 1px solid var(--line); min-width: 0; }
+.stat:last-child { border-right: 0; }
+.stat .k { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.stat .v { font-family: var(--display); font-weight: 700; font-size: 1.7rem; line-height: 1.1; }
+.chips { display: flex; gap: .4rem; flex-wrap: wrap; }
+.chip { text-decoration: none; color: var(--ink); background: var(--surface); border: 1px solid var(--line); padding: .3rem .8rem; border-radius: 999px; font-size: .88rem; font-weight: 600; }
+.chip:hover { border-color: var(--accent); }
+.section { display: flex; flex-direction: column; gap: .75rem; min-width: 0; }
+.section > h2 { font-size: 1.6rem; text-transform: uppercase; letter-spacing: .02em; display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+.section > h2 .count { font-size: .95rem; color: var(--muted); font-family: var(--body); font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lead { color: var(--muted); max-width: 70ch; margin: 0; }
+
+/* ---- surfaces ---- */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; box-shadow: var(--shadow); min-width: 0; }
+.card.flat { box-shadow: none; }
+.scroll { overflow-x: auto; }
+.banner { border-radius: var(--radius); padding: .65rem .9rem; font-size: .92rem; border: 1px solid var(--line); background: var(--surface); color: var(--muted); }
+.banner.disc { background: var(--warn-bg); color: var(--warn); border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
+.banner.bad { background: var(--bad-bg); color: var(--bad); border-color: color-mix(in srgb, var(--bad) 45%, transparent); }
+.banner.good { background: var(--good-bg); color: var(--good); border-color: color-mix(in srgb, var(--good) 45%, transparent); }
+.pill { display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px; padding: .1rem .65rem; font-size: .74rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.pill.rec { background: var(--accent); color: var(--accent-ink); }
+.pill.lean { background: var(--warn-bg); color: var(--warn); }
+.pill.ok { background: var(--good-bg); color: var(--good); } .pill.warn { background: var(--warn-bg); color: var(--warn); } .pill.alert { background: var(--bad-bg); color: var(--bad); }
+.pill.mute { background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); }
+.good { color: var(--good); } .bad { color: var(--bad); } .muted { color: var(--muted); }
+
+/* ---- pick cards ---- */
+.picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr)); gap: .9rem; }
+.pick { display: flex; flex-direction: column; gap: .8rem; }
+.pick.is-rec { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
+.pick-top { display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem; }
+.pick-team { font-family: var(--display); font-weight: 700; font-size: 1.9rem; line-height: 1; text-transform: uppercase; }
+.pick-sub { color: var(--muted); font-size: .88rem; margin-top: .2rem; }
+.pbar { display: flex; flex-direction: column; gap: .35rem; }
+.pbar-track { position: relative; height: 12px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.pbar-fill { position: absolute; inset: 0 auto 0 0; background: var(--blue); }
+.pbar-gap { position: absolute; top: 0; bottom: 0; }
+.pbar-gap.up { background: var(--good); } .pbar-gap.down { background: var(--bad); opacity: .85; }
+.pbar-mkt { position: absolute; top: -2px; bottom: -2px; width: 3px; margin-left: -1px; background: var(--ink); border-radius: 2px; }
+.pbar-labels { display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted); gap: .5rem; flex-wrap: wrap; }
+.pbar-labels b { color: var(--ink); font-weight: 700; }
+.kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr)); gap: .6rem 1rem; }
+.kv > div { display: flex; flex-direction: column; min-width: 0; }
+.kv .k { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.kv .v { font-family: var(--display); font-weight: 700; font-size: 1.3rem; line-height: 1.2; }
+.why { font-size: .88rem; color: var(--muted); margin: 0; }
+.why ul { margin: .3rem 0 0 1.1rem; padding: 0; }
+.mine { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; padding-top: .7rem; border-top: 1px dashed var(--line-strong); }
+.mine label { margin: 0; }
+.mine-out { font-size: .88rem; flex-basis: 100%; }
+
+/* ---- tables ---- */
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+th, td { text-align: left; padding: .5rem .65rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; background: var(--surface); position: sticky; top: 0; }
+tbody tr:hover { background: var(--surface-2); }
+td.num, th.num { text-align: right; }
+.edge-cell { display: inline-flex; align-items: center; gap: .4rem; font-weight: 700; }
+.dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--muted); display: inline-block; }
+.dot.up { background: var(--good); } .dot.down { background: var(--bad); }
+
+.reason { display: flex; flex-direction: column; gap: .2rem; align-items: flex-start; max-width: 30ch; font-size: .82rem; }
+.mine select { padding: .3rem .4rem; font-size: .85rem; } .mine input { padding: .3rem .5rem; font-size: .85rem; width: 6rem; }
+td .mine { padding: 0; border: 0; flex-wrap: nowrap; }
+@media (max-width: 640px) {
+  table.rtable thead { display: none; }
+  table.rtable, table.rtable tbody { display: block; }
+  table.rtable tr { display: grid; grid-template-columns: 1fr 1fr; gap: .25rem 1rem; padding: .75rem .1rem; border-bottom: 1px solid var(--line); }
+  table.rtable tr:last-child { border-bottom: 0; }
+  table.rtable td { display: flex; flex-direction: column; border: 0; padding: .1rem 0; text-align: left; min-width: 0; }
+  table.rtable td.num { text-align: left; }
+  table.rtable td:first-child { grid-column: 1 / -1; font-size: 1rem; }
+  table.rtable td::before { content: attr(data-label); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  table.rtable td:first-child::before { display: none; }
+  table.rtable td[colspan] { display: block; grid-column: 1 / -1; }
+  table.rtable td[colspan]::before { display: none; }
+  .card.scroll { padding: .4rem .8rem; }
+}
+
+/* ---- forms ---- */
+label { display: block; font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: .25rem; }
+input, select, button { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 8px; padding: .45rem .6rem; min-width: 0; }
+input, select { width: 100%; }
+.mine input, .mine select { width: auto; }
+.mine input { width: 7.5rem; }
+button { cursor: pointer; width: auto; font-weight: 600; }
+button:hover { border-color: var(--accent); }
+.btn-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); padding: .5rem 1.1rem; }
+.btn-primary:hover { filter: brightness(1.06); }
+.btn-ghost { background: transparent; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .8rem 1rem; }
+details.drawer { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+details.drawer > summary { cursor: pointer; list-style: none; padding: .8rem 1.1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; font-weight: 600; }
+details.drawer > summary::-webkit-details-marker { display: none; }
+details.drawer > summary::after { content: "Edit"; font-size: .8rem; color: var(--blue); }
+details.drawer[open] > summary::after { content: "Close"; }
+details.drawer > .drawer-body { padding: 0 1.1rem 1.1rem; display: flex; flex-direction: column; gap: .8rem; }
+.tabs { display: inline-flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 2px; }
+.tabs button { border: 0; background: transparent; color: var(--muted); padding: .45rem 1rem; border-radius: 7px; }
+.tabs button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgba(0, 0, 0, .08); }
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); gap: .6rem 1rem; }
+.metric .v { font-family: var(--display); font-weight: 700; font-size: 1.5rem; line-height: 1.15; }
+.metric .k { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.check { display: flex; gap: .5rem; align-items: center; font-size: .9rem; text-transform: none; letter-spacing: 0; color: var(--ink); }
+.check input { width: auto; }
+.chart { width: 100%; height: auto; display: block; color: var(--muted); }
+.footer { color: var(--muted); font-size: .85rem; display: flex; flex-direction: column; gap: .6rem; }
+.stack { display: flex; flex-direction: column; gap: .6rem; }
+.row { display: flex; justify-content: space-between; gap: .75rem; flex-wrap: wrap; align-items: baseline; }
+@media (max-width: 640px) {
+  .nav { order: 3; flex-basis: 100%; margin-left: 0; }
+  .topbar-in { padding-block: .45rem; }
+  .stat { flex-basis: 45%; border-bottom: 1px solid var(--line); }
+  .pick-team { font-size: 1.6rem; }
+}
+</style></head>
+<body><header class="topbar"><div class="topbar-in"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>NHL Model</a>
+<nav class="nav" aria-label="Pages"><a href="index.html">Picks</a><a href="bets.html">Bets</a><a href="history.html" aria-current="page">History</a></nav></div></header>
+<main class="wrap"><div class="pagehead"><div class="stack"><h1>History</h1><div class="when">Every day's picks and how they settled. Open a day to see that day's full page.</div></div></div>
+<div class="note">Research and education only. Not betting advice. Stake only what you can afford to lose.</div>
+<nav class="chips" aria-label="Sections"><a class="chip" href="#by-day">By day</a><a class="chip" href="#bets">Recommended bets</a></nav>
+<section class="section" id="by-day"><h2>By day <span class="count">2</span></h2><div class="card flat scroll"><table class="rtable"><thead><tr><th>Date</th><th class="num">Games</th><th class="num">Bets</th><th class="num">Staked</th><th class="num">Profit</th><th class="num">ROI</th><th class="num">Pending</th></tr></thead><tbody><tr><td><a href='archive/2026-10-01.html'>2026-10-01</a></td><td class='num' data-label='Games'>8</td><td class='num' data-label='Bets'>0</td><td class='num' data-label='Staked'>-</td><td class='num ' data-label='Profit'>-</td><td class='num ' data-label='ROI'>-</td><td class='num' data-label='Pending'>-</td></tr><tr><td><a href='archive/2026-09-30.html'>2026-09-30</a></td><td class='num' data-label='Games'>3</td><td class='num' data-label='Bets'>0</td><td class='num' data-label='Staked'>-</td><td class='num ' data-label='Profit'>-</td><td class='num ' data-label='ROI'>-</td><td class='num' data-label='Pending'>-</td></tr></tbody></table></div></section>
+<section class="section" id="bets"><h2>Recommended bets <span class="count">latest 100</span></h2><div class="card flat scroll"><table class="rtable"><thead><tr><th>Date</th><th>Game</th><th>Pick</th><th class="num">Price</th><th class="num">Stake</th><th>Result</th><th class="num">Profit</th></tr></thead><tbody><tr><td colspan=7>No recommended bets yet.</td></tr></tbody></table></div></section>
+<footer class="footer"><div class="banner disc">Disclaimer. This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.</div></footer></main></body></html>

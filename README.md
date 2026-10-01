@@ -8,7 +8,7 @@
 
 ### Today's picks: 2026-10-01
 
-**8 game(s) · 0 recommended bet(s)** · morning run · model health **OK** · updated 2026-10-01 19:39 UTC
+**8 game(s) · 0 recommended bet(s)** · late run · model health **OK** · updated 2026-10-01 19:51 UTC
 
 | | |
 |---|---|
@@ -24,7 +24,7 @@
 | TBL @ NYR | 44.0% | 42.4% | no bet |
 | BUF @ CBJ | 48.7% | 48.8% | no bet |
 | MIN @ NSH | 46.7% | 42.7% | no bet |
-| SEA @ CGY | 53.0% | 50.2% | no bet |
+| SEA @ CGY | 53.0% | 50.1% | no bet |
 | CHI @ UTA | 67.1% | 66.7% | no bet |
 | EDM @ VAN | 44.6% | 34.4% | no bet |
 | FLA @ SJS | 50.0% | 42.3% | no bet |

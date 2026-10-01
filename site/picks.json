@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-10-01T19:39:51+00:00",
+ "generated_at": "2026-10-01T19:51:04+00:00",
  "public_safe": true,
  "date": "2026-10-01",
- "run_type": "morning",
+ "run_type": "late",
  "notes": [],
  "model": {
   "version": "20260930-8845bc",
@@ -13,9 +13,9 @@
  },
  "odds": {
   "enabled": true,
-  "captured_at": "2026-10-01T19:39:36+00:00",
+  "captured_at": "2026-10-01T19:50:43+00:00",
   "stale": false,
-  "remaining": 488,
+  "remaining": 484,
   "source": "live"
  },
  "policy": {
@@ -47,15 +47,15 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-01T19:39:36+00:00",
+   "odds_captured_at": "2026-10-01T19:50:43+00:00",
    "sides": {
     "home": {
      "team": "NJD",
      "p_model": 0.6307836552330608,
-     "p_market": 0.6132142872242894,
-     "p_adj": 0.6213052132231366,
-     "edge": 0.017569368008771402,
-     "ev": -0.005911658842981393,
+     "p_market": 0.6132249248153987,
+     "p_adj": 0.6213117251783039,
+     "edge": 0.017558730417662094,
+     "ev": -0.00590123971471368,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.6,
@@ -68,13 +68,13 @@
     "away": {
      "team": "PHI",
      "p_model": 0.3692163447669392,
-     "p_market": 0.3867857127757106,
-     "p_adj": 0.37869478677686347,
-     "edge": -0.017569368008771402,
-     "ev": -0.03432829371899815,
+     "p_market": 0.3867750751846013,
+     "p_adj": 0.37868827482169604,
+     "edge": -0.017558730417662094,
+     "ev": -0.041918664701109165,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.55,
+     "best_decimal": 2.53,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -116,28 +116,28 @@
      "side": "home",
      "label": "NJD -1.5",
      "point": -1.5,
-     "p_model": 0.3643517145391845,
-     "p_market": 0.3807125504411173,
+     "p_model": 0.3643517145391844,
+     "p_market": 0.37990818244366287,
      "p_push": 0.0,
-     "edge": -0.01636083590193277,
-     "ev": -0.07454664507047126,
+     "edge": -0.015556467904478455,
+     "ev": -0.0745466450704716,
      "best_decimal": 2.54,
      "best_book": null,
-     "n_books": 9
+     "n_books": 8
     },
     {
      "market": "spreads",
      "side": "away",
      "label": "PHI +1.5",
      "point": 1.5,
-     "p_model": 0.6356482854608154,
-     "p_market": 0.6192874495588827,
+     "p_model": 0.6356482854608156,
+     "p_market": 0.6200918175563371,
      "p_push": 0.0,
-     "edge": 0.016360835901932713,
-     "ev": 0.01068077388269656,
+     "edge": 0.01555646790447851,
+     "ev": 0.010680773882696948,
      "best_decimal": 1.59,
      "best_book": null,
-     "n_books": 9
+     "n_books": 8
     }
    ],
    "goals": {
@@ -166,7 +166,7 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-01T19:39:36+00:00",
+   "odds_captured_at": "2026-10-01T19:50:43+00:00",
    "sides": {
     "home": {
      "team": "NYR",
@@ -284,7 +284,7 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-01T19:39:36+00:00",
+   "odds_captured_at": "2026-10-01T19:50:43+00:00",
    "sides": {
     "home": {
      "team": "CBJ",
@@ -354,9 +354,9 @@
      "label": "CBJ +1.5",
      "point": 1.5,
      "p_model": 0.6982373528065584,
-     "p_market": 0.7062744023287365,
+     "p_market": 0.7055557778706356,
      "p_push": 0.0,
-     "edge": -0.008037049522178097,
+     "edge": -0.007318425064077205,
      "ev": -0.022467706070818272,
      "best_decimal": 1.4,
      "best_book": null,
@@ -368,11 +368,11 @@
      "label": "BUF -1.5",
      "point": -1.5,
      "p_model": 0.3017626471934416,
-     "p_market": 0.2937255976712635,
+     "p_market": 0.2944442221293644,
      "p_push": 0.0,
-     "edge": 0.008037049522178097,
-     "ev": -0.01021851720551159,
-     "best_decimal": 3.28,
+     "edge": 0.007318425064077205,
+     "ev": -0.022289023093249205,
+     "best_decimal": 3.24,
      "best_book": null,
      "n_books": 9
     }
@@ -404,7 +404,7 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-01T19:39:36+00:00",
+   "odds_captured_at": "2026-10-01T19:50:43+00:00",
    "sides": {
     "home": {
      "team": "NSH",
@@ -499,7 +499,7 @@
    ],
    "goals": {
     "lam_home": 2.9049792575497593,
-    "lam_away": 3.099994119692535,
+    "lam_away": 3.0999941196925347,
     "exp_total": 6.118817827537657
    },
    "server_action": "NO_BET",
@@ -522,18 +522,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-01T19:39:36+00:00",
+   "odds_captured_at": "2026-10-01T19:50:43+00:00",
    "sides": {
     "home": {
      "team": "CGY",
      "p_model": 0.5299315910836839,
-     "p_market": 0.5015198892054983,
-     "p_adj": 0.51312380451719,
-     "edge": 0.028411701878185647,
-     "ev": -0.004539819236651477,
-     "kelly_full": 0.0,
+     "p_market": 0.5013730333885392,
+     "p_adj": 0.5130148275034591,
+     "edge": 0.028558557695144704,
+     "ev": 0.0003789136317451369,
+     "kelly_full": 0.0003988564544685652,
      "best_book": null,
-     "best_decimal": 1.94,
+     "best_decimal": 1.95,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -543,10 +543,10 @@
     "away": {
      "team": "SEA",
      "p_model": 0.47006840891631607,
-     "p_market": 0.4984801107945017,
-     "p_adj": 0.4868761954828101,
-     "edge": -0.028411701878185647,
-     "ev": -0.05546018076334852,
+     "p_market": 0.4986269666114608,
+     "p_adj": 0.486985172496541,
+     "edge": -0.028558557695144704,
+     "ev": -0.055248765356710416,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.94,
@@ -564,9 +564,9 @@
      "label": "Over 6",
      "point": 6.0,
      "p_model": 0.4924124516532283,
-     "p_market": 0.4798892514812127,
+     "p_market": 0.4769317485237096,
      "p_push": 0.12494130398207892,
-     "edge": 0.01252320017201558,
+     "edge": 0.015480703129518658,
      "ev": 0.003956491589268418,
      "best_decimal": 2.04,
      "best_book": null,
@@ -578,11 +578,11 @@
      "label": "Under 6",
      "point": 6.0,
      "p_model": 0.5075875483467718,
-     "p_market": 0.5201107485187872,
+     "p_market": 0.5230682514762903,
      "p_push": 0.12494130398207892,
-     "edge": -0.01252320017201547,
-     "ev": -0.02669610051081528,
-     "best_decimal": 1.91,
+     "edge": -0.015480703129518547,
+     "ev": -0.053346234401090764,
+     "best_decimal": 1.85,
      "best_book": null,
      "n_books": 6
     },
@@ -592,9 +592,9 @@
      "label": "CGY -1.5",
      "point": -1.5,
      "p_model": 0.2959776353525218,
-     "p_market": 0.2869153014377678,
+     "p_market": 0.285902844483667,
      "p_push": 0.0,
-     "edge": 0.009062333914754028,
+     "edge": 0.010074790868854822,
      "ev": -0.017354250629627588,
      "best_decimal": 3.32,
      "best_book": null,
@@ -606,9 +606,9 @@
      "label": "SEA +1.5",
      "point": 1.5,
      "p_model": 0.7040223646474781,
-     "p_market": 0.7130846985622322,
+     "p_market": 0.714097155516333,
      "p_push": 0.0,
-     "edge": -0.009062333914754084,
+     "edge": -0.010074790868854877,
      "ev": -0.04252958407942964,
      "best_decimal": 1.36,
      "best_book": null,
@@ -642,15 +642,15 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-01T19:39:36+00:00",
+   "odds_captured_at": "2026-10-01T19:50:43+00:00",
    "sides": {
     "home": {
      "team": "UTA",
      "p_model": 0.6707327862167006,
-     "p_market": 0.6670350886637276,
-     "p_adj": 0.6688769419957188,
-     "edge": 0.0036976975529730005,
-     "ev": -0.01675089526629342,
+     "p_market": 0.6670730623789446,
+     "p_adj": 0.6688961416435539,
+     "edge": 0.003659723837756035,
+     "ev": -0.01672267178397574,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.47,
@@ -663,13 +663,13 @@
     "away": {
      "team": "CHI",
      "p_model": 0.3292672137832994,
-     "p_market": 0.3329649113362724,
-     "p_adj": 0.33112305800428116,
-     "edge": -0.0036976975529730005,
-     "ev": -0.049676823527712966,
+     "p_market": 0.3329269376210554,
+     "p_adj": 0.3311038583564461,
+     "edge": -0.003659723837756035,
+     "ev": -0.04642088793343524,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.87,
+     "best_decimal": 2.88,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -752,7 +752,7 @@
    "home_goalie": "K. Lankinen",
    "away_goalie": "C. Ingram",
    "goalie_status": "probable",
-   "p_home": 0.4457480146652525,
+   "p_home": 0.44574801466525243,
    "blocked": "early-season sample size: a team has only played 1 games (< 10)",
    "notes": [
     "EDM have the clearly better goal differential this season (gap 0.49 goals/game).",
@@ -762,14 +762,14 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-01T19:39:36+00:00",
+   "odds_captured_at": "2026-10-01T19:50:43+00:00",
    "sides": {
     "home": {
      "team": "VAN",
-     "p_model": 0.4457480146652525,
+     "p_model": 0.44574801466525243,
      "p_market": 0.34374768074139644,
      "p_adj": 0.3568581997335992,
-     "edge": 0.10200033392385605,
+     "edge": 0.10200033392385599,
      "ev": 0.00990870524608578,
      "kelly_full": 0.005414593030647967,
      "best_book": null,
@@ -782,10 +782,10 @@
     },
     "away": {
      "team": "EDM",
-     "p_model": 0.5542519853347475,
+     "p_model": 0.5542519853347476,
      "p_market": 0.6562523192586036,
      "p_adj": 0.6431418002664009,
-     "edge": -0.1020003339238561,
+     "edge": -0.10200033392385599,
      "ev": -0.04171871760306267,
      "kelly_full": 0.0,
      "best_book": null,
@@ -858,7 +858,7 @@
    "goals": {
     "lam_home": 2.7985965550213225,
     "lam_away": 3.2172938407248295,
-    "exp_total": 6.12782977773685
+    "exp_total": 6.127829777736851
    },
    "server_action": "NO_BET",
    "server_side": null,
@@ -880,7 +880,7 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-01T19:39:36+00:00",
+   "odds_captured_at": "2026-10-01T19:50:43+00:00",
    "sides": {
     "home": {
      "team": "SJS",
