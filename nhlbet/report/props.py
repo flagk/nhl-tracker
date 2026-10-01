@@ -79,6 +79,6 @@ class PropEngine:
                 game_id=game_id, player_id=int(pid), name=str(r["name"]), team=str(r.team), opp=str(r.opp), point=float(line), lam=lam, p_over=po, p_over_market=pm,
                 over_price=bo, under_price=bu, edge_over=po - pm, ev_over=po * (bo - 1) - (1 - po), ev_under=(1 - po) * (bu - 1) - po, n_books=nb, n_prev=int(r.n_prev),
                 history=[{"date": str(d.date()), "opp": o, "sog": int(s)} for d, o, s in zip(last10.game_date, last10.opp, last10.sog)],
-                avg_season=float(season.sog.mean()) if len(season) else None, avg_l10=float(last10.sog.mean()) if len(last10) else None,
+                avg_season=float(season.sog.mean()) if len(season) >= 5 else None,          # a one-game 'season average' early in the year would only mislead avg_l10=float(last10.sog.mean()) if len(last10) else None,
                 hit_l10=float((last10.sog > line).mean()) if len(last10) else None, hit_l20=float((last20.sog > line).mean()) if len(last20) else None))
         return sorted(out, key=lambda q: -max(abs(q.edge_over), 0))

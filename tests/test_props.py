@@ -191,6 +191,7 @@ def test_engine_prices_matched_players_with_history_and_skips_unknowns():
         assert 0.0 < q.p_over < 1.0 and 0.3 < q.p_over_market < 0.7 and q.n_books == 2 and len(q.history) == 10 and q.n_prev >= MIN_GAMES
         assert q.over_price == 1.95 and q.under_price == 1.9 and q.ev_over == pytest.approx(q.p_over * 0.95 - (1 - q.p_over))
         assert q.hit_l10 == pytest.approx(np.mean([h["sog"] > 2.5 for h in q.history]))
+        assert q.avg_season is None or q.avg_season > 0                                       # shown only with 5+ games this season
 
 
 def pq(pid, name, p_over, pm=0.5, point=2.5, over=1.91, under=1.91, n_prev=30):
