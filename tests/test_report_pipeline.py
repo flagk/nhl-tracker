@@ -202,6 +202,12 @@ def test_context_notes():
 
 
 # ---------------------------------------------------------------- end-to-end on a synthetic league
+def _noon(day, hours=0):
+    """Pinned clock for end-to-end runs: ~17:00 UTC on the game day, before the 23:00 UTC puck drop (synthetic games are in 2024)."""
+    from datetime import datetime, timedelta
+    return datetime.fromisoformat(f"{day}T17:00:00+00:00") + timedelta(hours=hours)
+
+
 def _e2e_setup(tmp_path, league, monkeypatch):
     monkeypatch.chdir(tmp_path)
     (tmp_path / "data/models").mkdir(parents=True)
@@ -227,7 +233,7 @@ def test_end_to_end_daily_run(league, tmp_path, monkeypatch):
     assert (st.df("SELECT game_id FROM odds_snapshots").game_id == 99999).all()
     from nhlbet.report.readme import END as _E, START as _S
     (tmp_path / "README.md").write_text(f"# Test repo\n\n{_S}\nplaceholder\n{_E}\n\ntail\n")
-    r = run_daily(day, "morning", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models")
+    r = run_daily(day, "morning", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models", now=_noon(day))
     assert r["games"] == 1
     rep = (tmp_path / "reports" / "latest.md").read_text()
     assert (tmp_path / "reports/daily" / f"{day}-morning.md").exists() and "TOR @ BOS" in rep and rep.count(DISCLAIMER) == 2
@@ -248,7 +254,7 @@ def test_end_to_end_daily_run(league, tmp_path, monkeypatch):
     assert len(Store(str(tmp_path / "t.db")).df("SELECT * FROM shadow_bets")) == len(STRATEGIES)      # paper trading ran on the slate
     assert any((tmp_path / "data/logs/shadow_bets").glob("*.csv")) and "Paper trading" in rep
     # late run: no retrain, adds a second recommendation row for the same game (history kept, final = latest)
-    r2 = run_daily(day, "late", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models")
+    r2 = run_daily(day, "late", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models", now=_noon(day, 4))
     assert r2["model"] == r["model"]
     s2 = Store(str(tmp_path / "t.db"))
     assert len(s2.df("SELECT * FROM recommendations")) == 2 and len(final_recommendations(s2)) == 1
@@ -259,14 +265,14 @@ def test_stale_odds_produce_no_bet(league, tmp_path, monkeypatch):
     books = [("bookA", 2.60, 1.55, f"{day}T15:00:00Z")]
     fx = type("Fx", (), {"events": [F.odds_event("e1", commence=f"{day}T23:00:00Z", books=books)], "captured_at": "2000-01-01T00:00:00+00:00", "remaining": 1, "used": 1, "source": "live"})()
     record_fetch(st, fx)
-    run_daily(day, "morning", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models")
+    run_daily(day, "morning", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models", now=_noon(day))
     rec = Store(str(tmp_path / "t.db")).df("SELECT * FROM recommendations").iloc[0]
     assert rec.action == "NO_BET" and rec.odds_stale == 1 and "stale" in rec.reasons
 
 
 def test_no_odds_means_no_bet_and_is_reported(league, tmp_path, monkeypatch):
     st, day = _e2e_setup(tmp_path, league, monkeypatch)
-    run_daily(day, "morning", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models")
+    run_daily(day, "morning", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models", now=_noon(day))
     assert "no odds" in (tmp_path / "reports/latest.md").read_text()
     assert Store(str(tmp_path / "t.db")).df("SELECT action FROM recommendations").action.iloc[0] == "NO_BET"
 

@@ -8,11 +8,21 @@ from nhlbet.data.store import Store
 from nhlbet.odds.math import devig
 
 
+def pregame_only(df: pd.DataFrame) -> pd.DataFrame:
+    """Drop quotes captured after the game's scheduled start: those are in-play prices (a 2% favourite in the third period), not the pre-game market.
+    Rows without a commence time are kept."""
+    if df.empty or "commence_time" not in df:
+        return df
+    cap = pd.to_datetime(df.captured_at, utc=True, errors="coerce", format="ISO8601")
+    start = pd.to_datetime(df.commence_time, utc=True, errors="coerce", format="ISO8601")
+    return df[~(cap > start)]
+
+
 def h2h_wide(store: Store, since: str | None = None) -> pd.DataFrame:
     """One row per (captured_at, event, book): ``home``/``away`` = decimal odds of each side (moneyline only);
-    ``home_team``/``away_team`` = abbreviations."""
+    ``home_team``/``away_team`` = abbreviations. Pre-game quotes only."""
     q = "SELECT * FROM odds_snapshots WHERE market='h2h'" + (" AND captured_at >= ?" if since else "")
-    df = store.df(q, [since] if since else [])
+    df = pregame_only(store.df(q, [since] if since else []))
     if df.empty:
         return df
     df["side"] = np.where(df.outcome == df.home, "home", np.where(df.outcome == df.away, "away", "other"))

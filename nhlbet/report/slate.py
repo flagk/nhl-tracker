@@ -20,6 +20,7 @@ from nhlbet.risk.policy import Recommendation, RiskConfig, recommend_slate
 from nhlbet.risk.shadow import shadow_bets
 
 log = logging.getLogger(__name__)
+IN_PLAY_WINDOW_H = 12.0
 
 
 @dataclass
@@ -73,6 +74,12 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
     tables = load_tables(store)
     games = tables["games"]
     today = games[(games.game_date == pd.Timestamp(date)) & (games.source == "nhl_api") & (games.home_score.isna())]
+    if len(today):                       # a game that started within the last 12h is in progress / awaiting its score: its odds are in-play prices
+        start = pd.to_datetime(today.start_utc, utc=True, errors="coerce")
+        live = (start <= pd.Timestamp(now)) & (start > pd.Timestamp(now) - pd.Timedelta(hours=IN_PLAY_WINDOW_H))
+        if live.any():
+            log.info("skipping %d game(s) already under way: %s", int(live.sum()), ", ".join(f"{a}@{h}" for a, h in zip(today[live].away, today[live].home)))
+        today = today[~live.to_numpy()]
     if today.empty:
         log.info("no unplayed games on %s", date)
         return []
