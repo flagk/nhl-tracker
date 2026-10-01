@@ -98,11 +98,12 @@ def test_alt_strategies_follow_their_rules():
         by.setdefault(r["strategy"], {})[r["game_id"]] = r
     assert len(by) == len(STRATEGIES)
     te = by["totals_edge"]
-    assert te[1]["action"] == "BET" and te[1]["side"] == "over" and te[1]["stake"] == 10.0 and te[1]["market"] == "totals" and te[1]["point"] == 6.5     # +5% edge
+    assert te[1]["action"] == "BET" and te[1]["side"] == "over" and te[1]["stake"] == 18.0 and te[1]["market"] == "totals" and te[1]["point"] == 6.5     # +5% edge
     assert te[2]["action"] == "NO_BET" and te[3]["action"] == "NO_BET" and te[4]["action"] == "NO_BET"         # 0% edge / no odds / model ALERT
     ev = by["every_total"]
     assert ev[1]["side"] == "over" and ev[2]["side"] == "under" and ev[2]["action"] == "BET" and ev[3]["action"] == "NO_BET"   # model's side, edge ignored
-    assert by["always_over"][2]["side"] == "over" and by["always_over"][2]["label"] == "over 6.5"
+    assert ev[1]["stake"] == 7.0 and ev[2]["stake"] == 8.0                        # model 52% -> conviction 0.08 -> $7; model 53% on the under -> 0.12 -> $8
+    assert by["always_over"][2]["side"] == "over" and by["always_over"][2]["label"] == "over 6.5" and by["always_over"][2]["stake"] == 10.0     # control: always $10
     assert by["puckline_edge"][1]["action"] == "NO_BET"                                                          # +2% < 3% threshold
     assert by["every_puckline"][1]["side"] == "away" and by["every_puckline"][1]["market"] == "spreads"
 

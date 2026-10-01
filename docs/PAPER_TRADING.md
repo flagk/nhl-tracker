@@ -33,3 +33,12 @@ control loses about the margin on a fair market. Stakes are always pretend; noth
 `totals_edge`, `puckline_edge`, `every_total`, `every_puckline` and the control `always_over` use the goals model (see [MARKETS.md](MARKETS.md)).
 They settle on the score (totals exclude the shootout goal, the puck line uses the official margin; pushes refund the stake), and have no CLV because
 closing snapshots only fetch moneylines.
+
+
+## Stake sizes ($5 to $30)
+Pretend stakes scale with the model's conviction so the data can answer "do the bets it is surest about do better?":
+- edge-based strategies: a 3-point edge is about $12, a 10-point edge or more is $30;
+- "bet every game" strategies: 50% model probability is $5, 75% or more is $30;
+- the live-policy copies (`no_guard`, `edge_1pct`, `no_shrink`) keep their Kelly-based sizing;
+- the no-skill controls (`market_favorite`, `always_over`) always stake $10, so their ROI is a clean baseline.
+Compare strategies on ROI (profit per dollar staked), not total profit, because stake sizes differ.

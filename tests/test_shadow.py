@@ -141,8 +141,26 @@ def test_every_game_bets_the_models_side_even_at_negative_edge_and_is_listed():
     cfg = RiskConfig(bankroll=1000)
     games = [G(1, q(0.60, 0.64, 1.55, 2.60)), G(2, q(0.45, 0.50, 1.95, 1.95)), G(3, None)]   # game 1: model likes home but the price is too short (edge -4%)
     eg = by_strategy(shadow_bets(games, cfg, "r", "t", "d"))["every_game"]
-    assert eg[1]["action"] == "BET" and eg[1]["side"] == "home" and eg[1]["stake"] == 10.0 and eg[1]["edge"] < 0
+    assert eg[1]["action"] == "BET" and eg[1]["side"] == "home" and eg[1]["stake"] == 15.0 and eg[1]["edge"] < 0
     assert eg[2]["side"] == "away" and eg[2]["stake"] == 10.0 and eg[3]["action"] == "NO_BET"
     from nhlbet.report.markdown import _fake_bets_today
     md = "\n".join(_fake_bets_today(games, cfg, "d"))
-    assert "NOT recommendations" in md and "A1 @ H1" in md and "A2 @ H2" in md and "A3" not in md and "Total pretend stake $20.00" in md
+    assert "NOT recommendations" in md and "A1 @ H1" in md and "A2 @ H2" in md and "A3" not in md and "Total pretend stake $25.00" in md
+
+
+def test_paper_stakes_scale_with_conviction_between_5_and_30_and_controls_stay_flat():
+    from nhlbet.risk.shadow import CONTROL_STAKE, edge_conviction, paper_stake, side_conviction
+    assert [paper_stake(c) for c in (-1, 0, 0.5, 1, 7)] == [5.0, 5.0, 18.0, 30.0, 30.0]            # clipped, whole dollars (17.5 rounds to 18)
+    assert paper_stake(edge_conviction(0.03)) == 12.0 and paper_stake(edge_conviction(0.10)) == 30.0 and paper_stake(edge_conviction(0.25)) == 30.0
+    assert paper_stake(side_conviction(0.50)) == 5.0 and paper_stake(side_conviction(0.75)) == 30.0 and paper_stake(side_conviction(0.62)) == 17.0
+    cfg = RiskConfig(bankroll=1000)
+    games = [G(i, q(0.50 + 0.04 * i, 0.50, 1.95, 1.95)) for i in range(1, 7)]
+    rows = shadow_bets(games, cfg, "r", "t", "d")
+    stakes = {}
+    for r in rows:
+        if r["action"] == "BET":
+            stakes.setdefault(r["strategy"], []).append(r["stake"])
+    assert set(stakes["market_favorite"]) == {CONTROL_STAKE}                                         # controls: always $10, so their ROI is a clean baseline
+    for name in ("every_game", "flat_model_side"):
+        assert all(5.0 <= x <= 30.0 and x == int(x) for x in stakes[name]) and len(set(stakes[name])) > 1     # varies, whole dollars, in range
+        assert stakes[name] == sorted(stakes[name])                                                  # a surer model never stakes less (games are in rising-probability order)

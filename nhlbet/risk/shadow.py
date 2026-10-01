@@ -17,7 +17,24 @@ from nhlbet.odds.edge import SideQuote
 from nhlbet.risk.policy import RiskConfig, game_block_reason, recommend_slate
 from nhlbet.risk.shrink import shrink_to_market
 
-FLAT_PCT = 0.01   # flat strategies stake 1% of bankroll per bet
+PAPER_MIN, PAPER_MAX = 5.0, 30.0     # pretend stakes scale with the model's conviction between these
+CONTROL_STAKE = 10.0                 # no-skill controls always stake the same, so their ROI is a clean baseline
+
+
+def paper_stake(conviction: float) -> float:
+    """$5 at no conviction up to $30 at full conviction, rounded to whole dollars. conviction is clipped to [0, 1]."""
+    c = min(1.0, max(0.0, float(conviction)))
+    return float(round(PAPER_MIN + (PAPER_MAX - PAPER_MIN) * c))
+
+
+def edge_conviction(edge: float) -> float:
+    """A 3-point edge is about $12, a 10-point edge or more is the $30 maximum."""
+    return edge / 0.10
+
+
+def side_conviction(p: float) -> float:
+    """Bets on the model's favoured side of a two-way market: 50% -> $5, 75% or more -> $30."""
+    return (p - 0.5) / 0.25
 
 
 @dataclass(frozen=True)
@@ -34,14 +51,14 @@ STRATEGIES: tuple[Strategy, ...] = (
              (("min_edge", 0.01), ("min_edge_unconfirmed_goalie", 0.01), ("min_ev", 0.0))),
     Strategy("no_shrink", "Live policy trusting the raw model fully (no shrinkage toward the market)", "policy",
              (("trust_w0", 1.0), ("trust_d0", 1e9), ("max_disagreement", 1.0))),
-    Strategy("flat_model_side", "Flat 1% on every game where the model sees any positive edge", "flat_edge"),
-    Strategy("every_game", "Flat 1% on the model's preferred side of EVERY game that has fresh odds (no edge filter, even at a negative edge)", "model_side"),
-    Strategy("totals_edge", "Goals model: flat 1% on the over/under side with a 3%+ raw edge vs the market (experimental market)", "alt_edge", (("market", "totals"),)),
-    Strategy("puckline_edge", "Goals model: flat 1% on the puck-line side with a 3%+ raw edge vs the market (experimental market)", "alt_edge", (("market", "spreads"),)),
-    Strategy("every_total", "Goals model: flat 1% on its over/under side of EVERY game with fresh totals odds, no edge filter", "alt_every", (("market", "totals"),)),
-    Strategy("every_puckline", "Goals model: flat 1% on its puck-line side of EVERY game with fresh spread odds, no edge filter", "alt_every", (("market", "spreads"),)),
-    Strategy("always_over", "CONTROL: flat 1% on the Over of every game (no skill; shows what totals vig plus base rate cost)", "alt_control", (("market", "totals"),)),
-    Strategy("market_favorite", "CONTROL: flat 1% on the market favourite (no skill; shows what the bookmaker margin costs)", "market_favorite"),
+    Strategy("flat_model_side", "$5-$30 (more for a bigger edge) on every game where the model sees any positive edge", "flat_edge"),
+    Strategy("every_game", "$5-$30 (more when the model is surer) on the model's preferred side of EVERY game with fresh odds, no edge filter, even at a negative edge", "model_side"),
+    Strategy("totals_edge", "Goals model: $5-$30 on the over/under side with a 3%+ raw edge vs the market (experimental market)", "alt_edge", (("market", "totals"),)),
+    Strategy("puckline_edge", "Goals model: $5-$30 on the puck-line side with a 3%+ raw edge vs the market (experimental market)", "alt_edge", (("market", "spreads"),)),
+    Strategy("every_total", "Goals model: $5-$30 on its over/under side of EVERY game with fresh totals odds, no edge filter", "alt_every", (("market", "totals"),)),
+    Strategy("every_puckline", "Goals model: $5-$30 on its puck-line side of EVERY game with fresh spread odds, no edge filter", "alt_every", (("market", "spreads"),)),
+    Strategy("always_over", "CONTROL: flat $10 on the Over of every game (no skill; shows what totals vig plus base rate cost)", "alt_control", (("market", "totals"),)),
+    Strategy("market_favorite", "CONTROL: flat $10 on the market favourite (no skill; shows what the bookmaker margin costs)", "market_favorite"),
 )
 
 
@@ -99,12 +116,15 @@ def shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date
                     continue
                 if st.kind == "alt_control":
                     q = next(x for x in qs if x.side == "over")
+                    rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name, q, CONTROL_STAKE))
+                    continue
                 else:
                     q = max(qs, key=lambda x: x.edge if st.kind == "alt_edge" else x.model_prob)
                 if st.kind == "alt_edge" and q.edge < cfg.min_edge:
                     rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name))
                     continue
-                rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name, q, round(cfg.bankroll * FLAT_PCT, 2)))
+                conv = edge_conviction(q.edge) if st.kind == "alt_edge" else side_conviction(q.model_prob)
+                rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name, q, paper_stake(conv)))
             continue
         for g in games:
             if not _usable(g.quotes, cfg, g.ctx):
@@ -116,5 +136,7 @@ def shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date
                 rows.append(_row(run_id, run_at, date, g.game_id, st.name))
                 continue
             p_adj = shrink_to_market(q.model_prob, q.market_prob, cfg.trust_w0, cfg.trust_d0)
-            rows.append(_row(run_id, run_at, date, g.game_id, st.name, "BET", q, round(cfg.bankroll * FLAT_PCT, 2), p_adj, q.ev))
+            stake = (CONTROL_STAKE if st.kind == "market_favorite" else
+                     paper_stake(edge_conviction(q.edge)) if st.kind == "flat_edge" else paper_stake(side_conviction(q.model_prob)))
+            rows.append(_row(run_id, run_at, date, g.game_id, st.name, "BET", q, stake, p_adj, q.ev))
     return rows
