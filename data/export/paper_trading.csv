@@ -1,1 +1,24 @@
 date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,clv_ev
+2026-09-30,always_over,2026020006,totals,6,PIT,PHI,over,Over 6,1.87,10,1,8.7,
+2026-09-30,always_over,2026020007,totals,6.5,LAK,COL,over,Over 6.5,2.06,10,1,10.6,
+2026-09-30,always_over,2026020008,totals,6,NYI,TOR,over,Over 6,1.97,10,0,-10,
+2026-09-30,every_game,2026020006,moneyline,,PIT,PHI,away,PIT,2.25,10,1,12.5,-0.036783
+2026-09-30,every_game,2026020007,moneyline,,LAK,COL,home,COL,1.53,10,1,5.3,-0.00873698
+2026-09-30,every_game,2026020008,moneyline,,NYI,TOR,away,NYI,2.2,10,0,-10,-0.0250727
+2026-09-30,every_puckline,2026020006,spreads,1.5,PIT,PHI,away,PIT +1.5,1.49,10,1,4.9,
+2026-09-30,every_puckline,2026020007,spreads,1.5,LAK,COL,away,LAK +1.5,1.67,10,0,-10,
+2026-09-30,every_puckline,2026020008,spreads,1.5,NYI,TOR,away,NYI +1.5,1.46,10,1,4.6,
+2026-09-30,every_total,2026020006,totals,6,PIT,PHI,under,Under 6,1.99,10,0,-10,
+2026-09-30,every_total,2026020007,totals,6.5,LAK,COL,under,Under 6.5,1.83,10,0,-10,
+2026-09-30,every_total,2026020008,totals,6,NYI,TOR,under,Under 6,1.91,10,1,9.1,
+2026-09-30,flat_model_side,2026020006,moneyline,,PIT,PHI,away,PIT,2.25,10,1,12.5,-0.036783
+2026-09-30,flat_model_side,2026020007,moneyline,,LAK,COL,away,LAK,2.73,10,0,-10,-0.0387242
+2026-09-30,flat_model_side,2026020008,moneyline,,NYI,TOR,away,NYI,2.2,10,0,-10,-0.0250727
+2026-09-30,market_favorite,2026020006,moneyline,,PIT,PHI,home,PHI,1.7,10,0,-10,-0.0277639
+2026-09-30,market_favorite,2026020007,moneyline,,LAK,COL,home,COL,1.53,10,1,5.3,-0.00873698
+2026-09-30,market_favorite,2026020008,moneyline,,NYI,TOR,home,TOR,1.77,10,1,7.7,-0.0143733
+2026-09-30,puckline_edge,2026020006,spreads,1.5,PIT,PHI,away,PIT +1.5,1.49,10,1,4.9,
+2026-09-30,puckline_edge,2026020007,spreads,1.5,LAK,COL,away,LAK +1.5,1.67,10,0,-10,
+2026-09-30,puckline_edge,2026020008,spreads,1.5,NYI,TOR,away,NYI +1.5,1.46,10,1,4.6,
+2026-09-30,totals_edge,2026020006,totals,6,PIT,PHI,under,Under 6,1.99,10,0,-10,
+2026-09-30,totals_edge,2026020007,totals,6.5,LAK,COL,under,Under 6.5,1.83,10,0,-10,

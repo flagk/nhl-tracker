@@ -1,1 +1,12 @@
 strategy,bets,staked,profit,roi,roi_lo,roi_hi,win_rate,avg_clv,n_clv
+always_over,3,30,9.3,0.31,,,0.666667,,0
+edge_1pct,0,0,0,,,,,,0
+every_game,3,30,7.8,0.26,,,0.666667,-0.0235309,3
+every_puckline,3,30,-0.5,-0.0166667,,,0.666667,,0
+every_total,3,30,-10.9,-0.363333,,,0.333333,,0
+flat_model_side,3,30,-7.5,-0.25,,,0.333333,-0.0335266,3
+market_favorite,3,30,3,0.1,,,0.666667,-0.0169581,3
+no_guard,0,0,0,,,,,,0
+no_shrink,0,0,0,,,,,,0
+puckline_edge,3,30,-0.5,-0.0166667,,,0.666667,,0
+totals_edge,2,20,-20,-1,,,0,,0

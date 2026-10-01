@@ -4,12 +4,16 @@
 
 Every recommendation is logged **before** its game and settled afterwards; passes (no bet) are the majority and are not listed here. [Back to the README](../README.md) · [Today's report](latest.md) · [Bet log CSV](../data/logs/bet_log.csv)
 
-No settled results yet. This page fills in automatically as games finish.
+## Overall
+
+- Games with a logged recommendation and a result: **3** (bet on 0; passed on 100%)
+- ⚠️ Far too few bets to separate skill from luck (about 6,900 would be needed to detect a true 3% ROI). Closing-line value converges much faster.
 
 ## By day
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
+| 2026-10-01 | 8 | 0 | - | - | - | - | [report](daily/2026-10-01-morning.md) · [page](../site/archive/2026-10-01.html) |
 | 2026-09-30 | 3 | 0 | - | - | - | - | [report](daily/2026-09-30-late.md) · [page](../site/archive/2026-09-30.html) |
 
 ## Recommended bets

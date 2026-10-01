@@ -1,0 +1,2 @@
+run_id,run_at,run_type,game_id,game_date,home,away,home_goalie,away_goalie,goalie_status,model_version,p_model,p_adj,p_market,p_stack_raw,action,side,team,book,decimal,stake,edge,ev,reasons,odds_captured_at,odds_stale,model_status
+2026-09-30-late-0032,2026-10-01T00:32:43+00:00,late,2026020007,2026-09-30,COL,LAK,S. Wedgewood,A. Forsberg,probable,20260929-3184e7-r2,0.6267958487936824,,0.6448460604714793,0.6491949418019048,NO_BET,,,,,0.0,,,early-season sample size: a team has only played 0 games (< 10),2026-10-01T00:32:42+00:00,0,OK
