@@ -66,6 +66,9 @@ def render_report(date: str, run_type: str, slate: list[SlateGame], cfg: RiskCon
         stale = " (STALE)" if odds_meta.get("stale") else ""
         credits = "" if odds_meta.get("remaining") is None else f" · API credits left: {odds_meta['remaining']}"
         L += [f"*Odds snapshot: {odds_meta.get('captured_at', 'none')}{stale}{credits}*", ""]
+        pr = odds_meta.get("props")
+        if pr:
+            L += [f"*Player props: {pr.get('games', 0)} game(s) priced" + (f"; **unavailable**: {pr['error']}" if pr.get("error") else "") + "*", ""]
     L += ["## Summary", ""]
     if not slate:
         L += ["No NHL games are scheduled (or none are unplayed) for this date.", ""]
