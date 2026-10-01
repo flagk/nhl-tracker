@@ -131,6 +131,32 @@ td .mine { padding: 0; border: 0; flex-wrap: nowrap; }
   .card.scroll { padding: .4rem .8rem; }
 }
 
+/* ---- game breakdowns ---- */
+details.gamebox > summary { justify-content: space-between; }
+details.gamebox > summary::after { margin-left: .5rem; }
+.gd-title { display: inline-flex; gap: .35rem; align-items: baseline; flex-wrap: wrap; }
+.drawer-body h3 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: .02em; margin-top: .4rem; }
+.drivers { display: flex; flex-direction: column; gap: .35rem; }
+.drow { display: grid; grid-template-columns: minmax(8rem, 15rem) 1fr 5.5rem; gap: .6rem; align-items: center; font-size: .88rem; }
+.dhead .dends { display: flex; justify-content: space-between; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.dtrack { position: relative; height: 10px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+.dtrack::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line-strong); }
+.irow .dtrack::after { display: none; }
+.dbar { position: absolute; top: 0; bottom: 0; }
+.dbar.home { background: var(--blue); } .dbar.away { background: var(--accent); }
+.dval { font-size: .8rem; color: var(--muted); text-align: right; white-space: nowrap; }
+.sgroup { margin-top: .8rem; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding-bottom: .2rem; border-bottom: 1px solid var(--line-strong); }
+.srow { display: grid; grid-template-columns: 1fr minmax(0, 2.2fr) 1fr; gap: .6rem; align-items: center; padding: .3rem 0; border-bottom: 1px solid var(--line); font-size: .92rem; }
+.slabel { text-align: center; color: var(--muted); font-size: .85rem; }
+.sval { font-weight: 600; padding: .1rem .5rem; border-radius: 6px; }
+.sval.away { text-align: left; } .sval.home { text-align: right; }
+.sval.better { background: var(--good-bg); color: var(--good); }
+.star { color: var(--accent); font-weight: 700; }
+.irow { display: grid; grid-template-columns: minmax(10rem, 22rem) 1fr 3rem; gap: .8rem; align-items: center; }
+.ilabel { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; font-size: .92rem; }
+a.more { font-size: .88rem; font-weight: 600; }
+@media (max-width: 640px) { .drow, .irow { grid-template-columns: 1fr; gap: .15rem; } .dval { text-align: left; } .srow { font-size: .85rem; } }
+
 /* ---- forms ---- */
 label { display: block; font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: .25rem; }
 input, select, button { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 8px; padding: .45rem .6rem; min-width: 0; }

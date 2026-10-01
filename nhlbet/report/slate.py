@@ -13,6 +13,7 @@ from nhlbet.data.loaders import load_tables
 from nhlbet.data.store import Store
 from nhlbet.features.builder import BuilderConfig, FeatureBuilder
 from nhlbet.models.bundle import ModelBundle
+from nhlbet.report.stats import game_stats
 from nhlbet.odds.consensus import latest_book_prices
 from nhlbet.odds.edge import SideQuote, evaluate_game
 from nhlbet.odds.markets import MarketQuote, alt_quotes, latest_alt_prices
@@ -43,6 +44,8 @@ class SlateGame:
     ctx: dict = field(default_factory=dict)              # the policy context this game was evaluated under
     alt: list[MarketQuote] = field(default_factory=list)  # totals / puck-line quotes from the goals model (experimental: paper-traded only)
     goals: dict = field(default_factory=dict)            # {lam_home, lam_away, exp_total} from the goals model
+    stats: list = field(default_factory=list)            # both teams' as-of stats for the side-by-side table (nhlbet.report.stats.game_stats)
+    drivers: list = field(default_factory=list)          # biggest pulls on the logistic component for this game
 
 
 def context_notes(row: pd.Series, home: str, away: str) -> list[str]:
@@ -90,6 +93,7 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
     preds = bundle.predict(rows)
     dists = bundle.score_distributions(rows, preds["p"].to_numpy())
     dist_by_game = dict(zip(rows.index, dists)) if dists is not None else {}
+    drivers_by_game = bundle.drivers(rows) if hasattr(bundle, "drivers") else {}
 
     log_row = store.df("SELECT source, captured_at FROM odds_fetch_log ORDER BY captured_at DESC LIMIT 1")
     fetch_stale = bool(len(log_row) and log_row.source.iloc[0] == "stale_cache")
@@ -113,13 +117,13 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
         goals = {"lam_home": dist.lam_home, "lam_away": dist.lam_away, "exp_total": dist.expected_total()} if dist is not None else {}
         inputs.append((int(g.game_id), g.home, g.away, quotes, ctx))
         meta[int(g.game_id)] = dict(start=g.start_utc, hg=hg, ag=ag, status=status, p=p_home, p_raw=p_raw, quotes=quotes, cap=cap, stale=stale,
-                                    notes=context_notes(row, g.home, g.away), ctx=ctx, books=books, alt=alt, goals=goals)
+                                    notes=context_notes(row, g.home, g.away), ctx=ctx, books=books, alt=alt, goals=goals, stats=game_stats(row), drivers=drivers_by_game.get(g.game_id, []))
     recs = recommend_slate(inputs, cfg)
     slate = []
     for rec in recs:
         m = meta[rec.game_id]
         slate.append(SlateGame(rec.game_id, m["start"], rec.home, rec.away, m["hg"], m["ag"], m["status"], m["p"], m["p_raw"], m["quotes"], rec,
-                               m["cap"], m["stale"], m["notes"], m["books"], m["ctx"], m["alt"], m["goals"]))
+                               m["cap"], m["stale"], m["notes"], m["books"], m["ctx"], m["alt"], m["goals"], m["stats"], m["drivers"]))
     epoch = pd.Timestamp(0, tz="UTC")
     slate.sort(key=lambda s: (pd.isna(s.start_utc), epoch if pd.isna(s.start_utc) else s.start_utc, s.game_id))
     if persist:

@@ -88,7 +88,7 @@
     return el("div", { class: "stack", style: "gap:.9rem" }, kids);
   }
   function chips() {
-    var items = [["sec-picks", "Top picks"], ["sec-games", "All games"], ["sec-other", "Totals & puck line"], ["sec-parlay", "Parlay"], ["sec-track", "Track record"], ["sec-paper", "Fake bets"]];
+    var items = [["sec-picks", "Top picks"], ["sec-games", "All games"], ["sec-stats", "Game stats"], ["sec-other", "Totals & puck line"], ["sec-parlay", "Parlay"], ["sec-inputs", "Model inputs"], ["sec-track", "Track record"], ["sec-paper", "Fake bets"]];
     return el("nav", { class: "chips", "aria-label": "Sections" }, items.map(function (i) { return el("a", { class: "chip", href: "#" + i[0], text: i[1] }); }));
   }
   var summaryLine = el("span", { class: "muted" });
@@ -132,6 +132,7 @@
     var whyKids = [goalies + why];
     if (g.notes && g.notes.length) whyKids.push(el("ul", {}, g.notes.map(function (n) { return el("li", { text: n }); })));
     box.push(el("p", { class: "why" }, whyKids));
+    box.push(el("a", { class: "more", href: "#game-" + g.game_id, text: "See all the stats behind this game", onclick: function () { openGame(g.game_id); } }));
     var minD = C.minDecimal(s.p_adj, 0);
     box.push(el("div", { class: "note", text: "Only worth betting at " + price(minD) + " or better (the model's break-even price after shrinking toward the market). Compare it with the price in your own app." }));
     var out = el("div", { class: "mine-out" });
@@ -176,6 +177,76 @@
         el("td", { class: "num", text: pct(g.p_home) }), el("td", { class: "num", text: g.sides.home ? pct(g.sides.home.p_market) : "no odds" }), el("td", {}, [edge]), el("td", {}, [dec])]);
     });
     return section("sec-games", "All games", String(D.games.length), [table(["Game", "Model (home)", "Market (home)", "Best side · edge", "Decision"], rows, [1, 2])]);
+  }
+
+  /* ---------- the numbers behind each game ---------- */
+  var INPUT_KEYS = {};
+  ((D.model && D.model.inputs) || []).forEach(function (i) { INPUT_KEYS[i.feature.slice(2)] = true; });   // base names (elo, cf_pct, b2b, ...) the model really uses
+  function driversBlock(g) {
+    var ds = g.drivers || [];
+    if (!ds.length) return null;
+    var mx = Math.max.apply(null, ds.map(function (d) { return Math.abs(d.value); })) || 1;
+    var rows = ds.map(function (d) {
+      var w = Math.abs(d.value) / mx * 50, home = d.value >= 0;
+      return el("div", { class: "drow" }, [el("div", { class: "dlabel", text: d.label }),
+        el("div", { class: "dtrack", role: "img", "aria-label": d.label + ": pulls toward the " + (home ? "home" : "away") + " team" }, [
+          el("div", { class: "dbar " + (home ? "home" : "away"), style: (home ? "left:50%;" : "right:50%;") + "width:" + w.toFixed(1) + "%" })]),
+        el("div", { class: "dval", text: (home ? g.home : g.away) + " +" + (Math.abs(d.value) * 25).toFixed(1) + " pts" })]);
+    });
+    return el("div", { class: "stack" }, [el("h3", { text: "What pulls hardest on the prediction" }),
+      el("div", { class: "note", text: "From the model's linear component (one of five models blended into the final number), so it shows direction and rough size (about how many win-probability points each input is worth), not the exact total. Bars to the right favour " + g.home + ", to the left " + g.away + "." }),
+      el("div", { class: "drivers" }, [el("div", { class: "drow dhead" }, [el("span", {}), el("span", { class: "dends" }, [el("span", { text: "← " + g.away }), el("span", { text: g.home + " →" })]), el("span", {})])].concat(rows))]);
+  }
+  function statsBlock(g) {
+    var groups = {}, order = [];
+    (g.stats || []).forEach(function (r) { if (!groups[r.group]) { groups[r.group] = []; order.push(r.group); } groups[r.group].push(r); });
+    if (!order.length) return el("div", { class: "note", text: "No team statistics are available for this game yet." });
+    var wanted = ["Strength", "Puck possession and chances", "Goaltending", "Special teams", "Schedule and travel", "Luck check", "Context"];
+    order.sort(function (a, b) { return wanted.indexOf(a) - wanted.indexOf(b); });
+    var kids = [el("h3", { text: "Team stats side by side" }), el("div", { class: "note", text: "Everything is computed from games before this one. The better number is highlighted; ★ marks inputs the model actually uses. Luck-check rows are shown for context, not as quality scores." })];
+    order.forEach(function (name) {
+      kids.push(el("div", { class: "sgroup", text: name }));
+      groups[name].forEach(function (r) {
+        kids.push(el("div", { class: "srow", title: r.tip }, [
+          el("div", { class: "sval away" + (r.better === "away" ? " better" : ""), text: r.away_s }),
+          el("div", { class: "slabel" }, [r.label, INPUT_KEYS[r.key] ? el("span", { class: "star", title: "The model uses this", text: " ★" }) : null]),
+          el("div", { class: "sval home" + (r.better === "home" ? " better" : ""), text: r.home_s })]));
+      });
+    });
+    return el("div", { class: "stack", style: "gap:.3rem" }, kids);
+  }
+  function gameDetail(g) {
+    var head = el("summary", {}, [
+      el("span", { class: "gd-title" }, [el("b", { text: g.away + " @ " + g.home }), g.start_utc ? el("span", { class: "muted", text: "  " + when(g.start_utc) }) : null]),
+      el("span", { class: "muted", text: "model " + pct(g.p_home, 0) + " home" + (g.sides.home ? " · market " + pct(g.sides.home.p_market, 0) : "") })]);
+    var gl = g.goalie_status === "unknown" || (!g.home_goalie && !g.away_goalie) ? null :
+      el("div", { class: "note", text: "Expected starters: " + g.away + " " + (g.away_goalie || "unknown") + ", " + g.home + " " + (g.home_goalie || "unknown") + " (" + g.goalie_status + "). Home ice is built into the model for every game." });
+    var body = el("div", { class: "drawer-body" }, [gl, driversBlock(g), statsBlock(g)]);
+    return el("details", { class: "drawer gamebox", id: "game-" + g.game_id }, [head, body]);
+  }
+  function openGame(id) {
+    var d = document.getElementById("game-" + id);
+    if (d) { d.open = true; setTimeout(function () { d.scrollIntoView({ behavior: "smooth", block: "start" }); }, 0); }
+  }
+  function gameStats() {
+    var kids = [el("p", { class: "lead", text: "Open a game to see the numbers the model is working from: both teams' strength, shot-attempt (Corsi) and expected-goals shares, goaltending, special teams, rest and travel, plus which inputs pull hardest on this prediction. Nothing here is seen after puck drop; every number is as of before the game." })];
+    if (!D.games.length) kids.push(el("div", { class: "card muted", text: "No games to show." }));
+    else kids.push(el("div", { class: "stack", style: "gap:.5rem" }, D.games.map(gameDetail)));
+    return section("sec-stats", "Game stats", D.games.length ? String(D.games.length) : "", kids);
+  }
+  function modelInputs() {
+    var inputs = (D.model && D.model.inputs) || [];
+    var kids = [el("p", { class: "lead", text: "These are the inputs the model uses, after testing many more and dropping the ones that did not help on games it had not seen. The bar shows how much each input moves predictions on average. Injuries, line combinations and betting-market movement are not inputs." })];
+    if (!inputs.length) return section("sec-inputs", "What the model looks at", "", kids.concat([el("div", { class: "card muted", text: "Input details appear after the next model build." })]));
+    var mx = Math.max.apply(null, inputs.map(function (i) { return i.share || 0; })) || 1;
+    var rows = inputs.map(function (i) {
+      var has = i.share !== null && i.share !== undefined;
+      return el("div", { class: "irow" }, [el("div", { class: "ilabel" }, [el("b", { text: i.label }), i.group ? el("span", { class: "pill mute", text: i.group }) : null]),
+        has ? el("div", { class: "dtrack" }, [el("div", { class: "dbar home", style: "left:0;width:" + (i.share / mx * 100).toFixed(1) + "%" })]) : el("div", {}), el("div", { class: "dval", text: has ? (i.share * 100).toFixed(0) + "%" : "" })]);
+    });
+    kids.push(el("div", { class: "card stack" }, rows));
+    if (inputs[0].share !== null && inputs[0].share !== undefined) kids.push(el("div", { class: "note", text: "Importance is each input's share of the average absolute SHAP value measured on out-of-sample games (see docs/FEATURES.md). Team strength usually dominates and the rest add small refinements, which is typical for hockey." }));
+    return section("sec-inputs", "What the model looks at", String(inputs.length) + " inputs", kids);
   }
 
   var showAllOther = false;
@@ -260,11 +331,12 @@
   var dynamic = el("div", { class: "stack", style: "gap:1.5rem" });
   function render() {
     var alloc = C.allocate(D.games, cfg());
-    dynamic.replaceChildren(statusBar(alloc), topPicks(alloc), allGames(alloc), otherMarkets(), section("sec-parlay", "Parlay calculator", "", [parlayBox]), track(), paper());
+    dynamic.replaceChildren(statusBar(alloc), topPicks(alloc), allGames(alloc), gameStats(), otherMarkets(), section("sec-parlay", "Parlay calculator", "", [parlayBox]), modelInputs(), track(), paper());
     renderParlay();
   }
   document.body.insertBefore(CH.topbar("picks"), app);
   app.replaceChildren(heading(), chips(), settingsPanel(), dynamic, el("footer", { class: "footer" }, [el("div", { class: "banner disc", text: D.disclaimer }),
     el("div", {}, ["Past days: ", el("a", { href: (location.pathname.indexOf("/archive/") >= 0 ? "../" : "") + "history.html", text: "history and results" }), "."])]));
   render();
+  if (location.hash.indexOf("#game-") === 0) openGame(location.hash.slice(6));
 })();
