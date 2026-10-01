@@ -291,10 +291,32 @@ def test_workflows_are_valid_and_scheduled(workflows):
     assert {"ci.yml", "daily.yml", "odds-close.yml", "backfill.yml"} <= set(workflows)
     daily = workflows["daily.yml"][True]
     crons = [s["cron"] for s in daily["schedule"]]
-    assert len(crons) == 2 and all(len(c.split()) == 5 for c in crons)              # morning + later-in-the-day goalie-confirmed rerun
+    assert len(crons) >= 6 and all(len(c.split()) == 5 for c in crons)              # several triggers (GitHub cron runs hours late); scripts/gate.py picks the useful ones
     assert workflows["daily.yml"]["permissions"]["contents"] == "write"
     for name in ("daily.yml", "odds-close.yml", "backfill.yml"):
         assert workflows[name]["concurrency"]["group"] == "nhl-data"                # writers never overlap
+
+
+def test_scheduled_workflows_are_gated_so_late_triggers_cost_nothing(workflows):
+    """GitHub cron arrived 3-6 h late: every credit-spending step of a scheduled workflow must sit behind scripts/gate.py, and the cache is only saved by gated runs."""
+    for name, step_id in (("daily.yml", "gate_and_type"), ("odds-close.yml", "gate")):
+        steps = workflows[name]["jobs"][next(iter(workflows[name]["jobs"]))]["steps"]
+        gate_ix = next(i for i, st in enumerate(steps) if st.get("id") == step_id)
+        assert "scripts/gate.py" in steps[gate_ix]["run"] and "--force" in steps[gate_ix]["run"]            # manual dispatches always run
+        needle = f"steps.{step_id}.outputs.run == 'true'"
+        for st in steps[gate_ix + 1:]:
+            assert needle in str(st.get("if", "")), f"{name}: step {st.get('name') or st.get('uses') or st.get('run')[:40]!r} is not gated"
+        spend = [st for st in steps if "ODDS_API_KEY" in str(st.get("env", {}))]
+        assert spend and all(steps.index(st) > gate_ix for st in spend)
+        assert any(str(st.get("uses", "")).startswith("actions/cache/save") for st in steps) and not any(str(st.get("uses", "")).startswith("actions/cache@") for st in steps)
+    # the run-type mapping in daily.yml must cover exactly the morning crons that are scheduled
+    daily = workflows["daily.yml"]
+    crons = [sc["cron"] for sc in daily[True]["schedule"]]
+    script = next(st for st in daily["jobs"]["report"]["steps"] if st.get("id") == "gate_and_type")["run"]
+    morning = [c for c in crons if f'"{c}"' in script.split("KIND=morning")[0]]
+    assert len(morning) >= 3 and len(crons) - len(morning) >= 5
+    for c in workflows["odds-close.yml"][True]["schedule"]:
+        assert len(c["cron"].split()) == 5
 
 
 def test_no_hardcoded_secrets_anywhere():
