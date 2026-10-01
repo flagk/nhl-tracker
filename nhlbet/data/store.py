@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS goalie_game (
 );
 CREATE TABLE IF NOT EXISTS skater_game (
     game_id INTEGER NOT NULL, team TEXT NOT NULL, player_id INTEGER NOT NULL, name TEXT,
-    position TEXT, toi_sec INTEGER, goals INTEGER, assists INTEGER, points INTEGER,
+    position TEXT, toi_sec INTEGER, goals INTEGER, assists INTEGER, points INTEGER, sog INTEGER,
     PRIMARY KEY (game_id, player_id)
 );
 CREATE TABLE IF NOT EXISTS shots (
@@ -77,11 +77,17 @@ CREATE TABLE IF NOT EXISTS shadow_bets (
     market TEXT, point REAL, label TEXT,              -- NULL market = moneyline; 'totals' / 'spreads' for the goals-model strategies
     PRIMARY KEY (run_id, game_id, strategy)
 );
+-- player-prop bets (several per game, hence their own table): fake money, settled from skater_game.sog like every other paper bet
+CREATE TABLE IF NOT EXISTS prop_bets (
+    run_id TEXT NOT NULL, run_at TEXT NOT NULL, game_id INTEGER NOT NULL, strategy TEXT NOT NULL, game_date TEXT, player_id INTEGER NOT NULL, name TEXT,
+    side TEXT NOT NULL, label TEXT, point REAL, book TEXT, decimal REAL, stake REAL, p_model REAL, p_market REAL, edge REAL, ev REAL, lam REAL,
+    PRIMARY KEY (run_id, game_id, strategy, player_id, side)
+);
 -- every run's model-vs-market view of totals and puck lines for EVERY game with odds (bets and passes): for calibration and paper trading
 CREATE TABLE IF NOT EXISTS alt_quotes (
     run_id TEXT NOT NULL, run_at TEXT NOT NULL, game_id INTEGER NOT NULL, game_date TEXT, market TEXT NOT NULL, side TEXT NOT NULL, label TEXT,
     point REAL, p_model REAL, p_market REAL, p_push REAL, book TEXT, decimal REAL, edge REAL, ev REAL, n_books INTEGER,
-    lam_home REAL, lam_away REAL, exp_total REAL, odds_captured_at TEXT,
+    lam_home REAL, lam_away REAL, exp_total REAL, odds_captured_at TEXT, player_id INTEGER,
     PRIMARY KEY (run_id, game_id, market, side)
 );
 CREATE TABLE IF NOT EXISTS goalie_confirmations (
@@ -105,7 +111,7 @@ class Store:
         self._migrate()
 
     # columns added after first release: CREATE TABLE IF NOT EXISTS leaves an existing (cached) database unchanged, so add them here
-    MIGRATIONS = {"shadow_bets": {"market": "TEXT", "point": "REAL", "label": "TEXT"}}
+    MIGRATIONS = {"shadow_bets": {"market": "TEXT", "point": "REAL", "label": "TEXT"}, "skater_game": {"sog": "INTEGER"}, "alt_quotes": {"player_id": "INTEGER"}}
 
     def _migrate(self) -> None:
         for table, cols in self.MIGRATIONS.items():

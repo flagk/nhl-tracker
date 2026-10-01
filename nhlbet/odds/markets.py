@@ -33,6 +33,7 @@ class MarketQuote:
     edge: float
     ev: float                 # per $1 at the best price, using the model's win / lose / push probabilities
     n_books: int
+    player_id: int | None = None
 
     def as_dict(self) -> dict:
         return asdict(self)

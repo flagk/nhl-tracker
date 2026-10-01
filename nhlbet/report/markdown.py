@@ -93,6 +93,7 @@ def render_report(date: str, run_type: str, slate: list[SlateGame], cfg: RiskCon
     L += ["## Track record (all logged recommendations that have resolved)", ""]
     L += _perf_section(perf)
     L += _other_markets(slate, ps)
+    L += _player_props(slate)
     L += _shadow_section(shadow)
     L += _fake_bets_today(slate, cfg, date)
     L += ["", "---", DISCLAIMER, ""]
@@ -159,6 +160,22 @@ def _other_markets(slate: list[SlateGame], public_safe: bool) -> list[str]:
               f"{q.edge * 100:+.1f} pts | {q.ev:+.1%} | {price} |"]
     L += [""]
     return L
+
+
+def _player_props(slate: list[SlateGame]) -> list[str]:
+    rows = [(s, q) for s in slate for q in getattr(s, "props", None) or []]
+    if not rows:
+        return []
+    L = ["", "## Player props: shots on goal (experimental, paper-trading only)", "",
+         "A player-level model (own recent shot rate, opponent, home ice, ice time, rest) against the market's over/under. **Experimental, no real stakes suggested.** "
+         "\"Take\" is a lean to check against your own app's price.", "",
+         "| Player | Game | Line | Take | Model shots | Model P(over) | Market P(over) | Edge on take | EV per $1 | Last 10 | Season avg |", "|---|---|---|---|---|---|---|---|---|---|---|"]
+    for s, q in sorted(rows, key=lambda x: -max(x[1].ev_over, x[1].ev_under))[:12]:
+        side = q.best_side
+        hist = " ".join(str(h["sog"]) for h in q.history)
+        L += [f"| {q.name} | {_matchup(s)} | {q.point:g} | {(side.title() if q.take else '-')} | {q.lam:.2f} | {q.p_over:.1%} | {q.p_over_market:.1%} | "
+              f"{q.edge(side) * 100:+.1f} pts | {max(q.ev_over, q.ev_under):+.1%} | {hist} | {'-' if q.avg_season is None else f'{q.avg_season:.1f}'} |"]
+    return L + [""]
 
 
 def _fake_bets_today(slate: list[SlateGame], cfg: RiskConfig, date: str) -> list[str]:

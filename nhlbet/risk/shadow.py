@@ -140,3 +140,37 @@ def shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date
                      paper_stake(edge_conviction(q.edge)) if st.kind == "flat_edge" else paper_stake(side_conviction(q.model_prob)))
             rows.append(_row(run_id, run_at, date, g.game_id, st.name, "BET", q, stake, p_adj, q.ev))
     return rows
+
+
+# ---------------------------------------------------------------- player props (several bets per game, so they live in their own table)
+PROP_MAX_PER_DAY = 8
+PROP_MIN_GAMES = 10
+PROP_STRATEGIES: tuple[Strategy, ...] = (
+    Strategy("sog_edge", f"Player shots: $5-$30 on the over/under the model likes (3%+ edge, 10+ games of history), best {PROP_MAX_PER_DAY} of the day (experimental market)", "prop_edge"),
+    Strategy("sog_over_control", f"CONTROL: flat $10 on the Over for the {PROP_MAX_PER_DAY} players with the highest shots lines (no model; shows what prop vig costs)", "prop_control"),
+)
+
+
+def _prop_row(run_id, run_at, date, game_id, strategy, q, side: str, stake: float) -> dict:
+    over = side == "over"
+    p_side = q.p_over if over else 1 - q.p_over
+    m_side = q.p_over_market if over else 1 - q.p_over_market
+    return {"run_id": run_id, "run_at": run_at, "game_id": game_id, "strategy": strategy, "game_date": date, "player_id": q.player_id, "name": q.name, "side": side,
+            "label": f"{q.name} {'Over' if over else 'Under'} {q.point:g}", "point": q.point, "book": None, "decimal": q.over_price if over else q.under_price, "stake": stake,
+            "p_model": p_side, "p_market": m_side, "edge": p_side - m_side, "ev": q.ev_over if over else q.ev_under, "lam": q.lam}
+
+
+def prop_shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date: str, strategies: Sequence[Strategy] = PROP_STRATEGIES) -> list[dict]:
+    """Paper bets on player shots across the whole slate (capped per day). ``games``: objects with ``game_id``, ``props`` (PropQuote list) and ``ctx``."""
+    cands = [(g, q) for g in games if _alt_usable(g, cfg) for q in (getattr(g, "props", None) or [])]
+    rows: list[dict] = []
+    for st in strategies:
+        if st.kind == "prop_edge":
+            scored = [(q.edge(q.best_side), g, q) for g, q in cands if q.n_prev >= PROP_MIN_GAMES]
+            picks = sorted([x for x in scored if x[0] >= cfg.min_edge], key=lambda x: -x[0])[:PROP_MAX_PER_DAY]
+            for e, g, q in picks:
+                rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, q.best_side, paper_stake(edge_conviction(e))))
+        elif st.kind == "prop_control":
+            for g, q in sorted(cands, key=lambda x: (-x[1].point, x[1].player_id))[:PROP_MAX_PER_DAY]:
+                rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, "over", CONTROL_STAKE))
+    return rows

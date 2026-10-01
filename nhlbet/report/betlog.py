@@ -78,13 +78,30 @@ def performance(store: Store, start_bankroll: float = 1000.0, cons: pd.DataFrame
     return out
 
 
-def alt_value(market, side, point, home_score, away_score, last_period) -> np.ndarray:
+def all_shadow_rows(store: Store) -> pd.DataFrame:
+    """Paper bets from both tables in one frame: game-level bets (``shadow_bets``) and player props (``prop_bets``, market ``player_sog``)."""
+    r = store.df("SELECT * FROM shadow_bets")
+    if "player_id" not in r:
+        r["player_id"] = np.nan
+    p = store.df("SELECT * FROM prop_bets")
+    if len(p):
+        p = p.assign(action="BET", team=p.label, p_adj=p.p_model, market="player_sog")
+        r = pd.concat([r, p[[c for c in p.columns if c in set(r.columns) | {"player_id"}]]], ignore_index=True)
+    return r
+
+
+def alt_value(market, side, point, home_score, away_score, last_period, sog=None) -> np.ndarray:
     """>0 the bet won, <0 lost, 0 pushed, for totals / puck-line bets (arrays). Totals exclude the shootout goal; the puck line uses the official margin."""
     hs, as_ = np.asarray(home_score, float), np.asarray(away_score, float)
     side, market, point = np.asarray(side), np.asarray(market), np.asarray(point, float)
     total = hs + as_ - (np.asarray(last_period) == "SO").astype(float)
     margin = np.where(side == "away", as_ - hs, hs - as_)
-    return np.where(market == "totals", np.where(side == "over", total - point, point - total), margin + point)
+    val = np.where(market == "totals", np.where(side == "over", total - point, point - total), margin + point)
+    if sog is not None:                                   # player shots: over wins when shots exceed the line; a player who did not dress voids the bet (value 0)
+        sg = np.asarray(sog, float)
+        shots = np.where(side == "over", sg - point, point - sg)
+        val = np.where(market == "player_sog", np.where(np.isnan(sg), 0.0, shots), val)
+    return val
 
 
 def shadow_resolved(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFrame:
@@ -93,14 +110,21 @@ def shadow_resolved(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFr
     Moneyline rows settle on the winner. Totals settle on regulation + overtime goals (shootout goal excluded) and the puck line on the
     official margin; a push (whole-number line landing exactly) refunds the stake and is not counted as a bet. CLV exists for moneylines only.
     """
-    r = store.df("SELECT * FROM shadow_bets")
+    r = all_shadow_rows(store)
     if r.empty:
         return r
-    final = r.sort_values("run_at").groupby(["game_id", "strategy"], as_index=False).tail(1)
+    r["player_id"] = r["player_id"].fillna(0)               # game-level bets have no player; props are one row per (game, strategy, player, side)
+    final = r.sort_values("run_at").groupby(["game_id", "strategy", "player_id"], as_index=False).tail(1)     # latest run per (game, strategy, player); a re-run may flip the side
     g = store.df("SELECT game_id, start_utc, home_win, home_score, away_score, last_period FROM games WHERE home_win IS NOT NULL")
     d = final.merge(g, on="game_id", how="inner")
     if d.empty:
         return d
+    sog = np.full(len(d), np.nan)
+    if (d.get("market") == "player_sog").any():
+        sk = store.df("SELECT game_id, player_id, sog FROM skater_game WHERE sog IS NOT NULL")
+        have = set(sk.game_id)                                # games whose shot data is loaded: a prop can only settle once its game has it
+        d = d[(d.market != "player_sog") | d.game_id.isin(have)].reset_index(drop=True)
+        sog = d[["game_id", "player_id"]].merge(sk, on=["game_id", "player_id"], how="left").sog.to_numpy(float)   # missing = did not dress -> void
     cons = consensus_snapshots(store) if cons is None else cons
     mk = d["market"].fillna("h2h") if "market" in d else pd.Series("h2h", index=d.index)
     ml = (mk == "h2h").to_numpy()
@@ -108,7 +132,7 @@ def shadow_resolved(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFr
     d["is_bet"] = (d.action == "BET") & (d.stake > 0)
     won_ml = ((d.side == "home") == (d.home_win == 1)).astype(float).to_numpy()
     point = d["point"].astype(float).to_numpy() if "point" in d else np.full(len(d), np.nan)
-    val = alt_value(mk.to_numpy(), d.side.to_numpy(), point, d.home_score, d.away_score, d.last_period)
+    val = alt_value(mk.to_numpy(), d.side.to_numpy(), point, d.home_score, d.away_score, d.last_period, sog)
     push = (~ml) & d.is_bet.to_numpy() & (val == 0)
     d["push"] = push
     d["is_bet"] = d.is_bet & ~push                        # a push refunds the stake: not a settled bet
@@ -179,7 +203,8 @@ def plot_performance(store: Store, path: str | Path, start_bankroll: float = 100
 # and the tiny goalie_confirmations.csv are shared, and the workflows resolve those in favour of the newest output.
 PARTITIONED = {"recommendations": ("run_id", ["run_id", "game_id"]), "odds_fetch_log": ("captured_at", ["captured_at"]),
                "shadow_bets": ("run_id", ["run_id", "game_id", "strategy"]), "odds_consensus": ("captured_at", ["game_id", "captured_at"]),
-               "alt_quotes": ("run_id", ["run_id", "game_id", "market", "side"])}
+               "alt_quotes": ("run_id", ["run_id", "game_id", "market", "side"]),
+               "prop_bets": ("run_id", ["run_id", "game_id", "strategy", "player_id", "side"])}
 SINGLE = {"goalie_confirmations": ["game_date", "team"]}
 ODDS_KEYS = ["captured_at", "event_id", "book", "market", "outcome", "point"]
 

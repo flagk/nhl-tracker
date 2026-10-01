@@ -30,6 +30,8 @@ def parse_events(events: list[dict], captured_at: str) -> list[dict]:
                         continue
                     name = oc.get("name", "")
                     side = home if team_from_name(name) == home else away if team_from_name(name) == away else name  # Over/Under stay as-is
+                    if str(mk.get("key", "")).startswith("player_") and oc.get("description"):
+                        side = f"{name}|{oc['description']}"          # player props: "Over|Connor McDavid" (the player is the outcome's description)
                     rows.append({"captured_at": captured_at, "event_id": ev["id"], "commence_time": ev.get("commence_time"),
                                  "home": home, "away": away, "book": bk.get("key"), "market": mk.get("key"),
                                  "outcome": side, "point": float(oc.get("point") or 0.0), "price": float(price),

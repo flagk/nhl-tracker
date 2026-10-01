@@ -42,3 +42,6 @@ Pretend stakes scale with the model's conviction so the data can answer "do the 
 - the live-policy copies (`no_guard`, `edge_1pct`, `no_shrink`) keep their Kelly-based sizing;
 - the no-skill controls (`market_favorite`, `always_over`) always stake $10, so their ROI is a clean baseline.
 Compare strategies on ROI (profit per dollar staked), not total profit, because stake sizes differ.
+
+## Player-prop strategies
+`sog_edge` and the control `sog_over_control` (see [MARKETS.md](MARKETS.md)) bet on players' shots on goal. A player can have several bets per game, so these live in their own table (`prop_bets`) and settle from the player's actual shots; a skater who did not play voids the bet (stake refunded, not counted).

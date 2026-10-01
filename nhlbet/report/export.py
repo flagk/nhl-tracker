@@ -103,7 +103,7 @@ def paper_trading(store: Store) -> pd.DataFrame:
 def alt_market_predictions(store: Store) -> pd.DataFrame:
     """Totals / puck-line quotes from the latest run per game (passes included) with the settled outcome (won / lost / push): for calibration."""
     from nhlbet.report.betlog import alt_value
-    q = store.df("SELECT * FROM alt_quotes")
+    q = store.df("SELECT * FROM alt_quotes WHERE market <> 'player_sog'")
     if q.empty:
         return pd.DataFrame(columns=ALT_COLS)
     q = q.sort_values("run_at").groupby(["game_id", "market", "side"], as_index=False).tail(1)
@@ -114,6 +114,29 @@ def alt_market_predictions(store: Store) -> pd.DataFrame:
     d["outcome"] = np.where(done, np.where(val > 0, "won", np.where(val < 0, "lost", "push")), None)
     d["best_price"] = d["decimal"]
     return d[ALT_COLS].sort_values(["game_date", "game_id", "market", "side"]).reset_index(drop=True)
+
+
+PROP_COLS = ["game_id", "game_date", "away", "home", "player_id", "player", "side", "line", "p_model", "p_market", "edge", "ev", "price", "expected_shots", "actual_shots", "outcome"]
+
+
+def prop_predictions(store: Store) -> pd.DataFrame:
+    """Every player-shots quote the model priced (latest run per game), both sides, with the actual shots and won / lost / void once the game is final."""
+    q = store.df("SELECT * FROM alt_quotes WHERE market = 'player_sog'")
+    if q.empty:
+        return pd.DataFrame(columns=PROP_COLS)
+    q = q.sort_values("run_at").groupby(["game_id", "side"], as_index=False).tail(1)
+    g = store.df("SELECT game_id, home, away, home_win FROM games")
+    sk = store.df("SELECT game_id, player_id, sog FROM skater_game WHERE sog IS NOT NULL")
+    d = q.merge(g, on="game_id", how="left").merge(sk, on=["game_id", "player_id"], how="left")
+    have = set(sk.game_id)
+    over = d.side.str.startswith("over")
+    settled = d.home_win.notna() & d.game_id.isin(have)
+    win = np.where(over, d.sog > d.point, d.sog < d.point)
+    d["outcome"] = np.where(~settled, None, np.where(d.sog.isna(), "void", np.where(win, "won", "lost")))
+    d["player"] = d.label.str.replace(r" (Over|Under) [0-9.]+$", "", regex=True)
+    d["side"] = np.where(over, "over", "under")
+    d = d.rename(columns={"point": "line", "decimal": "price", "exp_total": "expected_shots", "sog": "actual_shots"})
+    return d[PROP_COLS].sort_values(["game_date", "game_id", "player_id", "side"]).reset_index(drop=True)
 
 
 def paper_summary(store: Store) -> pd.DataFrame:
@@ -155,7 +178,7 @@ def export_dataset(store: Store, root: str | Path = "data/export", features: pd.
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
     tables = {"games_predictions": games_predictions(store, features), "daily_summary": daily_summary(store), "paper_trading": paper_trading(store),
-              "paper_summary": paper_summary(store), "alt_market_predictions": alt_market_predictions(store), "model_versions": model_versions(registry_path), "oos_predictions": oos_predictions(oos_path)}
+              "paper_summary": paper_summary(store), "alt_market_predictions": alt_market_predictions(store), "prop_predictions": prop_predictions(store), "model_versions": model_versions(registry_path), "oos_predictions": oos_predictions(oos_path)}
     for name, df in tables.items():
         df.to_csv(root / f"{name}.csv", index=False, float_format="%.6g")
     return {k: len(v) for k, v in tables.items()}

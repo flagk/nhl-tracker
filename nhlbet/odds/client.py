@@ -100,19 +100,26 @@ class OddsClient:
     # -- main call -------------------------------------------------------------------------------
     def fetch_odds(self, markets: Sequence[str] = ("h2h",), regions: str = "us", force: bool = False) -> OddsFetch:
         params = {"regions": regions, "markets": ",".join(markets), "oddsFormat": "decimal", "dateFormat": "iso"}
-        path = self._cache_path(params)
+        return self._fetch(f"{BASE}/sports/{SPORT}/odds", params, len(markets) * len(regions.split(",")), force, {})
+
+    def fetch_event_odds(self, event_id: str, markets: Sequence[str], regions: str = "us", force: bool = False) -> OddsFetch:
+        """One game's odds for markets only served per event (player props). Costs one credit per market per region **per event**."""
+        params = {"regions": regions, "markets": ",".join(markets), "oddsFormat": "decimal", "dateFormat": "iso"}
+        f = self._fetch(f"{BASE}/sports/{SPORT}/events/{event_id}/odds", params, len(markets) * len(regions.split(",")), force, {"event": event_id})
+        return OddsFetch([f.events] if isinstance(f.events, dict) else f.events, f.captured_at, f.remaining, f.used, f.source)
+
+    def _fetch(self, url: str, params: dict, cost: int, force: bool, cache_extra: dict) -> OddsFetch:
+        path = self._cache_path({**params, **cache_extra})
         cached = self._read(path)
         age = (self._now() - cached["fetched_epoch"]) if cached else None
         if cached and not force and age is not None and age <= self.ttl:
             return OddsFetch(cached["events"], cached["captured_at"], cached.get("remaining"), cached.get("used"), "cache")
 
-        cost = len(markets) * len(regions.split(","))
         remaining = self.remaining_credits()
         if remaining is not None and remaining < cost + self.reserve:
             log.error("odds quota low (%s credits left, reserve %s): not calling the API", remaining, self.reserve)
             return self._fallback(cached, age, QuotaExhausted(f"only {remaining} credits left (reserve {self.reserve})"))
 
-        url = f"{BASE}/sports/{SPORT}/odds"
         delay, last_err = 1.0, None
         for attempt in range(1, self.retries + 1):
             try:

@@ -59,6 +59,10 @@ def game_payload(s: SlateGame, cfg: RiskConfig, public_safe: bool = False) -> di
             "alt": [{"market": q.market, "side": q.side, "label": q.label, "point": q.point, "p_model": q.model_prob, "p_market": q.market_prob,
                      "p_push": q.p_push, "edge": q.edge, "ev": q.ev, "best_decimal": q.best_decimal, "best_book": None if public_safe else q.best_book,
                      "n_books": q.n_books} for q in (getattr(s, "alt", None) or [])], "goals": getattr(s, "goals", None) or None,
+            "props": [{"player_id": q.player_id, "name": q.name, "team": q.team, "opp": q.opp, "point": q.point, "lam": q.lam, "p_over": q.p_over, "p_over_market": q.p_over_market,
+                       "over_price": q.over_price, "under_price": q.under_price, "ev_over": q.ev_over, "ev_under": q.ev_under, "edge_over": q.edge_over, "take": q.take, "best_side": q.best_side,
+                       "n_books": q.n_books, "n_prev": q.n_prev, "history": q.history, "avg_season": q.avg_season, "avg_l10": q.avg_l10, "hit_l10": q.hit_l10, "hit_l20": q.hit_l20}
+                      for q in sorted((getattr(s, "props", None) or []), key=lambda x: -max(x.ev_over, x.ev_under))[:15]],
             "stats": getattr(s, "stats", None) or [],
             "drivers": [{"feature": d["feature"], "label": feature_label(d["feature"]), "value": d["value"], "raw": d.get("raw")} for d in (getattr(s, "drivers", None) or [])],
             "server_action": s.rec.action, "server_side": s.rec.side, "server_stake": s.rec.stake}
