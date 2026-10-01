@@ -15,6 +15,7 @@ from nhlbet.data.goalies import load_confirmations
 from nhlbet.data.ingest import current_season, import_legacy_csv, ingest_day, ingest_details, ingest_schedule
 from nhlbet.data.client import NHLClient
 from nhlbet.data.store import Store
+from nhlbet.hygiene import purge_inplay
 from nhlbet.models.bundle import ModelBundle
 from nhlbet.odds.client import OddsAPIError, OddsClient, OddsConfigError
 from nhlbet.odds.snapshots import record_fetch
@@ -74,12 +75,13 @@ def fetch_and_store_odds(store: Store, markets: tuple[str, ...] | None = None, r
 
 def run_daily(date: str | None = None, run_type: str = "morning", db: str = "data/nhl.db", bankroll: float = 1000.0, fixed_bankroll: bool = False,
               refresh: bool = True, odds: bool = True, do_retrain: bool | None = None, log_root: str = "data/logs", report_dir: str = "reports",
-              model_dir: str = "data/models", site_dir: str = "site", readme_path: str = "README.md", export_dir: str = "data/export") -> dict:
+              model_dir: str = "data/models", site_dir: str = "site", readme_path: str = "README.md", export_dir: str = "data/export", now: datetime | None = None) -> dict:
     date = date or game_day()
     store = Store(db)
     restored = restore_logs(store, log_root)
     if restored:
         log.info("restored logs: %s", restored)
+    purge_inplay(store)
     if not store.df("SELECT 1 FROM games LIMIT 1").shape[0] and LEGACY_CSV.exists():
         log.warning("empty database: bootstrapping from %s (28 teams, scores only). Run the backfill workflow for full data.", LEGACY_CSV)
         import_legacy_csv(store, LEGACY_CSV)
@@ -109,7 +111,7 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     current = bankroll if fixed_bankroll else max(perf.get("bankroll", bankroll), 0.0)
     cfg = RiskConfig(bankroll=current)
     status = entry.get("drift", {}).get("status", "OK")
-    slate = build_slate(store, bundle, date, cfg, run_type, "OK" if status == "INSUFFICIENT_DATA" else status)
+    slate = build_slate(store, bundle, date, cfg, run_type, "OK" if status == "INSUFFICIENT_DATA" else status, now=now)
 
     text = render_report(date, run_type, slate, cfg, entry["version"], {**entry, "p_source": entry.get("p_source")}, perf, odds_meta if odds_meta.get("enabled") else None, shadow=shadow)
     if notes:

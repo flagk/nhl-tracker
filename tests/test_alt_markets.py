@@ -134,13 +134,13 @@ def test_end_to_end_alt_markets(league, tmp_path, monkeypatch):
     from tests.test_report_pipeline import _e2e_setup
     st, day = _e2e_setup(tmp_path, league, monkeypatch)
     from datetime import datetime, timedelta, timezone
-    now = datetime.now(timezone.utc)                                     # fresh odds, so the stale-odds guard does not apply
-    upd = (now - timedelta(minutes=5)).isoformat(timespec="seconds")
+    now = datetime.fromisoformat(f"{day}T17:00:00+00:00")                # pinned clock: the odds are 30 minutes old and the game starts at 23:00 UTC
+    upd = (now - timedelta(minutes=35)).isoformat(timespec="seconds")
     ev = event(updated=upd)
     ev["commence_time"] = f"{day}T23:00:00Z"
     ev["bookmakers"][0]["key"], ev["bookmakers"][1]["key"], ev["bookmakers"][2]["key"] = "bookA", "bookB", "bookC"
-    record_fetch(st, OddsFetch([ev], now.isoformat(timespec="seconds"), 300, 200, "live"))
-    r = run_daily(day, "morning", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models")
+    record_fetch(st, OddsFetch([ev], (now - timedelta(minutes=30)).isoformat(timespec="seconds"), 300, 200, "live"))
+    r = run_daily(day, "morning", db=str(tmp_path / "t.db"), refresh=False, odds=False, log_root="data/logs", report_dir="reports", model_dir="data/models", now=now)
     assert r["games"] == 1
     db = Store(str(tmp_path / "t.db"))
     aq = db.df("SELECT * FROM alt_quotes")

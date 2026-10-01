@@ -34,7 +34,7 @@ def load_games(store: Store, include_unplayed: bool = True) -> pd.DataFrame:
     api = pd.to_numeric(g.season, errors="coerce")
     api_year = api.where(api < 10000, api // 10000)              # accept 20192020 (API) or 2019 (plain start year)
     g["season"] = api_year.where(api.notna(), derived).astype(int)
-    g["start_utc"] = pd.to_datetime(g.start_utc, utc=True, errors="coerce")
+    g["start_utc"] = pd.to_datetime(g.start_utc, utc=True, errors="coerce", format="ISO8601")      # mixed "...Z" and "... +00:00" strings must not silently become NaT
     return g.sort_values(["game_date", "game_id"]).reset_index(drop=True)
 
 

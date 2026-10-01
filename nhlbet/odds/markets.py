@@ -13,6 +13,7 @@ import pandas as pd
 
 from nhlbet.data.store import Store
 from nhlbet.models.goals import ScoreDistribution
+from nhlbet.odds.consensus import pregame_only
 from nhlbet.odds.math import best_price, devig
 
 MARKETS = ("h2h", "spreads", "totals")
@@ -43,7 +44,7 @@ def _ev(p_win: float, p_push: float, decimal: float) -> float:
 
 def latest_alt_prices(store: Store, game_id: int, max_book_age_min: float = 90.0) -> dict[str, pd.DataFrame]:
     """Latest capture's per-book pairs. ``totals``: book, point, over, under. ``spreads``: book, home_point, home, away (decimal odds)."""
-    df = store.df("SELECT * FROM odds_snapshots WHERE game_id=? AND market IN ('spreads','totals')", [game_id])
+    df = pregame_only(store.df("SELECT * FROM odds_snapshots WHERE game_id=? AND market IN ('spreads','totals')", [game_id]))
     out = {"totals": pd.DataFrame(), "spreads": pd.DataFrame()}
     if df.empty:
         return out
