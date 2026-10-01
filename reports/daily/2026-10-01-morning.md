@@ -2,9 +2,9 @@
 
 > **Disclaimer.** This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.
 
-*Generated 2026-10-01 13:41 UTC · model `20260930-8845bc` · probability source `online_platt` · bankroll $1,000.00 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
+*Generated 2026-10-01 19:39 UTC · model `20260930-8845bc` · probability source `online_platt` · bankroll $1,000.00 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
 
-*Odds snapshot: 2026-10-01T13:41:31+00:00 · API credits left: 491*
+*Odds snapshot: 2026-10-01T19:39:36+00:00 · API credits left: 488*
 
 ## Summary
 
@@ -15,14 +15,14 @@
 
 | Game | Goalies (away / home) | Model home win | Market no-vig home | Best price | Edge | EV per $1 | Stake | Decision |
 |---|---|---|---|---|---|---|---|---|
-| PHI @ NJD (19:00 ET) | D. Vladar / J. Markstrom (probable) | 63.1% | 60.3% | NJD 1.62 | +2.7% | - | - | no bet |
-| TBL @ NYR (19:00 ET) | A. Vasilevskiy / I. Shesterkin (probable) | 44.0% | 43.2% | NYR 2.25 | +0.9% | - | - | no bet |
-| BUF @ CBJ (19:00 ET) | U. Luukkonen / J. Greaves (probable) | 48.7% | 49.5% | BUF 1.92 | +0.8% | - | - | no bet |
-| MIN @ NSH (20:00 ET) | J. Wallstedt / J. Saros (probable) | 46.7% | 43.7% | NSH 2.22 | +3.0% | - | - | no bet |
-| SEA @ CGY (21:00 ET) | J. Daccord / D. Wolf (probable) | 53.0% | 50.0% | CGY 1.94 | +3.0% | - | - | no bet |
-| CHI @ UTA (21:30 ET) | S. Knight / K. Vejmelka (probable) | 67.1% | 66.5% | UTA 1.48 | +0.6% | - | - | no bet |
-| EDM @ VAN (22:00 ET) | C. Ingram / K. Lankinen (probable) | 44.6% | 33.8% | VAN 2.85 | +10.8% | - | - | no bet |
-| FLA @ SJS (22:00 ET) | D. Tarasov / A. Nedeljkovic (probable) | 50.0% | 42.5% | SJS 2.28 | +7.4% | - | - | no bet |
+| PHI @ NJD (19:00 ET) | D. Vladar / J. Markstrom (probable) | 63.1% | 61.3% | NJD 1.60 | +1.8% | - | - | no bet |
+| TBL @ NYR (19:00 ET) | A. Vasilevskiy / I. Shesterkin (probable) | 44.0% | 42.4% | NYR 2.30 | +1.6% | - | - | no bet |
+| BUF @ CBJ (19:00 ET) | U. Luukkonen / J. Greaves (probable) | 48.7% | 48.8% | BUF 1.90 | +0.1% | - | - | no bet |
+| MIN @ NSH (20:00 ET) | J. Wallstedt / J. Saros (probable) | 46.7% | 42.7% | NSH 2.30 | +4.0% | - | - | no bet |
+| SEA @ CGY (21:00 ET) | J. Daccord / D. Wolf (probable) | 53.0% | 50.2% | CGY 1.94 | +2.8% | - | - | no bet |
+| CHI @ UTA (21:30 ET) | S. Knight / K. Vejmelka (probable) | 67.1% | 66.7% | UTA 1.47 | +0.4% | - | - | no bet |
+| EDM @ VAN (22:00 ET) | C. Ingram / K. Lankinen (probable) | 44.6% | 34.4% | VAN 2.83 | +10.2% | - | - | no bet |
+| FLA @ SJS (22:00 ET) | D. Tarasov / A. Nedeljkovic (probable) | 50.0% | 42.3% | SJS 2.30 | +7.7% | - | - | no bet |
 
 ## Why
 
@@ -60,38 +60,38 @@ The goals model prices the over/under and the puck line. **No real stakes are su
 
 | Game | Market | Side | Model | Market (no-vig) | Edge | EV per $1 | Best price |
 |---|---|---|---|---|---|---|---|
-| EDM @ VAN (22:00 ET) | Puck line | VAN +1.5 | 66.9% | 54.7% | +12.2 pts | +18.4% | 1.77 |
-| EDM @ VAN (22:00 ET) | Total | Under 6.5 | 55.7% | 48.6% | +7.1 pts | +10.8% | 1.99 |
-| FLA @ SJS (22:00 ET) | Puck line | SJS +1.5 | 71.1% | 64.4% | +6.7 pts | +7.3% | 1.51 |
-| CHI @ UTA (21:30 ET) | Puck line | CHI +1.5 | 60.4% | 56.4% | +4.0 pts | +5.1% | 1.74 |
-| MIN @ NSH (20:00 ET) | Puck line | NSH +1.5 | 69.4% | 66.2% | +3.2 pts | +4.1% | 1.50 |
-| PHI @ NJD (19:00 ET) | Total | Over 5.5 | 57.7% | 54.5% | +3.1 pts | +2.1% | 1.77 |
-| FLA @ SJS (22:00 ET) | Total | Under 6.5 | 54.7% | 52.0% | +2.7 pts | +2.3% | 1.87 |
-| TBL @ NYR (19:00 ET) | Puck line | NYR +1.5 | 67.6% | 66.1% | +1.5 pts | +1.4% | 1.50 |
-| BUF @ CBJ (19:00 ET) | Puck line | BUF -1.5 | 30.2% | 28.9% | +1.3 pts | -0.4% | 3.30 |
-| SEA @ CGY (21:00 ET) | Puck line | CGY -1.5 | 29.6% | 28.4% | +1.2 pts | -1.7% | 3.32 |
-| SEA @ CGY (21:00 ET) | Total | Over 6 | 49.2% | 48.1% | +1.2 pts | +0.4% | 2.04 |
-| CHI @ UTA (21:30 ET) | Total | Over 6 | 51.1% | 50.0% | +1.1 pts | -1.2% | 1.93 |
-| TBL @ NYR (19:00 ET) | Total | Over 6 | 49.5% | 48.5% | +1.0 pts | -1.3% | 1.99 |
-| BUF @ CBJ (19:00 ET) | Total | Over 6 | 51.2% | 50.3% | +0.8 pts | -1.0% | 1.93 |
-| PHI @ NJD (19:00 ET) | Puck line | PHI +1.5 | 63.6% | 62.7% | +0.8 pts | +1.1% | 1.59 |
-| MIN @ NSH (20:00 ET) | Total | Under 6 | 49.6% | 49.5% | +0.1 pts | -2.9% | 1.95 |
-| MIN @ NSH (20:00 ET) | Total | Over 6 | 50.4% | 50.5% | -0.1 pts | -3.2% | 1.91 |
-| PHI @ NJD (19:00 ET) | Puck line | NJD -1.5 | 36.4% | 37.3% | -0.8 pts | -4.9% | 2.61 |
-| BUF @ CBJ (19:00 ET) | Total | Under 6 | 48.8% | 49.7% | -0.8 pts | -4.2% | 1.95 |
-| TBL @ NYR (19:00 ET) | Total | Under 6 | 50.5% | 51.5% | -1.0 pts | -4.9% | 1.87 |
-| CHI @ UTA (21:30 ET) | Total | Under 6 | 48.9% | 50.0% | -1.1 pts | -4.9% | 1.93 |
-| SEA @ CGY (21:00 ET) | Total | Under 6 | 50.8% | 51.9% | -1.2 pts | -0.9% | 1.95 |
-| SEA @ CGY (21:00 ET) | Puck line | SEA +1.5 | 70.4% | 71.6% | -1.2 pts | -4.3% | 1.36 |
-| BUF @ CBJ (19:00 ET) | Puck line | CBJ +1.5 | 69.8% | 71.1% | -1.3 pts | -2.2% | 1.40 |
-| TBL @ NYR (19:00 ET) | Puck line | TBL -1.5 | 32.4% | 33.9% | -1.5 pts | -8.1% | 2.84 |
-| FLA @ SJS (22:00 ET) | Total | Over 6.5 | 45.3% | 48.0% | -2.7 pts | -9.4% | 2.00 |
-| PHI @ NJD (19:00 ET) | Total | Under 5.5 | 42.3% | 45.5% | -3.1 pts | -9.9% | 2.13 |
-| MIN @ NSH (20:00 ET) | Puck line | MIN -1.5 | 30.6% | 33.8% | -3.2 pts | -12.5% | 2.86 |
-| CHI @ UTA (21:30 ET) | Puck line | UTA -1.5 | 39.6% | 43.6% | -4.0 pts | -12.1% | 2.22 |
-| FLA @ SJS (22:00 ET) | Puck line | FLA -1.5 | 28.9% | 35.6% | -6.7 pts | -21.9% | 2.70 |
-| EDM @ VAN (22:00 ET) | Total | Over 6.5 | 44.3% | 51.4% | -7.1 pts | -17.2% | 1.87 |
-| EDM @ VAN (22:00 ET) | Puck line | EDM -1.5 | 33.1% | 45.3% | -12.2 pts | -29.1% | 2.14 |
+| EDM @ VAN (22:00 ET) | Puck line | VAN +1.5 | 66.9% | 55.1% | +11.8 pts | +18.4% | 1.77 |
+| EDM @ VAN (22:00 ET) | Total | Under 6.5 | 55.7% | 48.5% | +7.3 pts | +12.5% | 2.02 |
+| FLA @ SJS (22:00 ET) | Puck line | SJS +1.5 | 71.1% | 64.0% | +7.1 pts | +8.8% | 1.53 |
+| PHI @ NJD (19:00 ET) | Total | Over 5.5 | 57.7% | 52.8% | +4.9 pts | +5.6% | 1.83 |
+| CHI @ UTA (21:30 ET) | Puck line | CHI +1.5 | 60.4% | 55.9% | +4.5 pts | +5.1% | 1.74 |
+| MIN @ NSH (20:00 ET) | Puck line | NSH +1.5 | 69.4% | 65.0% | +4.4 pts | +6.2% | 1.53 |
+| FLA @ SJS (22:00 ET) | Total | Under 6.5 | 54.7% | 51.3% | +3.3 pts | +3.4% | 1.89 |
+| TBL @ NYR (19:00 ET) | Total | Over 5.5 | 56.1% | 52.9% | +3.2 pts | +3.8% | 1.85 |
+| TBL @ NYR (19:00 ET) | Puck line | NYR +1.5 | 67.6% | 65.6% | +2.1 pts | +0.8% | 1.49 |
+| PHI @ NJD (19:00 ET) | Puck line | PHI +1.5 | 63.6% | 61.9% | +1.6 pts | +1.1% | 1.59 |
+| SEA @ CGY (21:00 ET) | Total | Over 6 | 49.2% | 48.0% | +1.3 pts | +0.4% | 2.04 |
+| CHI @ UTA (21:30 ET) | Total | Over 6 | 51.1% | 50.1% | +1.0 pts | -1.2% | 1.93 |
+| SEA @ CGY (21:00 ET) | Puck line | CGY -1.5 | 29.6% | 28.7% | +0.9 pts | -1.7% | 3.32 |
+| BUF @ CBJ (19:00 ET) | Puck line | BUF -1.5 | 30.2% | 29.4% | +0.8 pts | -1.0% | 3.28 |
+| MIN @ NSH (20:00 ET) | Total | Under 6 | 49.6% | 49.2% | +0.4 pts | -2.5% | 1.96 |
+| BUF @ CBJ (19:00 ET) | Total | Over 6 | 51.2% | 51.2% | +0.0 pts | -3.3% | 1.88 |
+| BUF @ CBJ (19:00 ET) | Total | Under 6 | 48.8% | 48.8% | -0.0 pts | -3.4% | 1.97 |
+| MIN @ NSH (20:00 ET) | Total | Over 6 | 50.4% | 50.8% | -0.4 pts | -3.2% | 1.91 |
+| BUF @ CBJ (19:00 ET) | Puck line | CBJ +1.5 | 69.8% | 70.6% | -0.8 pts | -2.2% | 1.40 |
+| SEA @ CGY (21:00 ET) | Puck line | SEA +1.5 | 70.4% | 71.3% | -0.9 pts | -4.3% | 1.36 |
+| CHI @ UTA (21:30 ET) | Total | Under 6 | 48.9% | 49.9% | -1.0 pts | -4.1% | 1.95 |
+| SEA @ CGY (21:00 ET) | Total | Under 6 | 50.8% | 52.0% | -1.3 pts | -2.7% | 1.91 |
+| PHI @ NJD (19:00 ET) | Puck line | NJD -1.5 | 36.4% | 38.1% | -1.6 pts | -7.5% | 2.54 |
+| TBL @ NYR (19:00 ET) | Puck line | TBL -1.5 | 32.4% | 34.4% | -2.1 pts | -9.3% | 2.80 |
+| TBL @ NYR (19:00 ET) | Total | Under 5.5 | 43.9% | 47.1% | -3.2 pts | -8.7% | 2.08 |
+| FLA @ SJS (22:00 ET) | Total | Over 6.5 | 45.3% | 48.7% | -3.3 pts | -9.4% | 2.00 |
+| MIN @ NSH (20:00 ET) | Puck line | MIN -1.5 | 30.6% | 35.0% | -4.4 pts | -14.3% | 2.80 |
+| CHI @ UTA (21:30 ET) | Puck line | UTA -1.5 | 39.6% | 44.1% | -4.5 pts | -12.9% | 2.20 |
+| PHI @ NJD (19:00 ET) | Total | Under 5.5 | 42.3% | 47.2% | -4.9 pts | -12.8% | 2.06 |
+| FLA @ SJS (22:00 ET) | Puck line | FLA -1.5 | 28.9% | 36.0% | -7.1 pts | -21.9% | 2.70 |
+| EDM @ VAN (22:00 ET) | Total | Over 6.5 | 44.3% | 51.5% | -7.3 pts | -16.7% | 1.88 |
+| EDM @ VAN (22:00 ET) | Puck line | EDM -1.5 | 33.1% | 44.9% | -11.8 pts | -27.8% | 2.18 |
 
 
 ## Paper trading (fake money, for measurement)
@@ -118,30 +118,30 @@ Every slate is also run through several alternative strategies with pretend stak
 
 | Game | Type | Pretend pick | Pretend stake | Price | Model | Market |
 |---|---|---|---|---|---|---|
-| PHI @ NJD | Moneyline | NJD moneyline | $10.00 | 1.62 | 63.1% | 60.3% |
-| TBL @ NYR | Moneyline | TBL moneyline | $10.00 | 1.71 | 56.0% | 56.8% |
-| BUF @ CBJ | Moneyline | BUF moneyline | $10.00 | 1.92 | 51.3% | 50.5% |
-| MIN @ NSH | Moneyline | MIN moneyline | $10.00 | 1.74 | 53.3% | 56.3% |
-| SEA @ CGY | Moneyline | CGY moneyline | $10.00 | 1.94 | 53.0% | 50.0% |
-| CHI @ UTA | Moneyline | UTA moneyline | $10.00 | 1.48 | 67.1% | 66.5% |
-| EDM @ VAN | Moneyline | EDM moneyline | $10.00 | 1.50 | 55.4% | 66.2% |
-| FLA @ SJS | Moneyline | FLA moneyline | $10.00 | 1.70 | 50.0% | 57.5% |
-| PHI @ NJD | Total | Over 5.5 | $10.00 | 1.77 | 57.7% | 54.5% |
-| TBL @ NYR | Total | Under 6 | $10.00 | 1.87 | 50.5% | 51.5% |
-| BUF @ CBJ | Total | Over 6 | $10.00 | 1.93 | 51.2% | 50.3% |
-| MIN @ NSH | Total | Over 6 | $10.00 | 1.91 | 50.4% | 50.5% |
-| SEA @ CGY | Total | Under 6 | $10.00 | 1.95 | 50.8% | 51.9% |
-| CHI @ UTA | Total | Over 6 | $10.00 | 1.93 | 51.1% | 50.0% |
-| EDM @ VAN | Total | Under 6.5 | $10.00 | 1.99 | 55.7% | 48.6% |
-| FLA @ SJS | Total | Under 6.5 | $10.00 | 1.87 | 54.7% | 52.0% |
-| PHI @ NJD | Puck line | PHI +1.5 | $10.00 | 1.59 | 63.6% | 62.7% |
-| TBL @ NYR | Puck line | NYR +1.5 | $10.00 | 1.50 | 67.6% | 66.1% |
-| BUF @ CBJ | Puck line | CBJ +1.5 | $10.00 | 1.40 | 69.8% | 71.1% |
-| MIN @ NSH | Puck line | NSH +1.5 | $10.00 | 1.50 | 69.4% | 66.2% |
-| SEA @ CGY | Puck line | SEA +1.5 | $10.00 | 1.36 | 70.4% | 71.6% |
-| CHI @ UTA | Puck line | CHI +1.5 | $10.00 | 1.74 | 60.4% | 56.4% |
-| EDM @ VAN | Puck line | VAN +1.5 | $10.00 | 1.77 | 66.9% | 54.7% |
-| FLA @ SJS | Puck line | SJS +1.5 | $10.00 | 1.51 | 71.1% | 64.4% |
+| PHI @ NJD | Moneyline | NJD moneyline | $10.00 | 1.60 | 63.1% | 61.3% |
+| TBL @ NYR | Moneyline | TBL moneyline | $10.00 | 1.70 | 56.0% | 57.6% |
+| BUF @ CBJ | Moneyline | BUF moneyline | $10.00 | 1.90 | 51.3% | 51.2% |
+| MIN @ NSH | Moneyline | MIN moneyline | $10.00 | 1.71 | 53.3% | 57.3% |
+| SEA @ CGY | Moneyline | CGY moneyline | $10.00 | 1.94 | 53.0% | 50.2% |
+| CHI @ UTA | Moneyline | UTA moneyline | $10.00 | 1.47 | 67.1% | 66.7% |
+| EDM @ VAN | Moneyline | EDM moneyline | $10.00 | 1.49 | 55.4% | 65.6% |
+| FLA @ SJS | Moneyline | FLA moneyline | $10.00 | 1.70 | 50.0% | 57.7% |
+| PHI @ NJD | Total | Over 5.5 | $10.00 | 1.83 | 57.7% | 52.8% |
+| TBL @ NYR | Total | Over 5.5 | $10.00 | 1.85 | 56.1% | 52.9% |
+| BUF @ CBJ | Total | Over 6 | $10.00 | 1.88 | 51.2% | 51.2% |
+| MIN @ NSH | Total | Over 6 | $10.00 | 1.91 | 50.4% | 50.8% |
+| SEA @ CGY | Total | Under 6 | $10.00 | 1.91 | 50.8% | 52.0% |
+| CHI @ UTA | Total | Over 6 | $10.00 | 1.93 | 51.1% | 50.1% |
+| EDM @ VAN | Total | Under 6.5 | $10.00 | 2.02 | 55.7% | 48.5% |
+| FLA @ SJS | Total | Under 6.5 | $10.00 | 1.89 | 54.7% | 51.3% |
+| PHI @ NJD | Puck line | PHI +1.5 | $10.00 | 1.59 | 63.6% | 61.9% |
+| TBL @ NYR | Puck line | NYR +1.5 | $10.00 | 1.49 | 67.6% | 65.6% |
+| BUF @ CBJ | Puck line | CBJ +1.5 | $10.00 | 1.40 | 69.8% | 70.6% |
+| MIN @ NSH | Puck line | NSH +1.5 | $10.00 | 1.53 | 69.4% | 65.0% |
+| SEA @ CGY | Puck line | SEA +1.5 | $10.00 | 1.36 | 70.4% | 71.3% |
+| CHI @ UTA | Puck line | CHI +1.5 | $10.00 | 1.74 | 60.4% | 55.9% |
+| EDM @ VAN | Puck line | VAN +1.5 | $10.00 | 1.77 | 66.9% | 55.1% |
+| FLA @ SJS | Puck line | SJS +1.5 | $10.00 | 1.53 | 71.1% | 64.0% |
 
 Total pretend stake $240.00. Settled results feed the `every_*` rows above; real bets follow the normal policy only.
 
