@@ -1,15 +1,15 @@
 {
- "generated_at": "2026-10-02T13:31:40+00:00",
+ "generated_at": "2026-10-02T18:19:24+00:00",
  "public_safe": true,
  "date": "2026-10-02",
- "run_type": "late",
+ "run_type": "morning",
  "notes": [],
  "model": {
-  "version": "20260930-8845bc",
+  "version": "20261001-0115e4",
   "p_source": "online_platt",
   "status": "OK",
   "reasons": [],
-  "train_end": "2026-09-30",
+  "train_end": "2026-10-01",
   "inputs": [
    {
     "feature": "d_elo",
@@ -127,13 +127,10 @@
  },
  "odds": {
   "enabled": true,
-  "captured_at": "2026-10-02T13:31:22+00:00",
+  "captured_at": "2026-10-02T18:19:03+00:00",
   "stale": false,
-  "remaining": 474,
-  "source": "live",
-  "props": {
-   "games": 0
-  }
+  "remaining": 473,
+  "source": "live"
  },
  "policy": {
   "bankroll": 1000.0,
@@ -154,7 +151,7 @@
    "home_goalie": "J. Gibson",
    "away_goalie": "I. Shesterkin",
    "goalie_status": "probable",
-   "p_home": 0.6310811068442208,
+   "p_home": 0.6343972680777005,
    "blocked": "early-season sample size: a team has only played 0 games (< 10)",
    "notes": [
     "NYR is on the second night of a back-to-back.",
@@ -162,18 +159,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-02T13:31:22+00:00",
+   "odds_captured_at": "2026-10-02T18:19:03+00:00",
    "sides": {
     "home": {
      "team": "DET",
-     "p_model": 0.6310811068442208,
-     "p_market": 0.5450645518960262,
-     "p_adj": 0.5591414627484816,
-     "edge": 0.0860165549481946,
-     "ev": 0.006454632947267003,
-     "kelly_full": 0.008068291184083753,
+     "p_model": 0.6343972680777005,
+     "p_market": 0.538994443651674,
+     "p_adj": 0.5525142952246338,
+     "edge": 0.09540282442602643,
+     "ev": 0.011101160261079879,
+     "kelly_full": 0.01337489188081913,
      "best_book": null,
-     "best_decimal": 1.8,
+     "best_decimal": 1.83,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -182,14 +179,14 @@
     },
     "away": {
      "team": "NYR",
-     "p_model": 0.3689188931557792,
-     "p_market": 0.4549354481039738,
-     "p_adj": 0.44085853725151836,
-     "edge": -0.0860165549481946,
-     "ev": -0.06537990102678104,
+     "p_model": 0.36560273192229953,
+     "p_market": 0.46100555634832596,
+     "p_adj": 0.4474857047753662,
+     "edge": -0.09540282442602643,
+     "ev": -0.05580516292397736,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.12,
+     "best_decimal": 2.11,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -203,11 +200,11 @@
      "side": "over",
      "label": "Over 6",
      "point": 6.0,
-     "p_model": 0.5171744831595982,
+     "p_model": 0.5240330552063118,
      "p_market": 0.48343709217206426,
-     "p_push": 0.12509661321980983,
-     "edge": 0.03373739098753398,
-     "ev": 0.03005202696506365,
+     "p_push": 0.12499540116421985,
+     "edge": 0.04059596303424756,
+     "ev": 0.042058067659194176,
      "best_decimal": 2.0,
      "best_book": null,
      "n_books": 6
@@ -217,11 +214,11 @@
      "side": "under",
      "label": "Under 6",
      "point": 6.0,
-     "p_model": 0.48282551684040176,
+     "p_model": 0.4759669447936882,
      "p_market": 0.5165629078279357,
-     "p_push": 0.12509661321980983,
-     "edge": -0.03373739098753392,
-     "ev": -0.08496736535304694,
+     "p_push": 0.12499540116421985,
+     "edge": -0.040595963034247506,
+     "ev": -0.09619959218567214,
      "best_decimal": 1.87,
      "best_book": null,
      "n_books": 6
@@ -231,11 +228,11 @@
      "side": "home",
      "label": "DET -1.5",
      "point": -1.5,
-     "p_model": 0.3238339496910003,
+     "p_model": 0.32273602517620054,
      "p_market": 0.32193270615600994,
      "p_push": 0.0,
-     "edge": 0.0019012435349903822,
-     "ev": -0.028498150926999033,
+     "edge": 0.000803319020190596,
+     "ev": -0.031791924471398336,
      "best_decimal": 3.0,
      "best_book": null,
      "n_books": 9
@@ -245,20 +242,20 @@
      "side": "away",
      "label": "NYR +1.5",
      "point": 1.5,
-     "p_model": 0.6761660503089997,
+     "p_model": 0.6772639748237994,
      "p_market": 0.67806729384399,
      "p_push": 0.0,
-     "edge": -0.0019012435349903267,
-     "ev": -0.019559227051950512,
+     "edge": -0.000803319020190596,
+     "ev": -0.01796723650549087,
      "best_decimal": 1.45,
      "best_book": null,
      "n_books": 9
     }
    ],
    "goals": {
-    "lam_home": 3.1756215256555884,
-    "lam_away": 2.898358295914068,
-    "exp_total": 6.1867607776158655
+    "lam_home": 3.187861336634779,
+    "lam_away": 2.9230190584860374,
+    "exp_total": 6.223526207371067
    },
    "props": [],
    "stats": [
@@ -564,37 +561,37 @@
     {
      "feature": "a_b2b",
      "label": "Second game in two nights (away team)",
-     "value": 0.20152336032353627,
+     "value": 0.2018760881370028,
      "raw": 1.0
     },
     {
      "feature": "d_g_sv_l5",
      "label": "Starting goalie save %, last 5 (home minus away)",
-     "value": 0.13062602107022936,
+     "value": 0.1308470010230541,
      "raw": -0.03954540568708209
     },
     {
      "feature": "d_games_last_7d",
      "label": "Games in the last 7 days (home minus away)",
-     "value": 0.08417516834660427,
+     "value": 0.08463577017306895,
      "raw": -2.0
     },
     {
      "feature": "h_early_w",
      "label": "Early-season weight (home team)",
-     "value": 0.05849666787428835,
+     "value": 0.061283989184507726,
      "raw": 0.0
     },
     {
      "feature": "d_cf_pct",
      "label": "Corsi % (shot attempts) (home minus away)",
-     "value": 0.03871283967773348,
+     "value": 0.038666425663632736,
      "raw": 0.023574883882282682
     },
     {
      "feature": "h_b2b",
      "label": "Second game in two nights (home team)",
-     "value": 0.027527791458461064,
+     "value": 0.027560031521776256,
      "raw": 0.0
     }
    ],
@@ -610,7 +607,7 @@
    "home_goalie": "F. Andersen",
    "away_goalie": "L. Thompson",
    "goalie_status": "probable",
-   "p_home": 0.65868426832061,
+   "p_home": 0.6622528352692061,
    "blocked": "early-season sample size: a team has only played 0 games (< 10)",
    "notes": [
     "CAR are creating the better share of expected goals recently.",
@@ -619,18 +616,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-02T13:31:22+00:00",
+   "odds_captured_at": "2026-10-02T18:19:03+00:00",
    "sides": {
     "home": {
      "team": "CAR",
-     "p_model": 0.65868426832061,
-     "p_market": 0.5624629027541085,
-     "p_adj": 0.5759324185215171,
-     "edge": 0.09622136556650152,
-     "ev": 0.0021224082274397538,
-     "kelly_full": 0.0028681192262699374,
+     "p_model": 0.6622528352692061,
+     "p_market": 0.5721001677814281,
+     "p_adj": 0.5859372817160716,
+     "edge": 0.09015266748777795,
+     "ev": 0.0078121245516431514,
+     "kelly_full": 0.010850172988393266,
      "best_book": null,
-     "best_decimal": 1.74,
+     "best_decimal": 1.72,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -639,14 +636,14 @@
     },
     "away": {
      "team": "WSH",
-     "p_model": 0.34131573167939,
-     "p_market": 0.4375370972458915,
-     "p_adj": 0.42406758147848284,
-     "edge": -0.09622136556650152,
-     "ev": -0.06281064493255284,
+     "p_model": 0.3377471647307939,
+     "p_market": 0.42789983221857186,
+     "p_adj": 0.4140627182839283,
+     "edge": -0.09015266748777795,
+     "ev": -0.055937002312643536,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.21,
+     "best_decimal": 2.28,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -660,11 +657,11 @@
      "side": "over",
      "label": "Over 6",
      "point": 6.0,
-     "p_model": 0.5061753507183886,
+     "p_model": 0.5135710905070694,
      "p_market": 0.5205950860244949,
-     "p_push": 0.12609029777943834,
-     "edge": -0.014419735306106296,
-     "ev": -0.05555933468782526,
+     "p_push": 0.12600458758493327,
+     "edge": -0.0070239955174254964,
+     "ev": -0.04360667486853054,
      "best_decimal": 1.85,
      "best_book": null,
      "n_books": 6
@@ -674,11 +671,11 @@
      "side": "under",
      "label": "Under 6",
      "point": 6.0,
-     "p_model": 0.4938246492816114,
+     "p_model": 0.4864289094929306,
      "p_market": 0.4794049139755051,
-     "p_push": 0.12609029777943834,
-     "edge": 0.014419735306106296,
-     "ev": -0.0021622347707717093,
+     "p_push": 0.12600458758493327,
+     "edge": 0.0070239955174254964,
+     "ev": -0.01521940898203894,
      "best_decimal": 2.02,
      "best_book": null,
      "n_books": 6
@@ -688,11 +685,11 @@
      "side": "home",
      "label": "CAR -1.5",
      "point": -1.5,
-     "p_model": 0.37461577622130876,
+     "p_model": 0.3738071157651416,
      "p_market": 0.34158631754493884,
      "p_push": 0.0,
-     "edge": 0.033029458676369916,
-     "ev": 0.048924173419664374,
+     "edge": 0.03222079822020274,
+     "ev": 0.04665992414239639,
      "best_decimal": 2.8,
      "best_book": null,
      "n_books": 9
@@ -702,20 +699,20 @@
      "side": "away",
      "label": "WSH +1.5",
      "point": 1.5,
-     "p_model": 0.6253842237786913,
+     "p_model": 0.6261928842348584,
      "p_market": 0.6584136824550612,
      "p_push": 0.0,
-     "edge": -0.03302945867636986,
-     "ev": -0.06192366433196306,
+     "edge": -0.03222079822020274,
+     "ev": -0.060710673647712377,
      "best_decimal": 1.5,
      "best_book": null,
      "n_books": 9
     }
    ],
    "goals": {
-    "lam_home": 3.3736807573806384,
-    "lam_away": 2.647336542603049,
-    "exp_total": 6.128112750689552
+    "lam_home": 3.3890335147199386,
+    "lam_away": 2.6713198173678827,
+    "exp_total": 6.167406684677484
    },
    "props": [],
    "stats": [
@@ -1021,37 +1018,37 @@
     {
      "feature": "d_elo",
      "label": "Elo rating (home minus away)",
-     "value": 0.21482091295063907,
+     "value": 0.21466453577412103,
      "raw": 70.92297668152992
     },
     {
      "feature": "d_cf_pct",
      "label": "Corsi % (shot attempts) (home minus away)",
-     "value": 0.19305445456486026,
+     "value": 0.19281722056145129,
      "raw": 0.11907465856464411
     },
     {
      "feature": "d_xg_share",
      "label": "Expected-goals share (home minus away)",
-     "value": 0.17512754186515078,
+     "value": 0.17577725238082637,
      "raw": 0.08350466615528457
     },
     {
      "feature": "h_early_w",
      "label": "Early-season weight (home team)",
-     "value": 0.05374414486421816,
+     "value": 0.056301025776390276,
      "raw": 0.047619047619047616
     },
     {
      "feature": "a_b2b",
      "label": "Second game in two nights (away team)",
-     "value": -0.05305299458769054,
+     "value": -0.0531239164372902,
      "raw": 0.0
     },
     {
      "feature": "d_games_last_7d",
      "label": "Games in the last 7 days (home minus away)",
-     "value": -0.044152307583143306,
+     "value": -0.04440557034447369,
      "raw": 1.0
     }
    ],
@@ -1067,7 +1064,7 @@
    "home_goalie": "C. Hellebuyck",
    "away_goalie": "J. Swayman",
    "goalie_status": "probable",
-   "p_home": 0.5337869801316196,
+   "p_home": 0.5356447701787158,
    "blocked": "early-season sample size: a team has only played 0 games (< 10)",
    "notes": [
     "BOS have the clearly better goal differential this season (gap 0.44 goals/game).",
@@ -1075,18 +1072,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-02T13:31:22+00:00",
+   "odds_captured_at": "2026-10-02T18:19:03+00:00",
    "sides": {
     "home": {
      "team": "WPG",
-     "p_model": 0.5337869801316196,
-     "p_market": 0.5286890038681066,
-     "p_adj": 0.531219722068919,
-     "edge": 0.005097976263513049,
-     "ev": -0.022555711393189015,
+     "p_model": 0.5356447701787158,
+     "p_market": 0.527785421965047,
+     "p_adj": 0.5316488075078373,
+     "edge": 0.007859348213668849,
+     "ev": -0.016449706110501006,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.84,
+     "best_decimal": 1.85,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -1095,11 +1092,11 @@
     },
     "away": {
      "team": "BOS",
-     "p_model": 0.4662130198683804,
-     "p_market": 0.4713109961318934,
-     "p_adj": 0.468780277931081,
-     "edge": -0.005097976263513049,
-     "ev": -0.029624824682662365,
+     "p_model": 0.4643552298212842,
+     "p_market": 0.47221457803495304,
+     "p_adj": 0.4683511924921628,
+     "edge": -0.007859348213668849,
+     "ev": -0.03051303154122309,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 2.07,
@@ -1116,11 +1113,11 @@
      "side": "over",
      "label": "Over 5.5",
      "point": 5.5,
-     "p_model": 0.5791505276372798,
+     "p_model": 0.5854813315084159,
      "p_market": 0.5385071133833738,
      "p_push": 0.0,
-     "edge": 0.04064341425390605,
-     "ev": 0.04826245502347648,
+     "edge": 0.0469742181250421,
+     "ev": 0.05972121003023273,
      "best_decimal": 1.81,
      "best_book": null,
      "n_books": 6
@@ -1130,11 +1127,11 @@
      "side": "under",
      "label": "Under 5.5",
      "point": 5.5,
-     "p_model": 0.4208494723627202,
+     "p_model": 0.41451866849158414,
      "p_market": 0.46149288661662624,
      "p_push": 0.0,
-     "edge": -0.04064341425390605,
-     "ev": -0.11621610803828758,
+     "edge": -0.0469742181250421,
+     "ev": -0.12951079616767325,
      "best_decimal": 2.1,
      "best_book": null,
      "n_books": 6
@@ -1144,11 +1141,11 @@
      "side": "home",
      "label": "WPG -1.5",
      "point": -1.5,
-     "p_model": 0.29057696435977676,
+     "p_model": 0.2895725377409459,
      "p_market": 0.3075731843732597,
      "p_push": 0.0,
-     "edge": -0.016996220013482943,
-     "ev": -0.09339987119749649,
+     "edge": -0.01800064663231382,
+     "ev": -0.09653368224824876,
      "best_decimal": 3.12,
      "best_book": null,
      "n_books": 9
@@ -1158,20 +1155,20 @@
      "side": "away",
      "label": "BOS +1.5",
      "point": 1.5,
-     "p_model": 0.7094230356402232,
+     "p_model": 0.7104274622590541,
      "p_market": 0.6924268156267404,
      "p_push": 0.0,
-     "edge": 0.016996220013482888,
-     "ev": 0.014474940965519212,
+     "edge": 0.01800064663231371,
+     "ev": 0.01591127103044726,
      "best_decimal": 1.43,
      "best_book": null,
      "n_books": 9
     }
    ],
    "goals": {
-    "lam_home": 3.0254113359762824,
-    "lam_away": 3.0419887636479173,
-    "exp_total": 6.181230941724554
+    "lam_home": 3.0387485752001497,
+    "lam_away": 3.06821676514815,
+    "exp_total": 6.220539381325043
    },
    "props": [],
    "stats": [
@@ -1477,37 +1474,37 @@
     {
      "feature": "d_elo",
      "label": "Elo rating (home minus away)",
-     "value": -0.08500271846251581,
+     "value": -0.08483950301765582,
      "raw": -28.568173601318904
     },
     {
      "feature": "d_g_sv_l5",
      "label": "Starting goalie save %, last 5 (home minus away)",
-     "value": 0.06522647867226962,
+     "value": 0.06534299246724447,
      "raw": -0.019690061485218235
     },
     {
      "feature": "h_early_w",
      "label": "Early-season weight (home team)",
-     "value": 0.05849666787428835,
+     "value": 0.061283989184507726,
      "raw": 0.0
     },
     {
      "feature": "a_b2b",
      "label": "Second game in two nights (away team)",
-     "value": -0.05305299458769054,
+     "value": -0.0531239164372902,
      "raw": 0.0
     },
     {
      "feature": "d_games_last_7d",
      "label": "Games in the last 7 days (home minus away)",
-     "value": 0.04139934303668841,
+     "value": 0.04162199000055474,
      "raw": -1.0
     },
     {
      "feature": "h_b2b",
      "label": "Second game in two nights (home team)",
-     "value": 0.027527791458461064,
+     "value": 0.027560031521776256,
      "raw": 0.0
     }
    ],
@@ -1523,7 +1520,7 @@
    "home_goalie": "J. Oettinger",
    "away_goalie": "J. Hofer",
    "goalie_status": "probable",
-   "p_home": 0.5885015519808658,
+   "p_home": 0.5866856624788622,
    "blocked": "early-season sample size: a team has only played 0 games (< 10)",
    "notes": [
     "DAL have the clearly better goal differential this season (gap 0.42 goals/game).",
@@ -1532,18 +1529,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-02T13:31:22+00:00",
+   "odds_captured_at": "2026-10-02T18:19:03+00:00",
    "sides": {
     "home": {
      "team": "DAL",
-     "p_model": 0.5885015519808658,
-     "p_market": 0.6258501462463721,
-     "p_adj": 0.6123909710419922,
-     "edge": -0.037348594265506296,
-     "ev": -0.03854617546407213,
+     "p_model": 0.5866856624788622,
+     "p_market": 0.6298709654512218,
+     "p_adj": 0.6156470008616873,
+     "edge": -0.04318530297235956,
+     "ev": -0.03959067865576771,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.57,
+     "best_decimal": 1.56,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -1552,14 +1549,14 @@
     },
     "away": {
      "team": "STL",
-     "p_model": 0.41149844801913416,
-     "p_market": 0.37414985375362786,
-     "p_adj": 0.3876090289580078,
-     "edge": 0.037348594265506296,
-     "ev": 0.007783475290820352,
-     "kelly_full": 0.00486467205676272,
+     "p_model": 0.4133143375211378,
+     "p_market": 0.3701290345487782,
+     "p_adj": 0.3843529991383126,
+     "edge": 0.04318530297235956,
+     "ev": 0.010848387733762066,
+     "kelly_full": 0.006655452597400041,
      "best_book": null,
-     "best_decimal": 2.6,
+     "best_decimal": 2.63,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -1573,11 +1570,11 @@
      "side": "over",
      "label": "Over 6",
      "point": 6.0,
-     "p_model": 0.5049935253501201,
+     "p_model": 0.512765189232285,
      "p_market": 0.5002248848589522,
-     "p_push": 0.12521770408563154,
-     "edge": 0.004768640491167875,
-     "ev": -0.022186662545967573,
+     "p_push": 0.1251578610043985,
+     "edge": 0.012540304373332756,
+     "ev": -0.009066150741220358,
      "best_decimal": 1.93,
      "best_book": null,
      "n_books": 6
@@ -1587,11 +1584,11 @@
      "side": "under",
      "label": "Under 6",
      "point": 6.0,
-     "p_model": 0.4950064746498799,
+     "p_model": 0.487234810767715,
      "p_market": 0.4997751151410478,
-     "p_push": 0.12521770408563154,
-     "edge": -0.004768640491167875,
-     "ev": -0.03904809816803817,
+     "p_push": 0.1251578610043985,
+     "edge": -0.012540304373332756,
+     "ev": -0.052172798988471825,
      "best_decimal": 1.93,
      "best_book": null,
      "n_books": 6
@@ -1601,11 +1598,11 @@
      "side": "home",
      "label": "DAL -1.5",
      "point": -1.5,
-     "p_model": 0.32946750484590315,
+     "p_model": 0.3284910981263658,
      "p_market": 0.39667723136612804,
      "p_push": 0.0,
-     "edge": -0.06720972652022489,
-     "ev": -0.19280461312753722,
+     "edge": -0.06818613323976225,
+     "ev": -0.19519680959040375,
      "best_decimal": 2.45,
      "best_book": null,
      "n_books": 9
@@ -1615,20 +1612,20 @@
      "side": "away",
      "label": "STL +1.5",
      "point": 1.5,
-     "p_model": 0.6705324951540969,
+     "p_model": 0.6715089018736342,
      "p_market": 0.603322768633872,
      "p_push": 0.0,
-     "edge": 0.06720972652022483,
-     "ev": 0.08626264214963697,
+     "edge": 0.06818613323976219,
+     "ev": 0.0878444210352875,
      "best_decimal": 1.62,
      "best_book": null,
      "n_books": 9
     }
    ],
    "goals": {
-    "lam_home": 3.170285623950681,
-    "lam_away": 2.8387773719822857,
-    "exp_total": 6.121926512476624
+    "lam_home": 3.185271562471193,
+    "lam_away": 2.865254555206475,
+    "exp_total": 6.163225447983348
    },
    "props": [],
    "stats": [
@@ -1934,37 +1931,37 @@
     {
      "feature": "d_elo",
      "label": "Elo rating (home minus away)",
-     "value": 0.10809023144358491,
+     "value": 0.10804762227835914,
      "raw": 35.50629446885728
     },
     {
      "feature": "h_early_w",
      "label": "Early-season weight (home team)",
-     "value": 0.05849666787428835,
+     "value": 0.061283989184507726,
      "raw": 0.0
     },
     {
      "feature": "d_pen_drawn_pg",
      "label": "Penalties drawn per game (home minus away)",
-     "value": 0.05839296216862199,
+     "value": 0.056453427882904965,
      "raw": 1.1999999999999997
     },
     {
      "feature": "a_b2b",
      "label": "Second game in two nights (away team)",
-     "value": -0.05305299458769054,
+     "value": -0.0531239164372902,
      "raw": 0.0
     },
     {
      "feature": "d_xg_share",
      "label": "Expected-goals share (home minus away)",
-     "value": 0.05281344543979337,
+     "value": 0.05301168283706913,
      "raw": 0.024432467843809924
     },
     {
      "feature": "h_b2b",
      "label": "Second game in two nights (home team)",
-     "value": 0.027527791458461064,
+     "value": 0.027560031521776256,
      "raw": 0.0
     }
    ],
@@ -1980,7 +1977,7 @@
    "home_goalie": "C. Hart",
    "away_goalie": "L. Dostal",
    "goalie_status": "probable",
-   "p_home": 0.5170533447558143,
+   "p_home": 0.5167799998077485,
    "blocked": "early-season sample size: a team has only played 0 games (< 10)",
    "notes": [
     "VGK have the clearly better goal differential this season (gap 0.41 goals/game).",
@@ -1990,18 +1987,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-02T13:31:22+00:00",
+   "odds_captured_at": "2026-10-02T18:19:03+00:00",
    "sides": {
     "home": {
      "team": "VGK",
-     "p_model": 0.5170533447558143,
-     "p_market": 0.638979746953203,
-     "p_adj": 0.6270948255412018,
-     "edge": -0.1219264021973887,
-     "ev": -0.04054491692196127,
+     "p_model": 0.5167799998077485,
+     "p_market": 0.6408931369652472,
+     "p_adj": 0.6291375689578774,
+     "edge": -0.12411313715749872,
+     "ev": -0.04371089518402632,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.53,
+     "best_decimal": 1.52,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -2010,14 +2007,14 @@
     },
     "away": {
      "team": "ANA",
-     "p_model": 0.4829466552441857,
-     "p_market": 0.36102025304679697,
-     "p_adj": 0.3729051744587983,
-     "edge": 0.1219264021973887,
-     "ev": -0.008072235939596495,
+     "p_model": 0.48322000019225153,
+     "p_market": 0.3591068630347528,
+     "p_adj": 0.3708624310421226,
+     "edge": 0.12411313715749872,
+     "ev": -0.006088684807111444,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.66,
+     "best_decimal": 2.68,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 0 games (< 10)"
@@ -2031,11 +2028,11 @@
      "side": "over",
      "label": "Over 6.5",
      "point": 6.5,
-     "p_model": 0.42346787429616284,
+     "p_model": 0.4308515987625002,
      "p_market": 0.5228745014808106,
      "p_push": 0.0,
-     "edge": -0.09940662718464777,
-     "ev": -0.2165844325520987,
+     "edge": -0.09202290271831043,
+     "ev": -0.20292454228937468,
      "best_decimal": 1.85,
      "best_book": null,
      "n_books": 9
@@ -2045,11 +2042,11 @@
      "side": "under",
      "label": "Under 6.5",
      "point": 6.5,
-     "p_model": 0.5765321257038372,
+     "p_model": 0.5691484012374999,
      "p_market": 0.4771254985191894,
      "p_push": 0.0,
-     "edge": 0.09940662718464777,
-     "ev": 0.16459489392175108,
+     "edge": 0.09202290271831048,
+     "ev": 0.1496797704997498,
      "best_decimal": 2.02,
      "best_book": null,
      "n_books": 9
@@ -2059,11 +2056,11 @@
      "side": "home",
      "label": "VGK -1.5",
      "point": -1.5,
-     "p_model": 0.2837891551096834,
+     "p_model": 0.2827409752932049,
      "p_market": 0.4220928936738285,
      "p_push": 0.0,
-     "edge": -0.13830373856414513,
-     "ev": -0.34728494324772824,
+     "edge": -0.1393519183806236,
+     "ev": -0.3496957568256288,
      "best_decimal": 2.3,
      "best_book": null,
      "n_books": 9
@@ -2073,20 +2070,20 @@
      "side": "away",
      "label": "ANA +1.5",
      "point": 1.5,
-     "p_model": 0.7162108448903166,
+     "p_model": 0.7172590247067951,
      "p_market": 0.5779071063261715,
      "p_push": 0.0,
-     "edge": 0.13830373856414513,
-     "ev": 0.21039632786463502,
+     "edge": 0.13935191838062366,
+     "ev": 0.21216775175448377,
      "best_decimal": 1.69,
      "best_book": null,
      "n_books": 9
     }
    ],
    "goals": {
-    "lam_home": 2.9177848381940685,
-    "lam_away": 2.97667255014802,
-    "exp_total": 6.009678322228311
+    "lam_home": 2.933059674703439,
+    "lam_away": 3.005940762075039,
+    "exp_total": 6.0538886210473555
    },
    "props": [],
    "stats": [
@@ -2392,38 +2389,38 @@
     {
      "feature": "d_elo",
      "label": "Elo rating (home minus away)",
-     "value": 0.20285062136948834,
+     "value": 0.202707003750471,
      "raw": 66.9508478902917
     },
     {
      "feature": "d_cf_pct",
      "label": "Corsi % (shot attempts) (home minus away)",
-     "value": -0.17824554500858528,
+     "value": -0.17802372289805782,
      "raw": -0.1106693824365913
     },
     {
      "feature": "d_xg_share",
      "label": "Expected-goals share (home minus away)",
-     "value": -0.06878552286717766,
+     "value": -0.06903611898149359,
      "raw": -0.034294355803075605
     },
     {
      "feature": "h_early_w",
      "label": "Early-season weight (home team)",
-     "value": 0.05374414486421816,
+     "value": 0.056301025776390276,
      "raw": 0.047619047619047616
     },
     {
      "feature": "a_b2b",
      "label": "Second game in two nights (away team)",
-     "value": -0.05305299458769054,
+     "value": -0.0531239164372902,
      "raw": 0.0
     },
     {
-     "feature": "d_pen_drawn_pg",
-     "label": "Penalties drawn per game (home minus away)",
-     "value": -0.04449814555405665,
-     "raw": -0.9333333333333336
+     "feature": "d_games_last_7d",
+     "label": "Games in the last 7 days (home minus away)",
+     "value": -0.04440557034447369,
+     "raw": 1.0
     }
    ],
    "server_action": "NO_BET",
@@ -2443,7 +2440,7 @@
   },
   "model": {
    "brier": 0.22993891667361818,
-   "log_loss": 0.6516447617871691,
+   "log_loss": 0.651644761787169,
    "accuracy": 0.5454545454545454
   },
   "vs_market": null,
@@ -2498,8 +2495,8 @@
    "strategy": "every_puckline",
    "bets": 11.0,
    "staked": 209.0,
-   "profit": -6.239999999999998,
-   "roi": -0.029856459330143532,
+   "profit": -6.240000000000002,
+   "roi": -0.02985645933014355,
    "roi_lo": null,
    "roi_hi": null,
    "win_rate": 0.6363636363636364,
@@ -2522,8 +2519,8 @@
    "strategy": "flat_model_side",
    "bets": 11.0,
    "staked": 141.0,
-   "profit": -19.530000000000005,
-   "roi": -0.13851063829787238,
+   "profit": -19.53000000000001,
+   "roi": -0.1385106382978724,
    "roi_lo": null,
    "roi_hi": null,
    "win_rate": 0.45454545454545453,

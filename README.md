@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-10-02
 
-**5 game(s) · 0 recommended bet(s)** · late run · model health **OK** · updated 2026-10-02 13:31 UTC
+**5 game(s) · 0 recommended bet(s)** · morning run · model health **OK** · updated 2026-10-02 18:19 UTC
 
 | | |
 |---|---|
@@ -23,11 +23,11 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| NYR @ DET | 63.1% | 54.5% | no bet |
-| WSH @ CAR | 65.9% | 56.2% | no bet |
-| BOS @ WPG | 53.4% | 52.9% | no bet |
-| STL @ DAL | 58.9% | 62.6% | no bet |
-| ANA @ VGK | 51.7% | 63.9% | no bet |
+| NYR @ DET | 63.4% | 53.9% | no bet |
+| WSH @ CAR | 66.2% | 57.2% | no bet |
+| BOS @ WPG | 53.6% | 52.8% | no bet |
+| STL @ DAL | 58.7% | 63.0% | no bet |
+| ANA @ VGK | 51.7% | 64.1% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
