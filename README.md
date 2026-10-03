@@ -175,7 +175,7 @@ Output: `reports/latest.md`, `reports/daily/<date>-<run>.md`, `site/`, `data/exp
 | `goals.yml`, `backfill.yml` | Manual: goals-model backtest; backfill seasons, retune and retrain. |
 | `ci.yml` | Tests on every push. |
 
-GitHub's scheduled triggers can arrive hours late, so the daily and closing-line workflows are triggered often and `scripts/gate.py` lets only a useful trigger do any work (see [docs/SITE.md](docs/SITE.md)).
+GitHub's scheduled triggers can arrive hours late, so the daily and closing-line workflows are triggered often and `scripts/gate.py` lets only a useful trigger do any work and a `heartbeat` workflow checks every few minutes and starts whatever is due (see [docs/SITE.md](docs/SITE.md)).
 The SQLite database is a rebuildable cache; data that can never be re-fetched (odds snapshots, recommendations) is committed as append-only CSV in `data/logs/`.
 </details>
 

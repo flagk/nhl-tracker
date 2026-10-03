@@ -35,3 +35,8 @@ for 22:45 UTC fired at 01:35). So the daily and closing-line workflows are trigg
 installed) decides whether *now* is a useful moment: one morning run per game day; one late run 20 minutes to 3 hours before the first unstarted game; a closing
 snapshot only when a game starts within 35 minutes and no live capture happened in the last 20. Triggers that arrive too late exit immediately and spend no API
 credits. Manual dispatches always run.
+
+**Heartbeat.** Because even frequent cron lines can all arrive late, `.github/workflows/heartbeat.yml` is a self-chaining job (started hourly by cron, and it
+re-launches itself near the end of its ~5.7 h life). Every 3 minutes `scripts/heartbeat.py` re-reads the repository and applies the same rules from committed files
+(`nhlbet.gate.decide_files`), then dispatches `daily.yml` or `odds-close.yml` with `gated=true` when something is due (with a cooldown, and never while that
+workflow is already running).

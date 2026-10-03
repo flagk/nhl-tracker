@@ -94,3 +94,74 @@ def decide(kind: str, now: datetime, db: str = "data/nhl.db", report_dir: str = 
             return False, f"odds were captured {int((now - last).total_seconds() // 60)} min ago"
         return True, f"{len(soon)} game(s) start within {CLOSE_WINDOW_MIN} min"
     raise ValueError(f"unknown kind {kind!r}")
+
+
+# ---------------------------------------------------------------------------------------------------------------------------
+# The same decisions from committed files only (no database), for the always-on heartbeat job, which has no cache to restore.
+# ``site/picks.json`` lists the current slate with start times; ``reports/daily/<date>-<kind>.md`` marks completed runs; the file names under
+# ``data/logs/odds_fetch_log/`` are the times of odds captures.
+import json  # noqa: E402
+
+
+def _slate(root: str | Path) -> tuple[str | None, list[datetime]]:
+    p = Path(root) / "site" / "picks.json"
+    if not p.exists():
+        return None, []
+    try:
+        d = json.loads(p.read_text())
+    except (OSError, ValueError):
+        return None, []
+    starts = []
+    for g in d.get("games", []):
+        s = g.get("start_utc")
+        if s:
+            try:
+                starts.append(datetime.fromisoformat(str(s).replace("Z", "+00:00")).astimezone(timezone.utc))
+            except ValueError:
+                continue
+    return d.get("date"), sorted(starts)
+
+
+def _last_capture_from_files(root: str | Path) -> datetime | None:
+    names = sorted((Path(root) / "data" / "logs" / "odds_fetch_log").glob("*.csv"))
+    for p in reversed(names):
+        try:
+            return datetime.strptime(p.stem[:19], "%Y-%m-%dT%H-%M-%S").replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+    return None
+
+
+def decide_files(kind: str, now: datetime, root: str | Path = ".") -> tuple[bool, str]:
+    """(run, reason) for ``morning`` / ``late`` / ``close`` using only files in the repository checkout."""
+    now = now.astimezone(timezone.utc)
+    date = game_day(now)
+    if kind in ("morning", "late"):
+        if (Path(root) / "reports" / "daily" / f"{date}-{kind}.md").exists():
+            return False, f"{kind} run for {date} already done"
+        if kind == "morning":
+            return True, "first morning run of the day"
+    slate_date, starts = _slate(root)
+    if kind == "late":
+        if slate_date != date:
+            return False, "today's slate is not built yet (the morning run comes first)"
+        up = [s for s in starts if s > now]
+        if not up:
+            return False, "no unstarted games left today"
+        wait = up[0] - now
+        if wait < timedelta(minutes=LATE_MIN_MIN):
+            return False, f"first game starts in {int(wait.total_seconds() // 60)} min: too late for a useful late run"
+        if wait > timedelta(hours=LATE_WINDOW_H):
+            return False, f"first game is {wait.total_seconds() / 3600:.1f} h away: too early (goalies not confirmed yet)"
+        return True, f"first game in {int(wait.total_seconds() // 60)} min"
+    if kind == "close":
+        if slate_date not in (date, game_day(now - timedelta(hours=24))):
+            return False, "no current slate"
+        soon = [s for s in starts if now - timedelta(minutes=2) <= s <= now + timedelta(minutes=CLOSE_WINDOW_MIN)]
+        if not soon:
+            return False, "no game starts in the next %d min" % CLOSE_WINDOW_MIN
+        last = _last_capture_from_files(root)
+        if last is not None and now - last < timedelta(minutes=MIN_GAP_MIN):
+            return False, f"odds were captured {int((now - last).total_seconds() // 60)} min ago"
+        return True, f"{len(soon)} game(s) start within {CLOSE_WINDOW_MIN} min"
+    raise ValueError(f"unknown kind {kind!r}")
