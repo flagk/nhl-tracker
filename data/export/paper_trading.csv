@@ -92,3 +92,41 @@ date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,cl
 2026-10-01,totals_edge,2026020010,totals,5.5,TBL,NYR,over,Over 5.5,1.85,13,1,11.05,
 2026-10-01,totals_edge,2026020015,totals,6.5,EDM,VAN,under,Under 6.5,2.02,23,0,-23,
 2026-10-01,totals_edge,2026020016,totals,6.5,FLA,SJS,under,Under 6.5,1.89,14,0,-14,
+2026-10-02,always_over,2026020017,totals,6,NYR,DET,over,Over 6,2,10,0,-10,
+2026-10-02,always_over,2026020018,totals,6,WSH,CAR,over,Over 6,1.85,10,1,8.5,
+2026-10-02,always_over,2026020019,totals,5.5,BOS,WPG,over,Over 5.5,1.81,10,1,8.1,
+2026-10-02,always_over,2026020020,totals,6,STL,DAL,over,Over 6,1.93,10,0,-10,
+2026-10-02,always_over,2026020021,totals,6.5,ANA,VGK,over,Over 6.5,1.85,10,1,8.5,
+2026-10-02,every_game,2026020017,moneyline,,NYR,DET,home,DET,1.83,18,0,-18,-0.0136402
+2026-10-02,every_game,2026020018,moneyline,,WSH,CAR,home,CAR,1.72,21,0,-21,-0.0159877
+2026-10-02,every_game,2026020019,moneyline,,BOS,WPG,home,WPG,1.85,9,0,-9,-0.036142
+2026-10-02,every_game,2026020020,moneyline,,STL,DAL,home,DAL,1.56,14,0,-14,-0.0165555
+2026-10-02,every_game,2026020021,moneyline,,ANA,VGK,home,VGK,1.52,7,0,-7,-0.00859986
+2026-10-02,every_puckline,2026020017,spreads,1.5,NYR,DET,away,NYR +1.5,1.45,23,1,10.35,
+2026-10-02,every_puckline,2026020018,spreads,1.5,WSH,CAR,away,WSH +1.5,1.5,18,1,9,
+2026-10-02,every_puckline,2026020019,spreads,1.5,BOS,WPG,away,BOS +1.5,1.43,26,1,11.18,
+2026-10-02,every_puckline,2026020020,spreads,1.5,STL,DAL,away,STL +1.5,1.62,22,1,13.64,
+2026-10-02,every_puckline,2026020021,spreads,1.5,ANA,VGK,away,ANA +1.5,1.69,27,1,18.63,
+2026-10-02,every_total,2026020017,totals,6,NYR,DET,over,Over 6,2,7,0,-7,
+2026-10-02,every_total,2026020018,totals,6,WSH,CAR,over,Over 6,1.85,6,1,5.1,
+2026-10-02,every_total,2026020019,totals,5.5,BOS,WPG,over,Over 5.5,1.81,14,1,11.34,
+2026-10-02,every_total,2026020020,totals,6,STL,DAL,over,Over 6,1.93,6,0,-6,
+2026-10-02,every_total,2026020021,totals,6.5,ANA,VGK,under,Under 6.5,2.02,12,0,-12,
+2026-10-02,flat_model_side,2026020017,moneyline,,NYR,DET,home,DET,1.83,29,0,-29,-0.0136402
+2026-10-02,flat_model_side,2026020018,moneyline,,WSH,CAR,home,CAR,1.72,28,0,-28,-0.0159877
+2026-10-02,flat_model_side,2026020019,moneyline,,BOS,WPG,home,WPG,1.85,7,0,-7,-0.036142
+2026-10-02,flat_model_side,2026020020,moneyline,,STL,DAL,away,STL,2.63,16,1,26.08,-0.0279865
+2026-10-02,flat_model_side,2026020021,moneyline,,ANA,VGK,away,ANA,2.68,30,1,50.4,-0.067995
+2026-10-02,market_favorite,2026020017,moneyline,,NYR,DET,home,DET,1.83,10,0,-10,-0.0136402
+2026-10-02,market_favorite,2026020018,moneyline,,WSH,CAR,home,CAR,1.72,10,0,-10,-0.0159877
+2026-10-02,market_favorite,2026020019,moneyline,,BOS,WPG,home,WPG,1.85,10,0,-10,-0.036142
+2026-10-02,market_favorite,2026020020,moneyline,,STL,DAL,home,DAL,1.56,10,0,-10,-0.0165555
+2026-10-02,market_favorite,2026020021,moneyline,,ANA,VGK,home,VGK,1.52,10,0,-10,-0.00859986
+2026-10-02,no_guard,2026020017,moneyline,,NYR,DET,home,DET,1.83,3.34,0,-3.34,-0.0136402
+2026-10-02,no_guard,2026020020,moneyline,,STL,DAL,away,STL,2.63,1.66,1,2.7058,-0.0279865
+2026-10-02,puckline_edge,2026020018,spreads,-1.5,WSH,CAR,home,CAR -1.5,2.8,13,0,-13,
+2026-10-02,puckline_edge,2026020020,spreads,1.5,STL,DAL,away,STL +1.5,1.62,22,1,13.64,
+2026-10-02,puckline_edge,2026020021,spreads,1.5,ANA,VGK,away,ANA +1.5,1.69,30,1,20.7,
+2026-10-02,totals_edge,2026020017,totals,6,NYR,DET,over,Over 6,2,15,0,-15,
+2026-10-02,totals_edge,2026020019,totals,5.5,BOS,WPG,over,Over 5.5,1.81,17,1,13.77,
+2026-10-02,totals_edge,2026020021,totals,6.5,ANA,VGK,under,Under 6.5,2.02,28,0,-28,

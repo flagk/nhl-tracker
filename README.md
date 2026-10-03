@@ -9,9 +9,9 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 <!-- PICKS:START -->
 
-### Today's picks: 2026-10-02
+### Today's picks: 2026-10-03
 
-**5 game(s) · 0 recommended bet(s)** · morning run · model health **OK** · updated 2026-10-02 18:19 UTC
+**13 game(s) · 0 recommended bet(s)** · morning run · model health **OK** · updated 2026-10-03 16:04 UTC
 
 | | |
 |---|---|
@@ -23,11 +23,19 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| NYR @ DET | 63.4% | 53.9% | no bet |
-| WSH @ CAR | 66.2% | 57.2% | no bet |
-| BOS @ WPG | 53.6% | 52.8% | no bet |
-| STL @ DAL | 58.7% | 63.0% | no bet |
-| ANA @ VGK | 51.7% | 64.1% | no bet |
+| CHI @ BUF | 71.4% | 67.8% | no bet |
+| OTT @ TOR | 40.9% | 50.8% | no bet |
+| WSH @ TBL | 65.6% | 62.5% | no bet |
+| CAR @ PHI | 43.5% | 45.3% | no bet |
+| MTL @ PIT | 58.6% | 46.9% | no bet |
+| UTA @ CBJ | 52.2% | 48.7% | no bet |
+| SEA @ EDM | 59.0% | 65.0% | no bet |
+| NJD @ NYI | 53.0% | 44.4% | no bet |
+| DAL @ NSH | 49.5% | 45.0% | no bet |
+| BOS @ MIN | 63.0% | 65.4% | no bet |
+| STL @ COL | 67.4% | 71.8% | no bet |
+| CGY @ VAN | 52.0% | 51.1% | no bet |
+| LAK @ SJS | 49.1% | 50.6% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
