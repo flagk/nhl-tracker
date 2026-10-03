@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-10-03T16:04:20+00:00",
+ "generated_at": "2026-10-03T20:03:44+00:00",
  "public_safe": true,
  "date": "2026-10-03",
- "run_type": "morning",
+ "run_type": "late",
  "notes": [],
  "model": {
   "version": "20261002-376fa6",
@@ -127,10 +127,13 @@
  },
  "odds": {
   "enabled": true,
-  "captured_at": "2026-10-03T16:03:58+00:00",
+  "captured_at": "2026-10-03T20:03:28+00:00",
   "stale": false,
-  "remaining": 471,
-  "source": "live"
+  "remaining": 468,
+  "source": "live",
+  "props": {
+   "games": 3
+  }
  },
  "policy": {
   "bankroll": 1000.0,
@@ -161,15 +164,15 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "BUF",
      "p_model": 0.7140538656101748,
-     "p_market": 0.6784713854935698,
-     "p_adj": 0.6916335265374154,
-     "edge": 0.03558248011660503,
-     "ev": -0.004047721786121894,
+     "p_market": 0.6809121979114349,
+     "p_adj": 0.6936091545383948,
+     "edge": 0.03314166769873994,
+     "ev": -0.0012028174647115697,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.44,
@@ -182,13 +185,13 @@
     "away": {
      "team": "CHI",
      "p_model": 0.2859461343898252,
-     "p_market": 0.3215286145064302,
-     "p_adj": 0.30836647346258467,
-     "edge": -0.03558248011660503,
-     "ev": -0.07490057961224605,
+     "p_market": 0.31908780208856513,
+     "p_adj": 0.3063908454616053,
+     "edge": -0.03314166769873994,
+     "ev": -0.06550792134210393,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 3.0,
+     "best_decimal": 3.05,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -200,30 +203,30 @@
     {
      "market": "totals",
      "side": "over",
-     "label": "Over 6",
-     "point": 6.0,
-     "p_model": 0.5114093932179415,
-     "p_market": 0.5177450177450181,
-     "p_push": 0.127493216842039,
-     "edge": -0.006335624527076589,
-     "ev": -0.04702167873426183,
-     "best_decimal": 1.85,
+     "label": "Over 6.5",
+     "point": 6.5,
+     "p_model": 0.446538092115911,
+     "p_market": 0.48842159536796775,
+     "p_push": 0.0,
+     "edge": -0.04188350325205675,
+     "ev": -0.106923815768178,
+     "best_decimal": 2.0,
      "best_book": null,
-     "n_books": 1
+     "n_books": 9
     },
     {
      "market": "totals",
      "side": "under",
-     "label": "Under 6",
-     "point": 6.0,
-     "p_model": 0.48859060678205846,
-     "p_market": 0.48225498225498187,
-     "p_push": 0.127493216842039,
-     "edge": 0.006335624527076589,
-     "ev": -0.028435518320833075,
-     "best_decimal": 1.98,
+     "label": "Under 6.5",
+     "point": 6.5,
+     "p_model": 0.553461907884089,
+     "p_market": 0.5115784046320322,
+     "p_push": 0.0,
+     "edge": 0.04188350325205681,
+     "ev": 0.05711224405860993,
+     "best_decimal": 1.91,
      "best_book": null,
-     "n_books": 1
+     "n_books": 9
     },
     {
      "market": "spreads",
@@ -231,13 +234,13 @@
      "label": "BUF -1.5",
      "point": -1.5,
      "p_model": 0.420063441760833,
-     "p_market": 0.4485137271150836,
+     "p_market": 0.46058233366928253,
      "p_push": 0.0,
-     "edge": -0.028450285354250593,
-     "ev": -0.10106423463181735,
-     "best_decimal": 2.14,
+     "edge": -0.04051889190844954,
+     "ev": -0.11786677230225068,
+     "best_decimal": 2.1,
      "best_book": null,
-     "n_books": 2
+     "n_books": 9
     },
     {
      "market": "spreads",
@@ -245,13 +248,13 @@
      "label": "CHI +1.5",
      "point": 1.5,
      "p_model": 0.579936558239167,
-     "p_market": 0.5514862728849164,
+     "p_market": 0.5394176663307175,
      "p_push": 0.0,
-     "edge": 0.02845028535425065,
-     "ev": 0.009089611336150605,
-     "best_decimal": 1.74,
+     "edge": 0.040518891908449484,
+     "ev": 0.06128390157767566,
+     "best_decimal": 1.83,
      "best_book": null,
-     "n_books": 2
+     "n_books": 9
     }
    ],
    "goals": {
@@ -259,7 +262,1133 @@
     "lam_away": 2.464418732560932,
     "exp_total": 6.155756500351624
    },
-   "props": [],
+   "props": [
+    {
+     "player_id": 8481524,
+     "name": "B. Byram",
+     "team": "CHI",
+     "opp": "BUF",
+     "point": 1.5,
+     "lam": 1.1226847246776923,
+     "p_over": 0.3071777435902312,
+     "p_over_market": 0.48016716248759617,
+     "over_price": 1.95,
+     "under_price": 1.81,
+     "ev_over": -0.40100339999904916,
+     "ev_under": 0.2540082841016815,
+     "edge_over": -0.17298941889736497,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 1,
+     "n_prev": 239,
+     "history": [
+      {
+       "date": "2026-03-31",
+       "opp": "NYI",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "OTT",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "WSH",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-06",
+       "opp": "TBL",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-08",
+       "opp": "NYR",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CBJ",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CHI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-15",
+       "opp": "DAL",
+       "sog": 0
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "VGK",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "UTA",
+       "sog": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.2,
+     "hit_l20": 0.3
+    },
+    {
+     "player_id": 8479420,
+     "name": "T. Thompson",
+     "team": "BUF",
+     "opp": "CHI",
+     "point": 3.5,
+     "lam": 3.0409253955774167,
+     "p_over": 0.36011563909497135,
+     "p_over_market": 0.4830621114289371,
+     "over_price": 1.97,
+     "under_price": 1.87,
+     "ev_over": -0.29057219098290643,
+     "ev_under": 0.19658375489240365,
+     "edge_over": -0.12294647233396577,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 4,
+     "n_prev": 229,
+     "history": [
+      {
+       "date": "2026-03-27",
+       "opp": "DET",
+       "sog": 4
+      },
+      {
+       "date": "2026-03-28",
+       "opp": "SEA",
+       "sog": 5
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "NYI",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "OTT",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "WSH",
+       "sog": 5
+      },
+      {
+       "date": "2026-04-06",
+       "opp": "TBL",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-08",
+       "opp": "NYR",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CBJ",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CHI",
+       "sog": 6
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CBJ",
+       "sog": 4
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.5,
+     "hit_l20": 0.4
+    },
+    {
+     "player_id": 8480802,
+     "name": "R. McLeod",
+     "team": "BUF",
+     "opp": "CHI",
+     "point": 1.5,
+     "lam": 1.0357048744058552,
+     "p_over": 0.2766735137659122,
+     "p_over_market": 0.4111645619114368,
+     "over_price": 2.25,
+     "under_price": 1.62,
+     "ev_over": -0.37748459402669754,
+     "ev_under": 0.17178890769922228,
+     "edge_over": -0.1344910481455246,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 242,
+     "history": [
+      {
+       "date": "2026-03-27",
+       "opp": "DET",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-28",
+       "opp": "SEA",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "NYI",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "OTT",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "WSH",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-06",
+       "opp": "TBL",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-08",
+       "opp": "NYR",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CBJ",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CHI",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CBJ",
+       "sog": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.2,
+     "hit_l20": 0.2
+    },
+    {
+     "player_id": 8482659,
+     "name": "J. Doan",
+     "team": "BUF",
+     "opp": "CHI",
+     "point": 2.5,
+     "lam": 1.7302190381067566,
+     "p_over": 0.25483917673205936,
+     "p_over_market": 0.38943782253567566,
+     "over_price": 2.45,
+     "under_price": 1.57,
+     "ev_over": -0.3756440170064545,
+     "ev_under": 0.16990249253066686,
+     "edge_over": -0.1345986458036163,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 145,
+     "history": [
+      {
+       "date": "2026-03-28",
+       "opp": "SEA",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "NYI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "OTT",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "WSH",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-06",
+       "opp": "TBL",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-08",
+       "opp": "NYR",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CBJ",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CHI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-15",
+       "opp": "DAL",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CBJ",
+       "sog": 3
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.2,
+     "hit_l20": 0.35
+    },
+    {
+     "player_id": 8484197,
+     "name": "O. Moore",
+     "team": "CHI",
+     "opp": "BUF",
+     "point": 1.5,
+     "lam": 1.03235493236493,
+     "p_over": 0.27549184500611057,
+     "p_over_market": 0.4072945557769035,
+     "over_price": 2.3,
+     "under_price": 1.61,
+     "ev_over": -0.36636875648594575,
+     "ev_under": 0.16645812954016204,
+     "edge_over": -0.13180271077079292,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 62,
+     "history": [
+      {
+       "date": "2026-02-02",
+       "opp": "SJS",
+       "sog": 1
+      },
+      {
+       "date": "2026-02-04",
+       "opp": "CBJ",
+       "sog": 0
+      },
+      {
+       "date": "2026-02-26",
+       "opp": "NSH",
+       "sog": 0
+      },
+      {
+       "date": "2026-02-28",
+       "opp": "COL",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-01",
+       "opp": "UTA",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-03",
+       "opp": "WPG",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-06",
+       "opp": "VAN",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-08",
+       "opp": "DAL",
+       "sog": 0
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "VGK",
+       "sog": 2
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "UTA",
+       "sog": 2
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.5,
+     "hit_l20": 0.35
+    },
+    {
+     "player_id": 8484797,
+     "name": "K. Helenius",
+     "team": "BUF",
+     "opp": "CHI",
+     "point": 1.5,
+     "lam": 1.525281910064199,
+     "p_over": 0.44052269324461246,
+     "p_over_market": 0.5317341105904175,
+     "over_price": 1.8,
+     "under_price": 2.05,
+     "ev_over": -0.20705915215969756,
+     "ev_under": 0.14692847884854432,
+     "edge_over": -0.09121141734580507,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 10,
+     "history": [
+      {
+       "date": "2026-01-19",
+       "opp": "CAR",
+       "sog": 0
+      },
+      {
+       "date": "2026-01-20",
+       "opp": "NSH",
+       "sog": 4
+      },
+      {
+       "date": "2026-01-22",
+       "opp": "MTL",
+       "sog": 1
+      },
+      {
+       "date": "2026-01-24",
+       "opp": "NYI",
+       "sog": 2
+      },
+      {
+       "date": "2026-01-27",
+       "opp": "TOR",
+       "sog": 2
+      },
+      {
+       "date": "2026-01-29",
+       "opp": "LAK",
+       "sog": 2
+      },
+      {
+       "date": "2026-01-31",
+       "opp": "MTL",
+       "sog": 3
+      },
+      {
+       "date": "2026-02-03",
+       "opp": "TBL",
+       "sog": 1
+      },
+      {
+       "date": "2026-02-05",
+       "opp": "PIT",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CBJ",
+       "sog": 2
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.6,
+     "hit_l20": 0.6
+    },
+    {
+     "player_id": 8474141,
+     "name": "P. Kane",
+     "team": "CHI",
+     "opp": "BUF",
+     "point": 2.5,
+     "lam": 2.167016215180169,
+     "p_over": 0.3644421376675999,
+     "p_over_market": 0.4676818442358777,
+     "over_price": 2.1,
+     "under_price": 1.8,
+     "ev_over": -0.23467151089804011,
+     "ev_under": 0.1440041521983202,
+     "edge_over": -0.1032397065682778,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 191,
+     "history": [
+      {
+       "date": "2026-04-02",
+       "opp": "PHI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "NYR",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "MIN",
+       "sog": 5
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "CBJ",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "PHI",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "NJD",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "TBL",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-15",
+       "opp": "FLA",
+       "sog": 2
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "VGK",
+       "sog": 4
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "UTA",
+       "sog": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.3,
+     "hit_l20": 0.5
+    },
+    {
+     "player_id": 8480839,
+     "name": "R. Dahlin",
+     "team": "BUF",
+     "opp": "CHI",
+     "point": 2.5,
+     "lam": 2.304454425936252,
+     "p_over": 0.3980188503642619,
+     "p_over_market": 0.49050057623356225,
+     "over_price": 1.95,
+     "under_price": 1.89,
+     "ev_over": -0.22386324178968936,
+     "ev_under": 0.13774437281154495,
+     "edge_over": -0.09248172586930037,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 4,
+     "n_prev": 232,
+     "history": [
+      {
+       "date": "2026-03-27",
+       "opp": "DET",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-28",
+       "opp": "SEA",
+       "sog": 4
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "NYI",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "OTT",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "WSH",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-06",
+       "opp": "TBL",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-08",
+       "opp": "NYR",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CBJ",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CHI",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CBJ",
+       "sog": 4
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.5,
+     "hit_l20": 0.45
+    },
+    {
+     "player_id": 8477479,
+     "name": "T. Bertuzzi",
+     "team": "CHI",
+     "opp": "BUF",
+     "point": 1.5,
+     "lam": 1.6981887463672334,
+     "p_over": 0.49237035122698336,
+     "p_over_market": 0.5632446911509631,
+     "over_price": 1.77,
+     "under_price": 2.2,
+     "ev_over": -0.12850447832823947,
+     "ev_under": 0.11678522730063667,
+     "edge_over": -0.07087433992397973,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 243,
+     "history": [
+      {
+       "date": "2026-03-31",
+       "opp": "WPG",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "EDM",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "SEA",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-06",
+       "opp": "SJS",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CAR",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "STL",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "BUF",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-15",
+       "opp": "SJS",
+       "sog": 1
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "VGK",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "UTA",
+       "sog": 2
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.4,
+     "hit_l20": 0.6
+    },
+    {
+     "player_id": 8483493,
+     "name": "F. Nazar",
+     "team": "CHI",
+     "opp": "BUF",
+     "point": 1.5,
+     "lam": 1.7639481981395198,
+     "p_over": 0.5111178019996111,
+     "p_over_market": 0.5810046444270708,
+     "over_price": 1.65,
+     "under_price": 2.25,
+     "ev_over": -0.15665562670064176,
+     "ev_under": 0.099984945500875,
+     "edge_over": -0.06988684242745968,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 124,
+     "history": [
+      {
+       "date": "2026-03-31",
+       "opp": "WPG",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "EDM",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "SEA",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-06",
+       "opp": "SJS",
+       "sog": 6
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CAR",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "STL",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "BUF",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-15",
+       "opp": "SJS",
+       "sog": 0
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "VGK",
+       "sog": 3
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "UTA",
+       "sog": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.4,
+     "hit_l20": 0.45
+    },
+    {
+     "player_id": 8482671,
+     "name": "O. Power",
+     "team": "BUF",
+     "opp": "CHI",
+     "point": 1.5,
+     "lam": 1.3583728017118428,
+     "p_over": 0.3871607273381583,
+     "p_over_market": 0.46161740558291964,
+     "over_price": 2.03,
+     "under_price": 1.75,
+     "ev_over": -0.2140637235035387,
+     "ev_under": 0.07246872715822295,
+     "edge_over": -0.07445667824476132,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 237,
+     "history": [
+      {
+       "date": "2026-03-28",
+       "opp": "SEA",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "NYI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "OTT",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "WSH",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-06",
+       "opp": "TBL",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-08",
+       "opp": "NYR",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CBJ",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CHI",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-15",
+       "opp": "DAL",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CBJ",
+       "sog": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.4,
+     "hit_l20": 0.3
+    },
+    {
+     "player_id": 8483500,
+     "name": "N. Ostlund",
+     "team": "BUF",
+     "opp": "CHI",
+     "point": 1.5,
+     "lam": 1.2934563339157539,
+     "p_over": 0.36561320791408547,
+     "p_over_market": 0.4376970959298132,
+     "over_price": 2.15,
+     "under_price": 1.69,
+     "ev_over": -0.21393160298471625,
+     "ev_under": 0.07211367862519552,
+     "edge_over": -0.07208388801572774,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 69,
+     "history": [
+      {
+       "date": "2026-03-08",
+       "opp": "TBL",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-10",
+       "opp": "SJS",
+       "sog": 3
+      },
+      {
+       "date": "2026-03-12",
+       "opp": "WSH",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-14",
+       "opp": "TOR",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-17",
+       "opp": "VGK",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-19",
+       "opp": "SJS",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-21",
+       "opp": "LAK",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-22",
+       "opp": "ANA",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-25",
+       "opp": "BOS",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CBJ",
+       "sog": 3
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.5,
+     "hit_l20": 0.35
+    },
+    {
+     "player_id": 8480064,
+     "name": "J. Norris",
+     "team": "BUF",
+     "opp": "CHI",
+     "point": 1.5,
+     "lam": 1.663753076112767,
+     "p_over": 0.482336929906066,
+     "p_over_market": 0.5014656520186628,
+     "over_price": 1.91,
+     "under_price": 2.0,
+     "ev_over": -0.07873646387941391,
+     "ev_under": 0.03532614018786795,
+     "edge_over": -0.019128722112596752,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 151,
+     "history": [
+      {
+       "date": "2026-03-28",
+       "opp": "SEA",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "NYI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "OTT",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "WSH",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-06",
+       "opp": "TBL",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-08",
+       "opp": "NYR",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CBJ",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CHI",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-15",
+       "opp": "DAL",
+       "sog": 2
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CBJ",
+       "sog": 1
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.5,
+     "hit_l20": 0.55
+    },
+    {
+     "player_id": 8482097,
+     "name": "J. Quinn",
+     "team": "BUF",
+     "opp": "CHI",
+     "point": 2.5,
+     "lam": 2.810041440965086,
+     "p_over": 0.5134755727325825,
+     "p_over_market": 0.47978891919239247,
+     "over_price": 1.99,
+     "under_price": 1.87,
+     "ev_over": 0.02181638973783917,
+     "ev_under": -0.09019932100992922,
+     "edge_over": 0.033686653540190015,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 4,
+     "n_prev": 184,
+     "history": [
+      {
+       "date": "2026-03-28",
+       "opp": "SEA",
+       "sog": 4
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "NYI",
+       "sog": 7
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "OTT",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "WSH",
+       "sog": 6
+      },
+      {
+       "date": "2026-04-06",
+       "opp": "TBL",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-08",
+       "opp": "NYR",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CBJ",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CHI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-15",
+       "opp": "DAL",
+       "sog": 5
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CBJ",
+       "sog": 4
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.7,
+     "hit_l20": 0.5
+    },
+    {
+     "player_id": 8485391,
+     "name": "A. Frondell",
+     "team": "CHI",
+     "opp": "BUF",
+     "point": 2.5,
+     "lam": 2.369463778563137,
+     "p_over": 0.4136276382060349,
+     "p_over_market": 0.4205906307618224,
+     "over_price": 2.4,
+     "under_price": 1.67,
+     "ev_over": -0.007293668305516365,
+     "ev_under": -0.020758155804078304,
+     "edge_over": -0.006962992555787528,
+     "take": null,
+     "best_side": "over",
+     "n_books": 3,
+     "n_prev": 14,
+     "history": [
+      {
+       "date": "2026-03-31",
+       "opp": "WPG",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "EDM",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "SEA",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-06",
+       "opp": "SJS",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CAR",
+       "sog": 5
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "STL",
+       "sog": 6
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "BUF",
+       "sog": 5
+      },
+      {
+       "date": "2026-04-15",
+       "opp": "SJS",
+       "sog": 1
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "VGK",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "UTA",
+       "sog": 3
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.6,
+     "hit_l20": 0.5714285714285714
+    }
+   ],
    "stats": [
     {
      "key": "elo",
@@ -619,15 +1748,15 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "TOR",
      "p_model": 0.4094366344615329,
-     "p_market": 0.5082855476834192,
-     "p_adj": 0.4949786438336128,
-     "edge": -0.09884891322188627,
-     "ev": -0.05459079027779962,
+     "p_market": 0.5099770312148314,
+     "p_adj": 0.49677541089477867,
+     "edge": -0.10054039675329851,
+     "ev": -0.05115896519097285,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.91,
@@ -640,11 +1769,11 @@
     "away": {
      "team": "OTT",
      "p_model": 0.5905633655384671,
-     "p_market": 0.49171445231658084,
-     "p_adj": 0.5050213561663872,
-     "edge": 0.09884891322188627,
-     "ev": 0.030243566579429948,
-     "kelly_full": 0.029080352480221103,
+     "p_market": 0.4900229687851686,
+     "p_adj": 0.5032245891052214,
+     "edge": 0.10054039675329851,
+     "ev": 0.026578161774651665,
+     "kelly_full": 0.025555924783318907,
      "best_book": null,
      "best_decimal": 2.04,
      "books": {},
@@ -654,7 +1783,64 @@
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6",
+     "point": 6.0,
+     "p_model": 0.5111400215258642,
+     "p_market": 0.5201282310508247,
+     "p_push": 0.12638270347962421,
+     "edge": -0.008988209524960489,
+     "ev": -0.04305147594762232,
+     "best_decimal": 1.86,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6",
+     "point": 6.0,
+     "p_model": 0.48885997847413576,
+     "p_market": 0.47987176894917527,
+     "p_push": 0.12638270347962421,
+     "edge": 0.008988209524960489,
+     "ev": -0.010922700321777001,
+     "best_decimal": 2.02,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "TOR -1.5",
+     "point": -1.5,
+     "p_model": 0.20234683814345783,
+     "p_market": 0.2955738040186905,
+     "p_push": 0.0,
+     "edge": -0.09322696587523266,
+     "ev": -0.3443962444151965,
+     "best_decimal": 3.24,
+     "best_book": null,
+     "n_books": 8
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "OTT +1.5",
+     "point": 1.5,
+     "p_model": 0.7976531618565421,
+     "p_market": 0.7044261959813095,
+     "p_push": 0.0,
+     "edge": 0.0932269658752326,
+     "ev": 0.11671442659915887,
+     "best_decimal": 1.4,
+     "best_book": null,
+     "n_books": 8
+    }
+   ],
    "goals": {
     "lam_home": 2.6065482030378093,
     "lam_away": 3.443312277599797,
@@ -1019,18 +2205,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "TBL",
      "p_model": 0.6558653855400989,
-     "p_market": 0.6248077712145615,
-     "p_adj": 0.6370550671389456,
-     "edge": 0.03105761432553733,
-     "ev": 0.00017645540814453797,
-     "kelly_full": 0.0003095708914816455,
+     "p_market": 0.6476869563056139,
+     "p_adj": 0.6517015806470285,
+     "edge": 0.008178429234484974,
+     "ev": -0.01593061322298689,
+     "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.57,
+     "best_decimal": 1.51,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -1040,13 +2226,13 @@
     "away": {
      "team": "WSH",
      "p_model": 0.3441346144599011,
-     "p_market": 0.37519222878543845,
-     "p_adj": 0.36294493286105445,
-     "edge": -0.03105761432553733,
-     "ev": -0.05634317456125837,
+     "p_market": 0.3523130436943861,
+     "p_adj": 0.34829841935297146,
+     "edge": -0.008178429234484974,
+     "ev": -0.04217934677932855,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.6,
+     "best_decimal": 2.75,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -1061,13 +2247,13 @@
      "label": "Over 6.5",
      "point": 6.5,
      "p_model": 0.45095652161956395,
-     "p_market": 0.4462885379739999,
+     "p_market": 0.4757864010481675,
      "p_push": 0.0,
-     "edge": 0.004667983645564033,
-     "ev": -0.034953043734133105,
-     "best_decimal": 2.14,
+     "edge": -0.02482987942860354,
+     "ev": -0.07553913067989404,
+     "best_decimal": 2.05,
      "best_book": null,
-     "n_books": 1
+     "n_books": 7
     },
     {
      "market": "totals",
@@ -1075,27 +2261,27 @@
      "label": "Under 6.5",
      "point": 6.5,
      "p_model": 0.5490434783804361,
-     "p_market": 0.5537114620260001,
+     "p_market": 0.5242135989518325,
      "p_push": 0.0,
-     "edge": -0.004667983645563978,
-     "ev": -0.04466434761804117,
-     "best_decimal": 1.74,
+     "edge": 0.024829879428603596,
+     "ev": 0.026711304571415573,
+     "best_decimal": 1.87,
      "best_book": null,
-     "n_books": 1
+     "n_books": 7
     },
     {
      "market": "spreads",
      "side": "home",
      "label": "TBL -1.5",
      "point": -1.5,
-     "p_model": 0.33976513296425637,
-     "p_market": 0.3496147153864989,
+     "p_model": 0.3397651329642563,
+     "p_market": 0.4185994426472813,
      "p_push": 0.0,
-     "edge": -0.009849582422242542,
-     "ev": -0.08263414099650779,
-     "best_decimal": 2.7,
+     "edge": -0.07883430968302496,
+     "ev": -0.20155193753399758,
+     "best_decimal": 2.35,
      "best_book": null,
-     "n_books": 1
+     "n_books": 9
     },
     {
      "market": "spreads",
@@ -1103,19 +2289,19 @@
      "label": "WSH +1.5",
      "point": 1.5,
      "p_model": 0.6602348670357436,
-     "p_market": 0.6503852846135011,
+     "p_market": 0.5814005573527188,
      "p_push": 0.0,
-     "edge": 0.009849582422242542,
-     "ev": -0.016250048116741966,
-     "best_decimal": 1.49,
+     "edge": 0.07883430968302485,
+     "ev": 0.12900162263112158,
+     "best_decimal": 1.71,
      "best_book": null,
-     "n_books": 1
+     "n_books": 9
     }
    ],
    "goals": {
     "lam_home": 3.2411478894769137,
     "lam_away": 2.8231017475866476,
-    "exp_total": 6.1759182549653096
+    "exp_total": 6.175918254965308
    },
    "props": [],
    "stats": [
@@ -1477,18 +2663,18 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "PHI",
      "p_model": 0.4354923626534204,
-     "p_market": 0.45335723655812527,
-     "p_adj": 0.4451522067662608,
-     "edge": -0.01786487390470487,
-     "ev": -0.04292275545253932,
+     "p_market": 0.45228521519056997,
+     "p_adj": 0.44449873003496476,
+     "edge": -0.016792852537149572,
+     "ev": -0.03543775582412645,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.15,
+     "best_decimal": 2.17,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 2 games (< 10)"
@@ -1498,10 +2684,10 @@
     "away": {
      "team": "CAR",
      "p_model": 0.5645076373465796,
-     "p_market": 0.5466427634418747,
-     "p_adj": 0.5548477932337391,
-     "edge": 0.017864873904704925,
-     "ev": -0.012370928043944351,
+     "p_market": 0.54771478480943,
+     "p_adj": 0.5555012699650352,
+     "edge": 0.016792852537149572,
+     "ev": -0.011207739462237243,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.78,
@@ -1512,13 +2698,1196 @@
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6",
+     "point": 6.0,
+     "p_model": 0.5187330728155009,
+     "p_market": 0.48343463967767586,
+     "p_push": 0.12638456267987408,
+     "edge": 0.03529843313782499,
+     "ev": 0.028199270997525838,
+     "best_decimal": 1.99,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6",
+     "point": 6.0,
+     "p_model": 0.48126692718449915,
+     "p_market": 0.5165653603223241,
+     "p_push": 0.12638456267987408,
+     "edge": -0.03529843313782499,
+     "ev": -0.08738849141792698,
+     "best_decimal": 1.87,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "PHI +1.5",
+     "point": 1.5,
+     "p_model": 0.618929935248686,
+     "p_market": 0.6775244069859262,
+     "p_push": 0.0,
+     "edge": -0.058594471737240195,
+     "ev": -0.10255159388940532,
+     "best_decimal": 1.45,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "CAR -1.5",
+     "point": -1.5,
+     "p_model": 0.381070064751314,
+     "p_market": 0.3224755930140738,
+     "p_push": 0.0,
+     "edge": 0.058594471737240195,
+     "ev": 0.143210194253942,
+     "best_decimal": 3.0,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 2.6165172686007487,
     "lam_away": 3.4745878174891227,
-    "exp_total": 6.1948896491567975
+    "exp_total": 6.194889649156798
    },
-   "props": [],
+   "props": [
+    {
+     "player_id": 8480762,
+     "name": "E. Robinson",
+     "team": "CAR",
+     "opp": "PHI",
+     "point": 1.5,
+     "lam": 0.9364895448311821,
+     "p_over": 0.2415500073575454,
+     "p_over_market": 0.45117649875344323,
+     "over_price": 2.07,
+     "under_price": 1.72,
+     "ev_over": -0.4999914847698811,
+     "ev_under": 0.3045339873450219,
+     "edge_over": -0.20962649139589784,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 198,
+     "history": [
+      {
+       "date": "2026-03-31",
+       "opp": "CBJ",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CBJ",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "NYI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "OTT",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CHI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "UTA",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "PHI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "NYI",
+       "sog": 3
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "FLA",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-02",
+       "opp": "WSH",
+       "sog": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.1,
+     "hit_l20": 0.2
+    },
+    {
+     "player_id": 8477948,
+     "name": "T. Sanheim",
+     "team": "PHI",
+     "opp": "CAR",
+     "point": 1.5,
+     "lam": 1.5804350113813568,
+     "p_over": 0.45745524845147056,
+     "p_over_market": 0.33553483553485985,
+     "over_price": 2.7,
+     "under_price": 1.43,
+     "ev_over": 0.23512917081897056,
+     "ev_under": -0.22416100528560293,
+     "edge_over": 0.12192041291661071,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 1,
+     "n_prev": 246,
+     "history": [
+      {
+       "date": "2026-03-31",
+       "opp": "WSH",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "DET",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-03",
+       "opp": "NYI",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "BOS",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "NJD",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "DET",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "WPG",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CAR",
+       "sog": 1
+      },
+      {
+       "date": "2026-09-30",
+       "opp": "PIT",
+       "sog": 3
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "NJD",
+       "sog": 3
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.6,
+     "hit_l20": 0.4
+    },
+    {
+     "player_id": 8475791,
+     "name": "T. Hall",
+     "team": "CAR",
+     "opp": "PHI",
+     "point": 1.5,
+     "lam": 1.5719019128168468,
+     "p_over": 0.4548592555353741,
+     "p_over_market": 0.5520925396506566,
+     "over_price": 1.76,
+     "under_price": 2.15,
+     "ev_over": -0.1994477102577416,
+     "ev_under": 0.17205260059894567,
+     "edge_over": -0.09723328411528254,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 4,
+     "n_prev": 169,
+     "history": [
+      {
+       "date": "2026-03-29",
+       "opp": "MTL",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "CBJ",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CBJ",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "NYI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "OTT",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "BOS",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CHI",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "PHI",
+       "sog": 1
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "FLA",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-02",
+       "opp": "WSH",
+       "sog": 1
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.4,
+     "hit_l20": 0.5
+    },
+    {
+     "player_id": 8482159,
+     "name": "T. Foerster",
+     "team": "PHI",
+     "opp": "CAR",
+     "point": 1.5,
+     "lam": 1.9069622807773519,
+     "p_over": 0.5500018698360984,
+     "p_over_market": 0.4687366393552312,
+     "over_price": 2.05,
+     "under_price": 1.87,
+     "ev_over": 0.1275038331640017,
+     "ev_under": -0.15850349659350405,
+     "edge_over": 0.08126523048086726,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 4,
+     "n_prev": 189,
+     "history": [
+      {
+       "date": "2026-04-02",
+       "opp": "DET",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-03",
+       "opp": "NYI",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "BOS",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "NJD",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "DET",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "WPG",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CAR",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "MTL",
+       "sog": 2
+      },
+      {
+       "date": "2026-09-30",
+       "opp": "PIT",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "NJD",
+       "sog": 2
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.8,
+     "hit_l20": 0.75
+    },
+    {
+     "player_id": 8476921,
+     "name": "J. Martinook",
+     "team": "CAR",
+     "opp": "PHI",
+     "point": 1.5,
+     "lam": 1.2670745847028904,
+     "p_over": 0.35674201958919927,
+     "p_over_market": 0.45117649875344323,
+     "over_price": 2.07,
+     "under_price": 1.72,
+     "ev_over": -0.2615440194503576,
+     "ev_under": 0.10640372630657724,
+     "edge_over": -0.09443447916424397,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 240,
+     "history": [
+      {
+       "date": "2026-03-29",
+       "opp": "MTL",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "CBJ",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CBJ",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "NYI",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "BOS",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "UTA",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "PHI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "NYI",
+       "sog": 1
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "FLA",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-02",
+       "opp": "WSH",
+       "sog": 2
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.4,
+     "hit_l20": 0.5
+    },
+    {
+     "player_id": 8479336,
+     "name": "C. Grundstrom",
+     "team": "PHI",
+     "opp": "CAR",
+     "point": 1.5,
+     "lam": 0.9996375968919499,
+     "p_over": 0.26393138831712704,
+     "p_over_market": 0.3644295302013191,
+     "over_price": 2.5,
+     "under_price": 1.49,
+     "ev_over": -0.3401715292071824,
+     "ev_under": 0.09674223140748073,
+     "edge_over": -0.10049814188419204,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 1,
+     "n_prev": 155,
+     "history": [
+      {
+       "date": "2026-03-24",
+       "opp": "CBJ",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-26",
+       "opp": "CHI",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-28",
+       "opp": "DET",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-29",
+       "opp": "DAL",
+       "sog": 4
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "WSH",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "DET",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "BOS",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "MTL",
+       "sog": 1
+      },
+      {
+       "date": "2026-09-30",
+       "opp": "PIT",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "NJD",
+       "sog": 1
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.2,
+     "hit_l20": 0.2
+    },
+    {
+     "player_id": 8478427,
+     "name": "S. Aho",
+     "team": "CAR",
+     "opp": "PHI",
+     "point": 2.5,
+     "lam": 2.516989207230854,
+     "p_over": 0.44828357017675236,
+     "p_over_market": 0.40604796418782585,
+     "over_price": 2.42,
+     "under_price": 1.67,
+     "ev_over": 0.08484623982774064,
+     "ev_under": -0.07863356219517648,
+     "edge_over": 0.042235605988926506,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 4,
+     "n_prev": 238,
+     "history": [
+      {
+       "date": "2026-03-28",
+       "opp": "NJD",
+       "sog": 3
+      },
+      {
+       "date": "2026-03-29",
+       "opp": "MTL",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "CBJ",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CBJ",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "NYI",
+       "sog": 7
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "OTT",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "BOS",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "UTA",
+       "sog": 5
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "FLA",
+       "sog": 4
+      },
+      {
+       "date": "2026-10-02",
+       "opp": "WSH",
+       "sog": 2
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.6,
+     "hit_l20": 0.5
+    },
+    {
+     "player_id": 8482702,
+     "name": "L. Stankoven",
+     "team": "CAR",
+     "opp": "PHI",
+     "point": 2.5,
+     "lam": 2.022783393872552,
+     "p_over": 0.32854247674173886,
+     "p_over_market": 0.39132891118244395,
+     "over_price": 2.42,
+     "under_price": 1.61,
+     "ev_over": -0.20492720628499195,
+     "ev_under": 0.08104661244580047,
+     "edge_over": -0.06278643444070509,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 4,
+     "n_prev": 185,
+     "history": [
+      {
+       "date": "2026-03-31",
+       "opp": "CBJ",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CBJ",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "NYI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "OTT",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "BOS",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CHI",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "PHI",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "NYI",
+       "sog": 2
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "FLA",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-02",
+       "opp": "WSH",
+       "sog": 4
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.4,
+     "hit_l20": 0.4
+    },
+    {
+     "player_id": 8480336,
+     "name": "S. Walker",
+     "team": "CAR",
+     "opp": "PHI",
+     "point": 1.5,
+     "lam": 1.8644041605593626,
+     "p_over": 0.538701867614691,
+     "p_over_market": 0.49853434798133717,
+     "over_price": 2.0,
+     "under_price": 1.91,
+     "ev_over": 0.07740373522938193,
+     "ev_under": -0.1189205671440598,
+     "edge_over": 0.0401675196333538,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 3,
+     "n_prev": 246,
+     "history": [
+      {
+       "date": "2026-03-31",
+       "opp": "CBJ",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CBJ",
+       "sog": 5
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "NYI",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "OTT",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "BOS",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CHI",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "UTA",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "PHI",
+       "sog": 1
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "FLA",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-02",
+       "opp": "WSH",
+       "sog": 2
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.7,
+     "hit_l20": 0.7
+    },
+    {
+     "player_id": 8480220,
+     "name": "N. Cates",
+     "team": "PHI",
+     "opp": "CAR",
+     "point": 1.5,
+     "lam": 1.612080175675154,
+     "p_over": 0.4670056343236242,
+     "p_over_market": 0.40285910619112975,
+     "over_price": 2.3,
+     "under_price": 1.6,
+     "ev_over": 0.07411295894433556,
+     "ev_under": -0.14720901491779864,
+     "edge_over": 0.06414652813249444,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 2,
+     "n_prev": 221,
+     "history": [
+      {
+       "date": "2026-04-02",
+       "opp": "DET",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-03",
+       "opp": "NYI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "BOS",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "NJD",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "DET",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "WPG",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CAR",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "MTL",
+       "sog": 2
+      },
+      {
+       "date": "2026-09-30",
+       "opp": "PIT",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "NJD",
+       "sog": 2
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.7,
+     "hit_l20": 0.6
+    },
+    {
+     "player_id": 8485406,
+     "name": "P. Martone",
+     "team": "PHI",
+     "opp": "CAR",
+     "point": 2.5,
+     "lam": 2.0508685222813576,
+     "p_over": 0.33557411977859275,
+     "p_over_market": 0.38770193612035453,
+     "over_price": 2.4,
+     "under_price": 1.59,
+     "ev_over": -0.19462211253137746,
+     "ev_under": 0.0564371495520376,
+     "edge_over": -0.05212781634176178,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 11,
+     "history": [
+      {
+       "date": "2026-04-02",
+       "opp": "DET",
+       "sog": 9
+      },
+      {
+       "date": "2026-04-03",
+       "opp": "NYI",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "BOS",
+       "sog": 5
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "NJD",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "DET",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "WPG",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CAR",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "MTL",
+       "sog": 5
+      },
+      {
+       "date": "2026-09-30",
+       "opp": "PIT",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "NJD",
+       "sog": 1
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.4,
+     "hit_l20": 0.45454545454545453
+    },
+    {
+     "player_id": 8476958,
+     "name": "J. Slavin",
+     "team": "CAR",
+     "opp": "PHI",
+     "point": 1.5,
+     "lam": 1.7128565380420955,
+     "p_over": 0.49659909333769314,
+     "p_over_market": 0.43869404049044725,
+     "over_price": 2.1,
+     "under_price": 1.67,
+     "ev_over": 0.04285809600915569,
+     "ev_under": -0.1593204858739476,
+     "edge_over": 0.0579050528472459,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 1,
+     "n_prev": 202,
+     "history": [
+      {
+       "date": "2026-03-28",
+       "opp": "NJD",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-29",
+       "opp": "MTL",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "CBJ",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CBJ",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "NYI",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "OTT",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "BOS",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "UTA",
+       "sog": 1
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "FLA",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-02",
+       "opp": "WSH",
+       "sog": 4
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.4,
+     "hit_l20": 0.4
+    },
+    {
+     "player_id": 8476906,
+     "name": "S. Gostisbehere",
+     "team": "CAR",
+     "opp": "PHI",
+     "point": 1.5,
+     "lam": 1.5395247506046326,
+     "p_over": 0.4449299974369838,
+     "p_over_market": 0.490067829868673,
+     "over_price": 1.95,
+     "under_price": 1.87,
+     "ev_over": -0.13238650499788163,
+     "ev_under": 0.03798090479284033,
+     "edge_over": -0.04513783243168917,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 208,
+     "history": [
+      {
+       "date": "2026-03-31",
+       "opp": "CBJ",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CBJ",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "NYI",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "OTT",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "BOS",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CHI",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "UTA",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "NYI",
+       "sog": 0
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "FLA",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-02",
+       "opp": "WSH",
+       "sog": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.5,
+     "hit_l20": 0.65
+    },
+    {
+     "player_id": 8482809,
+     "name": "J. Blake",
+     "team": "CAR",
+     "opp": "PHI",
+     "point": 1.5,
+     "lam": 2.0456693880863472,
+     "p_over": 0.5852432319067895,
+     "p_over_market": 0.6109781062350739,
+     "over_price": 1.6,
+     "under_price": 2.5,
+     "ev_over": -0.06361082894913672,
+     "ev_under": 0.03689192023302623,
+     "edge_over": -0.025734874328284363,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 164,
+     "history": [
+      {
+       "date": "2026-03-31",
+       "opp": "CBJ",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CBJ",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "NYI",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "OTT",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "BOS",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CHI",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "PHI",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "NYI",
+       "sog": 4
+      },
+      {
+       "date": "2026-09-29",
+       "opp": "FLA",
+       "sog": 2
+      },
+      {
+       "date": "2026-10-02",
+       "opp": "WSH",
+       "sog": 3
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.7,
+     "hit_l20": 0.7
+    },
+    {
+     "player_id": 8484387,
+     "name": "M. Michkov",
+     "team": "PHI",
+     "opp": "CAR",
+     "point": 1.5,
+     "lam": 1.7877209909403982,
+     "p_over": 0.517761033448055,
+     "p_over_market": 0.5459924460251908,
+     "over_price": 1.78,
+     "under_price": 2.15,
+     "ev_over": -0.07838536046246203,
+     "ev_under": 0.036813778086681626,
+     "edge_over": -0.028231412577135795,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 163,
+     "history": [
+      {
+       "date": "2026-04-02",
+       "opp": "DET",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-03",
+       "opp": "NYI",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "BOS",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "NJD",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "DET",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "WPG",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "CAR",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "MTL",
+       "sog": 8
+      },
+      {
+       "date": "2026-09-30",
+       "opp": "PIT",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "NJD",
+       "sog": 1
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.6,
+     "hit_l20": 0.5
+    }
+   ],
    "stats": [
     {
      "key": "elo",
@@ -1877,18 +4246,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "PIT",
      "p_model": 0.5859999305039362,
-     "p_market": 0.4685903884302868,
-     "p_adj": 0.48074668229305134,
-     "edge": 0.1174095420736494,
-     "ev": -0.009661834476314302,
+     "p_market": 0.48863394767307994,
+     "p_adj": 0.5020327982419774,
+     "edge": 0.09736598283085623,
+     "ev": -0.00597505948088467,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.06,
+     "best_decimal": 1.98,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -1898,13 +4267,13 @@
     "away": {
      "team": "MTL",
      "p_model": 0.4140000694960638,
-     "p_market": 0.5314096115697132,
-     "p_adj": 0.5192533177069487,
-     "edge": -0.1174095420736494,
-     "ev": -0.04976642859628383,
+     "p_market": 0.5113660523269201,
+     "p_adj": 0.49796720175802256,
+     "edge": -0.09736598283085629,
+     "ev": -0.04888264464217695,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.83,
+     "best_decimal": 1.91,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -1916,58 +4285,58 @@
     {
      "market": "totals",
      "side": "over",
-     "label": "Over 6",
-     "point": 6.0,
-     "p_model": 0.5148947155704646,
-     "p_market": 0.4890305772658711,
-     "p_push": 0.12521840975907636,
-     "edge": 0.025864138304593498,
-     "ev": 0.003538225041165577,
-     "best_decimal": 1.95,
+     "label": "Over 6.5",
+     "point": 6.5,
+     "p_model": 0.4507670273648314,
+     "p_market": 0.49236488647812987,
+     "p_push": 0.0,
+     "edge": -0.041597859113298497,
+     "ev": -0.10748128581763383,
+     "best_decimal": 1.98,
      "best_book": null,
-     "n_books": 1
+     "n_books": 9
     },
     {
      "market": "totals",
      "side": "under",
-     "label": "Under 6",
-     "point": 6.0,
-     "p_model": 0.4851052844295354,
-     "p_market": 0.5109694227341288,
-     "p_push": 0.12521840975907636,
-     "edge": -0.025864138304593443,
-     "ev": -0.08122619832501526,
-     "best_decimal": 1.87,
+     "label": "Under 6.5",
+     "point": 6.5,
+     "p_model": 0.5492329726351686,
+     "p_market": 0.5076351135218702,
+     "p_push": 0.0,
+     "edge": 0.041597859113298385,
+     "ev": 0.05452730745952361,
+     "best_decimal": 1.92,
      "best_book": null,
-     "n_books": 1
+     "n_books": 9
     },
     {
      "market": "spreads",
      "side": "home",
-     "label": "PIT -1.5",
-     "point": -1.5,
-     "p_model": 0.3350280169721971,
-     "p_market": 0.2912864963503815,
+     "label": "PIT +1.5",
+     "point": 1.5,
+     "p_model": 0.7560678917437932,
+     "p_market": 0.6961905719433831,
      "p_push": 0.0,
-     "edge": 0.04374152062181558,
-     "ev": 0.07208965431103076,
-     "best_decimal": 3.2,
+     "edge": 0.05987731980041011,
+     "ev": 0.05849504844131037,
+     "best_decimal": 1.4,
      "best_book": null,
-     "n_books": 1
+     "n_books": 9
     },
     {
      "market": "spreads",
      "side": "away",
-     "label": "MTL +1.5",
-     "point": 1.5,
-     "p_model": 0.6649719830278029,
-     "p_market": 0.7087135036496185,
+     "label": "MTL -1.5",
+     "point": -1.5,
+     "p_model": 0.24393210825620681,
+     "p_market": 0.3038094280566169,
      "p_push": 0.0,
-     "edge": -0.04374152062181558,
-     "ev": -0.08898838325190994,
-     "best_decimal": 1.37,
+     "edge": -0.05987731980041011,
+     "ev": -0.2316138589929485,
+     "best_decimal": 3.15,
      "best_book": null,
-     "n_books": 1
+     "n_books": 9
     }
    ],
    "goals": {
@@ -2333,18 +4702,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "CBJ",
      "p_model": 0.521756746091815,
-     "p_market": 0.4873504694107224,
-     "p_adj": 0.5002965380615964,
-     "edge": 0.034406276681092585,
-     "ev": 0.0055960415038085465,
-     "kelly_full": 0.0055406351522856905,
+     "p_market": 0.4840430349622211,
+     "p_adj": 0.49755962209128785,
+     "edge": 0.037713711129593874,
+     "ev": 0.005070436624401542,
+     "kelly_full": 0.004971016298432884,
      "best_book": null,
-     "best_decimal": 2.01,
+     "best_decimal": 2.02,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -2354,10 +4723,10 @@
     "away": {
      "team": "UTA",
      "p_model": 0.478243253908185,
-     "p_market": 0.5126495305892775,
-     "p_adj": 0.4997034619384036,
-     "edge": -0.03440627668109253,
-     "ev": -0.05556045693641731,
+     "p_market": 0.5159569650377789,
+     "p_adj": 0.5024403779087121,
+     "edge": -0.037713711129593874,
+     "ev": -0.05038768575253416,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.89,
@@ -2368,13 +4737,1196 @@
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6",
+     "point": 6.0,
+     "p_model": 0.5078541350297985,
+     "p_market": 0.5097644564410407,
+     "p_push": 0.12495729170106676,
+     "edge": -0.001910321411242255,
+     "ev": -0.030693998598087968,
+     "best_decimal": 1.9,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6",
+     "point": 6.0,
+     "p_model": 0.4921458649702015,
+     "p_market": 0.49023554355895926,
+     "p_push": 0.12495729170106676,
+     "edge": 0.001910321411242255,
+     "ev": -0.026664866692490186,
+     "best_decimal": 1.97,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "CBJ +1.5",
+     "point": 1.5,
+     "p_model": 0.7078890061676648,
+     "p_market": 0.7052232496349742,
+     "p_push": 0.0,
+     "edge": 0.002665756532690633,
+     "ev": 0.012281278819760655,
+     "best_decimal": 1.43,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "UTA -1.5",
+     "point": -1.5,
+     "p_model": 0.2921109938323352,
+     "p_market": 0.2947767503650258,
+     "p_push": 0.0,
+     "edge": -0.002665756532690633,
+     "ev": -0.050639270044910645,
+     "best_decimal": 3.25,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 2.9768103652323252,
     "lam_away": 3.0460856509422998,
-    "exp_total": 6.1371297831617415
+    "exp_total": 6.137129783161741
    },
-   "props": [],
+   "props": [
+    {
+     "player_id": 8482660,
+     "name": "K. Johnson",
+     "team": "CBJ",
+     "opp": "UTA",
+     "point": 1.5,
+     "lam": 1.1517826221209149,
+     "p_over": 0.31728862548861503,
+     "p_over_market": 0.5442608528784664,
+     "over_price": 1.76,
+     "under_price": 2.05,
+     "ev_over": -0.4415720191400375,
+     "ev_under": 0.39955831774833905,
+     "edge_over": -0.22697222738985134,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 187,
+     "history": [
+      {
+       "date": "2026-03-24",
+       "opp": "PHI",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-28",
+       "opp": "SJS",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "CAR",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CAR",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "DET",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "BUF",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "MTL",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-12",
+       "opp": "BOS",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "WSH",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "BUF",
+       "sog": 1
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.2,
+     "hit_l20": 0.4
+    },
+    {
+     "player_id": 8481716,
+     "name": "D. Voronkov",
+     "team": "CBJ",
+     "opp": "UTA",
+     "point": 1.5,
+     "lam": 0.9587951167382203,
+     "p_over": 0.24946222620314862,
+     "p_over_market": 0.4822565202155398,
+     "over_price": 1.99,
+     "under_price": 1.83,
+     "ev_over": -0.5035701698557342,
+     "ev_under": 0.3734841260482381,
+     "edge_over": -0.23279429401239116,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 212,
+     "history": [
+      {
+       "date": "2026-02-03",
+       "opp": "NJD",
+       "sog": 2
+      },
+      {
+       "date": "2026-02-04",
+       "opp": "CHI",
+       "sog": 0
+      },
+      {
+       "date": "2026-02-26",
+       "opp": "BOS",
+       "sog": 3
+      },
+      {
+       "date": "2026-02-28",
+       "opp": "NYI",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-02",
+       "opp": "NYR",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-03",
+       "opp": "NSH",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-05",
+       "opp": "FLA",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-12",
+       "opp": "FLA",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-28",
+       "opp": "SJS",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "BUF",
+       "sog": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.3,
+     "hit_l20": 0.4
+    },
+    {
+     "player_id": 8483431,
+     "name": "L. Cooley",
+     "team": "UTA",
+     "opp": "CBJ",
+     "point": 1.5,
+     "lam": 1.6482338565245236,
+     "p_over": 0.4777669760837383,
+     "p_over_market": 0.591650565538268,
+     "over_price": 1.63,
+     "under_price": 2.45,
+     "ev_over": -0.22123982898350664,
+     "ev_under": 0.27947090859484125,
+     "edge_over": -0.1138835894545297,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 4,
+     "n_prev": 212,
+     "history": [
+      {
+       "date": "2026-03-28",
+       "opp": "LAK",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "SEA",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "VAN",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "EDM",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "NSH",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "CAR",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-12",
+       "opp": "CGY",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "WPG",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-16",
+       "opp": "STL",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CHI",
+       "sog": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.5,
+     "hit_l20": 0.45
+    },
+    {
+     "player_id": 8482699,
+     "name": "D. Guenther",
+     "team": "UTA",
+     "opp": "CBJ",
+     "point": 2.5,
+     "lam": 2.58245329950266,
+     "p_over": 0.4632887277866551,
+     "p_over_market": 0.5906048994238929,
+     "over_price": 1.62,
+     "under_price": 2.35,
+     "ev_over": -0.2494722609856187,
+     "ev_under": 0.2612714897013606,
+     "edge_over": -0.12731617163723785,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 195,
+     "history": [
+      {
+       "date": "2026-03-26",
+       "opp": "WSH",
+       "sog": 8
+      },
+      {
+       "date": "2026-03-28",
+       "opp": "LAK",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "SEA",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "VAN",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "EDM",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "NSH",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "CAR",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-12",
+       "opp": "CGY",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "WPG",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CHI",
+       "sog": 5
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.6,
+     "hit_l20": 0.55
+    },
+    {
+     "player_id": 8482720,
+     "name": "M. Knies",
+     "team": "CBJ",
+     "opp": "UTA",
+     "point": 1.5,
+     "lam": 1.6480840737215536,
+     "p_over": 0.47772272427789686,
+     "p_over_market": 0.5604135399638444,
+     "over_price": 1.73,
+     "under_price": 2.25,
+     "ev_over": -0.17353968699923844,
+     "ev_under": 0.1751238703747321,
+     "edge_over": -0.0826908156859475,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 238,
+     "history": [
+      {
+       "date": "2026-03-28",
+       "opp": "STL",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-30",
+       "opp": "ANA",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "SJS",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "LAK",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-08",
+       "opp": "WSH",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "NYI",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "FLA",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "DAL",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-15",
+       "opp": "OTT",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "BUF",
+       "sog": 4
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.3,
+     "hit_l20": 0.35
+    },
+    {
+     "player_id": 8477501,
+     "name": "V. Nichushkin",
+     "team": "CBJ",
+     "opp": "UTA",
+     "point": 1.5,
+     "lam": 1.7646097554833506,
+     "p_over": 0.5113036385985773,
+     "p_over_market": 0.5815556524238027,
+     "over_price": 1.66,
+     "under_price": 2.35,
+     "ev_over": -0.15123595992636174,
+     "ev_under": 0.14843644929334343,
+     "edge_over": -0.07025201382522539,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 170,
+     "history": [
+      {
+       "date": "2026-03-30",
+       "opp": "CGY",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-01",
+       "opp": "VAN",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "DAL",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "STL",
+       "sog": 6
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "CGY",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "VGK",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "EDM",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "CGY",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-16",
+       "opp": "SEA",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "BUF",
+       "sog": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.5,
+     "hit_l20": 0.5
+    },
+    {
+     "player_id": 8477951,
+     "name": "N. Schmaltz",
+     "team": "UTA",
+     "opp": "CBJ",
+     "point": 2.5,
+     "lam": 2.737416603833152,
+     "p_over": 0.4978076584461901,
+     "p_over_market": 0.41231472170894423,
+     "over_price": 2.3,
+     "under_price": 1.67,
+     "ev_over": 0.14495761442623722,
+     "ev_under": -0.16133878960513753,
+     "edge_over": 0.0854929367372459,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 4,
+     "n_prev": 244,
+     "history": [
+      {
+       "date": "2026-03-28",
+       "opp": "LAK",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "SEA",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "VAN",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "EDM",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "NSH",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "CAR",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-12",
+       "opp": "CGY",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "WPG",
+       "sog": 8
+      },
+      {
+       "date": "2026-04-16",
+       "opp": "STL",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CHI",
+       "sog": 2
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.6,
+     "hit_l20": 0.6
+    },
+    {
+     "player_id": 8477346,
+     "name": "M. Weegar",
+     "team": "UTA",
+     "opp": "CBJ",
+     "point": 1.5,
+     "lam": 1.4983943697295503,
+     "p_over": 0.43213788257106933,
+     "p_over_market": 0.5173899272046832,
+     "over_price": 1.87,
+     "under_price": 1.95,
+     "ev_over": -0.19190215959210033,
+     "ev_under": 0.10733112898641473,
+     "edge_over": -0.08525204463361391,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 243,
+     "history": [
+      {
+       "date": "2026-03-26",
+       "opp": "WSH",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-28",
+       "opp": "LAK",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "SEA",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "EDM",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "NSH",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "CAR",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-12",
+       "opp": "CGY",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "WPG",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-16",
+       "opp": "STL",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CHI",
+       "sog": 2
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.6,
+     "hit_l20": 0.6
+    },
+    {
+     "player_id": 8479671,
+     "name": "M. Olivier",
+     "team": "CBJ",
+     "opp": "UTA",
+     "point": 1.5,
+     "lam": 1.729907549049527,
+     "p_over": 0.501481003810586,
+     "p_over_market": 0.43521956467548045,
+     "over_price": 2.2,
+     "under_price": 1.69,
+     "ev_over": 0.10325820838328936,
+     "ev_under": -0.1575028964398904,
+     "edge_over": 0.06626143913510557,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 2,
+     "n_prev": 198,
+     "history": [
+      {
+       "date": "2026-03-14",
+       "opp": "PHI",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-17",
+       "opp": "CAR",
+       "sog": 4
+      },
+      {
+       "date": "2026-03-19",
+       "opp": "NYR",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-21",
+       "opp": "SEA",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-22",
+       "opp": "NYI",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-24",
+       "opp": "PHI",
+       "sog": 5
+      },
+      {
+       "date": "2026-03-26",
+       "opp": "MTL",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-28",
+       "opp": "SJS",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-29",
+       "opp": "BOS",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "BUF",
+       "sog": 3
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.7,
+     "hit_l20": 0.65
+    },
+    {
+     "player_id": 8483485,
+     "name": "D. Mateychuk",
+     "team": "CBJ",
+     "opp": "UTA",
+     "point": 1.5,
+     "lam": 1.3499620594817452,
+     "p_over": 0.38439245451330073,
+     "p_over_market": 0.4581723918612008,
+     "over_price": 2.06,
+     "under_price": 1.74,
+     "ev_over": -0.20815154370260047,
+     "ev_under": 0.07115712914685673,
+     "edge_over": -0.07377993734790006,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 121,
+     "history": [
+      {
+       "date": "2026-03-29",
+       "opp": "BOS",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "CAR",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CAR",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "WPG",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "DET",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "BUF",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "MTL",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-12",
+       "opp": "BOS",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "WSH",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "BUF",
+       "sog": 2
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.4,
+     "hit_l20": 0.3
+    },
+    {
+     "player_id": 8475745,
+     "name": "C. Coyle",
+     "team": "CBJ",
+     "opp": "UTA",
+     "point": 1.5,
+     "lam": 1.8904855401771412,
+     "p_over": 0.5456542243967448,
+     "p_over_market": 0.4938410232527886,
+     "over_price": 1.95,
+     "under_price": 1.91,
+     "ev_over": 0.06402573757365237,
+     "ev_under": -0.13219956859778265,
+     "edge_over": 0.05181320114395621,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 3,
+     "n_prev": 248,
+     "history": [
+      {
+       "date": "2026-03-29",
+       "opp": "BOS",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "CAR",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CAR",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "WPG",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "DET",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "BUF",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "MTL",
+       "sog": 6
+      },
+      {
+       "date": "2026-04-12",
+       "opp": "BOS",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "WSH",
+       "sog": 2
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "BUF",
+       "sog": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.4,
+     "hit_l20": 0.35
+    },
+    {
+     "player_id": 8484166,
+     "name": "A. Fantilli",
+     "team": "CBJ",
+     "opp": "UTA",
+     "point": 2.5,
+     "lam": 2.4053421130677712,
+     "p_over": 0.42215748979472645,
+     "p_over_market": 0.469482632325817,
+     "over_price": 2.05,
+     "under_price": 1.83,
+     "ev_over": -0.13457714592081088,
+     "ev_under": 0.05745179367565062,
+     "edge_over": -0.04732514253109055,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 214,
+     "history": [
+      {
+       "date": "2026-03-29",
+       "opp": "BOS",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "CAR",
+       "sog": 5
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CAR",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "WPG",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "DET",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "BUF",
+       "sog": 5
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "MTL",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-12",
+       "opp": "BOS",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "WSH",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "BUF",
+       "sog": 2
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.5,
+     "hit_l20": 0.45
+    },
+    {
+     "player_id": 8479066,
+     "name": "R. Lomberg",
+     "team": "CBJ",
+     "opp": "UTA",
+     "point": 0.5,
+     "lam": 0.8259775240950243,
+     "p_over": 0.5505962344148896,
+     "p_over_market": 0.4840023269342687,
+     "over_price": 1.91,
+     "under_price": 1.8,
+     "ev_over": 0.05163880773243912,
+     "ev_under": -0.1910732219468012,
+     "edge_over": 0.06659390748062088,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 1,
+     "n_prev": 213,
+     "history": [
+      {
+       "date": "2026-02-02",
+       "opp": "TOR",
+       "sog": 0
+      },
+      {
+       "date": "2026-02-04",
+       "opp": "EDM",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-01",
+       "opp": "ANA",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-03",
+       "opp": "DAL",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-05",
+       "opp": "OTT",
+       "sog": 0
+      },
+      {
+       "date": "2026-03-07",
+       "opp": "CAR",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-09",
+       "opp": "WSH",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-16",
+       "opp": "DET",
+       "sog": 2
+      },
+      {
+       "date": "2026-03-24",
+       "opp": "LAK",
+       "sog": 0
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "BUF",
+       "sog": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.4,
+     "hit_l20": 0.45
+    },
+    {
+     "player_id": 8477497,
+     "name": "S. Monahan",
+     "team": "CBJ",
+     "opp": "UTA",
+     "point": 1.5,
+     "lam": 1.558803438686264,
+     "p_over": 0.4508573465345589,
+     "p_over_market": 0.5037537537537525,
+     "over_price": 1.91,
+     "under_price": 1.91,
+     "ev_over": -0.13886246811899255,
+     "ev_under": 0.048862468118992475,
+     "edge_over": -0.05289640721919364,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 216,
+     "history": [
+      {
+       "date": "2026-03-29",
+       "opp": "BOS",
+       "sog": 1
+      },
+      {
+       "date": "2026-03-31",
+       "opp": "CAR",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "CAR",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "WPG",
+       "sog": 0
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "DET",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "BUF",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "MTL",
+       "sog": 4
+      },
+      {
+       "date": "2026-04-12",
+       "opp": "BOS",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "WSH",
+       "sog": 1
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "BUF",
+       "sog": 1
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.3,
+     "hit_l20": 0.35
+    },
+    {
+     "player_id": 8478474,
+     "name": "L. Crouse",
+     "team": "UTA",
+     "opp": "CBJ",
+     "point": 1.5,
+     "lam": 1.8395784212228938,
+     "p_over": 0.5320040437177924,
+     "p_over_market": 0.4749768547626225,
+     "over_price": 1.97,
+     "under_price": 1.8,
+     "ev_over": 0.048047966124051045,
+     "ev_under": -0.15760727869202634,
+     "edge_over": 0.057027188955169894,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 2,
+     "n_prev": 244,
+     "history": [
+      {
+       "date": "2026-03-28",
+       "opp": "LAK",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "SEA",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "VAN",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "EDM",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "NSH",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "CAR",
+       "sog": 3
+      },
+      {
+       "date": "2026-04-12",
+       "opp": "CGY",
+       "sog": 2
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "WPG",
+       "sog": 1
+      },
+      {
+       "date": "2026-04-16",
+       "opp": "STL",
+       "sog": 2
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "CHI",
+       "sog": 1
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": null,
+     "hit_l10": 0.7,
+     "hit_l20": 0.6
+    }
+   ],
    "stats": [
     {
      "key": "elo",
@@ -2733,15 +6285,15 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "EDM",
      "p_model": 0.5896112172367178,
-     "p_market": 0.6501505122169757,
-     "p_adj": 0.6351511127100784,
-     "edge": -0.060539294980257896,
-     "ev": -0.047273330934882396,
+     "p_market": 0.649428430568292,
+     "p_adj": 0.6344285003868458,
+     "edge": -0.05981721333157419,
+     "ev": -0.04835724941973124,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.5,
@@ -2754,11 +6306,11 @@
     "away": {
      "team": "SEA",
      "p_model": 0.41038878276328217,
-     "p_market": 0.34984948778302427,
-     "p_adj": 0.3648488872899216,
-     "edge": 0.060539294980257896,
-     "ev": 0.003334440047284337,
-     "kelly_full": 0.001905394312733907,
+     "p_market": 0.350571569431708,
+     "p_adj": 0.3655714996131541,
+     "edge": 0.05981721333157419,
+     "ev": 0.005321623936173747,
+     "kelly_full": 0.0030409279635278557,
      "best_book": null,
      "best_decimal": 2.75,
      "books": {},
@@ -2768,7 +6320,64 @@
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6.5",
+     "point": 6.5,
+     "p_model": 0.44231961601608,
+     "p_market": 0.5129293317121699,
+     "p_push": 0.0,
+     "edge": -0.07060971569608993,
+     "ev": -0.1463231410889656,
+     "best_decimal": 1.93,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6.5",
+     "point": 6.5,
+     "p_model": 0.55768038398392,
+     "p_market": 0.4870706682878301,
+     "p_push": 0.0,
+     "edge": 0.07060971569608987,
+     "ev": 0.1153607679678399,
+     "best_decimal": 2.0,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "EDM -1.5",
+     "point": -1.5,
+     "p_model": 0.3387966207315947,
+     "p_market": 0.42998896906600476,
+     "p_push": 0.0,
+     "edge": -0.09119234833441003,
+     "ev": -0.22754370473196417,
+     "best_decimal": 2.28,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "SEA +1.5",
+     "point": 1.5,
+     "p_model": 0.6612033792684053,
+     "p_market": 0.5700110309339952,
+     "p_push": 0.0,
+     "edge": 0.09119234833441014,
+     "ev": 0.1504938799270253,
+     "best_decimal": 1.74,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 3.212327441875923,
     "lam_away": 2.7993639337897935,
@@ -3132,18 +6741,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "NYI",
      "p_model": 0.5302478289543765,
-     "p_market": 0.44416990166639714,
-     "p_adj": 0.45824334204362865,
-     "edge": 0.08607792728797936,
-     "ev": 0.0035529190755467788,
-     "kelly_full": 0.002985646281972083,
+     "p_market": 0.4435168492863133,
+     "p_adj": 0.4575531803576061,
+     "edge": 0.0867309796680632,
+     "ev": 0.006616996786733442,
+     "kelly_full": 0.005514163988944535,
      "best_book": null,
-     "best_decimal": 2.19,
+     "best_decimal": 2.2,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -3153,13 +6762,13 @@
     "away": {
      "team": "NJD",
      "p_model": 0.4697521710456235,
-     "p_market": 0.5558300983336029,
-     "p_adj": 0.5417566579563714,
-     "edge": -0.08607792728797936,
-     "ev": -0.051925848576350075,
+     "p_market": 0.5564831507136867,
+     "p_adj": 0.5424468196423939,
+     "edge": -0.0867309796680632,
+     "ev": -0.045293597429386656,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.75,
+     "best_decimal": 1.76,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -3174,13 +6783,13 @@
      "label": "Over 6",
      "point": 6.0,
      "p_model": 0.5183262784678826,
-     "p_market": 0.5,
+     "p_market": 0.4819023418983394,
      "p_push": 0.1249032492811537,
-     "edge": 0.018326278467882595,
-     "ev": -0.008748174308923606,
-     "best_decimal": 1.91,
+     "edge": 0.03642393656954318,
+     "ev": 0.04114624632201436,
+     "best_decimal": 2.02,
      "best_book": null,
-     "n_books": 1
+     "n_books": 6
     },
     {
      "market": "totals",
@@ -3188,41 +6797,41 @@
      "label": "Under 6",
      "point": 6.0,
      "p_model": 0.4816737215321174,
-     "p_market": 0.5,
+     "p_market": 0.5180976581016605,
      "p_push": 0.1249032492811537,
-     "edge": -0.018326278467882595,
-     "ev": -0.07001053325577261,
-     "best_decimal": 1.91,
+     "edge": -0.036423936569543125,
+     "ev": -0.08687097760054896,
+     "best_decimal": 1.87,
      "best_book": null,
-     "n_books": 1
+     "n_books": 6
     },
     {
      "market": "spreads",
      "side": "home",
-     "label": "NYI -1.5",
-     "point": -1.5,
-     "p_model": 0.28566321696950403,
-     "p_market": 0.30157809236476607,
+     "label": "NYI +1.5",
+     "point": 1.5,
+     "p_model": 0.7081496340611497,
+     "p_market": 0.6698751669807168,
      "p_push": 0.0,
-     "edge": -0.01591487539526204,
-     "ev": -0.11444402739453752,
-     "best_decimal": 3.1,
+     "edge": 0.03827446708043292,
+     "ev": 0.04806145841050158,
+     "best_decimal": 1.48,
      "best_book": null,
-     "n_books": 1
+     "n_books": 9
     },
     {
      "market": "spreads",
      "side": "away",
-     "label": "NJD +1.5",
-     "point": 1.5,
-     "p_model": 0.714336783030496,
-     "p_market": 0.6984219076352339,
+     "label": "NJD -1.5",
+     "point": -1.5,
+     "p_model": 0.2918503659388503,
+     "p_market": 0.3301248330192832,
      "p_push": 0.0,
-     "edge": 0.01591487539526204,
-     "ev": -0.00707187158761069,
-     "best_decimal": 1.39,
+     "edge": -0.03827446708043292,
+     "ev": -0.1390414204803916,
+     "best_decimal": 2.95,
      "best_book": null,
-     "n_books": 1
+     "n_books": 9
     }
    ],
    "goals": {
@@ -3590,18 +7199,18 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "NSH",
      "p_model": 0.49506061154970965,
-     "p_market": 0.4503236532611734,
-     "p_adj": 0.4646998075295791,
-     "edge": 0.044736958288536244,
-     "ev": 0.008398582339186667,
-     "kelly_full": 0.007178275503578348,
+     "p_market": 0.43407213062157285,
+     "p_adj": 0.4490701282678131,
+     "edge": 0.0609884809281368,
+     "ev": 0.014898489885257549,
+     "kelly_full": 0.011824198321632977,
      "best_book": null,
-     "best_decimal": 2.17,
+     "best_decimal": 2.26,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -3611,13 +7220,13 @@
     "away": {
      "team": "DAL",
      "p_model": 0.5049393884502904,
-     "p_market": 0.5496763467388266,
-     "p_adj": 0.5353001924704209,
-     "edge": -0.04473695828853619,
-     "ev": -0.052518659327354944,
+     "p_market": 0.5659278693784271,
+     "p_adj": 0.5509298717321869,
+     "edge": -0.06098848092813669,
+     "ev": -0.04138202318599482,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.77,
+     "best_decimal": 1.74,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -3625,10 +7234,67 @@
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6",
+     "point": 6.0,
+     "p_model": 0.5034328139631989,
+     "p_market": 0.5023210793087328,
+     "p_push": 0.12513533087853776,
+     "edge": 0.0011117346544661233,
+     "ev": -0.016015283806500802,
+     "best_decimal": 1.95,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6",
+     "point": 6.0,
+     "p_model": 0.49656718603680106,
+     "p_market": 0.4976789206912672,
+     "p_push": 0.12513533087853776,
+     "edge": -0.0011117346544661233,
+     "ev": -0.02772794964957226,
+     "best_decimal": 1.95,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "NSH +1.5",
+     "point": 1.5,
+     "p_model": 0.6830420832982779,
+     "p_market": 0.6600750483021156,
+     "p_push": 0.0,
+     "edge": 0.02296703499616226,
+     "ev": 0.024563124947416803,
+     "best_decimal": 1.5,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "DAL -1.5",
+     "point": -1.5,
+     "p_model": 0.31695791670172213,
+     "p_market": 0.3399249516978844,
+     "p_push": 0.0,
+     "edge": -0.02296703499616226,
+     "ev": -0.08716119989904025,
+     "best_decimal": 2.88,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 2.853808326989501,
-    "lam_away": 3.146505928536143,
+    "lam_away": 3.1465059285361425,
     "exp_total": 6.113669450994959
    },
    "props": [],
@@ -3981,7 +7647,7 @@
    "home_goalie": "J. Wallstedt",
    "away_goalie": "J. Swayman",
    "goalie_status": "probable",
-   "p_home": 0.630228785254151,
+   "p_home": 0.6302287852541512,
    "blocked": "early-season sample size: a team has only played 1 games (< 10)",
    "notes": [
     "BOS is on the second night of a back-to-back.",
@@ -3989,15 +7655,15 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "MIN",
-     "p_model": 0.630228785254151,
-     "p_market": 0.6542067486714587,
-     "p_adj": 0.643868802274082,
-     "edge": -0.023977963417307624,
-     "ev": -0.03419679658887692,
+     "p_model": 0.6302287852541512,
+     "p_market": 0.6538459983107177,
+     "p_adj": 0.6436215377565296,
+     "edge": -0.0236172130565665,
+     "ev": -0.03456769336520554,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.5,
@@ -4009,14 +7675,14 @@
     },
     "away": {
      "team": "BOS",
-     "p_model": 0.36977121474584895,
-     "p_market": 0.34579325132854133,
-     "p_adj": 0.356131197725918,
-     "edge": 0.023977963417307624,
-     "ev": -0.0028326463674296365,
+     "p_model": 0.36977121474584884,
+     "p_market": 0.34615400168928234,
+     "p_adj": 0.3563784622434703,
+     "edge": 0.0236172130565665,
+     "ev": -0.005704090340717838,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.8,
+     "best_decimal": 2.79,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -4031,13 +7697,13 @@
      "label": "Over 6",
      "point": 6.0,
      "p_model": 0.5004954818473034,
-     "p_market": 0.5,
+     "p_market": 0.5270789832827227,
      "p_push": 0.12513439304211568,
-     "edge": 0.0004954818473034139,
-     "ev": -0.03854100546138639,
-     "best_decimal": 1.91,
+     "edge": -0.02658350143541932,
+     "ev": -0.07357030814186793,
+     "best_decimal": 1.83,
      "best_book": null,
-     "n_books": 1
+     "n_books": 5
     },
     {
      "market": "totals",
@@ -4045,13 +7711,13 @@
      "label": "Under 6",
      "point": 6.0,
      "p_model": 0.4995045181526966,
-     "p_market": 0.5,
+     "p_market": 0.47292101671727726,
      "p_push": 0.12513439304211568,
-     "edge": -0.0004954818473034139,
-     "ev": -0.040196899164823274,
-     "best_decimal": 1.91,
+     "edge": 0.02658350143541932,
+     "ev": 0.016613012883919143,
+     "best_decimal": 2.04,
      "best_book": null,
-     "n_books": 1
+     "n_books": 5
     },
     {
      "market": "spreads",
@@ -4059,13 +7725,13 @@
      "label": "MIN -1.5",
      "point": -1.5,
      "p_model": 0.32504142068584513,
-     "p_market": 0.40367320680458463,
+     "p_market": 0.4289331905780983,
      "p_push": 0.0,
-     "edge": -0.0786317861187395,
-     "ev": -0.2329022471814055,
-     "best_decimal": 2.36,
+     "edge": -0.10389176989225318,
+     "ev": -0.26540638924999005,
+     "best_decimal": 2.26,
      "best_book": null,
-     "n_books": 2
+     "n_books": 9
     },
     {
      "market": "spreads",
@@ -4073,13 +7739,13 @@
      "label": "BOS +1.5",
      "point": 1.5,
      "p_model": 0.6749585793141548,
-     "p_market": 0.5963267931954154,
+     "p_market": 0.5710668094219017,
      "p_push": 0.0,
-     "edge": 0.07863178611873944,
-     "ev": 0.09343289848893088,
-     "best_decimal": 1.62,
+     "edge": 0.10389176989225313,
+     "ev": 0.1541791706272047,
+     "best_decimal": 1.71,
      "best_book": null,
-     "n_books": 2
+     "n_books": 9
     }
    ],
    "goals": {
@@ -4447,15 +8113,15 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "COL",
      "p_model": 0.6736102329842266,
-     "p_market": 0.7179838934301848,
-     "p_adj": 0.7036415919431322,
-     "edge": -0.04437366044595814,
-     "ev": -0.04304743495734009,
+     "p_market": 0.7219236348651469,
+     "p_adj": 0.7072688631825228,
+     "edge": -0.04831340188092026,
+     "ev": -0.038114346071768945,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.36,
@@ -4468,13 +8134,13 @@
     "away": {
      "team": "STL",
      "p_model": 0.3263897670157734,
-     "p_market": 0.28201610656981524,
-     "p_adj": 0.2963584080568678,
-     "edge": 0.04437366044595814,
-     "ev": -0.00423574892892431,
-     "kelly_full": 0.0,
+     "p_market": 0.2780763651348531,
+     "p_adj": 0.2927311368174772,
+     "edge": 0.04831340188092026,
+     "ev": 0.03919553570204404,
+     "kelly_full": 0.015370798314527074,
      "best_book": null,
-     "best_decimal": 3.36,
+     "best_decimal": 3.55,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -4482,7 +8148,64 @@
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6.5",
+     "point": 6.5,
+     "p_model": 0.4532557707557917,
+     "p_market": 0.4720319034305619,
+     "p_push": 0.0,
+     "edge": -0.018776132674770185,
+     "ev": -0.048162881412837366,
+     "best_decimal": 2.1,
+     "best_book": null,
+     "n_books": 5
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6.5",
+     "point": 6.5,
+     "p_model": 0.5467442292442083,
+     "p_market": 0.5279680965694381,
+     "p_push": 0.0,
+     "edge": 0.018776132674770185,
+     "ev": 0.01147682410178541,
+     "best_decimal": 1.85,
+     "best_book": null,
+     "n_books": 5
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "COL -1.5",
+     "point": -1.5,
+     "p_model": 0.3744599002871204,
+     "p_market": 0.5034654867626129,
+     "p_push": 0.0,
+     "edge": -0.12900558647549254,
+     "ev": -0.27354779344298646,
+     "best_decimal": 1.94,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "STL +1.5",
+     "point": 1.5,
+     "p_model": 0.6255400997128796,
+     "p_market": 0.49653451323738707,
+     "p_push": 0.0,
+     "edge": 0.12900558647549254,
+     "ev": 0.2510801994257592,
+     "best_decimal": 2.0,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 3.403770495304102,
     "lam_away": 2.68131325651436,
@@ -4848,15 +8571,15 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "VAN",
      "p_model": 0.5196800871007893,
-     "p_market": 0.5105504030015395,
-     "p_adj": 0.5150119465228689,
-     "edge": 0.009129684099249746,
-     "ev": -0.016327182141320506,
+     "p_market": 0.5096344931375015,
+     "p_adj": 0.5145203319704913,
+     "edge": 0.010045593963287747,
+     "ev": -0.017266165936361655,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 1.91,
@@ -4869,10 +8592,10 @@
     "away": {
      "team": "CGY",
      "p_model": 0.4803199128992107,
-     "p_market": 0.48944959699846047,
-     "p_adj": 0.48498805347713114,
-     "edge": -0.009129684099249746,
-     "ev": -0.030023893045737715,
+     "p_market": 0.49036550686249847,
+     "p_adj": 0.4854796680295087,
+     "edge": -0.010045593963287747,
+     "ev": -0.029040663940982592,
      "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 2.0,
@@ -4883,7 +8606,64 @@
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6",
+     "point": 6.0,
+     "p_model": 0.5082539530912734,
+     "p_market": 0.513187667491831,
+     "p_push": 0.12495624863726845,
+     "edge": -0.004933714400557565,
+     "ev": -0.03892419333783126,
+     "best_decimal": 1.88,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6",
+     "point": 6.0,
+     "p_model": 0.4917460469087266,
+     "p_market": 0.486812332508169,
+     "p_push": 0.12495624863726845,
+     "edge": 0.004933714400557565,
+     "ev": -0.023051126265215882,
+     "best_decimal": 1.98,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "VAN -1.5",
+     "point": -1.5,
+     "p_model": 0.29968910614360345,
+     "p_market": 0.29633754105597626,
+     "p_push": 0.0,
+     "edge": 0.003351565087627184,
+     "ev": -0.026010405033288775,
+     "best_decimal": 3.25,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "CGY +1.5",
+     "point": 1.5,
+     "p_model": 0.7003108938563966,
+     "p_market": 0.7036624589440237,
+     "p_push": 0.0,
+     "edge": -0.0033515650876271286,
+     "ev": 0.001444578214647052,
+     "best_decimal": 1.43,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 3.046758522143996,
     "lam_away": 2.9782772216945768,
@@ -5248,18 +9028,18 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-03T16:03:58+00:00",
+   "odds_captured_at": "2026-10-03T20:03:28+00:00",
    "sides": {
     "home": {
      "team": "SJS",
      "p_model": 0.4914457855684842,
-     "p_market": 0.5061285660722655,
-     "p_adj": 0.49920197119013715,
-     "edge": -0.014682780503781356,
-     "ev": -0.016572116755429744,
+     "p_market": 0.5086634263379973,
+     "p_adj": 0.500709577058674,
+     "edge": -0.017217640769513154,
+     "ev": -0.03363051627675917,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.97,
+     "best_decimal": 1.93,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -5269,11 +9049,11 @@
     "away": {
      "team": "LAK",
      "p_model": 0.5085542144315158,
-     "p_market": 0.49387143392773447,
-     "p_adj": 0.5007980288098629,
-     "edge": 0.014682780503781356,
-     "ev": 0.0015960576197258103,
-     "kelly_full": 0.0015960576197258103,
+     "p_market": 0.4913365736620027,
+     "p_adj": 0.49929042294132603,
+     "edge": 0.017217640769513154,
+     "ev": -0.0014191541173479982,
+     "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 2.0,
      "books": {},
@@ -5283,7 +9063,64 @@
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6.5",
+     "point": 6.5,
+     "p_model": 0.44202319771712384,
+     "p_market": 0.4648441548741699,
+     "p_push": 0.0,
+     "edge": -0.022820957157046073,
+     "ev": -0.07617151677121126,
+     "best_decimal": 2.09,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6.5",
+     "point": 6.5,
+     "p_model": 0.5579768022828762,
+     "p_market": 0.53515584512583,
+     "p_push": 0.0,
+     "edge": 0.02282095715704613,
+     "ev": 0.015517780154834626,
+     "best_decimal": 1.82,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "SJS -1.5",
+     "point": -1.5,
+     "p_model": 0.2833111204804867,
+     "p_market": 0.2937674954292567,
+     "p_push": 0.0,
+     "edge": -0.010456374948769998,
+     "ev": -0.0707395248240037,
+     "best_decimal": 3.28,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "LAK +1.5",
+     "point": 1.5,
+     "p_model": 0.7166888795195133,
+     "p_market": 0.7062325045707434,
+     "p_push": 0.0,
+     "edge": 0.010456374948769942,
+     "ev": 0.003364431327318562,
+     "best_decimal": 1.4,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 2.9657885933349273,
     "lam_away": 3.0408552136779807,
@@ -5663,8 +9500,8 @@
    "strategy": "always_over",
    "bets": 15.0,
    "staked": 150.0,
-   "profit": 40.7,
-   "roi": 0.27133333333333337,
+   "profit": 40.70000000000001,
+   "roi": 0.2713333333333334,
    "roi_lo": null,
    "roi_hi": null,
    "win_rate": 0.6666666666666666,
@@ -5699,8 +9536,8 @@
    "strategy": "every_puckline",
    "bets": 16.0,
    "staked": 325.0,
-   "profit": 56.559999999999995,
-   "roi": 0.1740307692307692,
+   "profit": 56.56,
+   "roi": 0.17403076923076924,
    "roi_lo": null,
    "roi_hi": null,
    "win_rate": 0.75,
@@ -5723,8 +9560,8 @@
    "strategy": "flat_model_side",
    "bets": 16.0,
    "staked": 251.0,
-   "profit": -7.049999999999997,
-   "roi": -0.028087649402390426,
+   "profit": -7.050000000000004,
+   "roi": -0.028087649402390454,
    "roi_lo": null,
    "roi_hi": null,
    "win_rate": 0.4375,
@@ -5771,8 +9608,8 @@
    "strategy": "puckline_edge",
    "bets": 10.0,
    "staked": 180.0,
-   "profit": -28.96999999999999,
-   "roi": -0.1609444444444444,
+   "profit": -28.97,
+   "roi": -0.16094444444444445,
    "roi_lo": null,
    "roi_hi": null,
    "win_rate": 0.5,
