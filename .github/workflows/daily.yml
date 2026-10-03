@@ -22,6 +22,9 @@ on:
       date:
         description: "YYYY-MM-DD (blank = today, US/Eastern)"
         default: ""
+      gated:
+        description: "true = re-check the schedule gate (used by the heartbeat); false = always run"
+        default: "false"
 
 concurrency:
   group: nhl-data          # never let two jobs write the log files at once
@@ -58,7 +61,7 @@ jobs:
             FORCE=""
           else
             KIND="${{ github.event.inputs.run_type || 'morning' }}"
-            FORCE="--force"
+            FORCE="--force"; if [ "${{ github.event.inputs.gated }}" = "true" ]; then FORCE=""; fi
           fi
           echo "type=$KIND" >> "$GITHUB_OUTPUT"
           python3 scripts/gate.py --kind "$KIND" $FORCE      # standard library only: runs before dependencies are installed

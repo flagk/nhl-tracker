@@ -8,6 +8,10 @@ on:
     - cron: "*/15 16-23 * * *"   # 12:00-19:45 ET (matinees and the main waves)
     - cron: "*/15 0-2 * * *"     # 20:00-22:45 ET (late and west-coast starts)
   workflow_dispatch:
+    inputs:
+      gated:
+        description: "true = re-check the schedule gate (used by the heartbeat); false = always run"
+        default: "false"
 
 concurrency:
   group: nhl-data
@@ -37,7 +41,7 @@ jobs:
       - name: Gate (is a game about to start?)
         id: gate
         run: |
-          FORCE=""; if [ "${{ github.event_name }}" != "schedule" ]; then FORCE="--force"; fi
+          FORCE=""; if [ "${{ github.event_name }}" != "schedule" ] && [ "${{ github.event.inputs.gated }}" != "true" ]; then FORCE="--force"; fi
           python3 scripts/gate.py --kind close $FORCE      # standard library only: runs before dependencies are installed
 
       - uses: actions/setup-python@v5

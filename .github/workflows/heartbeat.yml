@@ -1,0 +1,38 @@
+name: Heartbeat (reliable scheduler)
+# GitHub's scheduled triggers have arrived 3-6 hours late on this repository. This job stays alive for about 5.7 hours at a time, and every
+# 3 minutes decides (scripts/heartbeat.py, using the same gate rules as the other workflows) whether the morning run, the late run or a
+# closing-odds snapshot is due, then dispatches that workflow. When it finishes it starts the next link; an hourly cron restarts the chain
+# if it ever breaks. Only one link runs at a time. Costs no API credits by itself; the dispatched workflows spend them as before.
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: heartbeat
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  beat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Beat
+        id: beat
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/heartbeat.py --minutes 340 --interval 180
+      - name: Start the next link
+        # only after a full-length run: a crash loop must not respawn itself every few seconds (the hourly cron restarts a broken chain)
+        if: steps.beat.outputs.ran_minutes >= 300
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run heartbeat.yml --ref main
