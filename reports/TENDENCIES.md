@@ -2,7 +2,7 @@
 
 > Research/education only. Descriptive analytics, **not** betting advice, and nothing here changes the model or the staking rules automatically.
 
-*Generated 2026-10-04 04:00 UTC.* For each segment we test whether home teams win more or less often than the probabilities say (`bias` = actual minus predicted home-win frequency, in percentage points). With many segments, some look significant by luck, so every p-value is corrected across all tests (Benjamini-Hochberg false-discovery rate) and a segment is only a **tendency** if the same-direction bias also shows up in both halves of the data (first/second half by date).
+*Generated 2026-10-04 18:42 UTC.* For each segment we test whether home teams win more or less often than the probabilities say (`bias` = actual minus predicted home-win frequency, in percentage points). With many segments, some look significant by luck, so every p-value is corrected across all tests (Benjamini-Hochberg false-discovery rate) and a segment is only a **tendency** if the same-direction bias also shows up in both halves of the data (first/second half by date).
 
 ## Model vs outcomes (walk-forward, out of sample)
 
@@ -23,4 +23,4 @@
 | home win probability: 0.60 to 1.00 | 710 | -2.9 pts | 0.105 | 0.812 | no reliable tendency |
 | favourite: home team favoured | 1587 | -2.0 pts | 0.105 | 0.812 | no reliable tendency |
 
-*Market comparison starts at 300 settled games with odds; so far 27.*
+*Market comparison starts at 300 settled games with odds; so far 29.*
