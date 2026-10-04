@@ -9,9 +9,9 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 <!-- PICKS:START -->
 
-### Today's picks: 2026-10-03
+### Today's picks: 2026-10-04
 
-**0 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-04 03:58 UTC
+**5 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-04 04:03 UTC
 
 | | |
 |---|---|
@@ -21,7 +21,15 @@ Updated automatically every day. Most days the honest answer is "no bet".
 | 🧾 **[My bets & fake bets](https://flagk.github.io/nhl-tracker/bets.html)** | log your own bets (kept only in your browser) and see the pretend-money bets on every game |
 | 📈 [Bet log (CSV)](data/logs/bet_log.csv) | all settled recommended bets |
 
-*No NHL games to show for this date.*
+| Game | Model: home win | Market (no-vig) | Decision |
+|---|---|---|---|
+| WPG @ DET | 55.0% | 50.3% | no bet |
+| UTA @ NYR | 53.4% | 54.8% | no bet |
+| FLA @ ANA | 58.9% | 45.1% | no bet |
+| CGY @ SEA | 51.4% | 58.2% | no bet |
+| VGK @ VAN | 42.6% | 32.3% | no bet |
+
+*No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
 *Research and educational project; no guarantee of profit. The numbers above are not betting advice.*
 
