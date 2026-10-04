@@ -80,12 +80,12 @@ date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,cl
 2026-10-01,sog_edge,2026020010,player_sog,1.5,TBL,NYR,under,O. Bjorkstrand Under 1.5,1.74,17,1,12.58,
 2026-10-01,sog_edge,2026020010,player_sog,1.5,TBL,NYR,over,W. Cuylle Over 1.5,2,18,1,18,
 2026-10-01,sog_edge,2026020010,player_sog,1.5,TBL,NYR,under,A. Fox Under 1.5,1.87,18,1,15.66,
-2026-10-01,sog_over_control,2026020009,player_sog,2.5,PHI,NJD,over,P. Martone Over 2.5,2.25,10,0,-10,
 2026-10-01,sog_over_control,2026020009,player_sog,1.5,PHI,NJD,over,T. Konecny Over 1.5,1.83,10,0,-10,
+2026-10-01,sog_over_control,2026020009,player_sog,2.5,PHI,NJD,over,P. Martone Over 2.5,2.25,10,0,-10,
 2026-10-01,sog_over_control,2026020009,player_sog,2.5,PHI,NJD,over,O. Tippett Over 2.5,2.04,10,0,-10,
+2026-10-01,sog_over_control,2026020010,player_sog,1.5,TBL,NYR,over,J. Miller Over 1.5,1.66,10,0,-10,
 2026-10-01,sog_over_control,2026020010,player_sog,1.5,TBL,NYR,over,A. Fox Over 1.5,1.92,10,0,-10,
 2026-10-01,sog_over_control,2026020010,player_sog,1.5,TBL,NYR,over,O. Bjorkstrand Over 1.5,2.06,10,0,-10,
-2026-10-01,sog_over_control,2026020010,player_sog,1.5,TBL,NYR,over,J. Miller Over 1.5,1.66,10,0,-10,
 2026-10-01,sog_over_control,2026020010,player_sog,2.5,TBL,NYR,over,P. Dorofeyev Over 2.5,1.91,10,1,9.1,
 2026-10-01,sog_over_control,2026020010,player_sog,2.5,TBL,NYR,over,M. Zibanejad Over 2.5,2.1,10,1,11,
 2026-10-01,totals_edge,2026020009,totals,5.5,PHI,NJD,over,Over 5.5,1.83,17,0,-17,
@@ -140,6 +140,8 @@ date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,cl
 2026-10-03,always_over,2026020030,totals,6,DAL,NSH,over,Over 6,1.95,10,0,-10,
 2026-10-03,always_over,2026020031,totals,6,BOS,MIN,over,Over 6,1.83,10,0,-10,
 2026-10-03,always_over,2026020032,totals,6.5,STL,COL,over,Over 6.5,2.1,10,1,11,
+2026-10-03,always_over,2026020033,totals,6,CGY,VAN,over,Over 6,1.88,10,0,-10,
+2026-10-03,always_over,2026020034,totals,6.5,LAK,SJS,over,Over 6.5,2.09,10,1,10.9,
 2026-10-03,every_game,2026020022,moneyline,,CHI,BUF,home,BUF,1.44,26,1,11.44,-0.0181462
 2026-10-03,every_game,2026020023,moneyline,,OTT,TOR,away,OTT,2.04,14,1,14.56,0.00857361
 2026-10-03,every_game,2026020024,moneyline,,WSH,TBL,home,TBL,1.51,21,1,10.71,-0.0211431
@@ -151,6 +153,8 @@ date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,cl
 2026-10-03,every_game,2026020030,moneyline,,DAL,NSH,away,DAL,1.74,5,0,-5,-0.0148965
 2026-10-03,every_game,2026020031,moneyline,,BOS,MIN,home,MIN,1.5,18,1,9,-0.0108101
 2026-10-03,every_game,2026020032,moneyline,,STL,COL,home,COL,1.36,22,1,7.92,-0.00951763
+2026-10-03,every_game,2026020033,moneyline,,CGY,VAN,home,VAN,1.91,7,1,6.37,-0.0256809
+2026-10-03,every_game,2026020034,moneyline,,LAK,SJS,away,LAK,2,6,0,-6,-0.00667418
 2026-10-03,every_puckline,2026020022,spreads,1.5,CHI,BUF,away,CHI +1.5,1.83,13,1,10.79,
 2026-10-03,every_puckline,2026020023,spreads,1.5,OTT,TOR,away,OTT +1.5,1.4,30,1,12,
 2026-10-03,every_puckline,2026020024,spreads,1.5,WSH,TBL,away,WSH +1.5,1.71,21,0,-21,
@@ -162,6 +166,8 @@ date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,cl
 2026-10-03,every_puckline,2026020030,spreads,1.5,DAL,NSH,home,NSH +1.5,1.5,23,1,11.5,
 2026-10-03,every_puckline,2026020031,spreads,1.5,BOS,MIN,away,BOS +1.5,1.71,22,0,-22,
 2026-10-03,every_puckline,2026020032,spreads,1.5,STL,COL,away,STL +1.5,2,18,0,-18,
+2026-10-03,every_puckline,2026020033,spreads,1.5,CGY,VAN,away,CGY +1.5,1.43,25,0,-25,
+2026-10-03,every_puckline,2026020034,spreads,1.5,LAK,SJS,away,LAK +1.5,1.4,27,1,10.8,
 2026-10-03,every_total,2026020022,totals,6.5,CHI,BUF,under,Under 6.5,1.91,10,0,-10,
 2026-10-03,every_total,2026020023,totals,6,OTT,TOR,over,Over 6,1.86,6,0,-6,
 2026-10-03,every_total,2026020024,totals,6.5,WSH,TBL,under,Under 6.5,1.87,10,1,8.7,
@@ -172,6 +178,8 @@ date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,cl
 2026-10-03,every_total,2026020030,totals,6,DAL,NSH,over,Over 6,1.95,5,0,-5,
 2026-10-03,every_total,2026020031,totals,6,BOS,MIN,over,Over 6,1.83,5,0,-5,
 2026-10-03,every_total,2026020032,totals,6.5,STL,COL,under,Under 6.5,1.85,10,0,-10,
+2026-10-03,every_total,2026020033,totals,6,CGY,VAN,over,Over 6,1.88,6,0,-6,
+2026-10-03,every_total,2026020034,totals,6.5,LAK,SJS,under,Under 6.5,1.82,11,0,-11,
 2026-10-03,flat_model_side,2026020022,moneyline,,CHI,BUF,home,BUF,1.44,13,1,5.72,-0.0181462
 2026-10-03,flat_model_side,2026020023,moneyline,,OTT,TOR,away,OTT,2.04,30,1,31.2,0.00857361
 2026-10-03,flat_model_side,2026020024,moneyline,,WSH,TBL,home,TBL,1.51,7,1,3.57,-0.0211431
@@ -183,6 +191,8 @@ date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,cl
 2026-10-03,flat_model_side,2026020030,moneyline,,DAL,NSH,home,NSH,2.26,20,1,25.2,-0.0195022
 2026-10-03,flat_model_side,2026020031,moneyline,,BOS,MIN,away,BOS,2.79,11,0,-11,-0.0498933
 2026-10-03,flat_model_side,2026020032,moneyline,,STL,COL,away,STL,3.55,17,0,-17,-0.0354503
+2026-10-03,flat_model_side,2026020033,moneyline,,CGY,VAN,home,VAN,1.91,8,1,7.28,-0.0256809
+2026-10-03,flat_model_side,2026020034,moneyline,,LAK,SJS,away,LAK,2,9,0,-9,-0.00667418
 2026-10-03,market_favorite,2026020022,moneyline,,CHI,BUF,home,BUF,1.44,10,1,4.4,-0.0181462
 2026-10-03,market_favorite,2026020023,moneyline,,OTT,TOR,home,TOR,1.91,10,0,-10,-0.0343018
 2026-10-03,market_favorite,2026020024,moneyline,,WSH,TBL,home,TBL,1.51,10,1,5.1,-0.0211431
@@ -194,6 +204,8 @@ date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,cl
 2026-10-03,market_favorite,2026020030,moneyline,,DAL,NSH,away,DAL,1.74,10,0,-10,-0.0148965
 2026-10-03,market_favorite,2026020031,moneyline,,BOS,MIN,home,MIN,1.5,10,1,5,-0.0108101
 2026-10-03,market_favorite,2026020032,moneyline,,STL,COL,home,COL,1.36,10,1,3.6,-0.00951763
+2026-10-03,market_favorite,2026020033,moneyline,,CGY,VAN,home,VAN,1.91,10,1,9.1,-0.0256809
+2026-10-03,market_favorite,2026020034,moneyline,,LAK,SJS,home,SJS,1.93,10,1,9.3,-0.0285594
 2026-10-03,no_guard,2026020023,moneyline,,OTT,TOR,away,OTT,2.04,6.39,1,6.6456,0.00857361
 2026-10-03,no_guard,2026020030,moneyline,,DAL,NSH,home,NSH,2.26,2.96,1,3.7296,-0.0195022
 2026-10-03,puckline_edge,2026020022,spreads,1.5,CHI,BUF,away,CHI +1.5,1.83,15,1,12.45,
@@ -210,10 +222,10 @@ date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,cl
 2026-10-03,sog_edge,2026020022,player_sog,1.5,CHI,BUF,under,O. Moore Under 1.5,1.61,30,1,18.3,
 2026-10-03,sog_edge,2026020025,player_sog,1.5,CAR,PHI,under,E. Robinson Under 1.5,1.72,30,0,-30,
 2026-10-03,sog_edge,2026020027,player_sog,1.5,UTA,CBJ,under,K. Johnson Under 1.5,2.05,30,0,-30,
-2026-10-03,sog_edge,2026020027,player_sog,1.5,UTA,CBJ,under,D. Voronkov Under 1.5,1.83,30,1,24.9,
 2026-10-03,sog_edge,2026020027,player_sog,2.5,UTA,CBJ,under,D. Guenther Under 2.5,2.35,30,0,-30,
-2026-10-03,sog_over_control,2026020022,player_sog,3.5,CHI,BUF,over,T. Thompson Over 3.5,1.97,10,1,9.7,
+2026-10-03,sog_edge,2026020027,player_sog,1.5,UTA,CBJ,under,D. Voronkov Under 1.5,1.83,30,1,24.9,
 2026-10-03,sog_over_control,2026020022,player_sog,2.5,CHI,BUF,over,P. Kane Over 2.5,2.1,10,0,-10,
+2026-10-03,sog_over_control,2026020022,player_sog,3.5,CHI,BUF,over,T. Thompson Over 3.5,1.97,10,1,9.7,
 2026-10-03,sog_over_control,2026020025,player_sog,2.5,CAR,PHI,over,N. Ehlers Over 2.5,2.2,10,0,-10,
 2026-10-03,sog_over_control,2026020025,player_sog,2.5,CAR,PHI,over,S. Aho Over 2.5,2.42,10,1,14.2,
 2026-10-03,sog_over_control,2026020025,player_sog,2.5,CAR,PHI,over,O. Tippett Over 2.5,2.46,10,1,14.6,
