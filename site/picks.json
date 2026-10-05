@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-05T04:04:23+00:00",
+ "generated_at": "2026-10-05T15:39:40+00:00",
  "public_safe": true,
  "date": "2026-10-05",
  "run_type": "morning",
@@ -127,9 +127,9 @@
  },
  "odds": {
   "enabled": true,
-  "captured_at": "2026-10-05T04:04:01+00:00",
+  "captured_at": "2026-10-05T15:39:17+00:00",
   "stale": false,
-  "remaining": 442,
+  "remaining": 441,
   "source": "live"
  },
  "policy": {
@@ -160,18 +160,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-05T04:04:01+00:00",
+   "odds_captured_at": "2026-10-05T15:39:17+00:00",
    "sides": {
     "home": {
      "team": "TBL",
      "p_model": 0.6657794636744274,
-     "p_market": 0.6440825318675145,
-     "p_adj": 0.6536764424578848,
-     "edge": 0.0216969318069129,
-     "ev": -0.006411807464015096,
+     "p_market": 0.6676079277741237,
+     "p_adj": 0.6666945439739067,
+     "edge": -0.0018284640996962809,
+     "ev": -0.013292074918618113,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.52,
+     "best_decimal": 1.48,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 2 games (< 10)"
@@ -181,13 +181,13 @@
     "away": {
      "team": "PHI",
      "p_model": 0.3342205363255726,
-     "p_market": 0.3559174681324855,
-     "p_adj": 0.3463235575421152,
-     "edge": -0.0216969318069129,
-     "ev": -0.05453668791002553,
+     "p_market": 0.3323920722258763,
+     "p_adj": 0.33330545602609335,
+     "edge": 0.0018284640996962809,
+     "ev": -0.023415013843546495,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.73,
+     "best_decimal": 2.93,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 2 games (< 10)"
@@ -560,18 +560,18 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-05T04:04:01+00:00",
+   "odds_captured_at": "2026-10-05T15:39:17+00:00",
    "sides": {
     "home": {
      "team": "BOS",
      "p_model": 0.4914215248245901,
-     "p_market": 0.4856781928833217,
-     "p_adj": 0.48852378543104397,
-     "edge": 0.005743331941268415,
-     "ev": -0.013181953429291127,
+     "p_market": 0.48042096556507613,
+     "p_adj": 0.48574236873424115,
+     "edge": 0.011000559259513987,
+     "ev": -0.009085567782148085,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.02,
+     "best_decimal": 2.04,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -581,13 +581,13 @@
     "away": {
      "team": "OTT",
      "p_model": 0.5085784751754099,
-     "p_market": 0.5143218071166783,
-     "p_adj": 0.511476214568956,
-     "edge": -0.005743331941268415,
-     "ev": -0.03842471661036284,
+     "p_market": 0.5195790344349238,
+     "p_adj": 0.5142576312657589,
+     "edge": -0.011000559259513931,
+     "ev": -0.0280530769077158,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.88,
+     "best_decimal": 1.89,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 1 games (< 10)"
@@ -961,18 +961,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-05T04:04:01+00:00",
+   "odds_captured_at": "2026-10-05T15:39:17+00:00",
    "sides": {
     "home": {
      "team": "PIT",
      "p_model": 0.666720359408299,
-     "p_market": 0.6074907989942375,
-     "p_adj": 0.6224895463942187,
-     "edge": 0.059229560414061466,
-     "ev": 0.0084330651586344,
-     "kelly_full": 0.013601717997797419,
+     "p_market": 0.6217283516455032,
+     "p_adj": 0.6361276352859306,
+     "edge": 0.04499200776279577,
+     "ev": 0.005081663751770438,
+     "kelly_full": 0.00876148922719041,
      "best_book": null,
-     "best_decimal": 1.62,
+     "best_decimal": 1.58,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 2 games (< 10)"
@@ -982,13 +982,13 @@
     "away": {
      "team": "WPG",
      "p_model": 0.333279640591701,
-     "p_market": 0.3925092010057625,
-     "p_adj": 0.37751045360578134,
-     "edge": -0.059229560414061466,
-     "ev": -0.0637740750576622,
+     "p_market": 0.3782716483544968,
+     "p_adj": 0.36387236471406936,
+     "edge": -0.04499200776279577,
+     "ev": -0.07212546997912317,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.48,
+     "best_decimal": 2.55,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 2 games (< 10)"
@@ -1360,18 +1360,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-05T04:04:01+00:00",
+   "odds_captured_at": "2026-10-05T15:39:17+00:00",
    "sides": {
     "home": {
      "team": "DAL",
      "p_model": 0.6337971801194532,
-     "p_market": 0.6087232473993169,
-     "p_adj": 0.6193962808282557,
-     "edge": 0.02507393272013625,
-     "ev": -0.00277198786650823,
+     "p_market": 0.6456579719798667,
+     "p_adj": 0.6399506047165928,
+     "edge": -0.011860791860413555,
+     "ev": -0.014476068736447023,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.61,
+     "best_decimal": 1.54,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 2 games (< 10)"
@@ -1381,13 +1381,13 @@
     "away": {
      "team": "SJS",
      "p_model": 0.3662028198805468,
-     "p_market": 0.39127675260068306,
-     "p_adj": 0.3806037191717443,
-     "edge": -0.02507393272013625,
-     "ev": -0.05229673926235667,
+     "p_market": 0.35434202802013326,
+     "p_adj": 0.36004939528340724,
+     "edge": 0.011860791860413555,
+     "ev": -0.01706515087629834,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.49,
+     "best_decimal": 2.73,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 2 games (< 10)"
@@ -1755,7 +1755,7 @@
    "avg_decimal": null
   },
   "model": {
-   "brier": 0.22509523219655236,
+   "brier": 0.22509523219655234,
    "log_loss": 0.641960484057745,
    "accuracy": 0.5882352941176471
   },
@@ -1763,7 +1763,7 @@
    "n": 34,
    "model_log_loss": 0.641960484057745,
    "market_close_log_loss": 0.6436857650195937,
-   "model_brier": 0.22509523219655236,
+   "model_brier": 0.22509523219655234,
    "market_close_brier": 0.22659602343675922
   },
   "clv": {
@@ -1781,10 +1781,10 @@
    "strategy": "always_over",
    "bets": 32.0,
    "staked": 320.0,
-   "profit": -10.600000000000005,
-   "roi": -0.033125000000000016,
-   "roi_lo": -0.3853125,
-   "roi_hi": 0.3194453124999996,
+   "profit": -10.600000000000003,
+   "roi": -0.03312500000000001,
+   "roi_lo": -0.38815625,
+   "roi_hi": 0.27906250000000005,
    "win_rate": 0.5,
    "avg_clv": null,
    "n_clv": 0.0
@@ -1805,10 +1805,10 @@
    "strategy": "every_game",
    "bets": 34.0,
    "staked": 422.0,
-   "profit": 49.040000000000006,
-   "roi": 0.11620853080568722,
-   "roi_lo": -0.1616735153884395,
-   "roi_hi": 0.3615398255813952,
+   "profit": 49.03999999999999,
+   "roi": 0.11620853080568719,
+   "roi_lo": -0.19176122577494473,
+   "roi_hi": 0.36670859737433636,
    "win_rate": 0.5882352941176471,
    "avg_clv": -0.020139971316773652,
    "n_clv": 34.0
@@ -1817,10 +1817,10 @@
    "strategy": "every_puckline",
    "bets": 34.0,
    "staked": 748.0,
-   "profit": -9.180000000000005,
-   "roi": -0.012272727272727279,
-   "roi_lo": -0.26739017149341515,
-   "roi_hi": 0.2138166239674157,
+   "profit": -9.18,
+   "roi": -0.012272727272727272,
+   "roi_lo": -0.27797797486616144,
+   "roi_hi": 0.22138849502819122,
    "win_rate": 0.6470588235294118,
    "avg_clv": null,
    "n_clv": 0.0
@@ -1831,8 +1831,8 @@
    "staked": 286.0,
    "profit": -93.63,
    "roi": -0.32737762237762236,
-   "roi_lo": -0.649574366197183,
-   "roi_hi": 0.019360282574568292,
+   "roi_lo": -0.6578351003726409,
+   "roi_hi": 0.011251789199739593,
    "win_rate": 0.3125,
    "avg_clv": null,
    "n_clv": 0.0
@@ -1843,8 +1843,8 @@
    "staked": 545.0,
    "profit": 47.25999999999999,
    "roi": 0.08671559633027522,
-   "roi_lo": -0.33936389995995037,
-   "roi_hi": 0.5161564983085516,
+   "roi_lo": -0.34611785700505465,
+   "roi_hi": 0.513832795116189,
    "win_rate": 0.47058823529411764,
    "avg_clv": -0.031533383082232296,
    "n_clv": 34.0
@@ -1855,8 +1855,8 @@
    "staked": 340.0,
    "profit": -47.5,
    "roi": -0.13970588235294118,
-   "roi_lo": -0.4197132352941177,
-   "roi_hi": 0.13445588235294093,
+   "roi_lo": -0.4176470588235294,
+   "roi_hi": 0.1388749999999997,
    "win_rate": 0.5294117647058824,
    "avg_clv": -0.021623645743192355,
    "n_clv": 34.0
@@ -1864,9 +1864,9 @@
   {
    "strategy": "no_guard",
    "bets": 4.0,
-   "staked": 14.35,
+   "staked": 14.350000000000001,
    "profit": 9.741,
-   "roi": 0.678815331010453,
+   "roi": 0.6788153310104529,
    "roi_lo": null,
    "roi_hi": null,
    "win_rate": 0.75,
@@ -1889,10 +1889,10 @@
    "strategy": "puckline_edge",
    "bets": 22.0,
    "staked": 465.0,
-   "profit": -98.69999999999999,
-   "roi": -0.212258064516129,
-   "roi_lo": -0.5659831993395052,
-   "roi_hi": 0.1394278309409887,
+   "profit": -98.7,
+   "roi": -0.21225806451612902,
+   "roi_lo": -0.549813694267516,
+   "roi_hi": 0.1356988841999856,
    "win_rate": 0.5,
    "avg_clv": null,
    "n_clv": 0.0
@@ -1903,8 +1903,8 @@
    "staked": 602.0,
    "profit": 42.09000000000002,
    "roi": 0.06991694352159471,
-   "roi_lo": -0.32329166859523256,
-   "roi_hi": 0.4279697138224864,
+   "roi_lo": -0.2929916061525749,
+   "roi_hi": 0.4368952578516947,
    "win_rate": 0.6086956521739131,
    "avg_clv": null,
    "n_clv": 0.0
@@ -1913,10 +1913,10 @@
    "strategy": "sog_over_control",
    "bets": 24.0,
    "staked": 240.0,
-   "profit": 4.899999999999999,
-   "roi": 0.02041666666666666,
-   "roi_lo": -0.44293750000000004,
-   "roi_hi": 0.47709375,
+   "profit": 4.900000000000002,
+   "roi": 0.020416666666666677,
+   "roi_lo": -0.4438020833333334,
+   "roi_hi": 0.4875624999999996,
    "win_rate": 0.4583333333333333,
    "avg_clv": null,
    "n_clv": 0.0
@@ -1925,7 +1925,7 @@
    "strategy": "totals_edge",
    "bets": 17.0,
    "staked": 282.0,
-   "profit": -77.92000000000002,
+   "profit": -77.92,
    "roi": -0.2763120567375887,
    "roi_lo": null,
    "roi_hi": null,
