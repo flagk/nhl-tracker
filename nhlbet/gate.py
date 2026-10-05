@@ -4,7 +4,7 @@ GitHub's cron is best-effort: on this repository triggers have arrived 3-6 hours
 snapshots meant for 22:45 / 23:20 UTC fired at 01:35 / 02:13). So instead of a few fixed times, the workflows are triggered often and each trigger asks
 this gate whether *now* is a useful moment. Triggers that arrive too late simply do nothing, and the odds API credits are only spent in a useful window.
 
-- ``morning``: once per game day (ET), never again after ``reports/daily/<date>-morning.md`` exists.
+- ``morning``: once per game day (ET), from 8 am ET on, never again after ``reports/daily/<date>-morning.md`` exists.
 - ``late``: once per game day, only while the first unstarted game begins within the next ``LATE_WINDOW`` (so goalies are mostly confirmed and
   the run is still before puck drop).
 - ``close``: only when some game starts within the next ``CLOSE_WINDOW_MIN`` minutes and no live odds capture happened in the last ``MIN_GAP_MIN``.
@@ -20,6 +20,7 @@ LATE_MIN_MIN = 20          # a late run needs at least this long before puck dro
 LATE_WINDOW_H = 3.0
 CLOSE_WINDOW_MIN = 35
 MIN_GAP_MIN = 20
+MORNING_FROM_ET_H = 8      # yesterday's late games are final (settlement) and the day's lines exist; a midnight run was too early
 
 
 def game_day(now: datetime) -> str:
@@ -65,6 +66,12 @@ def _last_live_fetch(db: str) -> datetime | None:
         return None
 
 
+def _morning_ok(now: datetime) -> tuple[bool, str]:
+    if now.astimezone(ZoneInfo("America/New_York")).hour < MORNING_FROM_ET_H:
+        return False, "too early for the morning run (waits until 8 am ET so last night's games are settled)"
+    return True, "first morning run of the day"
+
+
 def decide(kind: str, now: datetime, db: str = "data/nhl.db", report_dir: str = "reports", force: bool = False) -> tuple[bool, str]:
     """(run, reason). ``force`` is for manual dispatches: always run."""
     if force:
@@ -75,7 +82,7 @@ def decide(kind: str, now: datetime, db: str = "data/nhl.db", report_dir: str = 
         if (Path(report_dir) / "daily" / f"{date}-{kind}.md").exists():
             return False, f"{kind} run for {date} already done"
         if kind == "morning":
-            return True, "first morning run of the day"
+            return _morning_ok(now)
         up = [s for s in _starts(db, date) if s > now]
         if not up:
             return False, "no unstarted games left today"
@@ -140,7 +147,7 @@ def decide_files(kind: str, now: datetime, root: str | Path = ".") -> tuple[bool
         if (Path(root) / "reports" / "daily" / f"{date}-{kind}.md").exists():
             return False, f"{kind} run for {date} already done"
         if kind == "morning":
-            return True, "first morning run of the day"
+            return _morning_ok(now)
     slate_date, starts = _slate(root)
     if kind == "late":
         if slate_date != date:

@@ -38,6 +38,12 @@ def test_morning_due_until_done(tmp_path):
     assert not decide_files("morning", utc("2026-10-03T15:52:00"), r)[0]
 
 
+def test_morning_not_at_midnight(tmp_path):
+    r = repo(tmp_path)
+    assert not decide_files("morning", utc("2026-10-04T04:02:00"), r)[0]
+    assert decide_files("morning", utc("2026-10-04T12:05:00"), r)[0]
+
+
 def test_late_window(tmp_path):
     r = repo(tmp_path)                       # first game 23:00Z
     assert not decide_files("late", utc("2026-10-03T19:00:00"), r)[0]    # 4 h away
