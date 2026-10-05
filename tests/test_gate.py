@@ -63,3 +63,10 @@ def test_close_snapshot_only_just_before_a_start_and_not_twice(tmp_path):
     assert not run and "15 min ago" in why
     assert decide("close", T("2026-10-01T22:45:00"), **kw)[0]                    # 25 min since the last capture: take the closing snapshot
     assert not decide("close", T("2026-10-01T23:05:00"), **kw)[0]                # puck has dropped: nothing starts soon, in-play prices are not wanted
+
+
+def test_morning_waits_until_8am_et(tmp_path):
+    kw = dict(db=str(tmp_path / "x.db"), report_dir=str(tmp_path))
+    assert not decide("morning", T("2026-10-05T04:02:00"), **kw)[0]      # midnight ET: last night's games not settled yet
+    assert not decide("morning", T("2026-10-05T11:59:00"), **kw)[0]      # 7:59 am EDT
+    assert decide("morning", T("2026-10-05T12:00:00"), **kw)[0]
