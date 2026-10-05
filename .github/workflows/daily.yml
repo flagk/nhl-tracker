@@ -32,6 +32,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write           # to start the Pages deploy directly (workflow_run alone has skipped some runs)
 
 jobs:
   report:
@@ -114,6 +115,12 @@ jobs:
             sleep $((i * 4))
           done
           exit 1
+
+      - name: Publish the site
+        if: steps.gate_and_type.outputs.run == 'true' && success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main || echo "could not start the Pages deploy (the workflow_run trigger is the fallback)"
 
       - name: Save database + raw API cache
         if: steps.gate_and_type.outputs.run == 'true' && success()
