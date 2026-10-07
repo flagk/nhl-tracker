@@ -31,7 +31,7 @@ probability and the price you type, and remembers your entries in this browser.
 
 ## Pick ranking
 The first section lists every pick the model can price today (moneylines, totals, puck lines, player shots/points/assists/anytime goals) in one numbered order, with filters by type.
-The score is the model's edge over the market in probability points, times a reliability weight (moneyline 1.0, goals-model markets 0.5, player markets 0.25-0.35), so a large edge from an unvalidated model cannot jump to the top on its own. It is not ranked by dollar EV, which would reward long-shot prices and single-book outliers; EV at the best price is its own column. It is a ranking, not a recommendation: only moneylines tagged **Recommended** pass the betting rules.
+The score is the model's edge over the market in probability points, times a reliability weight (moneyline 1.0, goals-model markets 0.5, shots 0.3, points/assists 0.2, anytime goals 0.15), so a large edge from an unvalidated model cannot jump to the top on its own. It is not ranked by dollar EV, which would reward long-shot prices and single-book outliers; EV at the best price is its own column. It is a ranking, not a recommendation: only moneylines tagged **Recommended** pass the betting rules.
 Games with stale odds or a failing model (ALERT) are left out. The code is `nhlbet/report/ranking.py`.
 
 ## Scheduling (why there are so many cron lines)

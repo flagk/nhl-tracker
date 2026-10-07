@@ -17,7 +17,9 @@ from nhlbet.odds.props import PROP_MAX_AGE_MIN, STATS  # noqa: F401  (STATS docu
 from nhlbet.risk.policy import RiskConfig, assess_sides
 
 # How far each kind of model is trusted (1 = take its probability at face value). Experimental markets have no betting track record yet.
-WEIGHTS = {"moneyline": 1.0, "totals": 0.5, "spreads": 0.5, "player_sog": 0.35, "player_points": 0.3, "player_assists": 0.3, "player_goals": 0.25}
+# Player shots have a walk-forward backtest (calibrated against each player's own history) but no proof against the market; points, assists and
+# goals have no backtest at all yet, and their first live prices disagreed with the market mostly in one direction (too many Unders), so they get the least trust.
+WEIGHTS = {"moneyline": 1.0, "totals": 0.5, "spreads": 0.5, "player_sog": 0.3, "player_points": 0.2, "player_assists": 0.2, "player_goals": 0.15}
 TYPE_NAMES = {"moneyline": "Moneyline", "totals": "Total", "spreads": "Puck line", "player_sog": "Player shots", "player_points": "Player points",
               "player_assists": "Player assists", "player_goals": "Anytime goalscorer"}
 PROP_MIN_HISTORY = 10          # a player prop needs this many earlier games to be ranked at all
