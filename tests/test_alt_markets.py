@@ -176,3 +176,16 @@ def test_alt_predictions_export_settles_outcomes_by_hand():
     assert d.loc[(1, "totals", "over"), "outcome"] == "won" and d.loc[(1, "totals", "over"), "point"] == 5.5     # SO game: 4+3-1 = 6 goals
     assert d.loc[(1, "totals", "under"), "outcome"] == "push" and d.loc[(1, "spreads", "home"), "outcome"] == "lost"
     assert d.loc[(2, "totals", "over"), "outcome"] is None or pd.isna(d.loc[(2, "totals", "over"), "outcome"])
+
+
+def test_role_strategies_pick_their_own_bet_type():
+    cfg = RiskConfig(bankroll=1000)
+    tot = [mq("totals", "over", 6.5, 0.46, 0.50), mq("totals", "under", 6.5, 0.54, 0.50)]                 # under +4%
+    sp = [mq("spreads", "home", -1.5, 0.36, 0.40), mq("spreads", "away", 1.5, 0.64, 0.60)]               # dog +4%, fav -4%
+    by = {r["strategy"]: r for r in shadow_bets([G(1, tot + sp)], cfg, "r", "t", "d")}
+    assert by["under_edge"]["side"] == "under" and by["under_edge"]["action"] == "BET" and by["under_edge"]["stake"] == 15.0      # 4% edge -> conviction 0.4
+    assert by["over_edge"]["action"] == "NO_BET"                                                          # over is -4%
+    assert by["puckline_dog_edge"]["side"] == "away" and by["puckline_dog_edge"]["point"] == 1.5 and by["puckline_dog_edge"]["action"] == "BET"
+    assert by["puckline_fav_edge"]["action"] == "NO_BET"
+    assert by["always_under"]["side"] == "under" and by["always_under"]["stake"] == 10.0
+    assert by["puckline_dog_control"]["side"] == "away" and by["puckline_dog_control"]["stake"] == 10.0

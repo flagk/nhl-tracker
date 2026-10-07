@@ -57,7 +57,16 @@ STRATEGIES: tuple[Strategy, ...] = (
     Strategy("puckline_edge", "Goals model: $5-$30 on the puck-line side with a 3%+ raw edge vs the market (experimental market)", "alt_edge", (("market", "spreads"),)),
     Strategy("every_total", "Goals model: $5-$30 on its over/under side of EVERY game with fresh totals odds, no edge filter", "alt_every", (("market", "totals"),)),
     Strategy("every_puckline", "Goals model: $5-$30 on its puck-line side of EVERY game with fresh spread odds, no edge filter", "alt_every", (("market", "spreads"),)),
-    Strategy("always_over", "CONTROL: flat $10 on the Over of every game (no skill; shows what totals vig plus base rate cost)", "alt_control", (("market", "totals"),)),
+    Strategy("always_over", "CONTROL: flat $10 on the Over of every game (no skill; shows what totals vig plus base rate cost)", "alt_control", (("market", "totals"), ("role", "over"))),
+    Strategy("under_edge", "Goals model: $5-$30 on the Under only, when it has a 2%+ edge (are we better at low-scoring games?)", "alt_role_edge", (("market", "totals"), ("role", "under"))),
+    Strategy("over_edge", "Goals model: $5-$30 on the Over only, when it has a 2%+ edge", "alt_role_edge", (("market", "totals"), ("role", "over"))),
+    Strategy("puckline_dog_edge", "Goals model: $5-$30 on the +1.5 underdog side of the puck line, when it has a 2%+ edge", "alt_role_edge", (("market", "spreads"), ("role", "dog"))),
+    Strategy("puckline_fav_edge", "Goals model: $5-$30 on the -1.5 favourite side of the puck line, when it has a 2%+ edge", "alt_role_edge", (("market", "spreads"), ("role", "fav"))),
+    Strategy("always_under", "CONTROL: flat $10 on the Under of every game (no skill; the mirror of always_over)", "alt_control", (("market", "totals"), ("role", "under"))),
+    Strategy("puckline_dog_control", "CONTROL: flat $10 on the +1.5 underdog of every game (no skill; what the puck-line vig costs)", "alt_control", (("market", "spreads"), ("role", "dog"))),
+    Strategy("underdog_ml", "$5-$30 on the moneyline UNDERDOG, only when the model rates it 2%+ better than the market does", "ml_dog_edge"),
+    Strategy("underdog_ml_control", "CONTROL: flat $10 on the moneyline underdog of every game (no skill)", "ml_dog_control"),
+    Strategy("home_ml_control", "CONTROL: flat $10 on the HOME team's moneyline in every game (no skill; is there a home-ice price bias?)", "ml_home_control"),
     Strategy("market_favorite", "CONTROL: flat $10 on the market favourite (no skill; shows what the bookmaker margin costs)", "market_favorite"),
 )
 
@@ -88,6 +97,14 @@ def _alt_row(run_id, run_at, date, game_id, strategy, quote=None, stake=0.0) -> 
     return r
 
 
+ALT_MIN_EDGE = 0.02      # the role-specific strategies bet at a 2% edge, a bit looser than the live policy, to collect more evidence on each bet type
+
+
+def _role_ok(q, role: str) -> bool:
+    """over / under for totals; dog (+ handicap) / fav (- handicap) for the puck line."""
+    return q.side == role if role in ("over", "under") else (q.point > 0 if role == "dog" else q.point < 0)
+
+
 def _alt_usable(g, cfg: RiskConfig) -> bool:
     return not (g.ctx.get("model_status") == "ALERT" or (g.ctx.get("odds_stale") and not cfg.allow_stale_odds))
 
@@ -114,9 +131,19 @@ def shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date
                 if len(qs) < 2 or not _alt_usable(g, cfg):
                     rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name))
                     continue
-                if st.kind == "alt_control":
-                    q = next(x for x in qs if x.side == "over")
-                    rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name, q, CONTROL_STAKE))
+                role = dict(st.overrides).get("role")
+                if st.kind in ("alt_control", "alt_role_edge"):
+                    cand = [x for x in qs if _role_ok(x, role)]
+                    if not cand:
+                        rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name))
+                        continue
+                    q = max(cand, key=lambda x: x.edge)
+                    if st.kind == "alt_control":
+                        rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name, q, CONTROL_STAKE))
+                    elif q.edge >= ALT_MIN_EDGE:
+                        rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name, q, paper_stake(edge_conviction(q.edge))))
+                    else:
+                        rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name))
                     continue
                 else:
                     q = max(qs, key=lambda x: x.edge if st.kind == "alt_edge" else x.model_prob)
@@ -129,6 +156,15 @@ def shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date
         for g in games:
             if not _usable(g.quotes, cfg, g.ctx):
                 rows.append(_row(run_id, run_at, date, g.game_id, st.name))
+                continue
+            if st.kind in ("ml_dog_edge", "ml_dog_control", "ml_home_control"):
+                qs = list(g.quotes.values())
+                q = (g.quotes.get("home") or qs[0]) if st.kind == "ml_home_control" else min(qs, key=lambda x: x.market_prob)
+                if st.kind == "ml_dog_edge" and q.edge < ALT_MIN_EDGE:
+                    rows.append(_row(run_id, run_at, date, g.game_id, st.name))
+                    continue
+                stake = paper_stake(edge_conviction(q.edge)) if st.kind == "ml_dog_edge" else CONTROL_STAKE
+                rows.append(_row(run_id, run_at, date, g.game_id, st.name, "BET", q, stake, shrink_to_market(q.model_prob, q.market_prob, cfg.trust_w0, cfg.trust_d0), q.ev))
                 continue
             key = {"flat_edge": lambda x: x.edge, "model_side": lambda x: x.model_prob}.get(st.kind, lambda x: x.market_prob)
             q = max(g.quotes.values(), key=key)
@@ -147,6 +183,8 @@ PROP_MAX_PER_DAY = 8
 PROP_MIN_GAMES = 10
 PROP_STRATEGIES: tuple[Strategy, ...] = (
     Strategy("sog_edge", f"Player shots: $5-$30 on the over/under the model likes (3%+ edge, 10+ games of history), best {PROP_MAX_PER_DAY} of the day (experimental market)", "prop_edge"),
+    Strategy("sog_over_edge", f"Player shots, OVERS only: $5-$30 when the model sees a 2%+ edge on the over (10+ games of history), best {PROP_MAX_PER_DAY} of the day", "prop_edge_over"),
+    Strategy("sog_under_edge", f"Player shots, UNDERS only: $5-$30 when the model sees a 2%+ edge on the under (10+ games of history), best {PROP_MAX_PER_DAY} of the day", "prop_edge_under"),
     Strategy("sog_over_control", f"CONTROL: flat $10 on the Over for the {PROP_MAX_PER_DAY} players with the highest shots lines (no model; shows what prop vig costs)", "prop_control"),
 )
 
@@ -170,6 +208,11 @@ def prop_shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str,
             picks = sorted([x for x in scored if x[0] >= cfg.min_edge], key=lambda x: -x[0])[:PROP_MAX_PER_DAY]
             for e, g, q in picks:
                 rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, q.best_side, paper_stake(edge_conviction(e))))
+        elif st.kind in ("prop_edge_over", "prop_edge_under"):
+            side = st.kind.rsplit("_", 1)[1]
+            scored = [((q.edge(side)), g, q) for g, q in cands if q.n_prev >= PROP_MIN_GAMES]
+            for e, g, q in sorted([x for x in scored if x[0] >= ALT_MIN_EDGE], key=lambda x: -x[0])[:PROP_MAX_PER_DAY]:
+                rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, side, paper_stake(edge_conviction(e))))
         elif st.kind == "prop_control":
             for g, q in sorted(cands, key=lambda x: (-x[1].point, x[1].player_id))[:PROP_MAX_PER_DAY]:
                 rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, "over", CONTROL_STAKE))

@@ -293,3 +293,12 @@ def test_backtest_reports_calibration_and_never_trains_on_the_future():
     P2 = walk_forward_props(f2, "2024-05-01", 28, min_train=2000)
     early = P.game_date < "2024-06-01"
     pd.testing.assert_series_equal(P.loc[early, "lam"].reset_index(drop=True), P2.loc[P2.game_date < "2024-06-01", "lam"].reset_index(drop=True))
+
+
+def test_prop_over_and_under_only_strategies():
+    cfg = RiskConfig(bankroll=1000)
+    props = [pq(1, "Over", 0.60), pq(2, "Under", 0.40), pq(3, "Meh", 0.51), pq(4, "Rookie", 0.70, n_prev=3)]
+    rows = prop_shadow_bets([Gm(1, props)], cfg, "r", "t", "d")
+    o = [r for r in rows if r["strategy"] == "sog_over_edge"]
+    u = [r for r in rows if r["strategy"] == "sog_under_edge"]
+    assert [(r["player_id"], r["side"]) for r in o] == [(1, "over")] and [(r["player_id"], r["side"]) for r in u] == [(2, "under")]
