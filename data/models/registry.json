@@ -1201,5 +1201,127 @@
    "status": "WARN"
   },
   "has_goals": true
+ },
+ {
+  "created_at": "2026-10-07T12:02:45+00:00",
+  "version": "20261006-8663f0",
+  "artifact": "data/models/model_20261006-8663f0.joblib",
+  "data_fingerprint": "8663f0eb62@2026-10-06",
+  "n_train": 9833,
+  "train_start": "2018-10-03",
+  "train_end": "2026-10-06",
+  "features": [
+   "d_elo",
+   "d_xg_share",
+   "d_cf_pct",
+   "h_b2b",
+   "d_xga_pg",
+   "h_early_w",
+   "d_g_sv_l5",
+   "h_stakes",
+   "d_pen_drawn_pg",
+   "d_games_last_7d",
+   "d_ga_season_shrunk",
+   "a_b2b",
+   "h_homestand_n",
+   "d_g_sv_season"
+  ],
+  "hyperparameters": {
+   "logistic": {
+    "C": 0.003
+   },
+   "rf": {
+    "n_estimators": 300,
+    "min_samples_leaf": 80,
+    "max_features": 0.3
+   },
+   "lgbm": {
+    "n_estimators": 120,
+    "learning_rate": 0.03,
+    "num_leaves": 3,
+    "min_child_samples": 120,
+    "reg_lambda": 5.0
+   },
+   "xgb": {
+    "n_estimators": 120,
+    "learning_rate": 0.03,
+    "max_depth": 2,
+    "min_child_weight": 30,
+    "reg_lambda": 5.0
+   }
+  },
+  "builder_config": {
+   "halflife": 10.0,
+   "goalie_mode": "probable",
+   "lineup_mode": "off",
+   "shrink_k": 15.0,
+   "adv_window": 20,
+   "elo_k": 8.0,
+   "elo_home_adv": 25.0,
+   "elo_regress": 0.2
+  },
+  "p_source": "online_platt",
+  "walk_forward_metrics": {
+   "stack__online": {
+    "log_loss": 0.67588,
+    "brier": 0.24168,
+    "auc": 0.59044,
+    "ece": 0.03328,
+    "cal_slope": 0.82918
+   },
+   "elo": {
+    "log_loss": 0.68119,
+    "brier": 0.24413,
+    "auc": 0.57658,
+    "ece": 0.048,
+    "cal_slope": 0.69289
+   },
+   "home_rate": {
+    "log_loss": 0.68962,
+    "brier": 0.24824,
+    "auc": 0.48104,
+    "ece": 0.01722,
+    "cal_slope": 0.02412
+   },
+   "walk_forward_n": 2269
+  },
+  "drift": {
+   "performance": {
+    "status": "OK",
+    "n": 2629,
+    "recent_logloss": 0.6735217467684775,
+    "reference_logloss": 0.674829655154935,
+    "z": -0.0634161719809755,
+    "calibration_slope": 0.9136762502097097,
+    "reasons": []
+   },
+   "features": {
+    "psi": {
+     "d_elo": 0.29,
+     "d_xg_share": 0.177,
+     "d_cf_pct": 0.162,
+     "h_b2b": null,
+     "d_xga_pg": 0.167,
+     "h_early_w": 8.481,
+     "d_g_sv_l5": 0.137,
+     "h_stakes": null,
+     "d_pen_drawn_pg": 0.172,
+     "d_games_last_7d": 0.016,
+     "d_ga_season_shrunk": 0.983,
+     "a_b2b": null,
+     "h_homestand_n": 0.05,
+     "d_g_sv_season": 2.85
+    },
+    "flagged": {
+     "d_elo": 0.29,
+     "h_early_w": 8.481,
+     "d_ga_season_shrunk": 0.983,
+     "d_g_sv_season": 2.85
+    },
+    "status": "WARN"
+   },
+   "status": "WARN"
+  },
+  "has_goals": true
  }
 ]

@@ -269,22 +269,22 @@ date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,cl
 2026-10-04,puckline_edge,2026020036,spreads,1.5,UTA,NYR,away,UTA +1.5,1.43,15,0,-15,
 2026-10-04,puckline_edge,2026020037,spreads,1.5,FLA,ANA,home,ANA +1.5,1.48,29,1,13.92,
 2026-10-04,puckline_edge,2026020039,spreads,1.5,VGK,VAN,home,VAN +1.5,1.85,30,1,25.5,
-2026-10-04,sog_edge,2026020035,player_sog,1.5,WPG,DET,under,E. Finnie Under 1.5,1.91,30,0,-30,
-2026-10-04,sog_edge,2026020035,player_sog,2.5,WPG,DET,under,L. Raymond Under 2.5,1.71,29,1,20.59,
-2026-10-04,sog_edge,2026020035,player_sog,1.5,WPG,DET,over,J. Faulk Over 1.5,2.25,30,1,37.5,
 2026-10-04,sog_edge,2026020035,player_sog,1.5,WPG,DET,under,G. Vilardi Under 1.5,2.2,30,0,-30,
+2026-10-04,sog_edge,2026020035,player_sog,1.5,WPG,DET,over,J. Faulk Over 1.5,2.25,30,1,37.5,
 2026-10-04,sog_edge,2026020035,player_sog,2.5,WPG,DET,under,C. Perfetti Under 2.5,1.65,30,1,19.5,
 2026-10-04,sog_edge,2026020035,player_sog,3.5,WPG,DET,under,A. DeBrincat Under 3.5,1.83,30,0,-30,
 2026-10-04,sog_edge,2026020035,player_sog,1.5,WPG,DET,under,N. Niederreiter Under 1.5,1.74,30,1,22.2,
 2026-10-04,sog_edge,2026020035,player_sog,2.5,WPG,DET,under,V. Arvidsson Under 2.5,1.91,30,0,-30,
-2026-10-04,sog_over_control,2026020035,player_sog,2.5,WPG,DET,over,J. Morrissey Over 2.5,2.58,10,1,15.8,
+2026-10-04,sog_edge,2026020035,player_sog,1.5,WPG,DET,under,E. Finnie Under 1.5,1.91,30,0,-30,
+2026-10-04,sog_edge,2026020035,player_sog,2.5,WPG,DET,under,L. Raymond Under 2.5,1.71,29,1,20.59,
 2026-10-04,sog_over_control,2026020035,player_sog,2.5,WPG,DET,over,C. Perfetti Over 2.5,2.34,10,0,-10,
 2026-10-04,sog_over_control,2026020035,player_sog,2.5,WPG,DET,over,L. Raymond Over 2.5,2.12,10,0,-10,
 2026-10-04,sog_over_control,2026020035,player_sog,2.5,WPG,DET,over,M. Seider Over 2.5,2.35,10,1,13.5,
 2026-10-04,sog_over_control,2026020035,player_sog,2.5,WPG,DET,over,V. Arvidsson Over 2.5,2.2,10,1,12,
+2026-10-04,sog_over_control,2026020035,player_sog,2.5,WPG,DET,over,J. Morrissey Over 2.5,2.58,10,1,15.8,
 2026-10-04,sog_over_control,2026020035,player_sog,3.5,WPG,DET,over,A. DeBrincat Over 3.5,2,10,1,10,
-2026-10-04,sog_over_control,2026020035,player_sog,1.5,WPG,DET,over,B. Chiarot Over 1.5,2.34,10,0,-10,
 2026-10-04,sog_over_control,2026020035,player_sog,3.5,WPG,DET,over,K. Connor Over 3.5,2.2,10,1,12,
+2026-10-04,sog_over_control,2026020035,player_sog,1.5,WPG,DET,over,B. Chiarot Over 1.5,2.34,10,0,-10,
 2026-10-04,totals_edge,2026020035,totals,5.5,WPG,DET,over,Over 5.5,1.82,14,0,-14,
 2026-10-04,totals_edge,2026020036,totals,5.5,UTA,NYR,over,Over 5.5,1.85,16,1,13.6,
 2026-10-04,totals_edge,2026020037,totals,6.5,FLA,ANA,under,Under 6.5,2.01,21,1,21.21,
@@ -320,8 +320,8 @@ date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,cl
 2026-10-05,sog_edge,2026020041,player_sog,2.5,OTT,BOS,under,D. Batherson Under 2.5,1.69,30,1,20.7,
 2026-10-05,sog_edge,2026020041,player_sog,1.5,OTT,BOS,under,W. Foegele Under 1.5,1.9,30,1,27,
 2026-10-05,sog_edge,2026020042,player_sog,2.5,WPG,PIT,under,E. Karlsson Under 2.5,1.83,30,1,24.9,
-2026-10-05,sog_edge,2026020042,player_sog,2.5,WPG,PIT,under,C. Perfetti Under 2.5,1.69,30,0,-30,
 2026-10-05,sog_edge,2026020042,player_sog,2.5,WPG,PIT,under,S. Crosby Under 2.5,2,30,0,-30,
+2026-10-05,sog_edge,2026020042,player_sog,2.5,WPG,PIT,under,C. Perfetti Under 2.5,1.69,30,0,-30,
 2026-10-05,sog_over_control,2026020040,player_sog,2.5,PHI,TBL,over,N. Kucherov Over 2.5,1.65,10,0,-10,
 2026-10-05,sog_over_control,2026020040,player_sog,2.5,PHI,TBL,over,J. Carlson Over 2.5,2.39,10,0,-10,
 2026-10-05,sog_over_control,2026020041,player_sog,3.5,OTT,BOS,over,D. Pastrnak Over 3.5,2.28,10,0,-10,
@@ -334,3 +334,83 @@ date,strategy,game_id,market,point,away,home,side,team,price,stake,won,profit,cl
 2026-10-05,totals_edge,2026020041,totals,5.5,OTT,BOS,over,Over 5.5,1.88,19,0,-19,
 2026-10-05,totals_edge,2026020042,totals,6.5,WPG,PIT,under,Under 6.5,1.89,18,1,16.02,
 2026-10-05,totals_edge,2026020043,totals,6.5,SJS,DAL,under,Under 6.5,1.87,15,1,13.05,
+2026-10-06,always_over,2026020044,totals,6,NSH,TOR,over,Over 6,2,10,1,10,
+2026-10-06,always_over,2026020045,totals,6,CAR,MTL,over,Over 6,1.91,10,1,9.1,
+2026-10-06,always_over,2026020046,totals,6,OTT,DET,over,Over 6,1.99,10,1,9.9,
+2026-10-06,always_over,2026020047,totals,6,UTA,NJD,over,Over 6,1.83,10,1,8.3,
+2026-10-06,always_over,2026020048,totals,5.5,NYI,NYR,over,Over 5.5,1.87,10,1,8.7,
+2026-10-06,always_over,2026020049,totals,6.5,MIN,BUF,over,Over 6.5,2.06,10,0,-10,
+2026-10-06,always_over,2026020050,totals,5.5,STL,CHI,over,Over 5.5,1.83,10,1,8.3,
+2026-10-06,always_over,2026020051,totals,6,VGK,SEA,over,Over 6,1.88,10,1,8.8,
+2026-10-06,always_over,2026020052,totals,6,FLA,LAK,over,Over 6,1.99,10,0,-10,
+2026-10-06,every_game,2026020044,moneyline,,NSH,TOR,away,NSH,2.39,5,0,-5,-0.0422749
+2026-10-06,every_game,2026020045,moneyline,,CAR,MTL,away,CAR,1.83,12,1,9.96,0.00372876
+2026-10-06,every_game,2026020046,moneyline,,OTT,DET,home,DET,1.87,10,1,8.7,-0.00754534
+2026-10-06,every_game,2026020047,moneyline,,UTA,NJD,home,NJD,1.85,7,0,-7,-0.0210338
+2026-10-06,every_game,2026020048,moneyline,,NYI,NYR,home,NYR,1.65,7,1,4.55,-0.0176216
+2026-10-06,every_game,2026020049,moneyline,,MIN,BUF,home,BUF,1.98,13,1,12.74,-0.0297535
+2026-10-06,every_game,2026020050,moneyline,,STL,CHI,away,STL,1.72,13,0,-13,-0.016264
+2026-10-06,every_game,2026020051,moneyline,,VGK,SEA,away,VGK,1.6,11,1,6.6,-0.0358494
+2026-10-06,every_game,2026020052,moneyline,,FLA,LAK,home,LAK,2.06,11,0,-11,0.00836186
+2026-10-06,every_puckline,2026020044,spreads,1.5,NSH,TOR,away,NSH +1.5,1.54,28,1,15.12,
+2026-10-06,every_puckline,2026020045,spreads,1.5,CAR,MTL,home,MTL +1.5,1.44,20,0,-20,
+2026-10-06,every_puckline,2026020046,spreads,1.5,OTT,DET,away,OTT +1.5,1.43,27,0,-27,
+2026-10-06,every_puckline,2026020047,spreads,1.5,UTA,NJD,away,UTA +1.5,1.43,26,1,11.18,
+2026-10-06,every_puckline,2026020048,spreads,1.5,NYI,NYR,away,NYI +1.5,1.53,25,0,-25,
+2026-10-06,every_puckline,2026020049,spreads,1.5,MIN,BUF,home,BUF +1.5,1.4,30,1,12,
+2026-10-06,every_puckline,2026020050,spreads,1.5,STL,CHI,home,CHI +1.5,1.48,19,1,9.12,
+2026-10-06,every_puckline,2026020051,spreads,1.5,VGK,SEA,home,SEA +1.5,1.59,23,0,-23,
+2026-10-06,every_puckline,2026020052,spreads,1.5,FLA,LAK,home,LAK +1.5,1.4,28,1,11.2,
+2026-10-06,every_total,2026020044,totals,6,NSH,TOR,over,Over 6,2,5,1,5,
+2026-10-06,every_total,2026020045,totals,6,CAR,MTL,over,Over 6,1.91,6,1,5.46,
+2026-10-06,every_total,2026020046,totals,6,OTT,DET,over,Over 6,1.99,6,1,5.94,
+2026-10-06,every_total,2026020047,totals,6,UTA,NJD,over,Over 6,1.83,6,1,4.98,
+2026-10-06,every_total,2026020048,totals,5.5,NYI,NYR,over,Over 5.5,1.87,11,1,9.57,
+2026-10-06,every_total,2026020049,totals,6.5,MIN,BUF,under,Under 6.5,1.83,10,1,8.3,
+2026-10-06,every_total,2026020050,totals,5.5,STL,CHI,over,Over 5.5,1.83,13,1,10.79,
+2026-10-06,every_total,2026020051,totals,6,VGK,SEA,over,Over 6,1.88,7,1,6.16,
+2026-10-06,every_total,2026020052,totals,6,FLA,LAK,over,Over 6,1.99,7,0,-7,
+2026-10-06,flat_model_side,2026020044,moneyline,,NSH,TOR,away,NSH,2.39,28,0,-28,-0.0422749
+2026-10-06,flat_model_side,2026020045,moneyline,,CAR,MTL,away,CAR,1.83,12,1,9.96,0.00372876
+2026-10-06,flat_model_side,2026020046,moneyline,,OTT,DET,home,DET,1.87,14,1,12.18,-0.00754534
+2026-10-06,flat_model_side,2026020047,moneyline,,UTA,NJD,away,UTA,2.08,7,1,7.56,-0.0206755
+2026-10-06,flat_model_side,2026020048,moneyline,,NYI,NYR,away,NYI,2.36,23,0,-23,-0.0450988
+2026-10-06,flat_model_side,2026020049,moneyline,,MIN,BUF,home,BUF,1.98,28,1,27.44,-0.0297535
+2026-10-06,flat_model_side,2026020050,moneyline,,STL,CHI,away,STL,1.72,8,0,-8,-0.016264
+2026-10-06,flat_model_side,2026020051,moneyline,,VGK,SEA,home,SEA,2.46,18,0,-18,-0.0223816
+2026-10-06,flat_model_side,2026020052,moneyline,,FLA,LAK,home,LAK,2.06,23,0,-23,0.00836186
+2026-10-06,market_favorite,2026020044,moneyline,,NSH,TOR,home,TOR,1.66,10,1,6.6,-0.00519815
+2026-10-06,market_favorite,2026020045,moneyline,,CAR,MTL,away,CAR,1.83,10,1,8.3,0.00372876
+2026-10-06,market_favorite,2026020046,moneyline,,OTT,DET,home,DET,1.87,10,1,8.7,-0.00754534
+2026-10-06,market_favorite,2026020047,moneyline,,UTA,NJD,home,NJD,1.85,10,0,-10,-0.0210338
+2026-10-06,market_favorite,2026020048,moneyline,,NYI,NYR,home,NYR,1.65,10,1,6.5,-0.0176216
+2026-10-06,market_favorite,2026020049,moneyline,,MIN,BUF,away,MIN,1.89,10,0,-10,-0.0361444
+2026-10-06,market_favorite,2026020050,moneyline,,STL,CHI,away,STL,1.72,10,0,-10,-0.016264
+2026-10-06,market_favorite,2026020051,moneyline,,VGK,SEA,away,VGK,1.6,10,1,6,-0.0358494
+2026-10-06,market_favorite,2026020052,moneyline,,FLA,LAK,away,FLA,1.92,10,1,9.2,-0.0198324
+2026-10-06,no_guard,2026020044,moneyline,,NSH,TOR,away,NSH,2.39,2.2,0,-2.2,-0.0422749
+2026-10-06,no_guard,2026020052,moneyline,,FLA,LAK,home,LAK,2.06,6.16,0,-6.16,0.00836186
+2026-10-06,puckline_edge,2026020044,spreads,1.5,NSH,TOR,away,NSH +1.5,1.54,28,1,15.12,
+2026-10-06,puckline_edge,2026020048,spreads,1.5,NYI,NYR,away,NYI +1.5,1.53,19,0,-19,
+2026-10-06,puckline_edge,2026020049,spreads,1.5,MIN,BUF,home,BUF +1.5,1.4,16,1,6.4,
+2026-10-06,puckline_edge,2026020051,spreads,1.5,VGK,SEA,home,SEA +1.5,1.59,20,0,-20,
+2026-10-06,puckline_edge,2026020052,spreads,1.5,FLA,LAK,home,LAK +1.5,1.4,13,1,5.2,
+2026-10-06,sog_edge,2026020045,player_sog,1.5,CAR,MTL,under,L. Hutson Under 1.5,1.8,30,0,-30,
+2026-10-06,sog_edge,2026020046,player_sog,1.5,OTT,DET,under,F. Zetterlund Under 1.5,1.95,30,1,28.5,
+2026-10-06,sog_edge,2026020046,player_sog,1.5,OTT,DET,under,E. Finnie Under 1.5,1.83,30,0,-30,
+2026-10-06,sog_edge,2026020046,player_sog,2.5,OTT,DET,under,D. Batherson Under 2.5,1.59,30,1,17.7,
+2026-10-06,sog_edge,2026020046,player_sog,1.5,OTT,DET,under,W. Foegele Under 1.5,2,30,1,30,
+2026-10-06,sog_edge,2026020046,player_sog,2.5,OTT,DET,under,V. Arvidsson Under 2.5,2.14,30,0,-30,
+2026-10-06,sog_edge,2026020049,player_sog,3.5,MIN,BUF,under,K. Kaprizov Under 3.5,1.74,30,1,22.2,
+2026-10-06,sog_edge,2026020049,player_sog,1.5,MIN,BUF,under,M. Shabanov Under 1.5,1.8,30,0,-30,
+2026-10-06,sog_over_control,2026020045,player_sog,2.5,CAR,MTL,over,S. Aho Over 2.5,1.87,10,1,8.7,
+2026-10-06,sog_over_control,2026020045,player_sog,2.5,CAR,MTL,over,N. Ehlers Over 2.5,1.95,10,1,9.5,
+2026-10-06,sog_over_control,2026020046,player_sog,2.5,OTT,DET,over,V. Arvidsson Over 2.5,1.74,10,1,7.4,
+2026-10-06,sog_over_control,2026020049,player_sog,2.5,MIN,BUF,over,B. Coleman Over 2.5,2.38,10,0,-10,
+2026-10-06,sog_over_control,2026020049,player_sog,3.5,MIN,BUF,over,M. Boldy Over 3.5,2.2,10,1,12,
+2026-10-06,sog_over_control,2026020049,player_sog,3.5,MIN,BUF,over,T. Thompson Over 3.5,2.25,10,1,12.5,
+2026-10-06,sog_over_control,2026020049,player_sog,3.5,MIN,BUF,over,K. Kaprizov Over 3.5,2.1,10,0,-10,
+2026-10-06,sog_over_control,2026020049,player_sog,2.5,MIN,BUF,over,J. Eriksson Ek Over 2.5,1.96,10,0,-10,
+2026-10-06,totals_edge,2026020048,totals,5.5,NYI,NYR,over,Over 5.5,1.87,15,1,13.05,
+2026-10-06,totals_edge,2026020050,totals,5.5,STL,CHI,over,Over 5.5,1.83,20,1,16.6,
+2026-10-06,totals_edge,2026020052,totals,6,FLA,LAK,over,Over 6,1.99,13,0,-13,
