@@ -2,11 +2,11 @@
 
 > **Disclaimer.** This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.
 
-*Generated 2026-10-07 22:55 UTC · model `20261006-8663f0` · probability source `online_platt` · bankroll $1,000.00 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
+*Generated 2026-10-07 23:00 UTC · model `20261006-8663f0` · probability source `online_platt` · bankroll $1,000.00 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
 
 > **Model health: WARN.** feature drift: d_elo, h_early_w, d_ga_season_shrunk, d_g_sv_season. Treat picks with extra scepticism.
 
-*Odds snapshot: 2026-10-07T22:47:04+00:00 · API credits left: 375*
+*Odds snapshot: 2026-10-07T23:00:19+00:00 · API credits left: 360*
 
 *Player props: 3 game(s) priced*
 
@@ -19,9 +19,9 @@
 
 | Game | Goalies (away / home) | Model home win | Market no-vig home | Best price | Edge | EV per $1 | Stake | Decision |
 |---|---|---|---|---|---|---|---|---|
-| PIT @ WSH (19:30 ET) | S. Skinner / L. Thompson (probable) | 49.8% | 59.6% | PIT 2.38 | +9.8% | - | - | no bet |
+| PIT @ WSH (19:30 ET) | S. Skinner / L. Thompson (probable) | 49.8% | 59.5% | PIT 2.38 | +9.7% | - | - | no bet |
 | COL @ WPG (19:30 ET) | S. Wedgewood / C. Hellebuyck (probable) | 41.7% | 36.1% | WPG 2.70 | +5.6% | - | - | no bet |
-| EDM @ ANA (22:00 ET) | C. Ingram / L. Dostal (probable) | 55.9% | 45.0% | ANA 2.15 | +10.9% | - | - | no bet |
+| EDM @ ANA (22:00 ET) | C. Ingram / L. Dostal (probable) | 55.9% | 44.9% | ANA 2.16 | +11.0% | - | - | no bet |
 
 ## Why
 
@@ -45,8 +45,8 @@ The goals model prices the over/under and the puck line. **No real stakes are su
 
 | Game | Market | Side | Model | Market (no-vig) | Edge | EV per $1 | Best price |
 |---|---|---|---|---|---|---|---|
-| PIT @ WSH (19:30 ET) | Puck line | PIT +1.5 | 73.2% | 61.9% | +11.3 pts | +16.3% | 1.59 |
-| EDM @ ANA (22:00 ET) | Total | Under 6.5 | 54.4% | 43.3% | +11.1 pts | +24.0% | 2.28 |
+| PIT @ WSH (19:30 ET) | Puck line | PIT +1.5 | 73.2% | 62.0% | +11.2 pts | +16.3% | 1.59 |
+| EDM @ ANA (22:00 ET) | Total | Under 6.5 | 54.4% | 43.4% | +11.0 pts | +22.4% | 2.25 |
 | EDM @ ANA (22:00 ET) | Puck line | ANA +1.5 | 73.9% | 65.9% | +8.0 pts | +10.1% | 1.49 |
 | COL @ WPG (19:30 ET) | Puck line | WPG +1.5 | 63.2% | 57.6% | +5.6 pts | +6.8% | 1.69 |
 | PIT @ WSH (19:30 ET) | Total | Under 6.5 | 54.5% | 49.4% | +5.1 pts | +7.3% | 1.97 |
@@ -55,8 +55,8 @@ The goals model prices the over/under and the puck line. **No real stakes are su
 | PIT @ WSH (19:30 ET) | Total | Over 6.5 | 45.5% | 50.6% | -5.1 pts | -13.0% | 1.91 |
 | COL @ WPG (19:30 ET) | Puck line | COL -1.5 | 36.8% | 42.4% | -5.6 pts | -15.3% | 2.30 |
 | EDM @ ANA (22:00 ET) | Puck line | EDM -1.5 | 26.1% | 34.1% | -8.0 pts | -26.9% | 2.80 |
-| EDM @ ANA (22:00 ET) | Total | Over 6.5 | 45.6% | 56.7% | -11.1 pts | -20.2% | 1.75 |
-| PIT @ WSH (19:30 ET) | Puck line | WSH -1.5 | 26.8% | 38.1% | -11.3 pts | -31.5% | 2.55 |
+| EDM @ ANA (22:00 ET) | Total | Over 6.5 | 45.6% | 56.6% | -11.0 pts | -20.2% | 1.75 |
+| PIT @ WSH (19:30 ET) | Puck line | WSH -1.5 | 26.8% | 38.0% | -11.2 pts | -31.5% | 2.55 |
 
 
 ## Player props: shots, points, assists, anytime goals (experimental, paper-trading only)
@@ -66,13 +66,13 @@ A player-level model (own recent shot rate, opponent, home ice, ice time, rest) 
 | Player | Game | Stat / line | Take | Model expects | Model P(over) | Market P(over) | Edge on take | EV per $1 | Last 10 | Season avg |
 |---|---|---|---|---|---|---|---|---|---|---|
 | M. Ferraro | COL @ WPG (19:30 ET) | goal 0.5 | Over | 0.18 | 16.4% | 7.1% | +9.4 pts | +195.9% | 0 0 0 0 0 1 0 1 0 0 | - |
+| T. van Riemsdyk | PIT @ WSH (19:30 ET) | goal 0.5 | Over | 0.10 | 9.4% | 5.8% | +3.7 pts | +173.6% | 0 0 0 0 0 1 0 0 0 0 | - |
 | D. DeMelo | COL @ WPG (19:30 ET) | goal 0.5 | Over | 0.12 | 11.5% | 6.7% | +4.7 pts | +152.3% | 0 0 0 0 0 0 0 1 0 0 | - |
-| T. van Riemsdyk | PIT @ WSH (19:30 ET) | goal 0.5 | Over | 0.10 | 9.4% | 6.0% | +3.4 pts | +145.3% | 0 0 0 0 0 1 0 0 0 0 | - |
 | D. Carlile | PIT @ WSH (19:30 ET) | goal 0.5 | Over | 0.14 | 13.1% | 7.8% | +5.3 pts | +110.0% | 0 0 0 0 0 0 0 0 1 1 | - |
-| M. Fehérváry | PIT @ WSH (19:30 ET) | goal 0.5 | Over | 0.10 | 9.8% | 6.4% | +3.4 pts | +96.2% | 0 0 0 0 1 0 0 0 0 0 | - |
+| M. Fehérváry | PIT @ WSH (19:30 ET) | goal 0.5 | Over | 0.10 | 9.8% | 6.4% | +3.4 pts | +106.0% | 0 0 0 0 1 0 0 0 0 0 | - |
 | R. Shea | EDM @ ANA (22:00 ET) | goal 0.5 | Over | 0.16 | 15.0% | 9.4% | +5.6 pts | +80.1% | 0 0 1 0 0 0 0 0 1 0 | - |
-| J. Manson | COL @ WPG (19:30 ET) | goal 0.5 | Over | 0.11 | 10.5% | 7.1% | +3.4 pts | +78.2% | 0 0 0 0 0 0 0 0 0 1 | - |
-| T. Liljegren | PIT @ WSH (19:30 ET) | goal 0.5 | Over | 0.09 | 8.2% | 5.9% | +2.3 pts | +71.4% | 0 0 1 0 0 0 0 0 0 0 | - |
+| T. Liljegren | PIT @ WSH (19:30 ET) | goal 0.5 | Over | 0.09 | 8.2% | 5.8% | +2.3 pts | +71.4% | 0 0 1 0 0 0 0 0 0 0 | - |
+| J. Manson | COL @ WPG (19:30 ET) | goal 0.5 | Over | 0.11 | 10.5% | 7.3% | +3.2 pts | +67.7% | 0 0 0 0 0 0 0 0 0 1 | - |
 | S. Malinski | COL @ WPG (19:30 ET) | goal 0.5 | Over | 0.18 | 16.1% | 10.2% | +5.9 pts | +61.1% | 0 0 0 0 0 1 0 0 0 0 | - |
 | P. Kelly | COL @ WPG (19:30 ET) | goal 0.5 | Over | 0.21 | 18.9% | 13.1% | +5.8 pts | +60.6% | 0 1 0 0 0 0 0 1 1 0 | - |
 | C. Murphy | EDM @ ANA (22:00 ET) | goal 0.5 | Over | 0.08 | 8.0% | 5.9% | +2.0 pts | +51.1% | 0 0 0 0 0 0 0 0 0 0 | - |
@@ -85,18 +85,18 @@ Every slate is also run through several alternative strategies with pretend stak
 
 | Strategy | Bets | ROI | 95% CI | Win rate | Avg CLV/$1 | What it tests |
 |---|---|---|---|---|---|---|
-| `always_over` | 45 | -1.7% | -31% to +27% | 51% | - | CONTROL: flat $10 on the Over of every game (no skill; shows what totals vig plus base rate cost) |
+| `always_over` | 45 | -1.7% | -31% to +25% | 51% | - | CONTROL: flat $10 on the Over of every game (no skill; shows what totals vig plus base rate cost) |
 | `edge_1pct` | 0 | - | - | - | - | Live policy at a 1% raw-edge threshold instead of 3% |
-| `every_game` | 47 | +10.1% | -14% to +32% | 60% | -1.95% | $5-$30 (more when the model is surer) on the model's preferred side of EVERY game with fresh odds, no edge filter, even at a negative edge |
-| `every_puckline` | 47 | -9.1% | -30% to +12% | 60% | - | Goals model: $5-$30 on its puck-line side of EVERY game with fresh spread odds, no edge filter |
-| `every_total` | 45 | -12.4% | -41% to +16% | 44% | - | Goals model: $5-$30 on its over/under side of EVERY game with fresh totals odds, no edge filter |
-| `flat_model_side` | 47 | -4.4% | -40% to +32% | 43% | -2.88% | $5-$30 (more for a bigger edge) on every game where the model sees any positive edge |
-| `market_favorite` | 47 | -5.0% | -27% to +18% | 57% | -2.06% | CONTROL: flat $10 on the market favourite (no skill; shows what the bookmaker margin costs) |
+| `every_game` | 47 | +10.1% | -14% to +34% | 60% | -1.95% | $5-$30 (more when the model is surer) on the model's preferred side of EVERY game with fresh odds, no edge filter, even at a negative edge |
+| `every_puckline` | 47 | -9.1% | -32% to +12% | 60% | - | Goals model: $5-$30 on its puck-line side of EVERY game with fresh spread odds, no edge filter |
+| `every_total` | 45 | -12.4% | -41% to +15% | 44% | - | Goals model: $5-$30 on its over/under side of EVERY game with fresh totals odds, no edge filter |
+| `flat_model_side` | 47 | -4.4% | -40% to +31% | 43% | -2.88% | $5-$30 (more for a bigger edge) on every game where the model sees any positive edge |
+| `market_favorite` | 47 | -5.0% | -29% to +20% | 57% | -2.06% | CONTROL: flat $10 on the market favourite (no skill; shows what the bookmaker margin costs) |
 | `no_guard` | 6 | +6.1% | - | 50% | -1.44% | Live policy without the early-season guard (does the guard help?) |
 | `no_shrink` | 0 | - | - | - | - | Live policy trusting the raw model fully (no shrinkage toward the market) |
-| `puckline_edge` | 29 | -25.4% | -55% to +5% | 48% | - | Goals model: $5-$30 on the puck-line side with a 3%+ raw edge vs the market (experimental market) |
-| `sog_edge` | 38 | -2.6% | -31% to +26% | 55% | - |  |
-| `sog_over_control` | 40 | +3.3% | -33% to +35% | 48% | - |  |
+| `puckline_edge` | 29 | -25.4% | -57% to +5% | 48% | - | Goals model: $5-$30 on the puck-line side with a 3%+ raw edge vs the market (experimental market) |
+| `sog_edge` | 38 | -2.6% | -31% to +27% | 55% | - |  |
+| `sog_over_control` | 40 | +3.3% | -32% to +37% | 48% | - |  |
 | `totals_edge` | 24 | -17.3% | -56% to +23% | 42% | - | Goals model: $5-$30 on the over/under side with a 3%+ raw edge vs the market (experimental market) |
 
 *Samples are still small: ROI over fewer than ~100 bets is mostly luck. Compare strategies on CLV and against the control, and wait for volume.*
@@ -105,13 +105,13 @@ Every slate is also run through several alternative strategies with pretend stak
 
 | Game | Type | Pretend pick | Pretend stake | Price | Model | Market |
 |---|---|---|---|---|---|---|
-| PIT @ WSH | Moneyline | PIT moneyline | $5.00 | 2.38 | 50.2% | 40.4% |
+| PIT @ WSH | Moneyline | PIT moneyline | $5.00 | 2.38 | 50.2% | 40.5% |
 | COL @ WPG | Moneyline | COL moneyline | $13.00 | 1.53 | 58.3% | 63.9% |
-| EDM @ ANA | Moneyline | ANA moneyline | $11.00 | 2.15 | 55.9% | 45.0% |
+| EDM @ ANA | Moneyline | ANA moneyline | $11.00 | 2.16 | 55.9% | 44.9% |
 | PIT @ WSH | Total | Under 6.5 | $9.00 | 1.97 | 54.5% | 49.4% |
 | COL @ WPG | Total | Under 6.5 | $9.00 | 1.94 | 53.9% | 50.3% |
-| EDM @ ANA | Total | Under 6.5 | $9.00 | 2.28 | 54.4% | 43.3% |
-| PIT @ WSH | Puck line | PIT +1.5 | $28.00 | 1.59 | 73.2% | 61.9% |
+| EDM @ ANA | Total | Under 6.5 | $9.00 | 2.25 | 54.4% | 43.4% |
+| PIT @ WSH | Puck line | PIT +1.5 | $28.00 | 1.59 | 73.2% | 62.0% |
 | COL @ WPG | Puck line | WPG +1.5 | $18.00 | 1.69 | 63.2% | 57.6% |
 | EDM @ ANA | Puck line | ANA +1.5 | $29.00 | 1.49 | 73.9% | 65.9% |
 
