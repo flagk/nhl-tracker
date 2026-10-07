@@ -164,3 +164,16 @@ def test_paper_stakes_scale_with_conviction_between_5_and_30_and_controls_stay_f
     for name in ("every_game", "flat_model_side"):
         assert all(5.0 <= x <= 30.0 and x == int(x) for x in stakes[name]) and len(set(stakes[name])) > 1     # varies, whole dollars, in range
         assert stakes[name] == sorted(stakes[name])                                                  # a surer model never stakes less (games are in rising-probability order)
+
+
+def test_moneyline_diversity_strategies():
+    from nhlbet.risk.policy import RiskConfig
+    cfg = RiskConfig(bankroll=1000)
+    g = G(1, q(0.40, 0.45, 1.80, 2.10))                      # market favourite = home (55%); model likes the AWAY dog more than the market does (60% vs 55%... market 55% away? see below)
+    by = by_strategy(shadow_bets([g], cfg, "r", "t", "d"))
+    assert by["home_ml_control"][1]["side"] == "home" and by["home_ml_control"][1]["stake"] == 10.0
+    assert by["underdog_ml_control"][1]["side"] == "home" and by["underdog_ml_control"][1]["stake"] == 10.0   # home market prob 0.45 < away 0.55
+    assert by["underdog_ml"][1]["action"] == "NO_BET"                                                         # dog edge is only -5%
+    g2 = G(2, q(0.55, 0.45, 2.20, 1.70))                    # model rates the home dog 10 points above the market
+    r = by_strategy(shadow_bets([g2], cfg, "r", "t", "d"))["underdog_ml"][2]
+    assert r["action"] == "BET" and r["side"] == "home" and r["stake"] == 30.0

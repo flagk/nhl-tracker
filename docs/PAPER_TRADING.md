@@ -31,6 +31,10 @@ control loses about the margin on a fair market. Stakes are always pretend; noth
 
 ## Totals and puck-line strategies
 `totals_edge`, `puckline_edge`, `every_total`, `every_puckline` and the control `always_over` use the goals model (see [MARKETS.md](MARKETS.md)).
+
+**Bet-type variety.** To learn which kinds of bet (if any) the model is good at, there are also strategies that each bet on one specific kind, at a 2%+ edge:
+`under_edge`, `over_edge`, `puckline_dog_edge` (+1.5 side), `puckline_fav_edge` (-1.5 side), `underdog_ml` (moneyline underdogs) and, for player shots,
+`sog_over_edge` and `sog_under_edge`. No-skill controls (flat $10) give each a baseline: `always_under`, `puckline_dog_control`, `underdog_ml_control`, `home_ml_control`.
 They settle on the score (totals exclude the shootout goal, the puck line uses the official margin; pushes refund the stake), and have no CLV because
 closing snapshots only fetch moneylines.
 
@@ -40,7 +44,7 @@ Pretend stakes scale with the model's conviction so the data can answer "do the 
 - edge-based strategies: a 3-point edge is about $12, a 10-point edge or more is $30;
 - "bet every game" strategies: 50% model probability is $5, 75% or more is $30;
 - the live-policy copies (`no_guard`, `edge_1pct`, `no_shrink`) keep their Kelly-based sizing;
-- the no-skill controls (`market_favorite`, `always_over`) always stake $10, so their ROI is a clean baseline.
+- the no-skill controls (`market_favorite`, `always_over`, `always_under`, `puckline_dog_control`, `underdog_ml_control`, `home_ml_control`) always stake $10, so their ROI is a clean baseline.
 Compare strategies on ROI (profit per dollar staked), not total profit, because stake sizes differ.
 
 ## Player-prop strategies
