@@ -33,16 +33,15 @@ def pq(pid, name, p_over, pm=0.5, over=1.91, under=1.91, stat="sog", one_sided=F
                      -1.0 if one_sided else (1 - p_over) * (under - 1) - p_over, 3, n_prev, stat=stat, one_sided=one_sided)
 
 
-def test_ranking_orders_by_confidence_weighted_ev_and_numbers_from_one():
+def test_ranking_orders_by_confidence_weighted_edge_and_numbers_from_one():
     cfg = RiskConfig(bankroll=1000)
     g = S(1, ml(0.55, 0.52, 1.95, 1.95), [mq("totals", "over", 6.5, 0.50, 0.50), mq("totals", "under", 6.5, 0.50, 0.50)], [pq(7, "Big Edge", 0.75)])
     rows = rank_picks([g], cfg)
     assert [r["rank"] for r in rows] == list(range(1, len(rows) + 1)) and [r["score"] for r in rows] == sorted((r["score"] for r in rows), reverse=True)
     prop = next(r for r in rows if r["kind"] == "player_sog")
-    # a 25-point edge at 1.91 is +43% raw EV, but the experimental weight keeps the score far lower
+    # a 25-point edge, but the experimental weight cuts it to 0.35 * 25 = 8.75 points of score
     w = WEIGHTS["player_sog"]
-    ev_raw, ev_mkt = 0.75 * 0.91 - 0.25, 0.5 * 0.91 - 0.5
-    assert prop["ev_raw"] == pytest.approx(ev_raw) and prop["score"] == pytest.approx(w * ev_raw + (1 - w) * ev_mkt) and prop["experimental"]
+    assert prop["score"] == pytest.approx(w * 0.25) and prop["ev_raw"] == pytest.approx(0.75 * 0.91 - 0.25) and prop["experimental"]
     assert prop["pick"] == "Big Edge Over 2.5 shots"
     assert {r["kind"] for r in rows} == {"moneyline", "totals", "player_sog"}
 
@@ -57,7 +56,7 @@ def test_moneyline_is_fully_trusted_and_flags_recommendation():
 
 def test_every_pick_is_ranked_even_without_edge_and_stale_or_alert_games_are_skipped():
     cfg = RiskConfig(bankroll=1000)
-    fine = S(1, ml(0.50, 0.55, 1.80, 2.10))                          # model sees no edge anywhere: still ranked
+    fine = S(1, ml(0.55, 0.55, 1.80, 2.10))                          # model agrees with the market exactly: no edge, still ranked
     rows = rank_picks([fine, S(2, ml(0.6, 0.5, 2.0, 2.0), stale=True), S(3, ml(0.6, 0.5, 2.0, 2.0), status="ALERT")], cfg)
     assert len(rows) == 1 and rows[0]["game_id"] == 1 and rows[0]["has_edge"] is False
 
@@ -69,3 +68,12 @@ def test_player_props_one_sided_short_history_and_best_side():
     picks = {r["pick"] for r in rows}
     assert "Scorer to score (anytime)" in picks and "Under Guy Under 2.5 shots" in picks and not any("Rookie" in p for p in picks)
     assert next(r for r in rows if "Scorer" in r["pick"])["type"] == "Anytime goalscorer"
+
+
+def test_long_shots_and_outlier_prices_cannot_win_the_ranking_on_ev_alone():
+    cfg = RiskConfig(bankroll=1000)
+    scorer = pq(1, "Longshot", 0.07, pm=0.05, over=26.0, stat="goals", one_sided=True)      # +2 points of edge at a 26.0 price: huge dollar EV
+    g = S(1, ml(0.56, 0.52, 1.95, 1.95), props=[scorer])
+    rows = rank_picks([g], cfg)
+    assert rows[0]["kind"] == "moneyline" and rows[-1]["kind"] == "player_goals"             # a 4-point moneyline edge outranks a 2-point longshot edge
+    assert rows[-1]["ev_raw"] > rows[0]["ev_raw"]                                            # even though the longshot's EV per $1 is far larger

@@ -3,11 +3,11 @@
 This is a RANKING, not a recommendation. Only the moneyline policy can recommend a stake; everything else here is experimental and
 shown so the day's picks can be compared in one order.
 
-Score = confidence-adjusted expected value per $1 at the best price. The model's probability is pulled toward the market's by a
-reliability weight for that kind of bet (the moneyline model is the only one with a track record, and its probability is already shrunk by
-the live policy; the experimental models get less weight), so a huge edge from a new, unvalidated model cannot jump to the top on its own:
-
-    score = w * EV(model probability) + (1 - w) * EV(market probability)        (the second term is just minus the bookmaker's margin)
+Score = confidence-weighted edge, in probability points: ``weight * (model probability - market probability)``. The weight is how far that
+kind of model is trusted (the moneyline model is the only one with a track record, and its probability is already shrunk toward the market by
+the live policy; the experimental models get much less), so a huge edge from a new, unvalidated model cannot jump the queue on its own.
+It deliberately does NOT rank by expected value per dollar: EV scales with the price, so long shots (anytime scorers at 20/1) and one
+bookmaker's outlier price would crowd out everything else. EV at the best price is shown as its own column.
 """
 from __future__ import annotations
 
@@ -28,8 +28,7 @@ def _ev(p_win: float, p_push: float, dec: float) -> float:
 
 
 def _row(kind: str, s, label: str, p_model: float, p_market: float, dec: float, p_push: float, ev_raw: float, w: float, **extra) -> dict:
-    ev_mkt = _ev(p_market * (1 - p_push), p_push, dec)                     # what the bet is worth if the market is exactly right
-    score = w * ev_raw + (1.0 - w) * ev_mkt
+    score = w * (p_model - p_market)
     return {"kind": kind, "type": TYPE_NAMES[kind], "game_id": s.game_id, "game": f"{s.away} @ {s.home}", "start_utc": s.start_utc, "pick": label,
             "p_model": p_model, "p_market": p_market, "price": dec, "ev_raw": ev_raw, "score": score, "weight": w,
             "experimental": kind != "moneyline", **extra}
@@ -44,7 +43,7 @@ def rank_picks(slate: Sequence, cfg: RiskConfig, limit: int = 80) -> list[dict]:
         if s.quotes:
             best = None
             for q, p_adj, ev, fails in assess_sides(s.quotes, cfg, s.ctx):
-                cand = _row("moneyline", s, f"{q.team} moneyline", q.model_prob, q.market_prob, q.best_decimal, 0.0, ev, WEIGHTS["moneyline"],
+                cand = _row("moneyline", s, f"{q.team} moneyline", p_adj, q.market_prob, q.best_decimal, 0.0, ev, WEIGHTS["moneyline"],
                             recommended=bool(s.rec.action == "BET" and s.rec.side == q.side), note=("; ".join(fails) if fails else "clears the policy checks"))
                 if best is None or cand["score"] > best["score"]:
                     best = cand

@@ -170,7 +170,7 @@
   function rankPasses(r) { return rankFilter === "all" || (rankFilter === "player" ? r.kind.indexOf("player_") === 0 : r.kind === rankFilter); }
   function rankingSection() {
     var all = D.ranking || [];
-    var kids = [el("p", { class: "lead", text: "Every pick the model can price today, in one order: best first. The score is expected value per $1 after pulling the model's probability toward the market by how much that kind of model is trusted (moneylines fully, experimental markets much less), so a big edge from a new model cannot jump the queue alone. This is a ranking, not a recommendation: only moneylines tagged Recommended pass the betting rules." })];
+    var kids = [el("p", { class: "lead", text: "Every pick the model can price today, in one order: best first. The score is the model's edge over the market in probability points, scaled by how much that kind of model is trusted (moneylines fully, experimental markets much less), so a big edge from a new model cannot jump the queue alone. It is not ranked by dollar EV because that rewards long-shot prices; EV at the best price is shown separately. This is a ranking, not a recommendation: only moneylines tagged Recommended pass the betting rules." })];
     if (!all.length) return section("sec-rank", "Pick ranking", "", kids.concat([el("div", { class: "card muted", text: "Nothing to rank yet: no fresh odds for today's games." })]));
     kids.push(el("div", { class: "chips", role: "group", "aria-label": "Filter the ranking" }, RANK_FILTERS.map(function (f) {
       return el("button", { type: "button", class: "chip" + (rankFilter === f[0] ? " on" : ""), "aria-pressed": String(rankFilter === f[0]), text: f[1], onclick: function () { rankFilter = f[0]; render(); } });
@@ -181,9 +181,10 @@
       return el("tr", {}, [el("td", { class: "num" }, [el("b", { text: "#" + r.rank })]),
         el("td", {}, [el("b", { text: r.pick }), el("div", { class: "muted", text: r.game + (r.start_utc ? " · " + when(r.start_utc) : "") })]),
         el("td", { text: r.type }), el("td", { class: "num", text: pct(r.p_model) }), el("td", { class: "num", text: pct(r.p_market) }), el("td", { class: "num", text: price(r.price) }),
-        el("td", { class: "num " + (r.score >= 0 ? "good" : "bad"), text: spct(r.score) }), el("td", {}, [tag])]);
+        el("td", { class: "num " + (r.score >= 0 ? "good" : "bad"), text: (r.score >= 0 ? "+" : "") + (r.score * 100).toFixed(1) + " pts" }),
+        el("td", { class: "num " + (r.ev_raw >= 0 ? "good" : "bad"), text: spct(r.ev_raw) }), el("td", {}, [tag])]);
     });
-    kids.push(rows.length ? table(["Rank", "Pick", "Type", "Model", "Market", "Best price", "Score (EV per $1)", "Status"], rows, [0, 3, 4, 5, 6]) : el("div", { class: "card muted", text: "No picks of this type today." }));
+    kids.push(rows.length ? table(["Rank", "Pick", "Type", "Model", "Market", "Best price", "Score (edge)", "EV per $1", "Status"], rows, [0, 3, 4, 5, 6, 7]) : el("div", { class: "card muted", text: "No picks of this type today." }));
     if (list.length > 15) kids.push(el("div", {}, [el("button", { type: "button", class: "btn-ghost", text: showAllRank ? "Show the top 15 only" : "Show all " + list.length, onclick: function () { showAllRank = !showAllRank; render(); } })]));
     kids.push(el("div", { class: "note", text: "Rank is across all kinds of pick, so the numbers on the left are positions in the full list even when a filter is on. Prices are the best available today; check the price in your own app before using any of it." }));
     return section("sec-rank", "Pick ranking", String(all.length), kids);
