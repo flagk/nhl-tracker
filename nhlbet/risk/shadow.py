@@ -190,6 +190,12 @@ PROP_STRATEGIES: tuple[Strategy, ...] = (
     Strategy("pts_over_edge", f"Player POINTS, OVERS only: $5-$30 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_over", (("stat", "points"),)),
     Strategy("pts_under_edge", f"Player POINTS, UNDERS only: $5-$30 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_under", (("stat", "points"),)),
     Strategy("pts_over_control", f"CONTROL: flat $10 on the Over for {PROP_MAX_PER_DAY} players priced for points, highest line first (no model; shows what prop vig costs)", "prop_control", (("stat", "points"),)),
+    Strategy("ast_edge", f"Player ASSISTS: $5-$30 on the over/under the model likes (3%+ edge, 10+ games of history), best {PROP_MAX_PER_DAY} of the day (experimental market)", "prop_edge", (("stat", "assists"),)),
+    Strategy("ast_over_edge", f"Player ASSISTS, OVERS only: $5-$30 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_over", (("stat", "assists"),)),
+    Strategy("ast_under_edge", f"Player ASSISTS, UNDERS only: $5-$30 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_under", (("stat", "assists"),)),
+    Strategy("ast_over_control", f"CONTROL: flat $10 on the Over for {PROP_MAX_PER_DAY} players priced for assists (no model; shows what prop vig costs)", "prop_control", (("stat", "assists"),)),
+    Strategy("goal_edge", f"ANYTIME GOALSCORER: $5-$30 on players the model rates 3%+ likelier to score than the market, best {PROP_MAX_PER_DAY} of the day (experimental; the market's margin is estimated)", "prop_edge_over", (("stat", "goals"),)),
+    Strategy("goal_control", f"CONTROL: flat $10 on the {PROP_MAX_PER_DAY} most likely anytime scorers by market price (no model; shows what the margin costs)", "prop_control", (("stat", "goals"),)),
     Strategy("sog_over_control", f"CONTROL: flat $10 on the Over for the {PROP_MAX_PER_DAY} players with the highest shots lines (no model; shows what prop vig costs)", "prop_control"),
 )
 
@@ -199,7 +205,7 @@ def _prop_row(run_id, run_at, date, game_id, strategy, q, side: str, stake: floa
     p_side = q.p_over if over else 1 - q.p_over
     m_side = q.p_over_market if over else 1 - q.p_over_market
     return {"run_id": run_id, "run_at": run_at, "game_id": game_id, "strategy": strategy, "game_date": date, "player_id": q.player_id, "name": q.name, "side": side,
-            "label": f"{q.name} {'Over' if over else 'Under'} {q.point:g}", "market": STATS[q.stat]["store"], "point": q.point, "book": None, "decimal": q.over_price if over else q.under_price, "stake": stake,
+            "label": (f"{q.name} to score (anytime)" if q.one_sided else f"{q.name} {'Over' if over else 'Under'} {q.point:g}"), "market": STATS[q.stat]["store"], "point": q.point, "book": None, "decimal": q.over_price if over else q.under_price, "stake": stake,
             "p_model": p_side, "p_market": m_side, "edge": p_side - m_side, "ev": q.ev_over if over else q.ev_under, "lam": q.lam}
 
 
@@ -211,16 +217,17 @@ def prop_shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str,
         stat = dict(st.overrides).get("stat", "sog")
         cands = [(g, q) for g, q in all_cands if q.stat == stat]
         if st.kind == "prop_edge":
-            scored = [(q.edge(q.best_side), g, q) for g, q in cands if q.n_prev >= PROP_MIN_GAMES]
+            scored = [(q.edge(q.best_side), g, q) for g, q in cands if q.n_prev >= PROP_MIN_GAMES and q.has_side(q.best_side)]
             picks = sorted([x for x in scored if x[0] >= cfg.min_edge], key=lambda x: -x[0])[:PROP_MAX_PER_DAY]
             for e, g, q in picks:
                 rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, q.best_side, paper_stake(edge_conviction(e))))
         elif st.kind in ("prop_edge_over", "prop_edge_under"):
             side = st.kind.rsplit("_", 1)[1]
-            scored = [((q.edge(side)), g, q) for g, q in cands if q.n_prev >= PROP_MIN_GAMES]
-            for e, g, q in sorted([x for x in scored if x[0] >= ALT_MIN_EDGE], key=lambda x: -x[0])[:PROP_MAX_PER_DAY]:
+            floor = cfg.min_edge if st.name == "goal_edge" else ALT_MIN_EDGE
+            scored = [((q.edge(side)), g, q) for g, q in cands if q.n_prev >= PROP_MIN_GAMES and q.has_side(side)]
+            for e, g, q in sorted([x for x in scored if x[0] >= floor], key=lambda x: -x[0])[:PROP_MAX_PER_DAY]:
                 rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, side, paper_stake(edge_conviction(e))))
         elif st.kind == "prop_control":
-            for g, q in sorted(cands, key=lambda x: (-x[1].point, x[1].player_id))[:PROP_MAX_PER_DAY]:
+            for g, q in sorted(cands, key=lambda x: (-x[1].point, -x[1].p_over_market, x[1].player_id))[:PROP_MAX_PER_DAY]:
                 rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, "over", CONTROL_STAKE))
     return rows

@@ -97,7 +97,7 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
     dists = bundle.score_distributions(rows, preds["p"].to_numpy())
     dist_by_game = dict(zip(rows.index, dists)) if dists is not None else {}
     drivers_by_game = bundle.drivers(rows) if hasattr(bundle, "drivers") else {}
-    has_props = len(store.df("SELECT 1 FROM odds_snapshots WHERE market = 'player_shots_on_goal' AND game_id IN (%s) LIMIT 1" % ",".join(str(int(x)) for x in today.game_id)))
+    has_props = len(store.df("SELECT 1 FROM odds_snapshots WHERE market LIKE 'player_%%' AND game_id IN (%s) LIMIT 1" % ",".join(str(int(x)) for x in today.game_id)))
     engine = PropEngine.create(store, as_of=pd.Timestamp(date)) if has_props else None
 
     log_row = store.df("SELECT source, captured_at FROM odds_fetch_log ORDER BY captured_at DESC LIMIT 1")
@@ -123,7 +123,7 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
         inputs.append((int(g.game_id), g.home, g.away, quotes, ctx))
         meta[int(g.game_id)] = dict(start=g.start_utc, hg=hg, ag=ag, status=status, p=p_home, p_raw=p_raw, quotes=quotes, cap=cap, stale=stale,
                                     notes=context_notes(row, g.home, g.away), ctx=ctx, books=books, alt=alt, goals=goals, stats=game_stats(row), drivers=drivers_by_game.get(g.game_id, []),
-                                    props=engine.all_quotes_for_game(int(g.game_id), pd.Timestamp(date)) if engine is not None else [])
+                                    props=engine.all_quotes_for_game(int(g.game_id), pd.Timestamp(date), now=pd.Timestamp(now)) if engine is not None else [])
     recs = recommend_slate(inputs, cfg)
     slate = []
     for rec in recs:
@@ -151,9 +151,11 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
         for s_ in slate:
             for q in s_.props:
                 for side in ("over", "under"):
+                    if not q.has_side(side):
+                        continue
                     over = side == "over"
                     prop_rows.append({"run_id": run_id, "run_at": now.isoformat(timespec="seconds"), "game_id": s_.game_id, "game_date": date, "market": STATS[q.stat]["store"], "side": f"{side}:{q.player_id}",
-                                      "label": f"{q.name} {'Over' if over else 'Under'} {q.point:g}", "point": q.point, "p_model": q.p_over if over else 1 - q.p_over,
+                                      "label": (f"{q.name} to score (anytime)" if q.one_sided else f"{q.name} {'Over' if over else 'Under'} {q.point:g}"), "point": q.point, "p_model": q.p_over if over else 1 - q.p_over,
                                       "p_market": q.p_over_market if over else 1 - q.p_over_market, "p_push": 0.0, "book": None, "decimal": q.over_price if over else q.under_price,
                                       "edge": q.edge(side), "ev": q.ev_over if over else q.ev_under, "n_books": q.n_books, "lam_home": None, "lam_away": None, "exp_total": q.lam,
                                       "odds_captured_at": s_.odds_captured_at, "player_id": q.player_id})

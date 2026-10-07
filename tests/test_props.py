@@ -139,7 +139,12 @@ def test_fetching_props_is_bounded_cheap_and_never_raises(tmp_path):
     client = OddsClient(api_key="k", cache_dir=tmp_path / "c", session=sess, sleep=lambda s: None)
     st = Store(":memory:")
     r = fetch_player_props(st, client, events, max_games=3, now=now)
-    assert r == {"games": 3} and [u.split("/events/")[1].split("/")[0] for u in sess.calls] == ["e2", "e3", "e4"]
+    assert r["games"] == 3 and len(r["markets"]) == 4
+    called = [u.split("/events/")[1].split("/")[0] for u in sess.calls]
+    assert list(dict.fromkeys(called)) == ["e2", "e3", "e4"] and len(called) == 12                # one request per market per game: a market the plan lacks fails alone
+    low = fetch_player_props(st, client, events, max_games=3, now=now, remaining=180)             # credit guard: assists / anytime goals are skipped when credits run low
+    assert low["markets"] == ["player_points", "player_shots_on_goal"]
+    assert "protect moneylines" in fetch_player_props(st, client, events, max_games=3, now=now, remaining=60)["error"]
     bad = OddsClient(api_key="k", cache_dir=tmp_path / "c2", session=FakeSession({"/events/": [FakeResp(422, {})]}), sleep=lambda s: None)
     out = fetch_player_props(st, bad, events, max_games=3, now=now)                          # a plan without prop access: reported, not raised
     assert out["games"] == 0 and "422" in out["error"]
@@ -265,7 +270,7 @@ def test_end_to_end_props_reach_the_report_site_logs_and_exports(league, tmp_pat
     aq = db.df("SELECT * FROM alt_quotes WHERE market = 'player_sog'")
     assert len(aq) == 6 and set(aq.player_id) == set(bos.player_id) and aq.exp_total.between(0.3, 8).all()          # three players x over/under
     rep = (tmp_path / "reports/latest.md").read_text()
-    assert "Player props: shots on goal" in rep and "Experimental, no real stakes" in rep
+    assert "Player props: shots, points, assists, anytime goals" in rep and "Experimental, no real stakes" in rep
     html = (tmp_path / "site/index.html").read_text()
     m = re.search(r'<script id="payload" type="application/json">(.*?)</script>', html, re.S)
     import json
@@ -340,3 +345,49 @@ def test_points_market_is_priced_strategies_and_settles_on_points():
     s2.upsert("prop_bets", [r], ["run_id", "game_id", "strategy", "player_id", "side"])
     d = shadow_resolved(s2)
     assert d.iloc[0].won == 1 and d.iloc[0].profit == 20.0                                  # 2 points > 1.5 although 0 shots
+
+
+def test_anytime_goalscorer_is_one_sided_fresh_only_and_settles_on_goals():
+    from nhlbet.odds.props import consensus_one_sided
+    st, plist, day = engine_store()
+    rng = np.random.default_rng(7)
+    sk = st.df("SELECT * FROM skater_game")
+    sk["goals"] = rng.poisson(0.25, len(sk)); sk["assists"] = rng.poisson(0.3, len(sk))
+    st.upsert("skater_game", sk.to_dict("records"), ["game_id", "player_id"])
+    names = {pid: nm.replace(nm.split(".")[0] + ".", {"A": "Alex", "B": "Ben", "C": "Carl", "D": "Dan"}[nm[0]]) for pid, nm, *_ in plist["EDM"][:3]}
+    ev = prop_event(day)
+    ev["commence_time"] = f"{day}T23:00:00Z"
+    mk = lambda key, outs: [{"key": "bk1", "last_update": f"{day}T15:50:00Z", "markets": [{"key": key, "last_update": f"{day}T15:50:00Z", "outcomes": outs}]},
+                            {"key": "bk2", "last_update": f"{day}T15:50:00Z", "markets": [{"key": key, "last_update": f"{day}T15:50:00Z", "outcomes": [dict(o, price=o["price"] + 0.2) for o in outs]}]}]
+    goal_outs = [{"name": "Yes", "description": full, "price": 3.4} for full in names.values()]
+    ast_outs = [x for full in names.values() for x in ({"name": "Over", "description": full, "price": 2.5, "point": 0.5}, {"name": "Under", "description": full, "price": 1.55, "point": 0.5})]
+    ev["bookmakers"] = mk("player_goal_scorer_anytime", goal_outs)
+    record_fetch(st, type("Fx", (), {"events": [ev], "captured_at": f"{day}T16:00:00+00:00", "remaining": 300, "used": 5, "source": "live"})())
+    ev["bookmakers"] = mk("player_assists", ast_outs)
+    record_fetch(st, type("Fx", (), {"events": [ev], "captured_at": f"{day}T16:00:00+00:00", "remaining": 300, "used": 6, "source": "live"})())
+    eng = PropEngine.create(st, as_of=pd.Timestamp(day))
+    now = pd.Timestamp(f"{day}T16:30:00Z")
+    g = eng.quotes_for_game(500, pd.Timestamp(day), now=now, stat="goals")
+    assert len(g) == 3 and all(q.one_sided and q.under_price == 0.0 and q.ev_under == -1.0 and q.point == 0.5 and q.over_price == pytest.approx(3.6) for q in g)
+    assert all(0.0 < q.p_over < 0.9 and q.p_over_market == pytest.approx(np.mean([1 / 3.4, 1 / 3.6]) / 1.07) for q in g)
+    assert all(q.take in (None, "over") and q.best_side == "over" and not q.has_side("under") for q in g)
+    a = eng.quotes_for_game(500, pd.Timestamp(day), now=now, stat="assists")
+    assert len(a) == 3 and not any(q.one_sided for q in a) and all(q.captured_at == f"{day}T16:00:00+00:00" for q in a)
+    assert eng.all_quotes_for_game(500, pd.Timestamp(day), now=pd.Timestamp(f"{day}T19:30:00Z")) == []          # prices 3.5 h old: not used
+    assert len(eng.all_quotes_for_game(500, pd.Timestamp(day), now=now)) == 6
+    # strategies never bet an Under on the one-sided market; labels read naturally
+    cfg = RiskConfig(bankroll=1000)
+    rows = prop_shadow_bets([Gm(1, g)], cfg, "r", "t", "d")
+    assert {r["strategy"] for r in rows} <= {"goal_edge", "goal_control"} | {r["strategy"] for r in rows if r["strategy"].startswith(("sog_", "pts_", "ast_"))}
+    assert all(r["side"] == "over" and r["label"].endswith("to score (anytime)") and r["market"] == "player_goals" for r in rows if r["strategy"].startswith("goal_"))
+    # settlement: a goal wins an anytime bet at the price, no goal loses, assists settle on assists
+    s2 = Store(":memory:")
+    s2.upsert("games", [dict(game_id=1, season=1, game_type=2, game_date="2026-10-08", start_utc="2026-10-08T23:00:00Z", home="EDM", away="VAN", home_score=3, away_score=2,
+                             status="FINAL", last_period="REG", home_win=1, source="nhl_api", updated_at=None)], ["game_id"])
+    sk2 = lambda pid, goals, assists: dict(game_id=1, team="EDM", player_id=pid, name=f"P{pid}", position="C", toi_sec=1000, goals=goals, assists=assists, points=goals + assists, sog=3)
+    s2.upsert("skater_game", [sk2(10, 1, 0), sk2(11, 0, 2)], ["game_id", "player_id"])
+    bet = lambda pid, market, strat, pt: dict(run_id="r", run_at="t", game_id=1, strategy=strat, game_date="2026-10-08", player_id=pid, name=f"P{pid}", side="over", label="x", point=pt, book=None,
+                                               decimal=3.0, stake=10.0, p_model=0.3, p_market=0.3, edge=0.0, ev=0.0, lam=0.3, market=market)
+    s2.upsert("prop_bets", [bet(10, "player_goals", "goal_edge", 0.5), bet(11, "player_goals", "goal_control", 0.5), bet(11, "player_assists", "ast_edge", 1.5)], ["run_id", "game_id", "strategy", "player_id", "side"])
+    d = shadow_resolved(s2).set_index("strategy")
+    assert d.loc["goal_edge", "profit"] == 20.0 and d.loc["goal_control", "profit"] == -10.0 and d.loc["ast_edge", "profit"] == 20.0

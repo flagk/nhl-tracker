@@ -14,11 +14,11 @@ from sklearn.linear_model import PoissonRegressor
 SHRINK_K = 6.0                 # pseudo-games of position-average shooting blended into a player's own rate
 MIN_GAMES = 5                  # no props for players with fewer prior games
 DISPERSIONS = (0.0, 0.02, 0.05, 0.08, 0.12, 0.2, 0.3)
-LAM_BOUNDS = (0.15, 8.0)
+LAM_BOUNDS = (0.01, 8.0)
 
 
 class ShotsModel:
-    """Despite the name it models any per-game skater count with the same recipe: ``stat`` is 'sog' (shots, the default) or 'points'."""
+    """Despite the name it models any per-game skater count with the same recipe: ``stat`` is 'sog' (shots, the default), 'points', 'assists' or 'goals'."""
 
     def __init__(self, alpha: float = 1e-3, stat: str = "sog") -> None:
         self.alpha, self.stat = alpha, stat
@@ -30,7 +30,7 @@ class ShotsModel:
         rate = (n * own + SHRINK_K * pos_mean) / (n + SHRINK_K)
         toi_ref = d.pos.map(self.toi_ref_).fillna(self.toi_ref_["F"]).to_numpy(float)
         toi_ratio = (d.toi_l10.fillna(pd.Series(toi_ref, index=d.index)).to_numpy(float) / toi_ref).clip(0.4, 1.8)
-        return np.column_stack([np.log(np.clip(rate, 0.1, None)), np.log(d.opp_factor.fillna(1.0).to_numpy(float)), d.is_home.to_numpy(float),
+        return np.column_stack([np.log(np.clip(rate, 0.01, None)), np.log(d.opp_factor.fillna(1.0).to_numpy(float)), d.is_home.to_numpy(float),
                                 np.log(toi_ratio), np.minimum(d.rest_days.fillna(3).to_numpy(float), 5.0)])
 
     def fit(self, d: pd.DataFrame) -> "ShotsModel":

@@ -16,7 +16,12 @@ SOG_MARKET = "player_shots_on_goal"
 STORE_MARKET = "player_sog"
 # every individual-player stat we price: odds-API market, name stored with paper bets, skater_game column, wording for the UI
 STATS = {"sog": {"odds": SOG_MARKET, "store": "player_sog", "col": "sog", "noun": "shots"},
-         "points": {"odds": "player_points", "store": "player_points", "col": "points", "noun": "points"}}
+         "points": {"odds": "player_points", "store": "player_points", "col": "points", "noun": "points"},
+         "assists": {"odds": "player_assists", "store": "player_assists", "col": "assists", "noun": "assists", "extra": True},
+         # anytime goalscorer is one-sided (only 'Yes' is priced): equivalent to Over 0.5 goals, with no Under to bet or to remove the margin with
+         "goals": {"odds": "player_goal_scorer_anytime", "store": "player_goals", "col": "goals", "noun": "goals", "one_sided": True, "extra": True}}
+ONE_SIDED_MARGIN = 0.07        # assumed bookmaker margin on an anytime-scorer price (no opposite side to measure it from)
+PROP_MAX_AGE_MIN = 120.0       # a player price captured longer ago than this (relative to the run) is not used at all
 STORE_TO_STAT = {v["store"]: k for k, v in STATS.items()}
 
 
@@ -43,7 +48,9 @@ class PropQuote:
     avg_l10: float | None = None
     hit_l10: float | None = None                    # share of the last 10 games over this line
     hit_l20: float | None = None
-    stat: str = "sog"                                # 'sog' (shots on goal) or 'points'
+    stat: str = "sog"                                # 'sog', 'points', 'assists' or 'goals'
+    captured_at: str | None = None                   # when these prices were captured (UTC ISO)
+    one_sided: bool = False                          # anytime goalscorer: only the 'over' (Yes) side exists
 
     @property
     def take(self) -> str | None:
@@ -54,6 +61,9 @@ class PropQuote:
     @property
     def best_side(self) -> str:
         return "over" if self.ev_over >= self.ev_under else "under"
+
+    def has_side(self, side: str) -> bool:
+        return side == "over" or not self.one_sided
 
     def edge(self, side: str) -> float:
         return self.edge_over if side == "over" else -self.edge_over
@@ -68,7 +78,7 @@ def norm_name(n: str) -> tuple[str, str]:
     return (toks[0][0], toks[-1]) if toks else ("", "")
 
 
-def latest_prop_prices(store: Store, game_id: int, market: str = SOG_MARKET, max_book_age_min: float = 90.0) -> pd.DataFrame:
+def latest_prop_prices(store: Store, game_id: int, market: str = SOG_MARKET, max_book_age_min: float = 90.0, one_sided: bool = False) -> pd.DataFrame:
     """Latest pre-game capture: one row per (book, player, line) with decimal ``over`` / ``under`` prices."""
     df = pregame_only(store.df("SELECT * FROM odds_snapshots WHERE game_id=? AND market=?", [game_id, market]))
     if df.empty:
@@ -82,6 +92,14 @@ def latest_prop_prices(store: Store, game_id: int, market: str = SOG_MARKET, max
     if split.shape[1] < 2:
         return pd.DataFrame(columns=["book", "player", "point", "over", "under"])
     df = df.assign(side=split[0], player=split[1])
+    if one_sided:                                      # 'Yes' (or 'Over') = scores at least once; there is no under price
+        y = df[df.side.str.lower().isin(["yes", "over"])]
+        if y.empty:
+            return pd.DataFrame(columns=["book", "player", "point", "over", "under"])
+        w = y.groupby(["book", "player"]).price.max().reset_index().rename(columns={"price": "over"})
+        w["point"], w["under"] = 0.5, np.nan
+        w.attrs["captured_at"] = last
+        return w[["book", "player", "point", "over", "under"]]
     w = df.groupby(["book", "player", "point", "side"]).price.max().unstack("side").reset_index()
     if not {"Over", "Under"} <= set(w.columns):
         return pd.DataFrame(columns=["book", "player", "point", "over", "under"])
@@ -118,6 +136,12 @@ def match_players(names: list[str], roster: pd.DataFrame) -> dict[str, int]:
         if len(c) == 1:
             out[n] = c[0]
     return out
+
+
+def consensus_one_sided(rows: pd.DataFrame, margin: float = ONE_SIDED_MARGIN) -> tuple[float, float, float, int]:
+    """(approximate no-vig P(yes), best price, 0.0, n_books): each book's implied probability less an assumed margin, averaged. Approximate by design."""
+    ps = [min(0.99, (1.0 / o) / (1.0 + margin)) for o in rows.over if o > 1]
+    return float(np.mean(ps)), float(best_price(dict(zip(rows.book, rows.over)))[1]), 0.0, len(ps)
 
 
 def consensus_pair(rows: pd.DataFrame, method: str = "shin") -> tuple[float, float, float, int]:

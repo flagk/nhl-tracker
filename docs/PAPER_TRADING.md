@@ -34,7 +34,7 @@ control loses about the margin on a fair market. Stakes are always pretend; noth
 
 **Bet-type variety.** To learn which kinds of bet (if any) the model is good at, there are also strategies that each bet on one specific kind, at a 2%+ edge:
 `under_edge`, `over_edge`, `puckline_dog_edge` (+1.5 side), `puckline_fav_edge` (-1.5 side), `underdog_ml` (moneyline underdogs) and, for player shots,
-`sog_over_edge` and `sog_under_edge`; player points (goals + assists) have `pts_edge`, `pts_over_edge`, `pts_under_edge` and the control `pts_over_control`. No-skill controls (flat $10) give each a baseline: `always_under`, `puckline_dog_control`, `underdog_ml_control`, `home_ml_control`.
+`sog_over_edge` and `sog_under_edge`; player points (goals + assists) have `pts_edge`, `pts_over_edge`, `pts_under_edge` and the control `pts_over_control`; assists have `ast_edge`, `ast_over_edge`, `ast_under_edge`, `ast_over_control`; anytime goalscorer has `goal_edge` and the control `goal_control`. No-skill controls (flat $10) give each a baseline: `always_under`, `puckline_dog_control`, `underdog_ml_control`, `home_ml_control`.
 They settle on the score (totals exclude the shootout goal, the puck line uses the official margin; pushes refund the stake), and have no CLV because
 closing snapshots only fetch moneylines.
 

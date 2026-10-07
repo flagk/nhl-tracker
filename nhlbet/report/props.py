@@ -9,7 +9,7 @@ import pandas as pd
 from nhlbet.data.store import Store
 from nhlbet.features.players import add_asof_features, load_player_games, team_allowance
 from nhlbet.models.props import MIN_GAMES, ShotsModel
-from nhlbet.odds.props import STATS, PropQuote, consensus_pair, latest_prop_prices, match_players, modal_line, roster_candidates
+from nhlbet.odds.props import PROP_MAX_AGE_MIN, STATS, PropQuote, consensus_one_sided, consensus_pair, latest_prop_prices, match_players, modal_line, roster_candidates
 
 log = logging.getLogger(__name__)
 HISTORY_DAYS = 1100          # about three seasons of history is plenty for shot rates and keeps the live fit fast
@@ -36,22 +36,26 @@ class PropEngine:
         allowance = team_allowance(store)
         feats = add_asof_features(pg, allowance)
         model = ShotsModel().fit(feats)
-        models = {"sog": model, "points": ShotsModel(stat="points").fit(feats)}
+        models = {"sog": model, **{st: ShotsModel(stat=st).fit(feats) for st in ("points", "assists", "goals")}}
         a = allowance.dropna(subset=["allow"]).sort_values("game_date").groupby("team").allow.last()
         lg = float(allowance.lg.dropna().iloc[-1]) if allowance.lg.notna().any() else float(a.mean())
         factors = {t: float(np.clip(v / lg, 0.7, 1.4)) for t, v in a.items()}
         return cls(store, pg, model, factors, models)
 
-    def all_quotes_for_game(self, game_id: int, date: pd.Timestamp) -> list[PropQuote]:
-        """Quotes for every individual-player market we price (shots, points), best edge first."""
-        out = [q for stat in STATS for q in self.quotes_for_game(game_id, date, stat=stat)]
+    def all_quotes_for_game(self, game_id: int, date: pd.Timestamp, now: pd.Timestamp | None = None) -> list[PropQuote]:
+        """Quotes for every individual-player market we price (shots, points, assists, anytime goals), best edge first. ``now`` drops prices that are too old."""
+        out = [q for stat in STATS for q in self.quotes_for_game(game_id, date, now=now, stat=stat)]
         return sorted(out, key=lambda q: -max(abs(q.edge_over), 0))
 
     def quotes_for_game(self, game_id: int, date: pd.Timestamp, now: pd.Timestamp | None = None, stat: str = "sog") -> list[PropQuote]:
         spec, model = STATS[stat], self.models[stat]
-        col = spec["col"]
-        prices = latest_prop_prices(self.store, game_id, spec["odds"])
+        col, one_sided = spec["col"], bool(spec.get("one_sided"))
+        prices = latest_prop_prices(self.store, game_id, spec["odds"], one_sided=one_sided)
         if prices.empty:
+            return []
+        captured = prices.attrs.get("captured_at")
+        if now is not None and captured and (pd.Timestamp(now).tz_localize("UTC") if pd.Timestamp(now).tzinfo is None else pd.Timestamp(now)) - pd.to_datetime(captured, utc=True) > pd.Timedelta(minutes=PROP_MAX_AGE_MIN):
+            log.info("player props (%s) for game %s are from %s: too old to use", stat, game_id, captured)
             return []
         roster = roster_candidates(self.store, game_id)
         names = list(prices.player.unique())
@@ -60,7 +64,7 @@ class PropEngine:
             return []
         info = roster.set_index("player_id")
         future = pd.DataFrame([{"game_id": -game_id, "game_date": pd.Timestamp(date), "player_id": pid, "name": info.loc[pid, "name"], "team": info.loc[pid, "team"],
-                                "position": info.loc[pid, "position"], "toi_sec": np.nan, "sog": np.nan, "points": np.nan, "is_home": int(info.loc[pid, "is_home"]), "opp": info.loc[pid, "opp"]}
+                                "position": info.loc[pid, "position"], "toi_sec": np.nan, "sog": np.nan, "points": np.nan, "goals": np.nan, "assists": np.nan, "is_home": int(info.loc[pid, "is_home"]), "opp": info.loc[pid, "opp"]}
                                for pid in set(ids.values())])
         hist = self.pg[self.pg.player_id.isin(future.player_id)]
         f = add_asof_features(pd.concat([hist, future], ignore_index=True))
@@ -73,12 +77,12 @@ class PropEngine:
         for nm, pid in ids.items():
             rows = prices[prices.player == nm]
             line = modal_line(rows.point)
-            if abs(line - round(line)) < 1e-9:
+            if abs(line - round(line)) < 1e-9 and not one_sided:
                 continue                                     # whole-number lines can push; props are normally .5 lines
             r = by_pid.loc[pid]
             if r.n_prev < MIN_GAMES:
                 continue
-            pm, bo, bu, nb = consensus_pair(rows[rows.point == line])
+            pm, bo, bu, nb = consensus_one_sided(rows) if one_sided else consensus_pair(rows[rows.point == line])
             lam = float(r.lam)
             po = float(model.p_over(lam, line))
             h = self.pg[self.pg.player_id == pid].sort_values("game_date")
@@ -86,9 +90,9 @@ class PropEngine:
             season = h[h.game_date >= season_start]
             out.append(PropQuote(
                 game_id=game_id, player_id=int(pid), name=str(r["name"]), team=str(r.team), opp=str(r.opp), point=float(line), lam=lam, p_over=po, p_over_market=pm,
-                over_price=bo, under_price=bu, edge_over=po - pm, ev_over=po * (bo - 1) - (1 - po), ev_under=(1 - po) * (bu - 1) - po, n_books=nb, n_prev=int(r.n_prev),
+                over_price=bo, under_price=bu, edge_over=po - pm, ev_over=po * (bo - 1) - (1 - po), ev_under=(-1.0 if one_sided else (1 - po) * (bu - 1) - po), n_books=nb, n_prev=int(r.n_prev),
                 history=[{"date": str(d.date()), "opp": o, "sog": int(s), "val": int(s)} for d, o, s in zip(last10.game_date, last10.opp, last10[col])],
                 avg_season=float(season[col].mean()) if len(season) >= 5 else None,          # a one-game 'season average' early in the year would only mislead
                 avg_l10=float(last10[col].mean()) if len(last10) else None,
-                hit_l10=float((last10[col] > line).mean()) if len(last10) else None, hit_l20=float((last20[col] > line).mean()) if len(last20) else None, stat=stat))
+                hit_l10=float((last10[col] > line).mean()) if len(last10) else None, hit_l20=float((last20[col] > line).mean()) if len(last20) else None, stat=stat, captured_at=captured, one_sided=one_sided))
         return sorted(out, key=lambda q: -max(abs(q.edge_over), 0))
