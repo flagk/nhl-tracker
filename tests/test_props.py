@@ -302,3 +302,41 @@ def test_prop_over_and_under_only_strategies():
     o = [r for r in rows if r["strategy"] == "sog_over_edge"]
     u = [r for r in rows if r["strategy"] == "sog_under_edge"]
     assert [(r["player_id"], r["side"]) for r in o] == [(1, "over")] and [(r["player_id"], r["side"]) for r in u] == [(2, "under")]
+
+
+def test_points_market_is_priced_strategies_and_settles_on_points():
+    st, plist, day = engine_store()
+    # give the synthetic players some points so the points model has something to learn
+    rng = np.random.default_rng(5)
+    sk = st.df("SELECT * FROM skater_game")
+    sk["points"] = rng.poisson(0.5, len(sk))
+    st.upsert("skater_game", sk.to_dict("records"), ["game_id", "player_id"])
+    names = {pid: nm.replace(nm.split(".")[0] + ".", {"A": "Alex", "B": "Ben", "C": "Carl", "D": "Dan"}[nm[0]]) for pid, nm, *_ in plist["EDM"][:3]}
+    ev = prop_event(day)
+    ev["bookmakers"] = []
+    outs = []
+    for full in names.values():
+        outs += [{"name": "Over", "description": full, "price": 2.2, "point": 0.5}, {"name": "Under", "description": full, "price": 1.67, "point": 0.5}]
+    ev["bookmakers"].append({"key": "bk1", "last_update": f"{day}T15:50:00Z", "markets": [{"key": "player_points", "last_update": f"{day}T15:50:00Z", "outcomes": outs}]})
+    ev["commence_time"] = f"{day}T23:00:00Z"
+    record_fetch(st, type("Fx", (), {"events": [ev], "captured_at": f"{day}T16:00:00+00:00", "remaining": 300, "used": 5, "source": "live"})())
+    eng = PropEngine.create(st, as_of=pd.Timestamp(day))
+    qs = eng.all_quotes_for_game(500, pd.Timestamp(day))
+    assert len(qs) == 3 and {q.stat for q in qs} == {"points"} and all(0 < q.p_over < 1 and q.point == 0.5 for q in qs)
+    assert eng.quotes_for_game(500, pd.Timestamp(day), stat="sog") == []                    # no shots prices in this capture
+    cfg = RiskConfig(bankroll=1000)
+    q = pq(1, "Pts", 0.60)
+    q.stat = "points"
+    rows = prop_shadow_bets([Gm(1, [q])], cfg, "r", "t", "d")
+    assert {r["strategy"] for r in rows} >= {"pts_edge", "pts_over_edge", "pts_over_control"} and not any(r["strategy"].startswith("sog_") for r in rows)
+    assert all(r["market"] == "player_points" for r in rows)
+    # settlement uses points, not shots
+    s2 = Store(":memory:")
+    s2.upsert("games", [dict(game_id=1, season=1, game_type=2, game_date="2026-10-08", start_utc="2026-10-08T23:00:00Z", home="EDM", away="VAN", home_score=3, away_score=2,
+                             status="FINAL", last_period="REG", home_win=1, source="nhl_api", updated_at=None)], ["game_id"])
+    s2.upsert("skater_game", [dict(game_id=1, team="EDM", player_id=10, name="P", position="C", toi_sec=1000, goals=1, assists=1, points=2, sog=0)], ["game_id", "player_id"])
+    r = rows[0] | {"player_id": 10, "game_id": 1, "side": "over", "point": 1.5, "stake": 10.0, "decimal": 3.0, "strategy": "pts_edge", "market": "player_points"}
+    r.pop("name", None)
+    s2.upsert("prop_bets", [r], ["run_id", "game_id", "strategy", "player_id", "side"])
+    d = shadow_resolved(s2)
+    assert d.iloc[0].won == 1 and d.iloc[0].profit == 20.0                                  # 2 points > 1.5 although 0 shots

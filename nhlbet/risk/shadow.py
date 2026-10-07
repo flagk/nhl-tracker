@@ -14,6 +14,7 @@ from dataclasses import dataclass, replace
 from typing import Sequence
 
 from nhlbet.odds.edge import SideQuote
+from nhlbet.odds.props import STATS
 from nhlbet.risk.policy import RiskConfig, game_block_reason, recommend_slate
 from nhlbet.risk.shrink import shrink_to_market
 
@@ -185,6 +186,10 @@ PROP_STRATEGIES: tuple[Strategy, ...] = (
     Strategy("sog_edge", f"Player shots: $5-$30 on the over/under the model likes (3%+ edge, 10+ games of history), best {PROP_MAX_PER_DAY} of the day (experimental market)", "prop_edge"),
     Strategy("sog_over_edge", f"Player shots, OVERS only: $5-$30 when the model sees a 2%+ edge on the over (10+ games of history), best {PROP_MAX_PER_DAY} of the day", "prop_edge_over"),
     Strategy("sog_under_edge", f"Player shots, UNDERS only: $5-$30 when the model sees a 2%+ edge on the under (10+ games of history), best {PROP_MAX_PER_DAY} of the day", "prop_edge_under"),
+    Strategy("pts_edge", f"Player POINTS (goals + assists): $5-$30 on the over/under the model likes (3%+ edge, 10+ games of history), best {PROP_MAX_PER_DAY} of the day (experimental market)", "prop_edge", (("stat", "points"),)),
+    Strategy("pts_over_edge", f"Player POINTS, OVERS only: $5-$30 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_over", (("stat", "points"),)),
+    Strategy("pts_under_edge", f"Player POINTS, UNDERS only: $5-$30 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_under", (("stat", "points"),)),
+    Strategy("pts_over_control", f"CONTROL: flat $10 on the Over for {PROP_MAX_PER_DAY} players priced for points, highest line first (no model; shows what prop vig costs)", "prop_control", (("stat", "points"),)),
     Strategy("sog_over_control", f"CONTROL: flat $10 on the Over for the {PROP_MAX_PER_DAY} players with the highest shots lines (no model; shows what prop vig costs)", "prop_control"),
 )
 
@@ -194,15 +199,17 @@ def _prop_row(run_id, run_at, date, game_id, strategy, q, side: str, stake: floa
     p_side = q.p_over if over else 1 - q.p_over
     m_side = q.p_over_market if over else 1 - q.p_over_market
     return {"run_id": run_id, "run_at": run_at, "game_id": game_id, "strategy": strategy, "game_date": date, "player_id": q.player_id, "name": q.name, "side": side,
-            "label": f"{q.name} {'Over' if over else 'Under'} {q.point:g}", "point": q.point, "book": None, "decimal": q.over_price if over else q.under_price, "stake": stake,
+            "label": f"{q.name} {'Over' if over else 'Under'} {q.point:g}", "market": STATS[q.stat]["store"], "point": q.point, "book": None, "decimal": q.over_price if over else q.under_price, "stake": stake,
             "p_model": p_side, "p_market": m_side, "edge": p_side - m_side, "ev": q.ev_over if over else q.ev_under, "lam": q.lam}
 
 
 def prop_shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date: str, strategies: Sequence[Strategy] = PROP_STRATEGIES) -> list[dict]:
     """Paper bets on player shots across the whole slate (capped per day). ``games``: objects with ``game_id``, ``props`` (PropQuote list) and ``ctx``."""
-    cands = [(g, q) for g in games if _alt_usable(g, cfg) for q in (getattr(g, "props", None) or [])]
+    all_cands = [(g, q) for g in games if _alt_usable(g, cfg) for q in (getattr(g, "props", None) or [])]
     rows: list[dict] = []
     for st in strategies:
+        stat = dict(st.overrides).get("stat", "sog")
+        cands = [(g, q) for g, q in all_cands if q.stat == stat]
         if st.kind == "prop_edge":
             scored = [(q.edge(q.best_side), g, q) for g, q in cands if q.n_prev >= PROP_MIN_GAMES]
             picks = sorted([x for x in scored if x[0] >= cfg.min_edge], key=lambda x: -x[0])[:PROP_MAX_PER_DAY]

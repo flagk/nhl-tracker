@@ -14,6 +14,10 @@ from nhlbet.odds.math import best_price, devig
 
 SOG_MARKET = "player_shots_on_goal"
 STORE_MARKET = "player_sog"
+# every individual-player stat we price: odds-API market, name stored with paper bets, skater_game column, wording for the UI
+STATS = {"sog": {"odds": SOG_MARKET, "store": "player_sog", "col": "sog", "noun": "shots"},
+         "points": {"odds": "player_points", "store": "player_points", "col": "points", "noun": "points"}}
+STORE_TO_STAT = {v["store"]: k for k, v in STATS.items()}
 
 
 @dataclass
@@ -39,6 +43,7 @@ class PropQuote:
     avg_l10: float | None = None
     hit_l10: float | None = None                    # share of the last 10 games over this line
     hit_l20: float | None = None
+    stat: str = "sog"                                # 'sog' (shots on goal) or 'points'
 
     @property
     def take(self) -> str | None:

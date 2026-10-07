@@ -85,7 +85,7 @@ def all_shadow_rows(store: Store) -> pd.DataFrame:
         r["player_id"] = np.nan
     p = store.df("SELECT * FROM prop_bets")
     if len(p):
-        p = p.assign(action="BET", team=p.label, p_adj=p.p_model, market="player_sog")
+        p = p.assign(action="BET", team=p.label, p_adj=p.p_model, market=p["market"].fillna("player_sog") if "market" in p else "player_sog")
         r = pd.concat([r, p[[c for c in p.columns if c in set(r.columns) | {"player_id"}]]], ignore_index=True)
     return r
 
@@ -100,7 +100,7 @@ def alt_value(market, side, point, home_score, away_score, last_period, sog=None
     if sog is not None:                                   # player shots: over wins when shots exceed the line; a player who did not dress voids the bet (value 0)
         sg = np.asarray(sog, float)
         shots = np.where(side == "over", sg - point, point - sg)
-        val = np.where(market == "player_sog", np.where(np.isnan(sg), 0.0, shots), val)
+        val = np.where(np.char.startswith(market.astype(str), "player_"), np.where(np.isnan(sg), 0.0, shots), val)
     return val
 
 
@@ -120,11 +120,13 @@ def shadow_resolved(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFr
     if d.empty:
         return d
     sog = np.full(len(d), np.nan)
-    if (d.get("market") == "player_sog").any():
-        sk = store.df("SELECT game_id, player_id, sog FROM skater_game WHERE sog IS NOT NULL")
+    is_prop = d["market"].astype(str).str.startswith("player_") if "market" in d else pd.Series(False, index=d.index)
+    if is_prop.any():
+        sk = store.df("SELECT game_id, player_id, sog, points FROM skater_game WHERE sog IS NOT NULL")
         have = set(sk.game_id)                                # games whose shot data is loaded: a prop can only settle once its game has it
-        d = d[(d.market != "player_sog") | d.game_id.isin(have)].reset_index(drop=True)
-        sog = d[["game_id", "player_id"]].merge(sk, on=["game_id", "player_id"], how="left").sog.to_numpy(float)   # missing = did not dress -> void
+        d = d[~is_prop | d.game_id.isin(have)].reset_index(drop=True)
+        m = d[["game_id", "player_id"]].merge(sk, on=["game_id", "player_id"], how="left")      # missing = did not dress -> void
+        sog = np.where(d["market"].astype(str).eq("player_points"), m.points.to_numpy(float), m.sog.to_numpy(float))
     cons = consensus_snapshots(store) if cons is None else cons
     mk = d["market"].fillna("h2h") if "market" in d else pd.Series("h2h", index=d.index)
     ml = (mk == "h2h").to_numpy()
