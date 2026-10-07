@@ -66,6 +66,28 @@ def tick(now: datetime, last: dict, root: str = ".", run=sh, decide=decide_files
     return fired
 
 
+STUCK_AFTER_S = 20 * 60          # a Pages deploy normally takes ~1 minute
+
+
+def unstick_pages(now: datetime, run=sh) -> list[str]:
+    """Cancel Pages deploys stuck waiting/queued/pending for 20+ minutes (one such run blocked every later deploy for a day), then start a fresh one."""
+    cancelled = []
+    for status in ("waiting", "queued", "pending", "in_progress"):
+        out = run(["gh", "api", f"repos/{os.environ.get('GITHUB_REPOSITORY', 'flagk/nhl-tracker')}/actions/workflows/pages.yml/runs?status={status}&per_page=20"])
+        try:
+            runs = json.loads(out or "{}").get("workflow_runs", [])
+        except ValueError:
+            continue
+        for r in runs:
+            age = now.timestamp() - datetime.fromisoformat(r["created_at"].replace("Z", "+00:00")).timestamp()
+            if age > STUCK_AFTER_S:
+                run(["gh", "api", "-X", "POST", f"repos/{os.environ.get('GITHUB_REPOSITORY', 'flagk/nhl-tracker')}/actions/runs/{r['id']}/cancel"])
+                cancelled.append(str(r["id"]))
+    if cancelled:
+        dispatch("pages.yml", {}, run)
+    return cancelled
+
+
 def refresh(run=sh) -> None:
     run(["git", "fetch", "--depth=1", "-q", "origin", "main"])
     run(["git", "reset", "--hard", "-q", "origin/main"])
@@ -81,6 +103,9 @@ def main() -> None:
         refresh()
         now = datetime.now(timezone.utc)
         fired = tick(now, last)
+        stuck = unstick_pages(now)
+        if stuck:
+            fired.append("cancelled stuck Pages deploy " + ",".join(stuck))
         print(f"{now:%H:%M:%S}Z heartbeat: " + (", ".join(fired) if fired else "nothing due"), flush=True)
         time.sleep(a.interval)
     ran = (time.time() - start) / 60
