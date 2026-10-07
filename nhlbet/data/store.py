@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS shadow_bets (
 -- player-prop bets (several per game, hence their own table): fake money, settled from skater_game.sog like every other paper bet
 CREATE TABLE IF NOT EXISTS prop_bets (
     run_id TEXT NOT NULL, run_at TEXT NOT NULL, game_id INTEGER NOT NULL, strategy TEXT NOT NULL, game_date TEXT, player_id INTEGER NOT NULL, name TEXT,
-    side TEXT NOT NULL, label TEXT, point REAL, book TEXT, decimal REAL, stake REAL, p_model REAL, p_market REAL, edge REAL, ev REAL, lam REAL,
+    side TEXT NOT NULL, label TEXT, point REAL, book TEXT, decimal REAL, stake REAL, p_model REAL, p_market REAL, edge REAL, ev REAL, lam REAL, market TEXT,
     PRIMARY KEY (run_id, game_id, strategy, player_id, side)
 );
 -- every run's model-vs-market view of totals and puck lines for EVERY game with odds (bets and passes): for calibration and paper trading
@@ -111,7 +111,7 @@ class Store:
         self._migrate()
 
     # columns added after first release: CREATE TABLE IF NOT EXISTS leaves an existing (cached) database unchanged, so add them here
-    MIGRATIONS = {"shadow_bets": {"market": "TEXT", "point": "REAL", "label": "TEXT"}, "skater_game": {"sog": "INTEGER"}, "alt_quotes": {"player_id": "INTEGER"}}
+    MIGRATIONS = {"shadow_bets": {"market": "TEXT", "point": "REAL", "label": "TEXT"}, "skater_game": {"sog": "INTEGER"}, "alt_quotes": {"player_id": "INTEGER"}, "prop_bets": {"market": "TEXT"}}
 
     def _migrate(self) -> None:
         for table, cols in self.MIGRATIONS.items():

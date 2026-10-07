@@ -18,13 +18,15 @@ LAM_BOUNDS = (0.15, 8.0)
 
 
 class ShotsModel:
-    def __init__(self, alpha: float = 1e-3) -> None:
-        self.alpha = alpha
+    """Despite the name it models any per-game skater count with the same recipe: ``stat`` is 'sog' (shots, the default) or 'points'."""
+
+    def __init__(self, alpha: float = 1e-3, stat: str = "sog") -> None:
+        self.alpha, self.stat = alpha, stat
 
     def _prep(self, d: pd.DataFrame) -> np.ndarray:
         pos_mean = d.pos.map(self.pos_mean_).fillna(self.pos_mean_["F"]).to_numpy(float)
         n = np.clip(d.n_prev.fillna(0).to_numpy(float), 0, 40)
-        own = d.ewm_sog.fillna(pd.Series(pos_mean, index=d.index)).to_numpy(float)
+        own = d[f"ewm_{self.stat}"].fillna(pd.Series(pos_mean, index=d.index)).to_numpy(float)
         rate = (n * own + SHRINK_K * pos_mean) / (n + SHRINK_K)
         toi_ref = d.pos.map(self.toi_ref_).fillna(self.toi_ref_["F"]).to_numpy(float)
         toi_ratio = (d.toi_l10.fillna(pd.Series(toi_ref, index=d.index)).to_numpy(float) / toi_ref).clip(0.4, 1.8)
@@ -32,12 +34,13 @@ class ShotsModel:
                                 np.log(toi_ratio), np.minimum(d.rest_days.fillna(3).to_numpy(float), 5.0)])
 
     def fit(self, d: pd.DataFrame) -> "ShotsModel":
-        d = d[(d.n_prev >= 3) & d.sog.notna()]
-        self.pos_mean_ = d.groupby("pos").sog.mean().to_dict() or {"F": 1.9, "D": 1.4}
-        self.pos_mean_.setdefault("F", float(d.sog.mean())); self.pos_mean_.setdefault("D", float(d.sog.mean()))
+        y_all = self.stat
+        d = d[(d.n_prev >= 3) & d[y_all].notna()]
+        self.pos_mean_ = d.groupby("pos")[y_all].mean().to_dict() or {"F": 1.9, "D": 1.4}
+        self.pos_mean_.setdefault("F", float(d[y_all].mean())); self.pos_mean_.setdefault("D", float(d[y_all].mean()))
         self.toi_ref_ = (d.groupby("pos").toi_sec.mean().to_dict() or {"F": 1000.0, "D": 1300.0})
         self.toi_ref_.setdefault("F", 1000.0); self.toi_ref_.setdefault("D", 1300.0)
-        X, y = self._prep(d), d.sog.to_numpy(float)
+        X, y = self._prep(d), d[y_all].to_numpy(float)
         self.reg_ = PoissonRegressor(alpha=self.alpha, max_iter=500).fit(X, y)
         mu = self.lam(d)
         ll = {k: float(np.sum(np.log(np.maximum(_pmf(y.astype(int), mu, k), 1e-12)))) for k in DISPERSIONS}

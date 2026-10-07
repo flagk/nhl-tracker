@@ -251,23 +251,25 @@
 
   /* ---------- player props (shots on goal over/under) ---------- */
   var showAllProps = false;
+  function noun(q) { return q.stat === "points" ? "points" : "shots"; }
+  function hv(x) { return x.val !== undefined ? x.val : x.sog; }
   function historyStrip(q) {
     var h = q.history || [];
     if (!h.length) return null;
-    var mx = Math.max(q.point + 1, Math.max.apply(null, h.map(function (x) { return x.sog; })));
+    var mx = Math.max(q.point + 1, Math.max.apply(null, h.map(hv)));
     var bars = h.map(function (x) {
-      return el("div", { class: "hbar " + (x.sog > q.point ? "over" : "under"), title: x.date + " vs " + x.opp + ": " + x.sog + " shots", style: "height:" + Math.max(6, x.sog / mx * 100).toFixed(0) + "%" }, [el("span", { text: String(x.sog) })]);
+      return el("div", { class: "hbar " + (hv(x) > q.point ? "over" : "under"), title: x.date + " vs " + x.opp + ": " + hv(x) + " " + noun(q), style: "height:" + Math.max(6, hv(x) / mx * 100).toFixed(0) + "%" }, [el("span", { text: String(hv(x)) })]);
     });
     var line = el("div", { class: "hline", style: "bottom:" + (q.point / mx * 100).toFixed(0) + "%" }, [el("span", { text: String(q.point) })]);
-    return el("div", { class: "hist", role: "img", "aria-label": "Shots in the last " + h.length + " games: " + h.map(function (x) { return x.sog; }).join(", ") + ". Line " + q.point }, [line].concat(bars));
+    return el("div", { class: "hist", role: "img", "aria-label": noun(q) + " in the last " + h.length + " games: " + h.map(hv).join(", ") + ". Line " + q.point }, [line].concat(bars));
   }
   function propCard(g, q) {
     var side = q.take || q.best_side, over = side === "over";
     var pSide = over ? q.p_over : 1 - q.p_over, mSide = over ? q.p_over_market : 1 - q.p_over_market, ev = over ? q.ev_over : q.ev_under, dec = over ? q.over_price : q.under_price;
     var head = el("div", { class: "pick-top" }, [
-      el("div", {}, [el("div", { class: "pick-team", text: q.name }), el("div", { class: "pick-sub", text: q.team + " vs " + q.opp + " · shots on goal, line " + q.point })]),
+      el("div", {}, [el("div", { class: "pick-team", text: q.name }), el("div", { class: "pick-sub", text: q.team + " vs " + q.opp + " · " + (q.stat === "points" ? "points (goals + assists)" : "shots on goal") + ", line " + q.point })]),
       el("span", { class: "pill " + (q.take ? "lean" : "mute"), text: q.take ? "Take " + (over ? "Over " : "Under ") + q.point : "No edge" })]);
-    var kv = el("div", { class: "kv" }, [kvItem("Model expects", q.lam.toFixed(2) + " shots"), kvItem((over ? "Over " : "Under ") + "price", price(dec)), kvItem("EV per $1", spct(ev), ev >= 0 ? "good" : "bad"),
+    var kv = el("div", { class: "kv" }, [kvItem("Model expects", q.lam.toFixed(2) + " " + noun(q)), kvItem((over ? "Over " : "Under ") + "price", price(dec)), kvItem("EV per $1", spct(ev), ev >= 0 ? "good" : "bad"),
       kvItem("Edge", spct(pSide - mSide), pSide >= mSide ? "good" : "bad")]);
     var hist = historyStrip(q);
     var facts = [];
@@ -279,15 +281,15 @@
     function show(d) { out.textContent = d ? "At " + price(d) + " in your app: expected value " + spct(C.evAt(pSide, 0, d)) + " per $1" + (C.evAt(pSide, 0, d) > 0 ? "." : ". Not worth it at this price.") : ""; }
     var mine = priceBox(g.game_id + ":prop:" + q.player_id, show); mine.box.appendChild(out); show(mine.current());
     var kids = [head, probBar(pSide, mSide, (over ? "Over " : "Under ") + q.point), kv];
-    if (hist) kids.push(el("div", { class: "stack", style: "gap:.2rem" }, [el("div", { class: "note", text: "Shots in his last " + q.history.length + " games (bars above the line are overs)" }), hist]));
-    kids.push(el("p", { class: "why", text: facts.join(" · ") + (facts.length ? ". " : "") + "Model blends his recent shot rate (shrunk toward his position's average), tonight's opponent, home ice, ice time and rest. " + q.n_books + " book(s) quoted this line." }));
+    if (hist) kids.push(el("div", { class: "stack", style: "gap:.2rem" }, [el("div", { class: "note", text: noun(q).charAt(0).toUpperCase() + noun(q).slice(1) + " in his last " + q.history.length + " games (bars above the line are overs)" }), hist]));
+    kids.push(el("p", { class: "why", text: facts.join(" · ") + (facts.length ? ". " : "") + "Model blends his recent " + (q.stat === "points" ? "scoring" : "shot") + " rate (shrunk toward his position's average), tonight's opponent, home ice, ice time and rest. " + q.n_books + " book(s) quoted this line." }));
     kids.push(mine.box);
     return el("article", { class: "card pick" }, kids);
   }
   function playerProps() {
     var items = [];
     D.games.forEach(function (g) { (g.props || []).forEach(function (q) { items.push({ g: g, q: q }); }); });
-    var kids = [el("p", { class: "lead", text: "Shots-on-goal over/under lines, priced by a separate model built from each player's own shot history, the opponent's shots allowed, home ice, ice time and rest. Experimental and paper-traded only: it has no track record against the market, so treat \"Take\" as a lean to check against your own app, not a recommendation. Only a few games a day are priced (each game costs an odds-API credit)." })];
+    var kids = [el("p", { class: "lead", text: "Player shots-on-goal and points over/under lines, priced by separate models built from each player's own history, the opponent's shots allowed, home ice, ice time and rest. Experimental and paper-traded only: it has no track record against the market, so treat \"Take\" as a lean to check against your own app, not a recommendation. Only a few games a day are priced (each game costs an odds-API credit)." })];
     var pe = D.odds && D.odds.props && D.odds.props.error;
     if (pe) kids.push(el("div", { class: "banner bad", text: "Player-prop prices could not be fetched on the last run (" + pe + "). Your odds plan may not include player props." }));
     if (!items.length) return section("sec-props", "Player props", "experimental", kids.concat([el("div", { class: "card muted", text: "No player-prop prices yet today. They are fetched for the first few games to start, in the late run." })]));
@@ -295,7 +297,7 @@
     var shown = showAllProps ? items : items.slice(0, 12);
     kids.push(el("div", { class: "picks" }, shown.map(function (x) { return propCard(x.g, x.q); })));
     if (items.length > 12) kids.push(el("div", {}, [el("button", { type: "button", class: "btn-ghost", text: showAllProps ? "Show the top 12 only" : "Show all " + items.length + " players", onclick: function () { showAllProps = !showAllProps; render(); } })]));
-    return section("sec-props", "Player props", "shots on goal · experimental", kids);
+    return section("sec-props", "Player props", "shots & points · experimental", kids);
   }
 
   var showAllOther = false;

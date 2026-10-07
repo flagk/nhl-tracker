@@ -59,20 +59,21 @@ def refresh_data(store: Store, days_back: int = 7, days_ahead: int = 2) -> str |
 
 DEFAULT_MARKETS = ("h2h", "spreads", "totals")      # 3 credits per fetch
 MORNING_MARKETS = ("h2h",)                          # the morning run only needs moneylines: spreads, totals and props are priced closer to game time (late run)
-PROPS_MAX_GAMES = 3                                 # props cost 1 credit per game; 3 a day keeps the whole plan near ~12 credits/day (~360 of the 500 free monthly credits)
+PROPS_MAX_GAMES = 3                                 # props cost 1 credit per market (shots, points) per game: 3 games a day is ~6 credits/day on top of ~12 for game odds
 
 
 def fetch_player_props(store: Store, client: OddsClient, events: list[dict], max_games: int, now: datetime | None = None, regions: str = "us") -> dict:
-    """Shots-on-goal prop prices for the next few games to start (one credit per game). Never raises: a plan without prop access just reports why."""
-    from nhlbet.odds.props import SOG_MARKET
+    """Player-prop prices (shots, points) for the next few games to start (one credit per market per game). Never raises: a plan without prop access just reports why."""
+    from nhlbet.odds.props import STATS
+    markets = tuple(m.strip() for m in os.environ.get("ODDS_PROP_MARKETS", ",".join(v["odds"] for v in STATS.values())).split(",") if m.strip())
     now = now or datetime.now(timezone.utc)
     upcoming = sorted((e for e in events if e.get("commence_time") and datetime.fromisoformat(e["commence_time"].replace("Z", "+00:00")) > now
                        and datetime.fromisoformat(e["commence_time"].replace("Z", "+00:00")) < now + timedelta(hours=6)), key=lambda e: e["commence_time"])[:max_games]
     got = 0
     for e in upcoming:
         try:
-            f = client.fetch_event_odds(e["id"], (SOG_MARKET,), regions)
-            record_fetch(store, f, SOG_MARKET)
+            f = client.fetch_event_odds(e["id"], markets, regions)
+            record_fetch(store, f, ",".join(markets))
             got += 1
         except (OddsAPIError, OddsConfigError) as err:
             log.warning("player props unavailable: %s", err)

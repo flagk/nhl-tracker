@@ -18,7 +18,7 @@ ALLOW_WINDOW = 10     # games, opponent shots-allowed window
 def load_player_games(store: Store) -> pd.DataFrame:
     """One row per dressed skater per completed regular-season game: shots on goal, ice time, venue and opponent."""
     df = store.df("""
-        SELECT s.game_id, g.game_date, s.player_id, s.name, s.team, s.position, s.toi_sec, s.sog,
+        SELECT s.game_id, g.game_date, s.player_id, s.name, s.team, s.position, s.toi_sec, s.sog, s.points,
                CASE WHEN s.team = g.home THEN 1 ELSE 0 END AS is_home,
                CASE WHEN s.team = g.home THEN g.away ELSE g.home END AS opp
         FROM skater_game s JOIN games g ON g.game_id = s.game_id
@@ -52,6 +52,8 @@ def add_asof_features(pg: pd.DataFrame, allowance: pd.DataFrame | None = None) -
     pg["mean_sog"] = prev.groupby(pg.player_id).expanding().mean().reset_index(level=0, drop=True)
     pg["ewm_sog"] = g.sog.transform(lambda s: s.ewm(halflife=HALFLIFE, adjust=True, ignore_na=True).mean().shift(1))
     pg["l10_sog"] = g.sog.transform(lambda s: s.shift(1).rolling(10, min_periods=1).mean())
+    if "points" in pg:                                    # same recipe for points (goals + assists), used by the points prop model
+        pg["ewm_points"] = g.points.transform(lambda s: s.ewm(halflife=HALFLIFE, adjust=True, ignore_na=True).mean().shift(1))
     pg["toi_l10"] = g.toi_sec.transform(lambda s: s.shift(1).rolling(10, min_periods=1).mean())
     pg["rest_days"] = g.game_date.diff().dt.days.clip(1, 10)
     pg["pos"] = np.where(pg.position == "D", "D", "F")

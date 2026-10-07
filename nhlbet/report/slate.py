@@ -13,6 +13,7 @@ from nhlbet.data.loaders import load_tables
 from nhlbet.data.store import Store
 from nhlbet.features.builder import BuilderConfig, FeatureBuilder
 from nhlbet.models.bundle import ModelBundle
+from nhlbet.odds.props import STATS
 from nhlbet.report.props import PropEngine
 from nhlbet.report.stats import game_stats
 from nhlbet.odds.consensus import latest_book_prices
@@ -122,7 +123,7 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
         inputs.append((int(g.game_id), g.home, g.away, quotes, ctx))
         meta[int(g.game_id)] = dict(start=g.start_utc, hg=hg, ag=ag, status=status, p=p_home, p_raw=p_raw, quotes=quotes, cap=cap, stale=stale,
                                     notes=context_notes(row, g.home, g.away), ctx=ctx, books=books, alt=alt, goals=goals, stats=game_stats(row), drivers=drivers_by_game.get(g.game_id, []),
-                                    props=engine.quotes_for_game(int(g.game_id), pd.Timestamp(date)) if engine is not None else [])
+                                    props=engine.all_quotes_for_game(int(g.game_id), pd.Timestamp(date)) if engine is not None else [])
     recs = recommend_slate(inputs, cfg)
     slate = []
     for rec in recs:
@@ -151,7 +152,7 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
             for q in s_.props:
                 for side in ("over", "under"):
                     over = side == "over"
-                    prop_rows.append({"run_id": run_id, "run_at": now.isoformat(timespec="seconds"), "game_id": s_.game_id, "game_date": date, "market": "player_sog", "side": f"{side}:{q.player_id}",
+                    prop_rows.append({"run_id": run_id, "run_at": now.isoformat(timespec="seconds"), "game_id": s_.game_id, "game_date": date, "market": STATS[q.stat]["store"], "side": f"{side}:{q.player_id}",
                                       "label": f"{q.name} {'Over' if over else 'Under'} {q.point:g}", "point": q.point, "p_model": q.p_over if over else 1 - q.p_over,
                                       "p_market": q.p_over_market if over else 1 - q.p_over_market, "p_push": 0.0, "book": None, "decimal": q.over_price if over else q.under_price,
                                       "edge": q.edge(side), "ev": q.ev_over if over else q.ev_under, "n_books": q.n_books, "lam_home": None, "lam_away": None, "exp_total": q.lam,
