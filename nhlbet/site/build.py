@@ -61,7 +61,7 @@ def game_payload(s: SlateGame, cfg: RiskConfig, public_safe: bool = False) -> di
                      "n_books": q.n_books} for q in (getattr(s, "alt", None) or [])], "goals": getattr(s, "goals", None) or None,
             "props": [{"player_id": q.player_id, "name": q.name, "team": q.team, "opp": q.opp, "point": q.point, "lam": q.lam, "p_over": q.p_over, "p_over_market": q.p_over_market,
                        "over_price": q.over_price, "under_price": q.under_price, "ev_over": q.ev_over, "ev_under": q.ev_under, "edge_over": q.edge_over, "take": q.take, "best_side": q.best_side,
-                       "n_books": q.n_books, "n_prev": q.n_prev, "history": q.history, "avg_season": q.avg_season, "avg_l10": q.avg_l10, "hit_l10": q.hit_l10, "hit_l20": q.hit_l20, "stat": getattr(q, "stat", "sog")}
+                       "n_books": q.n_books, "n_prev": q.n_prev, "history": q.history, "avg_season": q.avg_season, "avg_l10": q.avg_l10, "hit_l10": q.hit_l10, "hit_l20": q.hit_l20, "stat": getattr(q, "stat", "sog"), "one_sided": getattr(q, "one_sided", False), "captured_at": getattr(q, "captured_at", None)}
                       for q in sorted((getattr(s, "props", None) or []), key=lambda x: -max(x.ev_over, x.ev_under))[:15]],
             "stats": getattr(s, "stats", None) or [],
             "drivers": [{"feature": d["feature"], "label": feature_label(d["feature"]), "value": d["value"], "raw": d.get("raw")} for d in (getattr(s, "drivers", None) or [])],

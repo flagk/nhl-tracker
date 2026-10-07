@@ -117,7 +117,7 @@ def alt_market_predictions(store: Store) -> pd.DataFrame:
 
 
 PROP_COLS = ["game_id", "game_date", "away", "home", "player_id", "player", "stat", "side", "line", "p_model", "p_market", "edge", "ev", "price", "expected_shots", "actual_shots", "outcome"]
-# note: for the 'points' stat the columns expected_shots / actual_shots hold expected / actual POINTS (names kept so existing reports do not break)
+# note: for stats other than 'sog' the columns expected_shots / actual_shots hold the expected / actual count of that stat (points, goals, assists) (names kept so existing reports do not break)
 
 
 def prop_predictions(store: Store) -> pd.DataFrame:
@@ -127,16 +127,16 @@ def prop_predictions(store: Store) -> pd.DataFrame:
         return pd.DataFrame(columns=PROP_COLS)
     q = q.sort_values("run_at").groupby(["game_id", "market", "side"], as_index=False).tail(1)
     g = store.df("SELECT game_id, home, away, home_win FROM games")
-    sk = store.df("SELECT game_id, player_id, sog, points FROM skater_game WHERE sog IS NOT NULL")
+    sk = store.df("SELECT game_id, player_id, sog, points, goals, assists FROM skater_game WHERE sog IS NOT NULL")
     d = q.merge(g, on="game_id", how="left").merge(sk, on=["game_id", "player_id"], how="left")
-    d["stat"] = np.where(d.market == "player_points", "points", "sog")
-    d["sog"] = np.where(d.stat == "points", d.points, d.sog)
+    d["stat"] = d.market.map({"player_points": "points", "player_goals": "goals", "player_assists": "assists"}).fillna("sog")
+    d["sog"] = np.select([d.stat == "points", d.stat == "goals", d.stat == "assists"], [d.points, d.goals, d.assists], d.sog)
     have = set(sk.game_id)
     over = d.side.str.startswith("over")
     settled = d.home_win.notna() & d.game_id.isin(have)
     win = np.where(over, d.sog > d.point, d.sog < d.point)
     d["outcome"] = np.where(~settled, None, np.where(d.sog.isna(), "void", np.where(win, "won", "lost")))
-    d["player"] = d.label.str.replace(r" (Over|Under) [0-9.]+$", "", regex=True)
+    d["player"] = d.label.str.replace(r" (Over|Under) [0-9.]+$| to score \(anytime\)$", "", regex=True)
     d["side"] = np.where(over, "over", "under")
     d = d.rename(columns={"point": "line", "decimal": "price", "exp_total": "expected_shots", "sog": "actual_shots"})
     return d[PROP_COLS].sort_values(["game_date", "game_id", "player_id", "side"]).reset_index(drop=True)

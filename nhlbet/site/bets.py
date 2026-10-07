@@ -18,7 +18,7 @@ from nhlbet.site.build import HERE, _clean
 MAX_BETS = 4000          # keep the page small: the most recent paper bets only
 
 
-TYPE_NAMES = {"h2h": "Moneyline", "totals": "Total", "spreads": "Puck line", "player_sog": "Player shots", "player_points": "Player points"}
+TYPE_NAMES = {"h2h": "Moneyline", "totals": "Total", "spreads": "Puck line", "player_sog": "Player shots", "player_points": "Player points", "player_assists": "Player assists", "player_goals": "Anytime goalscorer"}
 
 
 def paper_bets(store: Store, limit: int = MAX_BETS) -> pd.DataFrame:

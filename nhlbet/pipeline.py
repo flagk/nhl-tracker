@@ -59,26 +59,51 @@ def refresh_data(store: Store, days_back: int = 7, days_ahead: int = 2) -> str |
 
 DEFAULT_MARKETS = ("h2h", "spreads", "totals")      # 3 credits per fetch
 MORNING_MARKETS = ("h2h",)                          # the morning run only needs moneylines: spreads, totals and props are priced closer to game time (late run)
-PROPS_MAX_GAMES = 3                                 # props cost 1 credit per market (shots, points) per game: 3 games a day is ~6 credits/day on top of ~12 for game odds
+PROPS_MAX_GAMES = 3                                 # props cost 1 credit per market (shots, points, assists, anytime goals) per game: 3 games a day is ~12 credits/day on top of ~12 for game odds
 
 
-def fetch_player_props(store: Store, client: OddsClient, events: list[dict], max_games: int, now: datetime | None = None, regions: str = "us") -> dict:
-    """Player-prop prices (shots, points) for the next few games to start (one credit per market per game). Never raises: a plan without prop access just reports why."""
+EXTRA_PROPS_MIN_CREDITS = 250       # assists / anytime-goalscorer prices are only fetched while at least this many odds credits remain
+PROPS_MIN_CREDITS = 100             # below this no player prices are fetched at all: game moneylines come first
+
+
+def fetch_player_props(store: Store, client: OddsClient, events: list[dict], max_games: int, now: datetime | None = None, regions: str = "us",
+                       remaining: int | None = None) -> dict:
+    """Player-prop prices (shots, points, assists, anytime goalscorer) for the next few games to start (one credit per market per game).
+
+    One request per market, so a market the plan lacks fails alone. Only live captures are stored: a stale cached answer would put old lines on the
+    site. Never raises: a plan without prop access just reports why.
+    """
     from nhlbet.odds.props import STATS
-    markets = tuple(m.strip() for m in os.environ.get("ODDS_PROP_MARKETS", ",".join(v["odds"] for v in STATS.values())).split(",") if m.strip())
     now = now or datetime.now(timezone.utc)
+    env = os.environ.get("ODDS_PROP_MARKETS")
+    markets = [m.strip() for m in env.split(",") if m.strip()] if env else [v["odds"] for k, v in STATS.items() if not v.get("extra") or remaining is None or remaining >= EXTRA_PROPS_MIN_CREDITS]
+    if remaining is not None and remaining < PROPS_MIN_CREDITS:
+        return {"games": 0, "error": f"only {remaining} odds credits left: player prices skipped to protect moneylines"}
     upcoming = sorted((e for e in events if e.get("commence_time") and datetime.fromisoformat(e["commence_time"].replace("Z", "+00:00")) > now
                        and datetime.fromisoformat(e["commence_time"].replace("Z", "+00:00")) < now + timedelta(hours=6)), key=lambda e: e["commence_time"])[:max_games]
-    got = 0
+    got, errors, ok_markets = 0, [], set()
     for e in upcoming:
-        try:
-            f = client.fetch_event_odds(e["id"], markets, regions)
-            record_fetch(store, f, ",".join(markets))
-            got += 1
-        except (OddsAPIError, OddsConfigError) as err:
-            log.warning("player props unavailable: %s", err)
-            return {"games": got, "error": str(err)}
-    return {"games": got}
+        game_ok = False
+        for m in markets:
+            try:
+                f = client.fetch_event_odds(e["id"], (m,), regions)
+            except (OddsAPIError, OddsConfigError) as err:
+                log.warning("player props (%s) unavailable: %s", m, err)
+                errors.append(f"{m}: {err}")
+                continue
+            if f.stale:
+                errors.append(f"{m}: only an old cached answer was available, not used")
+                continue
+            record_fetch(store, f, m)
+            ok_markets.add(m)
+            game_ok = True
+        got += int(game_ok)
+    out = {"games": got, "markets": sorted(ok_markets)}
+    if errors and not got:
+        out["error"] = errors[0]
+    elif errors:
+        out["warnings"] = errors[:4]
+    return out
 
 
 def fetch_and_store_odds(store: Store, markets: tuple[str, ...] | None = None, regions: str = "us", run_type: str = "late") -> dict:
@@ -93,7 +118,7 @@ def fetch_and_store_odds(store: Store, markets: tuple[str, ...] | None = None, r
         meta = {"enabled": True, "captured_at": f.captured_at, "stale": f.stale, "remaining": f.remaining, "source": f.source}
         max_props = int(os.environ.get("ODDS_PROPS_MAX_GAMES", PROPS_MAX_GAMES if run_type != "morning" else 0))
         if max_props > 0 and not f.stale:
-            meta["props"] = fetch_player_props(store, client, f.events, max_props, regions=regions)
+            meta["props"] = fetch_player_props(store, client, f.events, max_props, regions=regions, remaining=f.remaining)
         return meta
     except (OddsAPIError, OddsConfigError) as e:
         log.error("odds fetch failed: %s", e)

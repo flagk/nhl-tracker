@@ -169,14 +169,14 @@ def _player_props(slate: list[SlateGame]) -> list[str]:
     rows = [(s, q) for s in slate for q in getattr(s, "props", None) or []]
     if not rows:
         return []
-    L = ["", "## Player props: shots on goal and points (experimental, paper-trading only)", "",
+    L = ["", "## Player props: shots, points, assists, anytime goals (experimental, paper-trading only)", "",
          "A player-level model (own recent shot rate, opponent, home ice, ice time, rest) against the market's over/under. **Experimental, no real stakes suggested.** "
          "\"Take\" is a lean to check against your own app's price.", "",
          "| Player | Game | Stat / line | Take | Model expects | Model P(over) | Market P(over) | Edge on take | EV per $1 | Last 10 | Season avg |", "|---|---|---|---|---|---|---|---|---|---|---|"]
     for s, q in sorted(rows, key=lambda x: -max(x[1].ev_over, x[1].ev_under))[:12]:
         side = q.best_side
         hist = " ".join(str(h.get("val", h.get("sog"))) for h in q.history)
-        L += [f"| {q.name} | {_matchup(s)} | {'pts' if getattr(q, 'stat', 'sog') == 'points' else 'sog'} {q.point:g} | {(side.title() if q.take else '-')} | {q.lam:.2f} | {q.p_over:.1%} | {q.p_over_market:.1%} | "
+        L += [f"| {q.name} | {_matchup(s)} | { {'points': 'pts', 'assists': 'ast', 'goals': 'goal'}.get(getattr(q, 'stat', 'sog'), 'sog') } {q.point:g} | {(side.title() if q.take else '-')} | {q.lam:.2f} | {q.p_over:.1%} | {q.p_over_market:.1%} | "
               f"{q.edge(side) * 100:+.1f} pts | {max(q.ev_over, q.ev_under):+.1%} | {hist} | {'-' if q.avg_season is None else f'{q.avg_season:.1f}'} |"]
     return L + [""]
 

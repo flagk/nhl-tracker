@@ -122,11 +122,12 @@ def shadow_resolved(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFr
     sog = np.full(len(d), np.nan)
     is_prop = d["market"].astype(str).str.startswith("player_") if "market" in d else pd.Series(False, index=d.index)
     if is_prop.any():
-        sk = store.df("SELECT game_id, player_id, sog, points FROM skater_game WHERE sog IS NOT NULL")
+        sk = store.df("SELECT game_id, player_id, sog, points, goals, assists FROM skater_game WHERE sog IS NOT NULL")
         have = set(sk.game_id)                                # games whose shot data is loaded: a prop can only settle once its game has it
         d = d[~is_prop | d.game_id.isin(have)].reset_index(drop=True)
         m = d[["game_id", "player_id"]].merge(sk, on=["game_id", "player_id"], how="left")      # missing = did not dress -> void
-        sog = np.where(d["market"].astype(str).eq("player_points"), m.points.to_numpy(float), m.sog.to_numpy(float))
+        col = d["market"].astype(str).map({"player_points": "points", "player_goals": "goals", "player_assists": "assists"}).fillna("sog")
+        sog = np.select([col.eq("points"), col.eq("goals"), col.eq("assists")], [m.points.to_numpy(float), m.goals.to_numpy(float), m.assists.to_numpy(float)], m.sog.to_numpy(float))
     cons = consensus_snapshots(store) if cons is None else cons
     mk = d["market"].fillna("h2h") if "market" in d else pd.Series("h2h", index=d.index)
     ml = (mk == "h2h").to_numpy()

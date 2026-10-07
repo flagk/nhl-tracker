@@ -251,7 +251,8 @@
 
   /* ---------- player props (shots on goal over/under) ---------- */
   var showAllProps = false;
-  function noun(q) { return q.stat === "points" ? "points" : "shots"; }
+  function noun(q) { return { points: "points", assists: "assists", goals: "goals" }[q.stat] || "shots"; }
+  function statLabel(q) { return { points: "points (goals + assists)", assists: "assists", goals: "anytime goalscorer" }[q.stat] || "shots on goal"; }
   function hv(x) { return x.val !== undefined ? x.val : x.sog; }
   function historyStrip(q) {
     var h = q.history || [];
@@ -267,9 +268,9 @@
     var side = q.take || q.best_side, over = side === "over";
     var pSide = over ? q.p_over : 1 - q.p_over, mSide = over ? q.p_over_market : 1 - q.p_over_market, ev = over ? q.ev_over : q.ev_under, dec = over ? q.over_price : q.under_price;
     var head = el("div", { class: "pick-top" }, [
-      el("div", {}, [el("div", { class: "pick-team", text: q.name }), el("div", { class: "pick-sub", text: q.team + " vs " + q.opp + " · " + (q.stat === "points" ? "points (goals + assists)" : "shots on goal") + ", line " + q.point })]),
-      el("span", { class: "pill " + (q.take ? "lean" : "mute"), text: q.take ? "Take " + (over ? "Over " : "Under ") + q.point : "No edge" })]);
-    var kv = el("div", { class: "kv" }, [kvItem("Model expects", q.lam.toFixed(2) + " " + noun(q)), kvItem((over ? "Over " : "Under ") + "price", price(dec)), kvItem("EV per $1", spct(ev), ev >= 0 ? "good" : "bad"),
+      el("div", {}, [el("div", { class: "pick-team", text: q.name }), el("div", { class: "pick-sub", text: q.team + " vs " + q.opp + " · " + statLabel(q) + (q.one_sided ? "" : ", line " + q.point) })]),
+      el("span", { class: "pill " + (q.take ? "lean" : "mute"), text: q.take ? (q.one_sided ? "Take: to score" : "Take " + (over ? "Over " : "Under ") + q.point) : "No edge" })]);
+    var kv = el("div", { class: "kv" }, [kvItem("Model expects", q.lam.toFixed(2) + " " + noun(q)), kvItem(q.one_sided ? "Anytime price" : (over ? "Over " : "Under ") + "price", price(dec)), kvItem("EV per $1", spct(ev), ev >= 0 ? "good" : "bad"),
       kvItem("Edge", spct(pSide - mSide), pSide >= mSide ? "good" : "bad")]);
     var hist = historyStrip(q);
     var facts = [];
@@ -280,16 +281,18 @@
     var out = el("div", { class: "mine-out" });
     function show(d) { out.textContent = d ? "At " + price(d) + " in your app: expected value " + spct(C.evAt(pSide, 0, d)) + " per $1" + (C.evAt(pSide, 0, d) > 0 ? "." : ". Not worth it at this price.") : ""; }
     var mine = priceBox(g.game_id + ":prop:" + q.player_id, show); mine.box.appendChild(out); show(mine.current());
-    var kids = [head, probBar(pSide, mSide, (over ? "Over " : "Under ") + q.point), kv];
+    var kids = [head, probBar(pSide, mSide, q.one_sided ? "Scores" : (over ? "Over " : "Under ") + q.point), kv];
     if (hist) kids.push(el("div", { class: "stack", style: "gap:.2rem" }, [el("div", { class: "note", text: noun(q).charAt(0).toUpperCase() + noun(q).slice(1) + " in his last " + q.history.length + " games (bars above the line are overs)" }), hist]));
-    kids.push(el("p", { class: "why", text: facts.join(" · ") + (facts.length ? ". " : "") + "Model blends his recent " + (q.stat === "points" ? "scoring" : "shot") + " rate (shrunk toward his position's average), tonight's opponent, home ice, ice time and rest. " + q.n_books + " book(s) quoted this line." }));
+    if (q.captured_at) facts.push("prices captured " + new Date(q.captured_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }));
+    if (q.one_sided) facts.push("market chance estimated from the price less an assumed margin (no opposite side to measure it)");
+    kids.push(el("p", { class: "why", text: facts.join(" · ") + (facts.length ? ". " : "") + "Model blends his recent " + ({ points: "scoring", assists: "assisting", goals: "goal-scoring" }[q.stat] || "shot") + " rate (shrunk toward his position's average), tonight's opponent, home ice, ice time and rest. " + q.n_books + " book(s) quoted this line." }));
     kids.push(mine.box);
     return el("article", { class: "card pick" }, kids);
   }
   function playerProps() {
     var items = [];
     D.games.forEach(function (g) { (g.props || []).forEach(function (q) { items.push({ g: g, q: q }); }); });
-    var kids = [el("p", { class: "lead", text: "Player shots-on-goal and points over/under lines, priced by separate models built from each player's own history, the opponent's shots allowed, home ice, ice time and rest. Experimental and paper-traded only: it has no track record against the market, so treat \"Take\" as a lean to check against your own app, not a recommendation. Only a few games a day are priced (each game costs an odds-API credit)." })];
+    var kids = [el("p", { class: "lead", text: "Player shots, points, assists and anytime-goalscorer lines, priced by separate models built from each player's own history, the opponent's shots allowed, home ice, ice time and rest. Experimental and paper-traded only: it has no track record against the market, so treat \"Take\" as a lean to check against your own app, not a recommendation. Only a few games a day are priced (each game costs an odds-API credit)." })];
     var pe = D.odds && D.odds.props && D.odds.props.error;
     if (pe) kids.push(el("div", { class: "banner bad", text: "Player-prop prices could not be fetched on the last run (" + pe + "). Your odds plan may not include player props." }));
     if (!items.length) return section("sec-props", "Player props", "experimental", kids.concat([el("div", { class: "card muted", text: "No player-prop prices yet today. They are fetched for the first few games to start, in the late run." })]));
@@ -297,7 +300,7 @@
     var shown = showAllProps ? items : items.slice(0, 12);
     kids.push(el("div", { class: "picks" }, shown.map(function (x) { return propCard(x.g, x.q); })));
     if (items.length > 12) kids.push(el("div", {}, [el("button", { type: "button", class: "btn-ghost", text: showAllProps ? "Show the top 12 only" : "Show all " + items.length + " players", onclick: function () { showAllProps = !showAllProps; render(); } })]));
-    return section("sec-props", "Player props", "shots & points · experimental", kids);
+    return section("sec-props", "Player props", "shots, points, assists, goals · experimental", kids);
   }
 
   var showAllOther = false;
