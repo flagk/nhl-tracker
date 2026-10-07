@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-10-07
 
-**3 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-10-07 22:13 UTC
+**3 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-10-07 22:48 UTC
 
 | | |
 |---|---|
@@ -23,9 +23,9 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| PIT @ WSH | 49.8% | 59.5% | no bet |
+| PIT @ WSH | 49.8% | 59.6% | no bet |
 | COL @ WPG | 41.7% | 36.1% | no bet |
-| EDM @ ANA | 55.9% | 44.9% | no bet |
+| EDM @ ANA | 55.9% | 45.0% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
