@@ -29,6 +29,12 @@ recalculates expected value, and for moneyline picks the suggested stake, at tha
 Nothing per-book is published (the odds feed's terms and the public repo rule that out), so the page cannot know which app you use. It works from the model
 probability and the price you type, and remembers your entries in this browser.
 
+## Pick ranking
+The first section lists every pick the model can price today (moneylines, totals, puck lines, player shots/points/assists/anytime goals) in one numbered order, with filters by type.
+The score is expected value per $1 after pulling the model's probability toward the market by a reliability weight (moneyline 1.0, goals-model markets 0.5, player markets 0.25-0.35),
+so a large edge from an unvalidated model cannot jump to the top on its own. It is a ranking, not a recommendation: only moneylines tagged **Recommended** pass the betting rules.
+Games with stale odds or a failing model (ALERT) are left out. The code is `nhlbet/report/ranking.py`.
+
 ## Scheduling (why there are so many cron lines)
 GitHub's scheduled triggers are best-effort and have arrived 3-6 hours late on this repository (a "late" run fired after puck drop; closing-line snapshots meant
 for 22:45 UTC fired at 01:35). So the daily and closing-line workflows are triggered often and `scripts/gate.py` (standard library only, runs before anything is

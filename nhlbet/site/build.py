@@ -12,6 +12,7 @@ from pathlib import Path
 
 from nhlbet.privacy import is_public_safe
 from nhlbet.report.markdown import DISCLAIMER
+from nhlbet.report.ranking import rank_picks
 from nhlbet.report.slate import SlateGame
 from nhlbet.report.stats import feature_label, model_inputs
 from nhlbet.risk.policy import RiskConfig, assess_sides, game_block_reason
@@ -87,6 +88,7 @@ def build_payload(slate: list[SlateGame], cfg: RiskConfig, perf: dict | None, mo
                    "max_bets_per_day": cfg.max_bets_per_day, "min_stake": cfg.min_stake, "min_edge": cfg.min_edge,
                    "parlay_max_legs": PARLAY_MAX_LEGS, "parlay_max_pct": PARLAY_MAX_PCT},
         "games": [game_payload(s, cfg, ps) for s in slate],
+        "ranking": rank_picks(slate, cfg),
         "track": track,
         "paper": ([] if shadow is None or len(shadow) == 0 else
                   [{"strategy": k, **{c: (None if v != v else v) for c, v in r.items()}} for k, r in shadow.iterrows()]),

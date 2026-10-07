@@ -59,7 +59,8 @@ def test_payload_is_json_safe_and_complete():
     slate, _ = random_slate(np.random.default_rng(0), 6, cfg)
     p = payload_for(slate, cfg)
     json.dumps(p, allow_nan=False)                                              # no NaN/Infinity anywhere
-    assert {"games", "policy", "model", "odds", "track", "disclaimer", "generated_at"} <= set(p)
+    assert {"games", "policy", "model", "odds", "track", "disclaimer", "generated_at", "ranking"} <= set(p)
+    assert [r["rank"] for r in p["ranking"]] == list(range(1, len(p["ranking"]) + 1)) and all(r["kind"] == "moneyline" for r in p["ranking"])
     g = p["games"][0]
     assert {"home", "away", "sides", "blocked", "p_home"} <= set(g) and set(g["sides"]["home"]) >= {"kelly_full", "qualifies", "books", "p_adj", "ev", "fails"}
     assert "educational" in p["disclaimer"] and "afford to lose" in p["disclaimer"]

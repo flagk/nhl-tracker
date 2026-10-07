@@ -88,7 +88,7 @@
     return el("div", { class: "stack", style: "gap:.9rem" }, kids);
   }
   function chips() {
-    var items = [["sec-picks", "Top picks"], ["sec-games", "All games"], ["sec-stats", "Game stats"], ["sec-other", "Totals & puck line"], ["sec-props", "Player props"], ["sec-parlay", "Parlay"], ["sec-inputs", "Model inputs"], ["sec-track", "Track record"], ["sec-paper", "Fake bets"]];
+    var items = [["sec-rank", "Ranking"], ["sec-picks", "Top picks"], ["sec-games", "All games"], ["sec-stats", "Game stats"], ["sec-other", "Totals & puck line"], ["sec-props", "Player props"], ["sec-parlay", "Parlay"], ["sec-inputs", "Model inputs"], ["sec-track", "Track record"], ["sec-paper", "Fake bets"]];
     return el("nav", { class: "chips", "aria-label": "Sections" }, items.map(function (i) { return el("a", { class: "chip", href: "#" + i[0], text: i[1] }); }));
   }
   var summaryLine = el("span", { class: "muted" });
@@ -163,6 +163,30 @@
     else if (!ranked.length) kids.push(el("div", { class: "card", text: "No game has a positive expected value against the current odds." }));
     else kids.push(el("div", { class: "picks" }, ranked.map(function (g) { return pickCard(g, alloc); })));
     return section("sec-picks", "Top picks", ranked.length ? "best " + ranked.length + " by expected value" : "", kids);
+  }
+  /* ---------- one ranked list of every pick across all markets (a ranking, not a recommendation) ---------- */
+  var rankFilter = "all", showAllRank = false;
+  var RANK_FILTERS = [["all", "All"], ["moneyline", "Moneyline"], ["totals", "Totals"], ["spreads", "Puck line"], ["player", "Player props"]];
+  function rankPasses(r) { return rankFilter === "all" || (rankFilter === "player" ? r.kind.indexOf("player_") === 0 : r.kind === rankFilter); }
+  function rankingSection() {
+    var all = D.ranking || [];
+    var kids = [el("p", { class: "lead", text: "Every pick the model can price today, in one order: best first. The score is expected value per $1 after pulling the model's probability toward the market by how much that kind of model is trusted (moneylines fully, experimental markets much less), so a big edge from a new model cannot jump the queue alone. This is a ranking, not a recommendation: only moneylines tagged Recommended pass the betting rules." })];
+    if (!all.length) return section("sec-rank", "Pick ranking", "", kids.concat([el("div", { class: "card muted", text: "Nothing to rank yet: no fresh odds for today's games." })]));
+    kids.push(el("div", { class: "chips", role: "group", "aria-label": "Filter the ranking" }, RANK_FILTERS.map(function (f) {
+      return el("button", { type: "button", class: "chip" + (rankFilter === f[0] ? " on" : ""), "aria-pressed": String(rankFilter === f[0]), text: f[1], onclick: function () { rankFilter = f[0]; render(); } });
+    })));
+    var list = all.filter(rankPasses), shown = showAllRank ? list : list.slice(0, 15);
+    var rows = shown.map(function (r) {
+      var tag = r.recommended ? el("span", { class: "pill rec", text: "Recommended" }) : el("span", { class: "pill " + (r.has_edge ? "lean" : "mute"), text: r.has_edge ? (r.experimental ? "Experimental lean" : "Lean") : "No edge" });
+      return el("tr", {}, [el("td", { class: "num" }, [el("b", { text: "#" + r.rank })]),
+        el("td", {}, [el("b", { text: r.pick }), el("div", { class: "muted", text: r.game + (r.start_utc ? " · " + when(r.start_utc) : "") })]),
+        el("td", { text: r.type }), el("td", { class: "num", text: pct(r.p_model) }), el("td", { class: "num", text: pct(r.p_market) }), el("td", { class: "num", text: price(r.price) }),
+        el("td", { class: "num " + (r.score >= 0 ? "good" : "bad"), text: spct(r.score) }), el("td", {}, [tag])]);
+    });
+    kids.push(rows.length ? table(["Rank", "Pick", "Type", "Model", "Market", "Best price", "Score (EV per $1)", "Status"], rows, [0, 3, 4, 5, 6]) : el("div", { class: "card muted", text: "No picks of this type today." }));
+    if (list.length > 15) kids.push(el("div", {}, [el("button", { type: "button", class: "btn-ghost", text: showAllRank ? "Show the top 15 only" : "Show all " + list.length, onclick: function () { showAllRank = !showAllRank; render(); } })]));
+    kids.push(el("div", { class: "note", text: "Rank is across all kinds of pick, so the numbers on the left are positions in the full list even when a filter is on. Prices are the best available today; check the price in your own app before using any of it." }));
+    return section("sec-rank", "Pick ranking", String(all.length), kids);
   }
   function g_ev(g) { return g.sides[bestSide(g)].ev; }
   function isRec(g, alloc) { var a = alloc[g.game_id]; return a && a.side === bestSide(g) ? 1 : 0; }
@@ -385,7 +409,7 @@
   var dynamic = el("div", { class: "stack", style: "gap:1.5rem" });
   function render() {
     var alloc = C.allocate(D.games, cfg());
-    dynamic.replaceChildren(statusBar(alloc), topPicks(alloc), allGames(alloc), gameStats(), otherMarkets(), playerProps(), section("sec-parlay", "Parlay calculator", "", [parlayBox]), modelInputs(), track(), paper());
+    dynamic.replaceChildren(statusBar(alloc), rankingSection(), topPicks(alloc), allGames(alloc), gameStats(), otherMarkets(), playerProps(), section("sec-parlay", "Parlay calculator", "", [parlayBox]), modelInputs(), track(), paper());
     renderParlay();
   }
   document.body.insertBefore(CH.topbar("picks"), app);
