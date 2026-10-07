@@ -99,3 +99,19 @@ def test_workflow_structure():
     for f in ("daily.yml", "odds-close.yml"):
         on = yaml.safe_load((ROOT / ".github/workflows" / f).read_text())[True]
         assert "gated" in on["workflow_dispatch"]["inputs"]
+
+
+def test_unstick_cancels_old_waiting_pages_runs_and_redeploys():
+    calls = []
+
+    def run(args):
+        calls.append(args)
+        if args[:2] == ["gh", "api"] and "status=waiting" in args[2]:
+            return json.dumps({"workflow_runs": [{"id": 7, "created_at": "2026-10-06T19:36:51Z"}, {"id": 8, "created_at": "2026-10-07T21:30:00Z"}]})
+        return json.dumps({"workflow_runs": []})
+
+    out = hb.unstick_pages(utc("2026-10-07T21:40:00"), run)
+    assert out == ["7"]                                                  # the 26-hour-old one only; the 10-minute-old one is left alone
+    assert any(c[:3] == ["gh", "workflow", "run"] and c[3] == "pages.yml" for c in calls)
+    calls.clear()
+    assert hb.unstick_pages(utc("2026-10-07T21:40:00"), lambda a: json.dumps({"workflow_runs": []})) == []
