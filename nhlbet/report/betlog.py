@@ -104,7 +104,63 @@ def alt_value(market, side, point, home_score, away_score, last_period, sog=None
     return val
 
 
-def shadow_resolved(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFrame:
+def _leg_status(leg: dict, games: pd.DataFrame, sk: pd.DataFrame) -> str:
+    """'won' | 'lost' | 'push' (void or pushed: the leg drops out of the ticket) | 'pending' (game not final yet or player shots not loaded)."""
+    g = games[games.game_id == leg["game_id"]]
+    if g.empty or pd.isna(g.home_win.iloc[0]):
+        return "pending"
+    g = g.iloc[0]
+    market = leg.get("market") or "h2h"
+    if market == "h2h":
+        return "won" if (leg["side"] == "home") == (g.home_win == 1) else "lost"
+    sog = None
+    if market.startswith("player_"):
+        if not (sk.game_id == leg["game_id"]).any():
+            return "pending"                                  # that game's player data is not loaded yet
+        row = sk[(sk.game_id == leg["game_id"]) & (sk.player_id == leg["player_id"])]
+        col = {"player_points": "points", "player_goals": "goals", "player_assists": "assists"}.get(market, "sog")
+        sog = float(row[col].iloc[0]) if len(row) else float("nan")
+    v = float(alt_value(np.array([market]), np.array([leg["side"]]), np.array([float(leg["point"]) if leg.get("point") is not None else np.nan]),
+                        [g.home_score], [g.away_score], [g.last_period], None if sog is None else np.array([sog]))[0])
+    return "won" if v > 0 else "lost" if v < 0 else "push"
+
+
+def parlay_resolved(store: Store) -> pd.DataFrame:
+    """AI parlays (latest run per day and strategy) with the outcome of each: pending | won | lost | push.
+
+    A parlay is LOST as soon as any leg loses, WON when every leg that did not push has won (pushed or void legs drop out and the payout uses
+    the remaining legs' prices), a PUSH when every leg pushed, and pending otherwise. Columns: game_date, strategy, label, legs (list), n_legs,
+    decimal (the ticket's price), eff_decimal (after dropping pushed legs), stake, p_model, p_market, ev, result, won, profit, push, game_id (first leg).
+    """
+    import json
+    pb = store.df("SELECT * FROM parlay_bets")
+    if pb.empty:
+        return pb
+    pb = pb.sort_values("run_at").groupby(["game_date", "strategy", "idx"], as_index=False).tail(1).reset_index(drop=True)
+    games = store.df("SELECT game_id, home, away, home_score, away_score, last_period, home_win FROM games")
+    sk = store.df("SELECT game_id, player_id, sog, points, goals, assists FROM skater_game WHERE sog IS NOT NULL")
+    rows = []
+    for r in pb.itertuples():
+        legs = json.loads(r.legs)
+        st = [_leg_status(l, games, sk) for l in legs]
+        if "lost" in st:
+            res = "lost"
+        elif "pending" in st:
+            res = "pending"
+        elif all(x == "push" for x in st):
+            res = "push"
+        else:
+            res = "won"
+        eff = float(np.prod([l["decimal"] for l, x in zip(legs, st) if x == "won"])) if res == "won" else float(r.decimal)
+        profit = r.stake * (eff - 1) if res == "won" else -r.stake if res == "lost" else 0.0
+        rows.append({"game_date": r.game_date, "strategy": r.strategy, "label": r.label, "legs": legs, "leg_status": st, "n_legs": int(r.n_legs), "decimal": float(r.decimal),
+                     "eff_decimal": eff, "stake": float(r.stake), "p_model": r.p_model, "p_market": r.p_market, "ev": r.ev, "result": res,
+                     "won": 1.0 if res == "won" else 0.0 if res == "lost" else np.nan, "profit": float(profit), "push": res == "push", "game_id": int(legs[0]["game_id"]),
+                     "run_at": r.run_at})
+    return pd.DataFrame(rows)
+
+
+def _shadow_resolved_games(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFrame:
     """Paper-trading rows joined with results, profit and CLV (latest run per game and strategy).
 
     Moneyline rows settle on the winner. Totals settle on regulation + overtime goals (shootout goal excluded) and the puck line on the
@@ -144,6 +200,19 @@ def shadow_resolved(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFr
     d["clv_ev"] = [bet_clv(s, dec, c)["clv_ev"] if (b and m and c is not None and not pd.isna(c)) else np.nan
                    for b, m, s, dec, c in zip(d.is_bet, ml, d.side, d.decimal, d.close_home_prob)]
     return d
+
+
+def shadow_resolved(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Game-level and player-prop paper bets plus the settled AI parlays (market ``parlay``), one row per bet."""
+    d = _shadow_resolved_games(store, cons)
+    pr = parlay_resolved(store)
+    pr = pr[pr.result != "pending"] if len(pr) else pr
+    if pr.empty:
+        return d
+    extra = pd.DataFrame({"game_date": pr.game_date, "strategy": pr.strategy, "game_id": pr.game_id, "market": "parlay", "side": "parlay", "point": np.nan, "label": pr.label, "team": pr.label,
+                          "decimal": pr.eff_decimal, "stake": pr.stake, "action": "BET", "player_id": 0.0, "p_model": pr.p_model, "p_market": pr.p_market, "ev": pr.ev,
+                          "is_bet": ~pr.push, "push": pr.push, "won": pr.won, "profit": pr.profit, "clv_ev": np.nan, "run_at": pr.run_at})
+    return pd.concat([d, extra], ignore_index=True) if len(d) else extra
 
 
 def shadow_performance(store: Store, cons: pd.DataFrame | None = None, B: int = 2000, seed: int = 0) -> pd.DataFrame:
@@ -207,7 +276,8 @@ def plot_performance(store: Store, path: str | Path, start_bankroll: float = 100
 PARTITIONED = {"recommendations": ("run_id", ["run_id", "game_id"]), "odds_fetch_log": ("captured_at", ["captured_at"]),
                "shadow_bets": ("run_id", ["run_id", "game_id", "strategy"]), "odds_consensus": ("captured_at", ["game_id", "captured_at"]),
                "alt_quotes": ("run_id", ["run_id", "game_id", "market", "side"]),
-               "prop_bets": ("run_id", ["run_id", "game_id", "strategy", "player_id", "side"])}
+               "prop_bets": ("run_id", ["run_id", "game_id", "strategy", "player_id", "side"]),
+               "parlay_bets": ("run_id", ["run_id", "strategy", "idx"])}
 SINGLE = {"goalie_confirmations": ["game_date", "team"]}
 ODDS_KEYS = ["captured_at", "event_id", "book", "market", "outcome", "point"]
 

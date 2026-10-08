@@ -88,7 +88,7 @@
     return el("div", { class: "stack", style: "gap:.9rem" }, kids);
   }
   function chips() {
-    var items = [["sec-rank", "Ranking"], ["sec-picks", "Top picks"], ["sec-games", "All games"], ["sec-stats", "Game stats"], ["sec-other", "Totals & puck line"], ["sec-props", "Player props"], ["sec-parlay", "Parlay"], ["sec-inputs", "Model inputs"], ["sec-track", "Track record"], ["sec-paper", "Fake bets"]];
+    var items = [["sec-rank", "Ranking"], ["sec-picks", "Top picks"], ["sec-games", "All games"], ["sec-stats", "Game stats"], ["sec-other", "Totals & puck line"], ["sec-props", "Player props"], ["sec-parlay", "Parlays"], ["sec-inputs", "Model inputs"], ["sec-track", "Track record"], ["sec-paper", "Fake bets"]];
     return el("nav", { class: "chips", "aria-label": "Sections" }, items.map(function (i) { return el("a", { class: "chip", href: "#" + i[0], text: i[1] }); }));
   }
   var summaryLine = el("span", { class: "muted" });
@@ -188,6 +188,21 @@
     if (list.length > 15) kids.push(el("div", {}, [el("button", { type: "button", class: "btn-ghost", text: showAllRank ? "Show the top 15 only" : "Show all " + list.length, onclick: function () { showAllRank = !showAllRank; render(); } })]));
     kids.push(el("div", { class: "note", text: "Rank is across all kinds of pick, so the numbers on the left are positions in the full list even when a filter is on. Prices are the best available today; check the price in your own app before using any of it." }));
     return section("sec-rank", "Pick ranking", String(all.length), kids);
+  }
+  /* ---------- the model's own parlays (fake money) ---------- */
+  function aiParlays() {
+    var ps = D.ai_parlays || [];
+    var kids = [el("p", { class: "lead", text: "The model builds its own multi-leg tickets from today's ranked picks, always one leg per game, and they are tracked with pretend money like every fake bet (see Fake bets for how they have done). Parlays multiply the bookmaker's margin along with the payout, so most lose; the control ticket shows what that costs. Not a recommendation." })];
+    if (!ps.length) return el("div", { class: "stack" }, kids.concat([el("div", { class: "card muted", text: "No parlay today: it needs picks from at least two different games that have not started." })]));
+    ps.forEach(function (p) {
+      var legs = el("ol", { class: "legs" }, p.legs.map(function (l) { return el("li", {}, [el("b", { text: l.label }), el("span", { class: "muted", text: " · " + l.game + " · " + price(l.decimal) + " · model " + pct(l.p_model) })]); }));
+      kids.push(el("article", { class: "card pick" }, [
+        el("div", { class: "pick-top" }, [el("div", {}, [el("div", { class: "pick-team", text: p.n_legs + "-leg parlay · " + p.strategy.replace("parlay_", "").replace(/_/g, " ")  }), el("div", { class: "pick-sub", text: p.description })]),
+          el("span", { class: "pill mute", text: "Fake " + usd(p.stake) })]),
+        legs,
+        el("div", { class: "kv" }, [kvItem("Ticket price", price(p.decimal)), kvItem("Model chance all hit", pct(p.p_model)), kvItem("Market chance all hit", pct(p.p_market)), kvItem("$ to win (fake)", usd(p.stake * (p.decimal - 1)))])]));
+    });
+    return el("div", { class: "stack" }, kids);
   }
   function g_ev(g) { return g.sides[bestSide(g)].ev; }
   function isRec(g, alloc) { var a = alloc[g.game_id]; return a && a.side === bestSide(g) ? 1 : 0; }
@@ -410,7 +425,7 @@
   var dynamic = el("div", { class: "stack", style: "gap:1.5rem" });
   function render() {
     var alloc = C.allocate(D.games, cfg());
-    dynamic.replaceChildren(statusBar(alloc), rankingSection(), topPicks(alloc), allGames(alloc), gameStats(), otherMarkets(), playerProps(), section("sec-parlay", "Parlay calculator", "", [parlayBox]), modelInputs(), track(), paper());
+    dynamic.replaceChildren(statusBar(alloc), rankingSection(), topPicks(alloc), allGames(alloc), gameStats(), otherMarkets(), playerProps(), section("sec-parlay", "Parlays", "", [aiParlays(), el("h3", { text: "Build your own" }), parlayBox]), modelInputs(), track(), paper());
     renderParlay();
   }
   document.body.insertBefore(CH.topbar("picks"), app);

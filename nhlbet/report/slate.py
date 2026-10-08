@@ -15,6 +15,8 @@ from nhlbet.features.builder import BuilderConfig, FeatureBuilder
 from nhlbet.models.bundle import ModelBundle
 from nhlbet.odds.props import STATS
 from nhlbet.report.props import PropEngine
+from nhlbet.report.ranking import rank_picks
+from nhlbet.risk.parlays import build_parlays
 from nhlbet.report.stats import game_stats
 from nhlbet.odds.consensus import latest_book_prices
 from nhlbet.odds.edge import SideQuote, evaluate_game
@@ -163,4 +165,8 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
             store.upsert("alt_quotes", prop_rows, ["run_id", "game_id", "market", "side"])
             store.upsert("prop_bets", prop_shadow_bets(slate, cfg, run_id, now.isoformat(timespec="seconds"), date), ["run_id", "game_id", "strategy", "player_id", "side"])
         store.upsert("shadow_bets", shadow_bets(slate, cfg, run_id, now.isoformat(timespec="seconds"), date), ["run_id", "game_id", "strategy"])
+        ranked = rank_picks(slate, cfg, now=pd.Timestamp(now))
+        parlays = build_parlays(ranked, slate, run_id, now.isoformat(timespec="seconds"), date, now=pd.Timestamp(now))
+        if parlays:
+            store.upsert("parlay_bets", parlays, ["run_id", "strategy", "idx"])
     return slate
