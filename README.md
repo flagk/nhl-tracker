@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-10-08
 
-**10 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-08 12:02 UTC
+**10 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-08 13:11 UTC
 
 | | |
 |---|---|
@@ -24,15 +24,15 @@ Updated automatically every day. Most days the honest answer is "no bet".
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
 | UTA @ BOS | 48.3% | 46.2% | no bet |
-| DAL @ BUF | 56.9% | 47.7% | no bet |
-| NSH @ MTL | 58.5% | 61.9% | no bet |
-| PHI @ OTT | 61.4% | 58.0% | no bet |
-| MIN @ TBL | 60.6% | 58.0% | no bet |
-| VAN @ CAR | 73.3% | 75.4% | no bet |
-| CHI @ NYI | 66.6% | 62.6% | no bet |
+| DAL @ BUF | 56.9% | 47.5% | no bet |
+| NSH @ MTL | 58.5% | 61.8% | no bet |
+| PHI @ OTT | 61.4% | 58.4% | no bet |
+| MIN @ TBL | 60.6% | 58.1% | no bet |
+| VAN @ CAR | 73.3% | 75.5% | no bet |
+| CHI @ NYI | 66.6% | 62.8% | no bet |
 | SJS @ STL | 60.5% | 58.3% | no bet |
-| COL @ CGY | 40.8% | 31.5% | no bet |
-| TOR @ VGK | 64.6% | 60.6% | no bet |
+| COL @ CGY | 40.8% | 31.6% | no bet |
+| TOR @ VGK | 64.6% | 60.9% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
