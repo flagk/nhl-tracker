@@ -83,6 +83,12 @@ CREATE TABLE IF NOT EXISTS prop_bets (
     side TEXT NOT NULL, label TEXT, point REAL, book TEXT, decimal REAL, stake REAL, p_model REAL, p_market REAL, edge REAL, ev REAL, lam REAL, market TEXT,
     PRIMARY KEY (run_id, game_id, strategy, player_id, side)
 );
+-- AI-built parlays (fake money): one row per parlay, legs as JSON; settled when every leg's game is final (nhlbet.report.betlog.parlay_resolved)
+CREATE TABLE IF NOT EXISTS parlay_bets (
+    run_id TEXT NOT NULL, run_at TEXT NOT NULL, game_date TEXT, strategy TEXT NOT NULL, idx INTEGER NOT NULL, n_legs INTEGER, label TEXT,
+    legs TEXT, decimal REAL, p_model REAL, p_market REAL, stake REAL, ev REAL,
+    PRIMARY KEY (run_id, strategy, idx)
+);
 -- every run's model-vs-market view of totals and puck lines for EVERY game with odds (bets and passes): for calibration and paper trading
 CREATE TABLE IF NOT EXISTS alt_quotes (
     run_id TEXT NOT NULL, run_at TEXT NOT NULL, game_id INTEGER NOT NULL, game_date TEXT, market TEXT NOT NULL, side TEXT NOT NULL, label TEXT,

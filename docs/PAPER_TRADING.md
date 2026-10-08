@@ -49,3 +49,11 @@ Compare strategies on ROI (profit per dollar staked), not total profit, because 
 
 ## Player-prop strategies
 `sog_edge` and the control `sog_over_control` (see [MARKETS.md](MARKETS.md)) bet on players' shots on goal. A player can have several bets per game, so these live in their own table (`prop_bets`) and settle from the player's actual shots; a skater who did not play voids the bet (stake refunded, not counted).
+
+
+## AI parlays
+Each run the model also builds its own fake-money parlays from the day's ranked picks (see the ranking in [SITE.md](SITE.md)), one leg per game so the legs are close to independent:
+`parlay_top2` and `parlay_top3` (the best-ranked picks), `parlay_players3` (the best player props) and the no-skill control `parlay_favorites_control` (flat $10 on the market favourites of 3 games).
+The ticket price is the product of the legs' best prices and the model's chance is the product of the legs' probabilities. Stakes are $5-$30 by the legs' average weighted edge.
+A parlay is **lost** the moment any leg loses, **won** when every leg that did not push has won (a pushed or void leg drops out and the payout uses the remaining legs), and pending until then.
+Settled parlays appear in the paper-trading tables as market `parlay`; open ones show under Fake bets. Parlays multiply the bookmaker's margin, so expect most to lose: judge on ROI over many tickets against the control, never on one hit.
