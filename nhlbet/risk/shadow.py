@@ -33,6 +33,19 @@ def edge_conviction(edge: float) -> float:
     return edge / 0.10
 
 
+TRUST_FULL_EDGE = 0.03     # experimental markets: a weighted edge (trust weight x raw edge) of 3 points earns the $30 maximum
+
+
+def trust_conviction(edge: float, weight: float) -> float:
+    """Conviction for an experimental market: the raw edge scaled by how much that kind of model has earned trust (see nhlbet.report.ranking.learn_weights)."""
+    return edge * weight / TRUST_FULL_EDGE
+
+
+def _trust(weights: dict | None, key: str) -> float:
+    from nhlbet.report.ranking import WEIGHTS
+    return float((weights or {}).get(key, WEIGHTS.get(key, 0.2)))
+
+
 def side_conviction(p: float) -> float:
     """Bets on the model's favoured side of a two-way market: 50% -> $5, 75% or more -> $30."""
     return (p - 0.5) / 0.25
@@ -111,7 +124,7 @@ def _alt_usable(g, cfg: RiskConfig) -> bool:
 
 
 def shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date: str,
-                strategies: Sequence[Strategy] = STRATEGIES) -> list[dict]:
+                strategies: Sequence[Strategy] = STRATEGIES, weights: dict | None = None) -> list[dict]:
     """``games``: objects with ``game_id, home, away, quotes, ctx`` (``SlateGame``). One row per (game, strategy)."""
     rows: list[dict] = []
     inputs = [(g.game_id, g.home, g.away, g.quotes, g.ctx) for g in games]
@@ -142,7 +155,7 @@ def shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date
                     if st.kind == "alt_control":
                         rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name, q, CONTROL_STAKE))
                     elif q.edge >= ALT_MIN_EDGE:
-                        rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name, q, paper_stake(edge_conviction(q.edge))))
+                        rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name, q, paper_stake(trust_conviction(q.edge, _trust(weights, market)))))
                     else:
                         rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name))
                     continue
@@ -151,7 +164,9 @@ def shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date
                 if st.kind == "alt_edge" and q.edge < cfg.min_edge:
                     rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name))
                     continue
-                conv = edge_conviction(q.edge) if st.kind == "alt_edge" else side_conviction(q.model_prob)
+                w = _trust(weights, market)
+                conv = (trust_conviction(q.edge, w) if st.kind == "alt_edge"
+                        else side_conviction(q.market_prob + w * (q.model_prob - q.market_prob)))      # conviction from the trust-blended chance, not the raw model chance
                 rows.append(_alt_row(run_id, run_at, date, g.game_id, st.name, q, paper_stake(conv)))
             continue
         for g in games:
@@ -209,7 +224,7 @@ def _prop_row(run_id, run_at, date, game_id, strategy, q, side: str, stake: floa
             "p_model": p_side, "p_market": m_side, "edge": p_side - m_side, "ev": q.ev_over if over else q.ev_under, "lam": q.lam}
 
 
-def prop_shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date: str, strategies: Sequence[Strategy] = PROP_STRATEGIES) -> list[dict]:
+def prop_shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date: str, strategies: Sequence[Strategy] = PROP_STRATEGIES, weights: dict | None = None) -> list[dict]:
     """Paper bets on player shots across the whole slate (capped per day). ``games``: objects with ``game_id``, ``props`` (PropQuote list) and ``ctx``."""
     all_cands = [(g, q) for g in games if _alt_usable(g, cfg) for q in (getattr(g, "props", None) or [])]
     rows: list[dict] = []
@@ -220,13 +235,13 @@ def prop_shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str,
             scored = [(q.edge(q.best_side), g, q) for g, q in cands if q.n_prev >= PROP_MIN_GAMES and q.has_side(q.best_side)]
             picks = sorted([x for x in scored if x[0] >= cfg.min_edge], key=lambda x: -x[0])[:PROP_MAX_PER_DAY]
             for e, g, q in picks:
-                rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, q.best_side, paper_stake(edge_conviction(e))))
+                rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, q.best_side, paper_stake(trust_conviction(e, _trust(weights, STATS[q.stat]['store'])))))
         elif st.kind in ("prop_edge_over", "prop_edge_under"):
             side = st.kind.rsplit("_", 1)[1]
             floor = cfg.min_edge if st.name == "goal_edge" else ALT_MIN_EDGE
             scored = [((q.edge(side)), g, q) for g, q in cands if q.n_prev >= PROP_MIN_GAMES and q.has_side(side)]
             for e, g, q in sorted([x for x in scored if x[0] >= floor], key=lambda x: -x[0])[:PROP_MAX_PER_DAY]:
-                rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, side, paper_stake(edge_conviction(e))))
+                rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, side, paper_stake(trust_conviction(e, _trust(weights, STATS[q.stat]['store'])))))
         elif st.kind == "prop_control":
             for g, q in sorted(cands, key=lambda x: (-x[1].point, -x[1].p_over_market, x[1].player_id))[:PROP_MAX_PER_DAY]:
                 rows.append(_prop_row(run_id, run_at, date, g.game_id, st.name, q, "over", CONTROL_STAKE))

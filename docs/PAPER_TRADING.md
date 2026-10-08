@@ -57,3 +57,7 @@ Each run the model also builds its own fake-money parlays from the day's ranked 
 The ticket price is the product of the legs' best prices and the model's chance is the product of the legs' probabilities. Stakes are $5-$30 by the legs' average weighted edge.
 A parlay is **lost** the moment any leg loses, **won** when every leg that did not push has won (a pushed or void leg drops out and the payout uses the remaining legs), and pending until then.
 Settled parlays appear in the paper-trading tables as market `parlay`; open ones show under Fake bets. Parlays multiply the bookmaker's margin, so expect most to lose: judge on ROI over many tickets against the control, never on one hit.
+
+## Stakes on experimental markets follow learned trust
+Totals, puck-line and player-prop fake bets are sized by `trust x edge`, not the raw edge: a weighted edge of 3 points is the $30 maximum, so a model that has done badly against the market
+(low learned weight, see [SITE.md](SITE.md)) stakes close to $5 even on a large edge, while one that earns trust stakes more. Which bets are placed is unchanged; only their size. The no-skill controls stay flat at $10.

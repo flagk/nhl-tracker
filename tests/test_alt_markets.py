@@ -102,7 +102,7 @@ def test_alt_strategies_follow_their_rules():
     assert te[2]["action"] == "NO_BET" and te[3]["action"] == "NO_BET" and te[4]["action"] == "NO_BET"         # 0% edge / no odds / model ALERT
     ev = by["every_total"]
     assert ev[1]["side"] == "over" and ev[2]["side"] == "under" and ev[2]["action"] == "BET" and ev[3]["action"] == "NO_BET"   # model's side, edge ignored
-    assert ev[1]["stake"] == 7.0 and ev[2]["stake"] == 8.0                        # model 52% -> conviction 0.08 -> $7; model 53% on the under -> 0.12 -> $8
+    assert ev[1]["stake"] == 5.0 and ev[2]["stake"] == 8.0                        # trust 0.3: model 52% vs market 47% blends to 48.5% -> no conviction -> $5; the under (53% / 53%) -> 0.12 -> $8
     assert by["always_over"][2]["side"] == "over" and by["always_over"][2]["label"] == "over 6.5" and by["always_over"][2]["stake"] == 10.0     # control: always $10
     assert by["puckline_edge"][1]["action"] == "NO_BET"                                                          # +2% < 3% threshold
     assert by["every_puckline"][1]["side"] == "away" and by["every_puckline"][1]["market"] == "spreads"

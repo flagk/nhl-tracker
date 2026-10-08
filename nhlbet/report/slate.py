@@ -149,6 +149,7 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
                                     "book": q.best_book, "decimal": q.best_decimal, "edge": q.edge, "ev": q.ev, "n_books": q.n_books,
                                     "lam_home": s.goals.get("lam_home"), "lam_away": s.goals.get("lam_away"), "exp_total": s.goals.get("exp_total"),
                                     "odds_captured_at": s.odds_captured_at} for s in slate for q in s.alt], ["run_id", "game_id", "market", "side"])
+        trust = learn_weights(store)                    # how far each experimental market's own results say to trust it: sizes its fake stakes and ranks its picks
         prop_rows = []
         for s_ in slate:
             for q in s_.props:
@@ -163,9 +164,9 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
                                       "odds_captured_at": s_.odds_captured_at, "player_id": q.player_id})
         if prop_rows:
             store.upsert("alt_quotes", prop_rows, ["run_id", "game_id", "market", "side"])
-            store.upsert("prop_bets", prop_shadow_bets(slate, cfg, run_id, now.isoformat(timespec="seconds"), date), ["run_id", "game_id", "strategy", "player_id", "side"])
-        store.upsert("shadow_bets", shadow_bets(slate, cfg, run_id, now.isoformat(timespec="seconds"), date), ["run_id", "game_id", "strategy"])
-        ranked = rank_picks(slate, cfg, now=pd.Timestamp(now), weights=learn_weights(store))
+            store.upsert("prop_bets", prop_shadow_bets(slate, cfg, run_id, now.isoformat(timespec="seconds"), date, weights=trust), ["run_id", "game_id", "strategy", "player_id", "side"])
+        store.upsert("shadow_bets", shadow_bets(slate, cfg, run_id, now.isoformat(timespec="seconds"), date, weights=trust), ["run_id", "game_id", "strategy"])
+        ranked = rank_picks(slate, cfg, now=pd.Timestamp(now), weights=trust)
         parlays = build_parlays(ranked, slate, run_id, now.isoformat(timespec="seconds"), date, now=pd.Timestamp(now))
         if parlays:
             store.upsert("parlay_bets", parlays, ["run_id", "strategy", "idx"])

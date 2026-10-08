@@ -217,7 +217,10 @@ def test_prop_strategies_follow_their_rules():
     edge = [r for r in rows if r["strategy"] == "sog_edge"]
     assert len(edge) == PROP_MAX_PER_DAY and all(r["edge"] >= cfg.min_edge and r["side"] == "over" for r in edge)
     assert all(r["player_id"] not in (100, 101, 200) for r in edge) and all(5 <= r["stake"] <= 30 and r["stake"] == int(r["stake"]) for r in edge)
-    assert {r["stake"] for r in edge} == {30.0}                                                  # 12-point+ edges all hit the maximum
+    from nhlbet.risk.shadow import paper_stake, trust_conviction
+    assert all(r["stake"] == paper_stake(trust_conviction(r["edge"], 0.2)) for r in edge) and max(r["stake"] for r in edge) < 30      # sized by the shots trust (0.2): a 12-point edge is $25-$27, not the maximum
+    hi = prop_shadow_bets([Gm(1, big[:2])], cfg, "r", "t", "d", weights={"player_sog": 1.0})
+    assert {r["stake"] for r in hi if r["strategy"] == "sog_edge"} == {30.0}                       # a fully trusted model's 12-point edge is the maximum
     ctrl = [r for r in rows if r["strategy"] == "sog_over_control"]
     assert len(ctrl) == PROP_MAX_PER_DAY and {r["stake"] for r in ctrl} == {CONTROL_STAKE} and {r["side"] for r in ctrl} == {"over"}
     u = prop_shadow_bets([Gm(1, [pq(9, "Dog", 0.40, pm=0.5, under=1.95)])], cfg, "r", "t", "d")
