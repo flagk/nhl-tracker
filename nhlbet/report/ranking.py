@@ -21,7 +21,9 @@ from nhlbet.risk.policy import RiskConfig, assess_sides
 # How far each kind of model is trusted (1 = take its probability at face value). Experimental markets have no betting track record yet.
 # Player shots have a walk-forward backtest (calibrated against each player's own history) but no proof against the market; points, assists and
 # goals have no backtest at all yet, and their first live prices disagreed with the market mostly in one direction (too many Unders), so they get the least trust.
-WEIGHTS = {"moneyline": 1.0, "totals": 0.5, "spreads": 0.5, "player_sog": 0.3, "player_points": 0.2, "player_assists": 0.2, "player_goals": 0.15}
+WEIGHTS = {"moneyline": 1.0, "totals": 0.3, "spreads": 0.25, "player_sog": 0.2, "player_points": 0.15, "player_assists": 0.15, "player_goals": 0.1}
+LEARN_MIN_PICKS = 30           # a market's weight is only adjusted from its own settled paper bets once it has this many distinct picks
+LEARN_PRIOR_STRENGTH = 60      # the prior counts as this many picks when blending with what the settled bets say
 TYPE_NAMES = {"moneyline": "Moneyline", "totals": "Total", "spreads": "Puck line", "player_sog": "Player shots", "player_points": "Player points",
               "player_assists": "Player assists", "player_goals": "Anytime goalscorer"}
 PROP_MIN_HISTORY = 10          # a player prop needs this many earlier games to be ranked at all
@@ -38,8 +40,9 @@ def _row(kind: str, s, label: str, p_model: float, p_market: float, dec: float, 
             "experimental": kind != "moneyline", "leg": {"game_id": s.game_id, "decimal": dec, "p_model": p_model, "p_market": p_market, **(leg or {})}, **extra}
 
 
-def rank_picks(slate: Sequence, cfg: RiskConfig, limit: int = 80, now=None) -> list[dict]:
+def rank_picks(slate: Sequence, cfg: RiskConfig, limit: int = 80, now=None, weights: dict | None = None) -> list[dict]:
     """Every priced pick (the better side of each market per game, the better side per player prop), best score first, with rank 1..n."""
+    W = {**WEIGHTS, **(weights or {})}
     rows: list[dict] = []
     for s in slate:
         if s.odds_stale or s.ctx.get("model_status") == "ALERT":
@@ -49,7 +52,7 @@ def rank_picks(slate: Sequence, cfg: RiskConfig, limit: int = 80, now=None) -> l
         if s.quotes:
             best = None
             for q, p_adj, ev, fails in assess_sides(s.quotes, cfg, s.ctx):
-                cand = _row("moneyline", s, f"{q.team} moneyline", p_adj, q.market_prob, q.best_decimal, 0.0, ev, WEIGHTS["moneyline"],
+                cand = _row("moneyline", s, f"{q.team} moneyline", p_adj, q.market_prob, q.best_decimal, 0.0, ev, W["moneyline"],
                             recommended=bool(s.rec.action == "BET" and s.rec.side == q.side), note=("; ".join(fails) if fails else "clears the policy checks"),
                             leg={"market": "h2h", "side": q.side, "point": None, "player_id": 0})
                 if best is None or cand["score"] > best["score"]:
@@ -58,7 +61,7 @@ def rank_picks(slate: Sequence, cfg: RiskConfig, limit: int = 80, now=None) -> l
                 rows.append(best)
         for market in ("totals", "spreads"):
             qs = [q for q in (s.alt or []) if q.market == market]
-            cands = [_row(market, s, q.label, q.model_prob, q.market_prob, q.best_decimal, q.p_push, q.ev, WEIGHTS[market], recommended=False,
+            cands = [_row(market, s, q.label, q.model_prob, q.market_prob, q.best_decimal, q.p_push, q.ev, W[market], recommended=False,
                           note="experimental goals model, paper-traded only", leg={"market": market, "side": q.side, "point": q.point, "player_id": 0}) for q in qs]
             if cands:
                 rows.append(max(cands, key=lambda r: r["score"]))
@@ -74,7 +77,7 @@ def rank_picks(slate: Sequence, cfg: RiskConfig, limit: int = 80, now=None) -> l
                 p, m = (q.p_over, q.p_over_market) if over else (1 - q.p_over, 1 - q.p_over_market)
                 dec = q.over_price if over else q.under_price
                 label = f"{q.name} to score (anytime)" if q.one_sided else f"{q.name} {'Over' if over else 'Under'} {q.point:g} {STATS[q.stat]['noun']}"
-                cands.append(_row(kind, s, label, p, m, dec, 0.0, q.ev_over if over else q.ev_under, WEIGHTS[kind], recommended=False,
+                cands.append(_row(kind, s, label, p, m, dec, 0.0, q.ev_over if over else q.ev_under, W[kind], recommended=False,
                                   note="experimental player model, paper-traded only", stat=q.stat, player_id=q.player_id,
                                   leg={"market": kind, "side": side, "point": q.point, "player_id": int(q.player_id)}))
             if cands:
@@ -85,3 +88,37 @@ def rank_picks(slate: Sequence, cfg: RiskConfig, limit: int = 80, now=None) -> l
         r["rank"] = i
         r["has_edge"] = r["score"] > 0
     return rows
+
+
+def learn_weights(store, prior: dict | None = None, min_picks: int = LEARN_MIN_PICKS, strength: float = LEARN_PRIOR_STRENGTH) -> dict:
+    """Trust weights per experimental market, learned from how those models' own settled paper bets did against the market.
+
+    For each market the weight ``w`` that would have predicted the settled picks best (lowest log loss of ``market + w * (model - market)``) is
+    found on the distinct settled picks, then blended with the prior in proportion to the sample (counted as at most 3 picks per game, because picks
+    in the same game are not independent). A model that is worse than the market on its own picks drifts to the 0.05 floor; one that proves itself
+    earns more trust. The moneyline weight is not learned (its probability is already shrunk by the live policy).
+    """
+    import numpy as np
+    from nhlbet.report.betlog import shadow_resolved
+    W = {**WEIGHTS, **(prior or {})}
+    try:
+        d = shadow_resolved(store)
+    except Exception:                                                     # a half-built database must never stop the daily report
+        return W
+    if d is None or d.empty or "market" not in d:
+        return W
+    d = d[d.is_bet & d.won.notna() & d.p_model.notna() & d.p_market.notna()]
+    d = d.assign(market=d.market.fillna("h2h")).drop_duplicates(["game_id", "label", "market"])
+    grid = np.arange(0.0, 1.0001, 0.05)
+    for kind in W:
+        if kind == "moneyline":
+            continue
+        g = d[d.market == kind]
+        if len(g) < min_picks:
+            continue
+        y, pm, pk = g.won.to_numpy(float), g.p_model.to_numpy(float), g.p_market.to_numpy(float)
+        ll = [-(y * np.log(np.clip(pk + w * (pm - pk), 0.01, 0.99)) + (1 - y) * np.log(1 - np.clip(pk + w * (pm - pk), 0.01, 0.99))).mean() for w in grid]
+        w_hat = float(grid[int(np.argmin(ll))])
+        n_eff = min(len(g), 3 * g.game_id.nunique())
+        W[kind] = float(np.clip((n_eff * w_hat + strength * W[kind]) / (n_eff + strength), 0.05, 1.0))
+    return W

@@ -77,3 +77,33 @@ def test_long_shots_and_outlier_prices_cannot_win_the_ranking_on_ev_alone():
     rows = rank_picks([g], cfg)
     assert rows[0]["kind"] == "moneyline" and rows[-1]["kind"] == "player_goals"             # a 4-point moneyline edge outranks a 2-point longshot edge
     assert rows[-1]["ev_raw"] > rows[0]["ev_raw"]                                            # even though the longshot's EV per $1 is far larger
+
+
+def _store_with_totals_bets(win_rate_pattern, n=40, p_model=0.70, p_market=0.50):
+    from nhlbet.data.store import Store
+    st = Store(":memory:")
+    games, bets = [], []
+    for i in range(n):
+        games.append(dict(game_id=i + 1, season=1, game_type=2, game_date="2026-10-08", start_utc="2026-10-08T23:00:00Z", home="H", away="A", home_score=5, away_score=3,
+                          status="FINAL", last_period="REG", home_win=1, source="nhl_api", updated_at=None))
+        won = win_rate_pattern(i)
+        bets.append(dict(run_id="r", run_at="t", game_id=i + 1, strategy="every_total", game_date="2026-10-08", action="BET", side="over", team="Over 6.5", book=None, decimal=1.91,
+                         stake=10.0, p_model=p_model, p_adj=p_model, p_market=p_market, edge=p_model - p_market, ev=0.0, market="totals", point=6.5 if won else 7.5, label=f"Over g{i}"))
+    st.upsert("games", games, ["game_id"]); st.upsert("shadow_bets", bets, ["run_id", "game_id", "strategy"])
+    return st
+
+
+def test_weights_are_learned_from_settled_paper_bets():
+    from nhlbet.report.ranking import WEIGHTS, learn_weights
+    # total 8 goals: 'over 6.5' wins, 'over 7.5' ... also wins; make the loser by a point above 8
+    bad = _store_with_totals_bets(lambda i: i % 2 == 0)                         # model says 70% but the over hits half the time, same as the market: model adds nothing
+    st = bad
+    st.conn.execute("UPDATE shadow_bets SET point = 9.5 WHERE point = 7.5"); st.conn.commit()
+    w_bad = learn_weights(st)["totals"]
+    good = _store_with_totals_bets(lambda i: i % 10 < 7)                         # the over really does hit 70%: the model is right where it disagrees with the market
+    good.conn.execute("UPDATE shadow_bets SET point = 9.5 WHERE point = 7.5"); good.conn.commit()
+    w_good = learn_weights(good)["totals"]
+    assert w_bad < WEIGHTS["totals"] < w_good                                    # worse than the market -> less trust; better -> more
+    few = _store_with_totals_bets(lambda i: False, n=10)
+    assert learn_weights(few)["totals"] == WEIGHTS["totals"]                     # too few settled picks: the prior stands
+    assert learn_weights(few)["moneyline"] == 1.0

@@ -12,7 +12,7 @@ from pathlib import Path
 
 from nhlbet.privacy import is_public_safe
 from nhlbet.report.markdown import DISCLAIMER
-from nhlbet.report.ranking import rank_picks
+from nhlbet.report.ranking import WEIGHTS, rank_picks
 from nhlbet.report.slate import SlateGame
 from nhlbet.report.stats import feature_label, model_inputs
 from nhlbet.risk.policy import RiskConfig, assess_sides, game_block_reason
@@ -69,12 +69,12 @@ def game_payload(s: SlateGame, cfg: RiskConfig, public_safe: bool = False) -> di
             "server_action": s.rec.action, "server_side": s.rec.side, "server_stake": s.rec.stake}
 
 
-def ai_parlays(slate: list[SlateGame], cfg: RiskConfig, now: datetime) -> list[dict]:
+def ai_parlays(slate: list[SlateGame], cfg: RiskConfig, now: datetime, weights: dict | None = None) -> list[dict]:
     """Today's AI-built fake-money parlays for display (the same builder the paper trading uses; nothing is stored here)."""
     import pandas as pd
     from nhlbet.risk.parlays import PARLAY_STRATEGIES, build_parlays
     ts = pd.Timestamp(now)
-    rows = build_parlays(rank_picks(slate, cfg, now=ts), slate, "", "", "", now=ts)
+    rows = build_parlays(rank_picks(slate, cfg, now=ts, weights=weights), slate, "", "", "", now=ts)
     desc = {s.name: s.description for s in PARLAY_STRATEGIES}
     return [{"strategy": r["strategy"], "description": desc[r["strategy"]], "n_legs": r["n_legs"], "decimal": r["decimal"], "p_model": r["p_model"], "p_market": r["p_market"],
              "stake": r["stake"], "ev": r["ev"], "legs": [{"label": l["label"], "game": l["game"], "decimal": l["decimal"], "p_model": l["p_model"], "p_market": l["p_market"]}
@@ -83,7 +83,7 @@ def ai_parlays(slate: list[SlateGame], cfg: RiskConfig, now: datetime) -> list[d
 
 def build_payload(slate: list[SlateGame], cfg: RiskConfig, perf: dict | None, model_entry: dict, odds_meta: dict | None, date: str,
                   run_type: str, now: datetime | None = None, notes: list[str] | None = None, shadow=None,
-                  public_safe: bool | None = None) -> dict:
+                  public_safe: bool | None = None, rank_weights: dict | None = None) -> dict:
     now = now or datetime.now(timezone.utc)
     ps = is_public_safe() if public_safe is None else public_safe
     perf = perf or {}
@@ -100,8 +100,9 @@ def build_payload(slate: list[SlateGame], cfg: RiskConfig, perf: dict | None, mo
                    "max_bets_per_day": cfg.max_bets_per_day, "min_stake": cfg.min_stake, "min_edge": cfg.min_edge,
                    "parlay_max_legs": PARLAY_MAX_LEGS, "parlay_max_pct": PARLAY_MAX_PCT},
         "games": [game_payload(s, cfg, ps) for s in slate],
-        "ranking": rank_picks(slate, cfg),
-        "ai_parlays": ai_parlays(slate, cfg, now),
+        "ranking": rank_picks(slate, cfg, weights=rank_weights),
+        "ranking_weights": {**WEIGHTS, **(rank_weights or {})},
+        "ai_parlays": ai_parlays(slate, cfg, now, rank_weights),
         "track": track,
         "paper": ([] if shadow is None or len(shadow) == 0 else
                   [{"strategy": k, **{c: (None if v != v else v) for c, v in r.items()}} for k, r in shadow.iterrows()]),
