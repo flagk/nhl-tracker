@@ -49,4 +49,4 @@ Reading it:
 ## 5. What to watch next
 - Whether learned weights for totals/puck line/player props stay near the floor as the sample grows (about 100+ distinct picks per market and 3+ weeks of games). If one climbs, that model is earning trust; if all stay at the floor the experimental markets are not beating the market.
 - Moneyline model vs market log loss once there are 150+ settled games; the live policy only bets when the model clearly disagrees.
-- The Oct 7 style loss days: stakes on experimental markets are still sized from raw edge ($5-$30), so they overstate conviction. Not changed yet because fake money is cheap and the variety is useful for learning; a candidate change is to size those stakes by the learned weight.
+- The Oct 7 style loss days: stakes on experimental markets are still sized from raw edge ($5-$30), so they overstate conviction. Since changed: those stakes are now sized by `trust x edge` (3 weighted points = $30), so low-trust markets stake near $5.
