@@ -17,6 +17,7 @@ from nhlbet.odds.consensus import pregame_only
 from nhlbet.odds.math import best_price, devig
 
 MARKETS = ("h2h", "spreads", "totals")
+ALT_MAX_AGE_MIN = 120.0     # totals / puck-line prices captured longer ago than this (relative to the run) are not used
 
 
 @dataclass
@@ -43,7 +44,7 @@ def _ev(p_win: float, p_push: float, decimal: float) -> float:
     return p_win * (decimal - 1.0) - (1.0 - p_win - p_push)
 
 
-def latest_alt_prices(store: Store, game_id: int, max_book_age_min: float = 90.0) -> dict[str, pd.DataFrame]:
+def latest_alt_prices(store: Store, game_id: int, max_book_age_min: float = 90.0, now=None, max_capture_age_min: float = ALT_MAX_AGE_MIN) -> dict[str, pd.DataFrame]:
     """Latest capture's per-book pairs. ``totals``: book, point, over, under. ``spreads``: book, home_point, home, away (decimal odds)."""
     df = pregame_only(store.df("SELECT * FROM odds_snapshots WHERE game_id=? AND market IN ('spreads','totals')", [game_id]))
     out = {"totals": pd.DataFrame(), "spreads": pd.DataFrame()}
@@ -52,6 +53,11 @@ def latest_alt_prices(store: Store, game_id: int, max_book_age_min: float = 90.0
     last = df.captured_at.max()
     df = df[df.captured_at == last]
     cap = pd.to_datetime(last, utc=True)
+    if now is not None:
+        nowts = pd.Timestamp(now)
+        nowts = nowts.tz_localize("UTC") if nowts.tzinfo is None else nowts
+        if nowts - cap > pd.Timedelta(minutes=max_capture_age_min):
+            return out                                       # these totals / puck-line prices are too old to call current: price nothing rather than price old lines
     upd = pd.to_datetime(df.book_updated, utc=True, errors="coerce")
     df = df[upd.isna() | ((cap - upd) <= pd.Timedelta(minutes=max_book_age_min))]
     t = df[df.market == "totals"]

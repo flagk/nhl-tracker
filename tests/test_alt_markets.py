@@ -189,3 +189,11 @@ def test_role_strategies_pick_their_own_bet_type():
     assert by["puckline_fav_edge"]["action"] == "NO_BET"
     assert by["always_under"]["side"] == "under" and by["always_under"]["stake"] == 10.0
     assert by["puckline_dog_control"]["side"] == "away" and by["puckline_dog_control"]["stake"] == 10.0
+
+
+def test_old_totals_and_puckline_prices_are_not_used():
+    st = store_with(event())                                                                   # captured 15:00 UTC
+    fresh = latest_alt_prices(st, 1, now=pd.Timestamp("2026-10-08T16:30:00Z"))                 # 90 minutes later: still current
+    assert len(fresh["totals"]) == 3 and len(fresh["spreads"]) == 3
+    old = latest_alt_prices(st, 1, now=pd.Timestamp("2026-10-08T17:30:00Z"))                   # 2.5 hours later: too old to call current
+    assert old["totals"].empty and old["spreads"].empty

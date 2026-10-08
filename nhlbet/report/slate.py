@@ -120,7 +120,7 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
                if row.get("h_gp_season") == row.get("h_gp_season") else None}
         books = [{"book": r.book, "home": float(r.home), "away": float(r.away)} for r in prices.itertuples()] if len(prices) else []
         dist = dist_by_game.get(g.game_id)
-        alt = alt_quotes(latest_alt_prices(store, g.game_id), dist, g.home, g.away, cal=getattr(bundle.goals, "cal", None)) if dist is not None else []
+        alt = alt_quotes(latest_alt_prices(store, g.game_id, now=now), dist, g.home, g.away, cal=getattr(bundle.goals, "cal", None)) if dist is not None else []
         goals = {"lam_home": dist.lam_home, "lam_away": dist.lam_away, "exp_total": dist.expected_total()} if dist is not None else {}
         inputs.append((int(g.game_id), g.home, g.away, quotes, ctx))
         meta[int(g.game_id)] = dict(start=g.start_utc, hg=hg, ag=ag, status=status, p=p_home, p_raw=p_raw, quotes=quotes, cap=cap, stale=stale,
