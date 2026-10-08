@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-10-08
 
-**10 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-08 13:11 UTC
+**10 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-08 13:19 UTC
 
 | | |
 |---|---|
