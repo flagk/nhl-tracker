@@ -172,7 +172,8 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     (out_dir / f"{date}-{run_type}.md").write_text(text)
     Path(report_dir, "latest.md").write_text(text)
     plot_performance(store, Path(report_dir) / "performance.png", bankroll)
-    payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow)
+    from nhlbet.report.ranking import learn_weights
+    payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow, rank_weights=learn_weights(store))
     build_site(payload, site_dir)
     build_bets_page(store, payload["games"], cfg.bankroll, payload["generated_at"], date, site_dir)
     # history (markdown for GitHub, html for the site) and the front-page block with clickable links
