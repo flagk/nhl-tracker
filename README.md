@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-10-10
 
-**14 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-10 12:03 UTC
+**14 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-10-10 14:04 UTC
 
 | | |
 |---|---|
@@ -24,19 +24,19 @@ Updated automatically every day. Most days the honest answer is "no bet".
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
 | PHI @ BOS | 58.1% | 55.6% | no bet |
-| VAN @ NJD | 64.2% | 72.6% | no bet |
-| EDM @ SJS | 46.1% | 41.6% | no bet |
-| MIN @ FLA | 53.1% | 55.7% | no bet |
+| VAN @ NJD | 64.2% | 72.7% | no bet |
+| EDM @ SJS | 46.1% | 41.0% | no bet |
+| MIN @ FLA | 53.1% | 55.8% | no bet |
 | UTA @ BUF | 57.3% | 50.1% | no bet |
 | DET @ MTL | 56.8% | 65.8% | no bet |
-| NSH @ OTT | 59.8% | 59.5% | no bet |
-| DAL @ PIT | 46.1% | 41.5% | no bet |
-| CAR @ CHI | 29.8% | 30.8% | no bet |
-| CBJ @ STL | 56.7% | 54.5% | no bet |
-| TOR @ COL | 70.2% | 65.8% | no bet |
-| TBL @ NYI | 46.0% | 38.9% | no bet |
-| ANA @ CGY | 46.9% | 47.1% | no bet |
-| LAK @ VGK | 58.1% | 60.1% | no bet |
+| NSH @ OTT | 59.8% | 59.6% | no bet |
+| DAL @ PIT | 46.1% | 37.7% | no bet |
+| CAR @ CHI | 29.8% | 30.7% | no bet |
+| CBJ @ STL | 56.7% | 54.2% | no bet |
+| TOR @ COL | 70.2% | 66.4% | no bet |
+| TBL @ NYI | 46.0% | 38.6% | no bet |
+| ANA @ CGY | 46.9% | 47.3% | no bet |
+| LAK @ VGK | 58.1% | 60.3% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
