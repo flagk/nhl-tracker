@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-10-11
 
-**3 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-11 12:04 UTC
+**3 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-10-11 18:03 UTC
 
 | | |
 |---|---|
@@ -23,9 +23,9 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| SEA @ WSH | 60.6% | 66.0% | no bet |
+| SEA @ WSH | 60.6% | 66.2% | no bet |
 | VAN @ NYR | 68.8% | 71.2% | no bet |
-| CAR @ PHI | 34.3% | 37.5% | no bet |
+| CAR @ PHI | 34.3% | 33.8% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
