@@ -6,13 +6,14 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 ## Overall
 
-- Games with a logged recommendation and a result: **64** (bet on 0; passed on 100%)
+- Games with a logged recommendation and a result: **78** (bet on 0; passed on 100%)
 - ⚠️ Far too few bets to separate skill from luck (about 6,900 would be needed to detect a true 3% ROI). Closing-line value converges much faster.
 
 ## By day
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
+| 2026-10-11 | 3 | 0 | - | - | - | - | [report](daily/2026-10-11-morning.md) · [page](../site/archive/2026-10-11.html) |
 | 2026-10-10 | 14 | 0 | - | - | - | - | [report](daily/2026-10-10-late.md) · [page](../site/archive/2026-10-10.html) |
 | 2026-10-09 | 4 | 0 | - | - | - | - | [report](daily/2026-10-09-late.md) · [page](../site/archive/2026-10-09.html) |
 | 2026-10-08 | 10 | 0 | - | - | - | - | [report](daily/2026-10-08-late.md) · [page](../site/archive/2026-10-08.html) |
