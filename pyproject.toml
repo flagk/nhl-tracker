@@ -16,4 +16,5 @@ dev = ["pytest>=7"]
 include = ["nhlbet*"]
 
 [tool.pytest.ini_options]
+markers = ["flat_stakes: run with the real flat-$10 fake-bet stakes instead of the conviction-scaled maths"]
 testpaths = ["tests"]

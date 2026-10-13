@@ -94,3 +94,16 @@ def test_latest_run_per_day_wins_and_logs_roundtrip(tmp_path):
     fresh = Store(":memory:")
     assert restore_logs(fresh, tmp_path)["parlay_bets"] == 2
     assert len(fresh.df("SELECT * FROM parlay_bets")) == 2
+
+
+@pytest.mark.flat_stakes
+def test_parlays_are_flat_ten_dollars_too():
+    cfg = RiskConfig(bankroll=1000)
+    g = slate()
+    rows = build_parlays(rank_picks(g, cfg), g, "r", "t", "2026-10-08")
+    assert rows and {r["stake"] for r in rows} == {10.0}
+    st = Store(":memory:")
+    seed_games(st)
+    put(st, "parlay_top2", [leg(1, "h2h", "home", None, 1.9), leg(3, "totals", "over", 8.5, 2.0)], stake=27.0)      # logged at $27, counted as $10
+    d = parlay_resolved(st).iloc[0]
+    assert d.stake == 10.0 and d.profit == pytest.approx(10 * (1.9 * 2.0 - 1))

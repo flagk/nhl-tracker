@@ -63,3 +63,11 @@ def league():
 def pytest_configure(config):
     import os
     os.environ["PYTHONHASHSEED"] = "0"
+
+
+@pytest.fixture(autouse=True)
+def conviction_stakes(monkeypatch, request):
+    """Most tests exercise the conviction-scaled stake maths; the flat-stake behaviour has its own tests (mark: flat_stakes)."""
+    from nhlbet.risk import shadow
+    if "flat_stakes" not in request.keywords:
+        monkeypatch.setattr(shadow, "FLAT_STAKE", None)

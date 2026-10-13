@@ -177,3 +177,23 @@ def test_moneyline_diversity_strategies():
     g2 = G(2, q(0.55, 0.45, 2.20, 1.70))                    # model rates the home dog 10 points above the market
     r = by_strategy(shadow_bets([g2], cfg, "r", "t", "d"))["underdog_ml"][2]
     assert r["action"] == "BET" and r["side"] == "home" and r["stake"] == 30.0
+
+
+@pytest.mark.flat_stakes
+def test_every_fake_bet_is_a_flat_ten_dollars_new_and_old():
+    from nhlbet.risk import shadow
+    from nhlbet.risk.policy import RiskConfig
+    assert shadow.FLAT_STAKE == 10.0 and shadow.paper_stake(0.0) == shadow.paper_stake(1.0) == 10.0
+    cfg = RiskConfig(bankroll=1000)
+    games = [G(1, q(0.62, 0.50, 1.95, 1.95)), G(2, q(0.70, 0.50, 2.0, 1.85))]
+    rows = shadow_bets(games, cfg, "r", "t", "d")
+    bets = [r for r in rows if r["action"] == "BET"]
+    assert bets and {r["stake"] for r in bets} == {10.0}                                    # live-policy strategies, edge strategies and controls alike
+    # a bet logged earlier at another stake is settled as $10 (the logged stake is kept for reference)
+    st = Store(":memory:")
+    st.upsert("games", [dict(game_id=1, season=1, game_type=2, game_date="2026-10-08", start_utc="2026-10-08T23:00:00Z", home="H", away="A", home_score=3, away_score=1,
+                             status="FINAL", last_period="REG", home_win=1, source="nhl_api", updated_at=None)], ["game_id"])
+    st.upsert("shadow_bets", [dict(run_id="r", run_at="t", game_id=1, strategy="every_game", game_date="2026-10-08", action="BET", side="home", team="H", book="b", decimal=2.0,
+                                   stake=27.0, p_model=0.6, p_adj=0.6, p_market=0.5, edge=0.1, ev=0.2)], ["run_id", "game_id", "strategy"])
+    r = shadow_performance(st).loc["every_game"]
+    assert r.staked == 10.0 and r.profit == 10.0 and r.roi == 1.0

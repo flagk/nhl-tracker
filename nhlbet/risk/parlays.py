@@ -24,9 +24,9 @@ class ParlayStrategy:
 
 
 PARLAY_STRATEGIES: tuple[ParlayStrategy, ...] = (
-    ParlayStrategy("parlay_top2", "The model's 2 best-ranked picks from different games combined into one ticket ($5-$30 by conviction)", 2, "top"),
-    ParlayStrategy("parlay_top3", "The model's 3 best-ranked picks from different games combined into one ticket ($5-$30 by conviction)", 3, "top"),
-    ParlayStrategy("parlay_players3", "The 3 best-ranked PLAYER props (shots, points, assists, anytime goals) from different games in one ticket ($5-$30 by conviction)", 3, "players"),
+    ParlayStrategy("parlay_top2", "The model's 2 best-ranked picks from different games combined into one ticket", 2, "top"),
+    ParlayStrategy("parlay_top3", "The model's 3 best-ranked picks from different games combined into one ticket", 3, "top"),
+    ParlayStrategy("parlay_players3", "The 3 best-ranked PLAYER props (shots, points, assists, anytime goals) from different games in one ticket", 3, "players"),
     ParlayStrategy("parlay_favorites_control", "CONTROL: flat $10 on the market favourites of 3 different games (no model; shows what parlay margin costs)", 3, "favorites"),
 )
 
