@@ -22,8 +22,18 @@ PAPER_MIN, PAPER_MAX = 5.0, 30.0     # pretend stakes scale with the model's con
 CONTROL_STAKE = 10.0                 # no-skill controls always stake the same, so their ROI is a clean baseline
 
 
+FLAT_STAKE: float | None = 10.0      # every fake bet stakes exactly this, so profit and ROI read as simply "how many $10 bets won". None = scale by conviction
+
+
+def flat(stake: float) -> float:
+    """The stake a fake bet actually uses: the flat stake when set, else the conviction-scaled one passed in."""
+    return FLAT_STAKE if FLAT_STAKE is not None else stake
+
+
 def paper_stake(conviction: float) -> float:
-    """$5 at no conviction up to $30 at full conviction, rounded to whole dollars. conviction is clipped to [0, 1]."""
+    """Flat mode (the default): always FLAT_STAKE. Otherwise $5 at no conviction up to $30 at full conviction, rounded to whole dollars (conviction clipped to [0, 1])."""
+    if FLAT_STAKE is not None:
+        return FLAT_STAKE
     c = min(1.0, max(0.0, float(conviction)))
     return float(round(PAPER_MIN + (PAPER_MAX - PAPER_MIN) * c))
 
@@ -65,20 +75,20 @@ STRATEGIES: tuple[Strategy, ...] = (
              (("min_edge", 0.01), ("min_edge_unconfirmed_goalie", 0.01), ("min_ev", 0.0))),
     Strategy("no_shrink", "Live policy trusting the raw model fully (no shrinkage toward the market)", "policy",
              (("trust_w0", 1.0), ("trust_d0", 1e9), ("max_disagreement", 1.0))),
-    Strategy("flat_model_side", "$5-$30 (more for a bigger edge) on every game where the model sees any positive edge", "flat_edge"),
-    Strategy("every_game", "$5-$30 (more when the model is surer) on the model's preferred side of EVERY game with fresh odds, no edge filter, even at a negative edge", "model_side"),
-    Strategy("totals_edge", "Goals model: $5-$30 on the over/under side with a 3%+ raw edge vs the market (experimental market)", "alt_edge", (("market", "totals"),)),
-    Strategy("puckline_edge", "Goals model: $5-$30 on the puck-line side with a 3%+ raw edge vs the market (experimental market)", "alt_edge", (("market", "spreads"),)),
-    Strategy("every_total", "Goals model: $5-$30 on its over/under side of EVERY game with fresh totals odds, no edge filter", "alt_every", (("market", "totals"),)),
-    Strategy("every_puckline", "Goals model: $5-$30 on its puck-line side of EVERY game with fresh spread odds, no edge filter", "alt_every", (("market", "spreads"),)),
+    Strategy("flat_model_side", "$10 on every game where the model sees any positive edge", "flat_edge"),
+    Strategy("every_game", "$10 on the model's preferred side of EVERY game with fresh odds, no edge filter, even at a negative edge", "model_side"),
+    Strategy("totals_edge", "Goals model: $10 on the over/under side with a 3%+ raw edge vs the market (experimental market)", "alt_edge", (("market", "totals"),)),
+    Strategy("puckline_edge", "Goals model: $10 on the puck-line side with a 3%+ raw edge vs the market (experimental market)", "alt_edge", (("market", "spreads"),)),
+    Strategy("every_total", "Goals model: $10 on its over/under side of EVERY game with fresh totals odds, no edge filter", "alt_every", (("market", "totals"),)),
+    Strategy("every_puckline", "Goals model: $10 on its puck-line side of EVERY game with fresh spread odds, no edge filter", "alt_every", (("market", "spreads"),)),
     Strategy("always_over", "CONTROL: flat $10 on the Over of every game (no skill; shows what totals vig plus base rate cost)", "alt_control", (("market", "totals"), ("role", "over"))),
-    Strategy("under_edge", "Goals model: $5-$30 on the Under only, when it has a 2%+ edge (are we better at low-scoring games?)", "alt_role_edge", (("market", "totals"), ("role", "under"))),
-    Strategy("over_edge", "Goals model: $5-$30 on the Over only, when it has a 2%+ edge", "alt_role_edge", (("market", "totals"), ("role", "over"))),
-    Strategy("puckline_dog_edge", "Goals model: $5-$30 on the +1.5 underdog side of the puck line, when it has a 2%+ edge", "alt_role_edge", (("market", "spreads"), ("role", "dog"))),
-    Strategy("puckline_fav_edge", "Goals model: $5-$30 on the -1.5 favourite side of the puck line, when it has a 2%+ edge", "alt_role_edge", (("market", "spreads"), ("role", "fav"))),
+    Strategy("under_edge", "Goals model: $10 on the Under only, when it has a 2%+ edge (are we better at low-scoring games?)", "alt_role_edge", (("market", "totals"), ("role", "under"))),
+    Strategy("over_edge", "Goals model: $10 on the Over only, when it has a 2%+ edge", "alt_role_edge", (("market", "totals"), ("role", "over"))),
+    Strategy("puckline_dog_edge", "Goals model: $10 on the +1.5 underdog side of the puck line, when it has a 2%+ edge", "alt_role_edge", (("market", "spreads"), ("role", "dog"))),
+    Strategy("puckline_fav_edge", "Goals model: $10 on the -1.5 favourite side of the puck line, when it has a 2%+ edge", "alt_role_edge", (("market", "spreads"), ("role", "fav"))),
     Strategy("always_under", "CONTROL: flat $10 on the Under of every game (no skill; the mirror of always_over)", "alt_control", (("market", "totals"), ("role", "under"))),
     Strategy("puckline_dog_control", "CONTROL: flat $10 on the +1.5 underdog of every game (no skill; what the puck-line vig costs)", "alt_control", (("market", "spreads"), ("role", "dog"))),
-    Strategy("underdog_ml", "$5-$30 on the moneyline UNDERDOG, only when the model rates it 2%+ better than the market does", "ml_dog_edge"),
+    Strategy("underdog_ml", "$10 on the moneyline UNDERDOG, only when the model rates it 2%+ better than the market does", "ml_dog_edge"),
     Strategy("underdog_ml_control", "CONTROL: flat $10 on the moneyline underdog of every game (no skill)", "ml_dog_control"),
     Strategy("home_ml_control", "CONTROL: flat $10 on the HOME team's moneyline in every game (no skill; is there a home-ice price bias?)", "ml_home_control"),
     Strategy("market_favorite", "CONTROL: flat $10 on the market favourite (no skill; shows what the bookmaker margin costs)", "market_favorite"),
@@ -191,25 +201,25 @@ def shadow_bets(games: Sequence, cfg: RiskConfig, run_id: str, run_at: str, date
             stake = (CONTROL_STAKE if st.kind == "market_favorite" else
                      paper_stake(edge_conviction(q.edge)) if st.kind == "flat_edge" else paper_stake(side_conviction(q.model_prob)))
             rows.append(_row(run_id, run_at, date, g.game_id, st.name, "BET", q, stake, p_adj, q.ev))
-    return rows
+    return [{**r, "stake": flat(r["stake"])} if r["action"] == "BET" else r for r in rows]
 
 
 # ---------------------------------------------------------------- player props (several bets per game, so they live in their own table)
 PROP_MAX_PER_DAY = 8
 PROP_MIN_GAMES = 10
 PROP_STRATEGIES: tuple[Strategy, ...] = (
-    Strategy("sog_edge", f"Player shots: $5-$30 on the over/under the model likes (3%+ edge, 10+ games of history), best {PROP_MAX_PER_DAY} of the day (experimental market)", "prop_edge"),
-    Strategy("sog_over_edge", f"Player shots, OVERS only: $5-$30 when the model sees a 2%+ edge on the over (10+ games of history), best {PROP_MAX_PER_DAY} of the day", "prop_edge_over"),
-    Strategy("sog_under_edge", f"Player shots, UNDERS only: $5-$30 when the model sees a 2%+ edge on the under (10+ games of history), best {PROP_MAX_PER_DAY} of the day", "prop_edge_under"),
-    Strategy("pts_edge", f"Player POINTS (goals + assists): $5-$30 on the over/under the model likes (3%+ edge, 10+ games of history), best {PROP_MAX_PER_DAY} of the day (experimental market)", "prop_edge", (("stat", "points"),)),
-    Strategy("pts_over_edge", f"Player POINTS, OVERS only: $5-$30 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_over", (("stat", "points"),)),
-    Strategy("pts_under_edge", f"Player POINTS, UNDERS only: $5-$30 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_under", (("stat", "points"),)),
+    Strategy("sog_edge", f"Player shots: $10 on the over/under the model likes (3%+ edge, 10+ games of history), best {PROP_MAX_PER_DAY} of the day (experimental market)", "prop_edge"),
+    Strategy("sog_over_edge", f"Player shots, OVERS only: $10 when the model sees a 2%+ edge on the over (10+ games of history), best {PROP_MAX_PER_DAY} of the day", "prop_edge_over"),
+    Strategy("sog_under_edge", f"Player shots, UNDERS only: $10 when the model sees a 2%+ edge on the under (10+ games of history), best {PROP_MAX_PER_DAY} of the day", "prop_edge_under"),
+    Strategy("pts_edge", f"Player POINTS (goals + assists): $10 on the over/under the model likes (3%+ edge, 10+ games of history), best {PROP_MAX_PER_DAY} of the day (experimental market)", "prop_edge", (("stat", "points"),)),
+    Strategy("pts_over_edge", f"Player POINTS, OVERS only: $10 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_over", (("stat", "points"),)),
+    Strategy("pts_under_edge", f"Player POINTS, UNDERS only: $10 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_under", (("stat", "points"),)),
     Strategy("pts_over_control", f"CONTROL: flat $10 on the Over for {PROP_MAX_PER_DAY} players priced for points, highest line first (no model; shows what prop vig costs)", "prop_control", (("stat", "points"),)),
-    Strategy("ast_edge", f"Player ASSISTS: $5-$30 on the over/under the model likes (3%+ edge, 10+ games of history), best {PROP_MAX_PER_DAY} of the day (experimental market)", "prop_edge", (("stat", "assists"),)),
-    Strategy("ast_over_edge", f"Player ASSISTS, OVERS only: $5-$30 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_over", (("stat", "assists"),)),
-    Strategy("ast_under_edge", f"Player ASSISTS, UNDERS only: $5-$30 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_under", (("stat", "assists"),)),
+    Strategy("ast_edge", f"Player ASSISTS: $10 on the over/under the model likes (3%+ edge, 10+ games of history), best {PROP_MAX_PER_DAY} of the day (experimental market)", "prop_edge", (("stat", "assists"),)),
+    Strategy("ast_over_edge", f"Player ASSISTS, OVERS only: $10 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_over", (("stat", "assists"),)),
+    Strategy("ast_under_edge", f"Player ASSISTS, UNDERS only: $10 at a 2%+ edge, best {PROP_MAX_PER_DAY} of the day", "prop_edge_under", (("stat", "assists"),)),
     Strategy("ast_over_control", f"CONTROL: flat $10 on the Over for {PROP_MAX_PER_DAY} players priced for assists (no model; shows what prop vig costs)", "prop_control", (("stat", "assists"),)),
-    Strategy("goal_edge", f"ANYTIME GOALSCORER: $5-$30 on players the model rates 3%+ likelier to score than the market, best {PROP_MAX_PER_DAY} of the day (experimental; the market's margin is estimated)", "prop_edge_over", (("stat", "goals"),)),
+    Strategy("goal_edge", f"ANYTIME GOALSCORER: $10 on players the model rates 3%+ likelier to score than the market, best {PROP_MAX_PER_DAY} of the day (experimental; the market's margin is estimated)", "prop_edge_over", (("stat", "goals"),)),
     Strategy("goal_control", f"CONTROL: flat $10 on the {PROP_MAX_PER_DAY} most likely anytime scorers by market price (no model; shows what the margin costs)", "prop_control", (("stat", "goals"),)),
     Strategy("sog_over_control", f"CONTROL: flat $10 on the Over for the {PROP_MAX_PER_DAY} players with the highest shots lines (no model; shows what prop vig costs)", "prop_control"),
 )

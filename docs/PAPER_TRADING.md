@@ -61,3 +61,8 @@ Settled parlays appear in the paper-trading tables as market `parlay`; open ones
 ## Stakes on experimental markets follow learned trust
 Totals, puck-line and player-prop fake bets are sized by `trust x edge`, not the raw edge: a weighted edge of 3 points is the $30 maximum, so a model that has done badly against the market
 (low learned weight, see [SITE.md](SITE.md)) stakes close to $5 even on a large edge, while one that earns trust stakes more. Which bets are placed is unchanged; only their size. The no-skill controls stay flat at $10.
+
+## Flat $10 stakes (current)
+Every fake bet is a flat **$10**: live-policy strategies, edge strategies, controls, player props and parlays alike, so profit and ROI read as simply "how many $10 bets won". This applies to past bets too:
+bets logged earlier with $5-$30 stakes are counted as $10 when settled (the originally logged stake stays in the log files; the paper-trading tables show $10). The conviction-based sizing described above is kept in the code
+(`nhlbet/risk/shadow.py`, set `FLAT_STAKE = None` to bring it back) but is switched off.

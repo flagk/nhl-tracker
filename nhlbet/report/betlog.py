@@ -87,6 +87,16 @@ def all_shadow_rows(store: Store) -> pd.DataFrame:
     if len(p):
         p = p.assign(action="BET", team=p.label, p_adj=p.p_model, market=p["market"].fillna("player_sog") if "market" in p else "player_sog")
         r = pd.concat([r, p[[c for c in p.columns if c in set(r.columns) | {"player_id"}]]], ignore_index=True)
+    return _flat_stakes(r)
+
+
+def _flat_stakes(r: pd.DataFrame) -> pd.DataFrame:
+    """Flat-stake mode: every fake bet counts as exactly FLAT_STAKE, including ones logged earlier with a different stake (the original is kept as ``logged_stake``)."""
+    from nhlbet.risk import shadow
+    if shadow.FLAT_STAKE is None or r.empty or "stake" not in r:
+        return r
+    r = r.assign(logged_stake=r["stake"])
+    r["stake"] = np.where((r["action"] == "BET") & (r["stake"] > 0), shadow.FLAT_STAKE, r["stake"])
     return r
 
 
@@ -137,6 +147,9 @@ def parlay_resolved(store: Store) -> pd.DataFrame:
     if pb.empty:
         return pb
     pb = pb.sort_values("run_at").groupby(["game_date", "strategy", "idx"], as_index=False).tail(1).reset_index(drop=True)
+    from nhlbet.risk import shadow
+    if shadow.FLAT_STAKE is not None:
+        pb["stake"] = shadow.FLAT_STAKE
     games = store.df("SELECT game_id, home, away, home_score, away_score, last_period, home_win FROM games")
     sk = store.df("SELECT game_id, player_id, sog, points, goals, assists FROM skater_game WHERE sog IS NOT NULL")
     rows = []
