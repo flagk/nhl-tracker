@@ -85,7 +85,7 @@ def apply_review(candidate: dict, wave_game_ids: set[int], facts: dict[str, dict
         fact = facts.get(p["pick_id"])
         a = agent.get(p["pick_id"])
         decision, by = combine(a["decision"] if a else None, fact)
-        status = "REVIEWED" if (ok and a is not None) else "UNREVIEWED"
+        status = "REVIEWED" if (ok and (a is not None or (by == "code" and decision != "keep"))) else "UNREVIEWED"
         if status == "UNREVIEWED" and by == "agent":
             by = "code"
         rec = _record(p, decision, by, status, a, fact, run_id, now, "; ".join(errors)[:200] if errors else None)

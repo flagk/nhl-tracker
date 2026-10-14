@@ -1,0 +1,145 @@
+name: Pre-game review (agent)
+# A Claude Code agent (anthropics/claude-code-action, authenticated with the repository secret CLAUDE_CODE_OAUTH_TOKEN, i.e. the Claude SUBSCRIPTION, not an API key)
+# checks late news (goalies, scratches, injuries, lineups) for the picks the model already made, once per wave of games, ~75 minutes before the first puck drop of the
+# wave. It may only answer KEEP / FLAG / VETO per pick; code validates its file, recomputes odds movement and applies the decisions. See AGENT.md.
+#
+# Failure policy: if the agent errors, times out, hits --max-turns or writes invalid output, the picks are published as UNREVIEWED (never as reviewed) and this
+# run is left RED so GitHub sends its failure notification.
+on:
+  # best-effort backup (GitHub cron has arrived 3-6 h late here); the heartbeat (scripts/heartbeat.py) dispatches this workflow on time. Scheduled runs only
+  # exist on the default branch, and a public repository's schedules are switched off after 60 days without repository activity (keepalive.yml covers the off-season).
+  schedule:
+    - cron: "*/15 17-23 * * *"
+    - cron: "*/15 0-2 * * *"
+  workflow_dispatch:
+    inputs:
+      gated:
+        description: "true = re-check the schedule gate (used by the heartbeat); false = manual: review the first wave that has not started, whatever the clock says"
+        default: "false"
+      dry_run:
+        description: "true = run everything but commit nothing and publish nothing (the agent still uses subscription usage)"
+        default: "false"
+
+concurrency:
+  group: nhl-data          # shares the group with the daily job: both write the same files
+  cancel-in-progress: false
+
+permissions:
+  contents: write         # commit review_logs/, data/review, data/logs/review, site/
+  actions: write          # start the Pages deploy (commits made with GITHUB_TOKEN do not trigger other workflows)
+
+env:
+  REVIEW_MODEL: sonnet                                  # alias for the current Sonnet (code.claude.com/docs/en/model-config); cost/quality balance for a lookup task
+  REVIEW_ACTION: anthropics/claude-code-action@v1
+  DRY_RUN: ${{ github.event.inputs.dry_run == 'true' }}
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40      # the agent step has its own, shorter limit so the steps after it still run when it times out
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}    # branch tip at job start, not the (possibly stale) triggering commit
+
+      - name: Gate (is a wave of games about to start, and not reviewed yet?)
+        id: gate
+        run: |
+          FORCE=""; if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.gated }}" != "true" ]; then FORCE="--force"; fi
+          python3 scripts/gate.py --kind review $FORCE      # standard library only
+
+      - uses: actions/setup-python@v5
+        if: steps.gate.outputs.run == 'true'
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e .
+        if: steps.gate.outputs.run == 'true'
+
+      - name: Restore the odds quota counter and API cache (read-only; the daily job saves it)
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/nhl.db
+            data/cache
+          key: nhl-data-${{ github.run_id }}
+          restore-keys: nhl-data-
+
+      - name: Prepare (wave, odds movement and deterministic odds veto, computed in code)
+        id: prepare
+        if: steps.gate.outputs.run == 'true'
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}      # not visible to the agent step
+        run: |
+          FORCE=""; if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.gated }}" != "true" ]; then FORCE="--force"; fi
+          if [ "${{ vars.REVIEW_FETCH_ODDS }}" = "false" ]; then FORCE="$FORCE --no-fetch"; fi      # repository variable: switch off the 3-credit price refresh
+          python scripts/review_prepare.py $FORCE
+          python scripts/review_guard.py snapshot
+
+      - name: Review agent (Claude Code Action, subscription OAuth token)
+        id: agent
+        if: steps.prepare.outputs.run == 'true' && steps.prepare.outputs.agent_needed == 'true'
+        timeout-minutes: 20
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ github.token }}              # act as the workflow's own token: no Claude GitHub App needed for this job
+          allowed_bots: "github-actions"                 # heartbeat-dispatched and scheduled runs can be attributed to a bot
+          prompt: |
+            Review the picks in agent/work/review_input.json following the instructions in your system prompt (agent/review_prompt.md) exactly.
+            Write only agent/work/picks_review.json, then reply "done".
+          claude_args: |
+            --model ${{ env.REVIEW_MODEL }}
+            --max-turns 45
+            --append-system-prompt-file agent/review_prompt.md
+            --tools "Read,Write,WebSearch,WebFetch"
+            --allowedTools "WebSearch,WebFetch,Read,Edit(agent/work/picks_review.json)"
+            --disallowedTools "Bash,mcp__*,Edit(.github/**),Edit(nhlbet/**),Edit(scripts/**),Edit(tests/**),Edit(data/**),Edit(site/**),Edit(reports/**),Edit(review_logs/**),Edit(agent/review_prompt.md),Edit(agent/picks_review.schema.json)"
+
+      - name: Guard (the agent may only have written agent/work/)
+        id: guard
+        if: always() && steps.agent.outcome != 'skipped' && steps.prepare.outputs.run == 'true'
+        run: python scripts/review_guard.py check
+
+      - name: Validate and apply the review (no LLM; publishes UNREVIEWED if the agent failed)
+        id: apply
+        if: always() && steps.prepare.outcome == 'success' && steps.prepare.outputs.run == 'true'
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          OUTCOME="${{ steps.agent.outcome }}"
+          if [ "$OUTCOME" = "success" ] && [ "${{ steps.guard.outcome }}" != "success" ]; then OUTCOME=failure; fi
+          if [ "$OUTCOME" = "" ]; then OUTCOME=skipped; fi
+          DRY=""; if [ "$DRY_RUN" = "true" ]; then DRY="--dry-run"; fi
+          EXEC=""; if [ -n "${{ steps.agent.outputs.execution_file }}" ]; then EXEC="--execution-file ${{ steps.agent.outputs.execution_file }}"; fi
+          python scripts/review_apply.py --agent-outcome "$OUTCOME" $DRY $EXEC
+
+      - name: Keep the working files for debugging
+        if: always() && steps.prepare.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: review-work
+          path: agent/work/
+          retention-days: 7
+
+      - name: Commit (only the files this workflow owns)
+        if: always() && steps.prepare.outputs.run == 'true' && steps.apply.outcome != 'skipped' && github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A data/review data/logs/review review_logs site
+          if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+          git commit -m "Pre-game review ${{ steps.prepare.outputs.run_id }}"
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push && exit 0
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 4))
+          done
+          exit 1
+
+      - name: Publish the site
+        if: always() && steps.prepare.outputs.run == 'true' && steps.apply.outcome != 'skipped' && github.event.inputs.dry_run != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main || echo "could not start the Pages deploy (the next daily run deploys it)"

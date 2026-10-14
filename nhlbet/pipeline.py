@@ -240,6 +240,15 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     except Exception as e:
         log.warning("evidence summary unavailable: %s", e)
     payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow, rank_weights=learn_weights(store), evidence=evidence)
+    try:                                   # candidates for the pre-game review agent, and the review decisions made so far today (UNREVIEWED when there are none)
+        from nhlbet.review.apply import STATE_NAME, attach_to_payload, load_state
+        from nhlbet.review.contract import build_candidates
+        review_dir = Path(log_root).parent / "review"
+        review_dir.mkdir(parents=True, exist_ok=True)
+        (review_dir / "picks_candidate.json").write_text(json.dumps(build_candidates(payload), indent=1, allow_nan=False))
+        attach_to_payload(payload, load_state(review_dir / STATE_NAME))
+    except Exception as e:
+        log.warning("review candidates unavailable: %s", e)
     build_site(payload, site_dir)
     build_bets_page(store, payload["games"], cfg.bankroll, payload["generated_at"], date, site_dir)
     # history (markdown for GitHub, html for the site) and the front-page block with clickable links

@@ -225,8 +225,11 @@ def slate_waves(root: str | Path) -> tuple[str | None, list[dict]]:
     return date, [{"key": f"rv-{date}-{w[0][0]:%H%M}", "start": w[0][0], "game_ids": [g for _, g in w]} for w in waves]
 
 
-def review_target(now: datetime, root: str | Path = ".") -> dict:
-    """The wave that should be reviewed now: ``{"key", "start", "game_ids", "reason"}``, or ``{"key": None, "reason": ...}`` when nothing is due."""
+def review_target(now: datetime, root: str | Path = ".", force: bool = False) -> dict:
+    """The wave that should be reviewed now: ``{"key", "start", "game_ids", "reason"}``, or ``{"key": None, "reason": ...}`` when nothing is due.
+
+    ``force`` (manual runs): the first wave that has not started, whatever the clock says and even if it was reviewed before.
+    """
     now = now.astimezone(timezone.utc)
     date = game_day(now)
     slate_date, waves = slate_waves(root)
@@ -245,6 +248,10 @@ def review_target(now: datetime, root: str | Path = ".") -> dict:
         cand = {}
     for w in waves:
         wait = w["start"] - now
+        if force:
+            if wait > timedelta(0):
+                return {**w, "reason": f"forced: wave {w['key']} starts in {int(wait.total_seconds() // 60)} min"}
+            continue
         if wait > timedelta(minutes=REVIEW_LEAD_MIN):
             return {"key": None, "reason": f"next wave starts in {int(wait.total_seconds() // 60)} min: review opens {REVIEW_LEAD_MIN} min before"}
         if wait < timedelta(minutes=REVIEW_LATEST_MIN):
