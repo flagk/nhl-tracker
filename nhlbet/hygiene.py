@@ -54,3 +54,36 @@ def data_freshness(store: Store, date: str, refresh_error: str | None = None, ma
     if age > max_age_days and int(today.n.iloc[0]):
         return False, f"data refresh failed ({refresh_error}) and the newest completed game is {age} days old: picks withheld"
     return True, ""
+
+
+def validate_inputs(store: Store) -> list[str]:
+    """Schema and sanity checks on the game table the model is about to use. Returns problems (empty = fine); the daily job withholds picks when there are any.
+
+    Checks: the needed columns exist, game ids and (date, home, away) are unique among API games, final scores are non-negative integers with a decided
+    winner, ``home_win`` agrees with the score, and no completed game lacks a result flag.
+    """
+    problems = []
+    cols = {r[1] for r in store.conn.execute("PRAGMA table_info(games)")}
+    missing = {"game_id", "game_date", "home", "away", "home_score", "away_score", "home_win", "status", "game_type"} - cols
+    if missing:
+        return [f"games table is missing columns: {sorted(missing)}"]
+    g = store.df("SELECT game_id, game_date, home, away, home_score, away_score, home_win, status, source FROM games")
+    if g.empty:
+        return []
+    if g.game_id.duplicated().any():
+        problems.append(f"{int(g.game_id.duplicated().sum())} duplicate game ids")
+    api = g[g.source == "nhl_api"]
+    dup = api.duplicated(["game_date", "home", "away"]).sum()
+    if dup:
+        problems.append(f"{int(dup)} duplicate (date, home, away) games")
+    fin = api[api.home_score.notna() & api.away_score.notna()]
+    if ((fin.home_score < 0) | (fin.away_score < 0)).any():
+        problems.append("negative scores")
+    if (fin.home_score == fin.away_score).any():
+        problems.append(f"{int((fin.home_score == fin.away_score).sum())} completed games with equal scores")
+    bad = fin[(fin.home_win.isna()) | (fin.home_win != (fin.home_score > fin.away_score).astype(int))]
+    if len(bad):
+        problems.append(f"{len(bad)} completed games where home_win disagrees with the score")
+    if g.game_date.isna().any():
+        problems.append("games without a date")
+    return problems

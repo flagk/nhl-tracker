@@ -15,7 +15,7 @@ from nhlbet.data.goalies import load_confirmations
 from nhlbet.data.ingest import current_season, import_legacy_csv, ingest_day, ingest_details, ingest_schedule, reparse_skaters
 from nhlbet.data.client import NHLClient
 from nhlbet.data.store import Store
-from nhlbet.hygiene import data_freshness, purge_inplay
+from nhlbet.hygiene import data_freshness, purge_inplay, validate_inputs
 from nhlbet.models.bundle import ModelBundle
 from nhlbet.odds.client import OddsAPIError, OddsClient, OddsConfigError
 from nhlbet.odds.snapshots import record_fetch
@@ -144,6 +144,9 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
             notes.append(f"data refresh failed ({err}); using cached data")
     load_confirmations(store)
     data_ok, data_msg = data_freshness(store, date, err if refresh else None)
+    problems = validate_inputs(store)
+    if problems:
+        data_ok, data_msg = False, "input data failed validation (" + "; ".join(problems) + "): picks withheld"
     if not data_ok:
         notes.append(data_msg)                     # shown on the page and in the report; the slate below is built with the model marked ALERT, so nothing is picked
 

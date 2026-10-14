@@ -59,3 +59,16 @@ def test_feature_selection_and_tuning_ended_before_the_walk_forward_evaluation_b
     sel = json.loads((ROOT / "data/models/feature_selection.json").read_text())["meta"]["selection_end"]
     tune = json.loads((ROOT / "data/models/hyperparams.json").read_text())["_meta"]["tune_end"]
     assert pd.Timestamp(sel) < pd.Timestamp(wf_first) and pd.Timestamp(tune) < pd.Timestamp(wf_first)
+
+
+def test_input_validation_catches_duplicates_and_inconsistent_results():
+    from nhlbet.hygiene import validate_inputs
+    st = Store(":memory:")
+    g = lambda gid, d, hs, as_, win: dict(game_id=gid, season=1, game_type=2, game_date=d, start_utc=f"{d}T23:00:00Z", home="H", away="A", home_score=hs, away_score=as_, status="FINAL",
+                                          last_period="REG", home_win=win, source="nhl_api", updated_at=None)
+    st.upsert("games", [g(1, "2026-10-01", 3, 1, 1), g(2, "2026-10-02", 2, 4, 0)], ["game_id"])
+    assert validate_inputs(st) == []
+    st.upsert("games", [g(3, "2026-10-02", 2, 4, 0)], ["game_id"])                                  # same date, home and away as game 2
+    assert any("duplicate (date, home, away)" in p for p in validate_inputs(st))
+    st.upsert("games", [g(4, "2026-10-03", 5, 2, 0)], ["game_id"])                                  # home won 5-2 but home_win says 0
+    assert any("disagrees with the score" in p for p in validate_inputs(st))
