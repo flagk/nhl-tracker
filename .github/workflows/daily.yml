@@ -92,7 +92,7 @@ jobs:
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}      # optional: without it odds are disabled and every game is "no bet"
           BANKROLL: ${{ vars.BANKROLL || '1000' }}
-          REVIEW_ENABLED: ${{ vars.REVIEW_ENABLED || 'true' }}     # false = no review candidates / labels on the page (see AGENT.md)
+          REVIEW_ENABLED: ${{ vars.REVIEW_ENABLED || (secrets.CLAUDE_CODE_OAUTH_TOKEN != '' && 'true' || 'false') }}     # review labels on the page only once the review is configured (see AGENT.md)
         run: |
           DATE_ARG=""
           if [ -n "${{ github.event.inputs.date }}" ]; then DATE_ARG="--date ${{ github.event.inputs.date }}"; fi

@@ -92,7 +92,8 @@ UNREVIEWED is never silent: the page shows it on every affected pick, the log ha
 3. Make sure **Settings → Actions → General → Workflow permissions** allows workflows to write (the existing daily job already needs this) and that Pages is deployed from GitHub Actions.
 4. Optional repository **variables** (Settings → Secrets and variables → Actions → Variables): `REVIEW_ENABLED=false` switches the whole feature off; `REVIEW_FETCH_ODDS=false`
    stops the 3-credit price refresh (odds movement then reads `unconfirmed` and no code veto is possible).
-5. The first run should be a dry run: **Actions → Pre-game review (agent) → Run workflow**, `gated=false`, `dry_run=true`.
+5. Until the secret exists the feature is **inactive and quiet**: the review workflow exits at its gate with a notice (green), and the page shows no review labels. Adding the secret turns it on.
+6. The first run should be a dry run: **Actions → Pre-game review (agent) → Run workflow**, `gated=false`, `dry_run=true`.
 
 The workflow passes `github_token: ${{ github.token }}` so the action acts as the workflow itself; the Claude GitHub App is not needed for this job.
 
@@ -113,7 +114,7 @@ The workflow passes `github_token: ${{ github.token }}` so the action acts as th
 
 * Fastest, no code change: set the repository variable `REVIEW_ENABLED=false`. The workflow stops at its gate, the daily job stops writing candidates, and the page shows no review labels.
 * Or: Actions → *Pre-game review (agent)* → **⋯ → Disable workflow** (the page will then label candidate picks UNREVIEWED until you also set the variable).
-* Deleting the secret does *not* disable it: every wave would run red and publish UNREVIEWED.
+* Deleting the secret also returns it to the quiet inactive state, but an *expired or invalid* secret does not: that is an agent failure (red run, UNREVIEWED).
 
 ## Does the agent help? (`reports/REVIEW.md`)
 
