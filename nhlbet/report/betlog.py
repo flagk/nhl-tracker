@@ -46,6 +46,11 @@ def resolved(store: Store, cons: pd.DataFrame | None = None) -> pd.DataFrame:
                 for b, s, dec, c in zip(d.is_bet, d.side, d.decimal, d.close_home_prob)]
     d["clv_ev"] = [x["clv_ev"] for x in clv_rows]
     d["clv_prob_pts"] = [x["clv_prob_pts"] for x in clv_rows]
+    # margin-free closing-line value: how far the no-vig line moved toward our side between the pick and the close (clv_ev above also pays the margin of the price taken, so it sits
+    # around -2% even for a no-skill bet; this one is centred on zero when the market simply agrees with itself)
+    p_pick = np.where(d.side == "home", d.p_market, 1 - d.p_market)
+    p_close = np.where(d.side == "home", d.close_home_prob.astype(float), 1 - d.close_home_prob.astype(float))
+    d["clv_move_pts"] = np.where(d.is_bet & d.close_home_prob.notna() & d.p_market.notna(), (p_close - p_pick) * 100, np.nan)
     d["date"] = pd.to_datetime(d.game_date)
     return d.sort_values("date").reset_index(drop=True)
 
@@ -73,6 +78,8 @@ def performance(store: Store, start_bankroll: float = 1000.0, cons: pd.DataFrame
     out["bankroll"] = float(start_bankroll + bets.profit.sum())
     out["drawdown"] = drawdown_stats(curve) if len(curve) else drawdown_stats(pd.DataFrame())
     out["clv"] = summarize_clv(bets.clv_ev) if len(bets) else {"n": 0}
+    if len(bets) and bets.clv_move_pts.notna().any():
+        out["clv"]["move_pts"] = float(bets.clv_move_pts.mean())          # margin-free: points the no-vig line moved toward our side (0 = no closing-line value)
     out["no_bet_rate"] = float(1 - d.is_bet.mean())
     out["curve"] = curve
     return out

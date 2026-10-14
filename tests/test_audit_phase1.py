@@ -1,5 +1,6 @@
 """Audit phase 1: live predictions feed the monitor, stale data never publishes picks, tuning / selection stay before the evaluation window."""
 import json
+import pytest
 from pathlib import Path
 
 import pandas as pd
@@ -72,3 +73,19 @@ def test_input_validation_catches_duplicates_and_inconsistent_results():
     assert any("duplicate (date, home, away)" in p for p in validate_inputs(st))
     st.upsert("games", [g(4, "2026-10-03", 5, 2, 0)], ["game_id"])                                  # home won 5-2 but home_win says 0
     assert any("disagrees with the score" in p for p in validate_inputs(st))
+
+
+def test_margin_free_closing_line_value_is_centred_on_zero_for_a_no_skill_bet():
+    from nhlbet.report.betlog import performance, resolved
+    st = Store(":memory:")
+    st.upsert("games", [dict(game_id=1, season=1, game_type=2, game_date="2026-10-08", start_utc="2026-10-08T23:00:00Z", home="H", away="A", home_score=3, away_score=1,
+                             status="FINAL", last_period="REG", home_win=1, source="nhl_api", updated_at=None)], ["game_id"])
+    rec = dict(run_id="r", run_at="2026-10-08T20:00:00+00:00", run_type="late", game_id=1, game_date="2026-10-08", home="H", away="A", p_model=0.6, p_adj=0.55, p_market=0.50, p_stack_raw=0.6,
+               action="BET", side="home", team="H", decimal=1.95, stake=10.0, model_version="v")
+    st.upsert("recommendations", [rec], ["run_id", "game_id"])
+    cons = pd.DataFrame([{"game_id": 1, "captured_at": "2026-10-08T22:50:00+00:00", "home_prob_novig": 0.53, "n_books": 5}])
+    d = resolved(st, cons)
+    assert d.clv_move_pts.iloc[0] == pytest.approx(3.0)                                              # the no-vig line moved 3 points toward home after the pick
+    assert d.clv_ev.iloc[0] == pytest.approx(1.95 * 0.53 - 1)                                       # the older measure also pays the margin of the price taken: -3.4% here
+    cons2 = cons.assign(home_prob_novig=0.50)
+    assert resolved(st, cons2).clv_move_pts.iloc[0] == pytest.approx(0.0) and resolved(st, cons2).clv_ev.iloc[0] < 0      # no movement: margin-free CLV is zero while CLV-with-margin is negative
