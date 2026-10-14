@@ -64,6 +64,19 @@ def fit_platt_line(p, y, line) -> dict:
     return {"a": float(m.intercept_[0]), "b": float(m.coef_[0, 0]), "c": float(m.coef_[0, 1]), "n": int(len(y))}
 
 
+def slope_se(p, y=None) -> float:
+    """Standard error of a logistic calibration slope from the observed information: 1 / sqrt(sum w (x - mean_w x)^2) with w = q(1-q) and x = logit(p).
+
+    When the model's probabilities barely vary (a totals model whose logits span about +-0.1), the slope is estimated very imprecisely (SE about 0.25 on 6,000
+    games), so a slope of 0.5 versus 0.8 is not evidence of anything: read ``cal_slope`` together with this.
+    """
+    x = _logit(p)
+    q = 1.0 / (1.0 + np.exp(-x))
+    w = q * (1 - q)
+    xbar = np.sum(w * x) / np.sum(w)
+    return float(1.0 / np.sqrt(np.sum(w * (x - xbar) ** 2)))
+
+
 def fit_platt(p, y) -> dict:
     """logit(p') = a + b*logit(p), fit by (lightly regularised) logistic regression. b near 1 = calibrated; b < 1 = overconfident; b near 0 = no signal."""
     from sklearn.linear_model import LogisticRegression
@@ -148,8 +161,9 @@ def evaluate(P: pd.DataFrame, calibrated: bool = False) -> pd.DataFrame:
         d = lm - lb
         lo, hi = _boot(d, Q.game_date)
         slope = fit_platt(Q[pc], y)["b"] if len(Q) > 100 else np.nan                  # logistic calibration slope (1 = calibrated)
+        slope_err = slope_se(Q[pc]) if len(Q) > 100 else np.nan
         rows.append({"market": name, "n": len(Q), "hit_rate": float(y.mean()), "mean_p": float(Q[pc].mean()), "ll_model": float(lm.mean()),
-                     "ll_base": float(lb.mean()), "diff": float(d.mean()), "ci_low": lo, "ci_high": hi, "cal_slope": slope})
+                     "ll_base": float(lb.mean()), "diff": float(d.mean()), "ci_low": lo, "ci_high": hi, "cal_slope": slope, "cal_slope_se": slope_err})
     return pd.DataFrame(rows)
 
 
