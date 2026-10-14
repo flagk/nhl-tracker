@@ -37,3 +37,11 @@ never the closing line; tests assert later snapshots are ignored. Market feature
   so backtest ROI cannot use real lines until enough snapshots accumulate. Until then ROI is reported as scenarios only.
 - Not verified against the live API from the dev sandbox (network policy); the request/response handling follows the public v4 docs
   and is exercised with faithful fakes. First live run: `python scripts/fetch_odds.py` and inspect `odds_fetch_log`.
+
+
+## Odds-credit budget (why some player prices are skipped)
+The free plan allows about 500 credits a month, and every request costs one credit per market. Over Oct 5-14 the system used ~23 a day, which would have run out around Oct 22. Three controls now keep the month alive:
+1. **Closing-line snapshots** (CLV): one capture per start wave instead of one every ~20 minutes. A game's closing snapshot is any capture in its final 25 minutes, and one capture covers every game starting soon, so a busy night takes about 3-4 captures instead of 15+.
+2. **No repeat purchases:** a game's player market fetched in the last hour is not fetched again (re-running the late run no longer re-buys the same lines).
+3. **A daily player-price budget:** what is left (less a 25-credit reserve) is spread over the days left in the month (the plan is assumed to reset on the 1st); today's spend and the closing snapshots still to come are subtracted, and player markets get only what remains, soonest games and shots/points first. Assists and anytime goalscorer need 250+ credits left, and no player prices are bought below 100.
+Moneylines, totals and puck lines (the late run's 3 credits) and the morning moneyline fetch are never rationed. A paid plan removes the squeeze; set `ODDS_PROPS_MAX_GAMES` and `ODDS_PROP_MARKETS` to widen coverage then.
