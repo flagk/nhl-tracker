@@ -191,6 +191,6 @@ What would change the verdict: positive margin-free closing-line value that beat
 - Goalie saves are a research model only (see above).
 - Per-book settlement rules are not modelled.
 - The 2024-25 / 2025-26 contrast (strong skill, then within noise) deserves a longer look once more seasons accumulate; one season of fade is suggestive, not conclusive.
-- `reports/PROPS.md` is being regenerated with the wider shrinkage grid; the shrinkage values in `reports/props_shrink.json` feed the live player models.
+- Props shrinkage was re-run on the wider grid (3 to 400 pseudo-games), chosen on games through 2024-06-30 and scored on later games (`reports/PROPS.md`, `reports/props_shrink.json`, which feeds the live player models): shots 25, points 50, assists 50, goals 100. None of the four sits at the edge of the grid any more (the first run chose the old top, 50, for points, assists and goals). On the later games the shots optimum was 12 rather than the chosen 25 (NLL 1.54512 vs 1.54537), a difference too small to matter. The goalie-saves prior (research model only) still chose the top of its own grid (1600), so that choice is not yet bracketed; nothing is priced or staked from it.
 
 Reproduce everything: `python -m pytest -q` (leakage, settlement, count and evaluation tests), `python scripts/validate.py` (live evidence from the committed logs), and the `Goals model backtest`, `Player props backtest` and `Validation (ablations)` workflows for the backtest reports.
