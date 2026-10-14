@@ -15,6 +15,9 @@
 |         12 |                1.59684 |     1.54512 |
 |         25 |                1.59682 |     1.54537 |
 |         50 |                1.59817 |     1.54717 |
+|        100 |                1.60271 |     1.55195 |
+|        200 |                1.61089 |     1.56003 |
+|        400 |                1.61968 |     1.56768 |
 
 **Model vs the player's own rate** (negative diff = model better):
 
@@ -80,6 +83,9 @@ Average sog: predicted 1.648, actual 1.637.
 |         12 |                0.84528 |     0.83615 |
 |         25 |                0.84465 |     0.83544 |
 |         50 |                0.84445 |     0.8351  |
+|        100 |                0.84523 |     0.83566 |
+|        200 |                0.84715 |     0.8373  |
+|        400 |                0.8493  |     0.83918 |
 
 **Model vs the player's own rate** (negative diff = model better):
 
@@ -131,6 +137,9 @@ Average points: predicted 0.451, actual 0.462.
 |         12 |                0.6489  |     0.64175 |
 |         25 |                0.64869 |     0.64145 |
 |         50 |                0.64861 |     0.64127 |
+|        100 |                0.6487  |     0.64124 |
+|        200 |                0.64931 |     0.64166 |
+|        400 |                0.65083 |     0.64294 |
 
 **Model vs the player's own rate** (negative diff = model better):
 
@@ -173,7 +182,7 @@ Average assists: predicted 0.283, actual 0.290.
 
 190,498 out-of-sample player-games (1,243 players) from 2022-10-07 to 2026-10-13; retrained every 28 days on strictly earlier games; players need 5+ prior games.
 
-**Shrinkage sensitivity** (pseudo-games of position-average rate blended into the player's own; mean count NLL, lower is better). Chosen on games up to 2024-06-30: **50**; scored on later games:
+**Shrinkage sensitivity** (pseudo-games of position-average rate blended into the player's own; mean count NLL, lower is better). Chosen on games up to 2024-06-30: **100**; scored on later games:
 
 |   shrink_k |   NLL up to 2024-06-30 |   NLL after |
 |-----------:|-----------------------:|------------:|
@@ -182,27 +191,30 @@ Average assists: predicted 0.283, actual 0.290.
 |         12 |                0.45894 |     0.45323 |
 |         25 |                0.45767 |     0.452   |
 |         50 |                0.45662 |     0.45094 |
+|        100 |                0.45625 |     0.45049 |
+|        200 |                0.45666 |     0.45076 |
+|        400 |                0.45743 |     0.45136 |
 
 **Model vs the player's own rate** (negative diff = model better):
 
 | what                                             |      n |   model |   baseline |    diff |   ci_low |   ci_high |   hit_rate |   mean_p |   n_to_confirm | verdict           |
 |:-------------------------------------------------|-------:|--------:|-----------:|--------:|---------:|----------:|-----------:|---------:|---------------:|:------------------|
-| goals per player-game (PMF log-likelihood, NLL)  | 190498 |  0.4537 |     0.4596 | -0.0058 |  -0.0062 |   -0.0055 |   nan      | nan      |           1491 | skill vs own rate |
-| goals per player-game (ranked probability score) | 190498 |  0.01   |     0.0101 | -0.0001 |  -0.0001 |   -0.0001 |   nan      | nan      |           1685 | skill vs own rate |
-| over 0.5 (log loss)                              | 173416 |  0.4177 |     0.4234 | -0.0057 |  -0.0061 |   -0.0054 |     0.1637 |   0.1606 |           1489 | skill vs own rate |
+| goals per player-game (PMF log-likelihood, NLL)  | 190498 |  0.4533 |     0.4622 | -0.0089 |  -0.0094 |   -0.0085 |   nan      | nan      |            980 | skill vs own rate |
+| goals per player-game (ranked probability score) | 190498 |  0.01   |     0.0101 | -0.0002 |  -0.0002 |   -0.0002 |   nan      | nan      |           1138 | skill vs own rate |
+| over 0.5 (log loss)                              | 173717 |  0.4173 |     0.4258 | -0.0085 |  -0.009  |   -0.0081 |     0.1636 |   0.1604 |            991 | skill vs own rate |
 
 **Reliability of P(over 0.5), by predicted-probability bin:**
 
 |     n |   predicted |   actual |
 |------:|------------:|---------:|
-| 21677 |      0.0592 |   0.0578 |
-| 21677 |      0.0819 |   0.077  |
-| 21677 |      0.105  |   0.1015 |
-| 21677 |      0.1298 |   0.1298 |
-| 21677 |      0.1582 |   0.1599 |
-| 21677 |      0.1927 |   0.2004 |
-| 21677 |      0.2384 |   0.2514 |
-| 21677 |      0.3198 |   0.3315 |
+| 21715 |      0.058  |   0.0566 |
+| 21715 |      0.0794 |   0.0777 |
+| 21714 |      0.1044 |   0.1037 |
+| 21715 |      0.1312 |   0.1271 |
+| 21714 |      0.1612 |   0.158  |
+| 21715 |      0.1962 |   0.1986 |
+| 21714 |      0.2397 |   0.2571 |
+| 21715 |      0.3132 |   0.33   |
 
 Average goals: predicted 0.169, actual 0.172.
 
