@@ -142,12 +142,53 @@ def static_games_table(payload: dict) -> str:
             f"<div class='card flat scroll'><table class='rtable'><thead>{head}</thead><tbody>{''.join(rows) or '<tr><td colspan=9>No games to show.</td></tr>'}</tbody></table></div>")
 
 
+def _review_text(rv: dict | None) -> str:
+    """Review status, reason and sources of one pick as escaped HTML (https links only)."""
+    import html
+    import re
+    e = html.escape
+    if not rv:
+        return "-"
+    label = "UNREVIEWED" if rv.get("status") == "UNREVIEWED" else {"flag": "Flagged", "veto": "Vetoed"}.get(rv.get("decision"), "Kept")
+    out = f"<b>{label}</b>"
+    note = rv.get("warning") or rv.get("reason")
+    if note:
+        out += f"<br><span class='muted'>{e(str(note))}</span>"
+    links = [f"<a href='{e(x['url'], quote=True)}' rel='noopener noreferrer'>{e(x['url'].split('//', 1)[1].split('/', 1)[0])}</a>" for x in (rv.get("sources") or [])
+             if isinstance(x.get("url"), str) and re.fullmatch(r"https://\S+", x["url"])]
+    if links:
+        out += "<br><span class='muted'>Sources: " + ", ".join(links) + "</span>"
+    if rv.get("reviewed_at"):
+        out += f"<br><span class='muted'>checked {e(str(rv['reviewed_at']))[:16].replace('T', ' ')} UTC{' (rule-based)' if rv.get('decided_by') == 'code' else ''}</span>"
+    return out
+
+
+def static_picks_table(payload: dict) -> str:
+    """Today's picks that went through the pre-game review, and the vetoed ones with the reason, as plain HTML (no JavaScript needed). Everything is escaped."""
+    import html
+    e = html.escape
+
+    def rows(items):
+        return "".join(f"<tr><td data-label='Pick'><b>{e(str(r['pick']))}</b><br><span class='muted'>{e(str(r['game']))}</span></td><td class='num' data-label='Model'>{r['p_model'] * 100:.1f}%</td>"
+                       f"<td class='num' data-label='Market, no vig'>{r['p_market'] * 100:.1f}%</td><td class='num' data-label='Best price'>{r['price']:.2f}</td>"
+                       f"<td data-label='Pre-game review'>{_review_text(r.get('review'))}</td></tr>" for r in items)
+    head = "<tr><th>Pick</th><th class='num'>Model</th><th class='num'>Market, no vig</th><th class='num'>Best price</th><th>Pre-game review</th></tr>"
+    picks = [r for r in payload.get("ranking", []) if r.get("review")]
+    out = ""
+    if picks:
+        out += (f"<h2>Picks and their pre-game review</h2><div class='card flat scroll'><table class='rtable'><thead>{head}</thead><tbody>{rows(picks)}</tbody></table></div>")
+    if payload.get("vetoed"):
+        out += (f"<h2>Vetoed by the pre-game review ({len(payload['vetoed'])})</h2><div class='card flat scroll'><table class='rtable'><thead>{head}</thead>"
+                f"<tbody>{rows(payload['vetoed'])}</tbody></table></div>")
+    return out
+
+
 def render_html(payload: dict) -> str:
     tpl = (HERE / "template.html").read_text()
     data = json.dumps(payload, allow_nan=False).replace("</", "<\\/")      # cannot close the <script> tag
     return (tpl.replace("/*__THEME__*/", (HERE / "theme.css").read_text()).replace("/*__CORE__*/", (HERE / "core.js").read_text())
                .replace("/*__CHROME__*/", (HERE / "chrome.js").read_text()).replace("/*__UI__*/", (HERE / "ui.js").read_text())
-               .replace("__STATIC__", static_games_table(payload)).replace("__DATA__", data).replace("__TITLE__", f"NHL picks {payload['date']}"))
+               .replace("__STATIC__", static_games_table(payload) + static_picks_table(payload)).replace("__DATA__", data).replace("__TITLE__", f"NHL picks {payload['date']}"))
 
 
 def build_site(payload: dict, out_dir: str | Path = "site") -> Path:

@@ -67,6 +67,7 @@ def test_failure_publishes_every_pick_as_unreviewed():
     assert res["status"] == "unreviewed" and len(res["final"]) == 3 and not res["vetoed"]
     assert all(r["review"]["status"] == "UNREVIEWED" and r["review"]["decision"] is None and "UNREVIEWED" in r["review"]["warning"] for r in res["final"])
     assert [r["p_model"] for r in res["final"]] == [p["p_model"] for p in c["picks"]]
+    assert all("did not complete" in r["review"]["reason"] and "picks_review.json is missing" in r["review"]["reason"] for r in res["final"])
 
 
 def test_invalid_output_is_a_failure_even_if_a_parsed_object_is_passed():

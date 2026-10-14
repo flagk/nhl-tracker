@@ -58,7 +58,7 @@ def _record(pick: dict, decision: str, by: str, status: str, agent: dict | None,
     reason = (agent or {}).get("reason")
     if by == "code" and decision != "keep":
         reason = ("odds: " if decision == "veto" else "line: ") + fact.get("summary", "")
-    if status == "UNREVIEWED" and by != "code":
+    if status == "UNREVIEWED" and decision == "keep":
         reason = "the review agent did not complete; this pick was not reviewed" + (f" ({err[:140]})" if err else "")
     checks = None
     if agent:
