@@ -4,7 +4,7 @@
 
 For every stat it scores the full count PMF (negative-binomial log-likelihood and ranked probability score, not just win rate), the over probability at
 each realistic line, and the reliability of P(over) line by line. It also tests how much to shrink a player's own rate toward his position's average
-(pseudo-games 3 / 6 / 12 / 25 / 50): the value is CHOSEN on games before --select-end and then SCORED on later games, and the choice is written to
+(pseudo-games 3 to 400): the value is CHOSEN on games before --select-end and then SCORED on later games, and the choice is written to
 reports/props_shrink.json for the live model. Run `python -m nhlbet.data.ingest --reparse-skaters` first (the props workflow does).
 """
 from __future__ import annotations
@@ -27,7 +27,7 @@ from nhlbet.features.players import add_asof_features, load_player_games, team_a
 from nhlbet.models.props import SHRINK_K
 from nhlbet.models.props_eval import LINES_BY_STAT, _pmf_matrix, calibration_table, evaluate, walk_forward_props
 
-GRID = (3.0, 6.0, 12.0, 25.0, 50.0)
+GRID = (3.0, 6.0, 12.0, 25.0, 50.0, 100.0, 200.0, 400.0)      # the first run chose 50 (the top of the old grid) for points, assists and goals: the grid must bracket the optimum
 NAMES = {"sog": "Player shots on goal", "points": "Player points (goals + assists)", "assists": "Player assists", "goals": "Player goals (anytime scorer = over 0.5)"}
 
 ap = argparse.ArgumentParser()
