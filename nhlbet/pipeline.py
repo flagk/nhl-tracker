@@ -5,6 +5,7 @@ fetch falls back to a flagged-stale snapshot or 'no odds -> no bet', a missing A
 """
 from __future__ import annotations
 
+import json
 import logging
 import os
 from datetime import datetime, timedelta, timezone
@@ -15,7 +16,7 @@ from nhlbet.data.goalies import load_confirmations
 from nhlbet.data.ingest import current_season, import_legacy_csv, ingest_day, ingest_details, ingest_schedule, reparse_skaters
 from nhlbet.data.client import NHLClient
 from nhlbet.data.store import Store
-from nhlbet.hygiene import purge_inplay
+from nhlbet.hygiene import data_freshness, purge_inplay, validate_inputs
 from nhlbet.models.bundle import ModelBundle
 from nhlbet.odds.client import OddsAPIError, OddsClient, OddsConfigError
 from nhlbet.odds.snapshots import record_fetch
@@ -143,6 +144,12 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
         if err:
             notes.append(f"data refresh failed ({err}); using cached data")
     load_confirmations(store)
+    data_ok, data_msg = data_freshness(store, date, err if refresh else None)
+    problems = validate_inputs(store)
+    if problems:
+        data_ok, data_msg = False, "input data failed validation (" + "; ".join(problems) + "): picks withheld"
+    if not data_ok:
+        notes.append(data_msg)                     # shown on the page and in the report; the slate below is built with the model marked ALERT, so nothing is picked
 
     reg = ModelRegistry(Path(model_dir) / "registry.json")
     if do_retrain is None:
@@ -163,6 +170,8 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     current = bankroll if fixed_bankroll else max(perf.get("bankroll", bankroll), 0.0)
     cfg = RiskConfig(bankroll=current)
     status = entry.get("drift", {}).get("status", "OK")
+    if not data_ok:
+        status = "ALERT"
     slate = build_slate(store, bundle, date, cfg, run_type, "OK" if status == "INSUFFICIENT_DATA" else status, now=now)
 
     text = render_report(date, run_type, slate, cfg, entry["version"], {**entry, "p_source": entry.get("p_source")}, perf, odds_meta if odds_meta.get("enabled") else None, shadow=shadow)
@@ -173,7 +182,14 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     Path(report_dir, "latest.md").write_text(text)
     plot_performance(store, Path(report_dir) / "performance.png", bankroll)
     from nhlbet.report.ranking import learn_weights
-    payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow, rank_weights=learn_weights(store))
+    evidence = []
+    try:                                   # the previous run's evidence (validation needs this run's exports, which are written after the page)
+        from nhlbet.site.validation_page import verdicts
+        vj = Path(report_dir, "VALIDATION.json")
+        evidence = [list(v) for v in verdicts(json.loads(vj.read_text()))[:5]] if vj.exists() else []
+    except Exception as e:
+        log.warning("evidence summary unavailable: %s", e)
+    payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow, rank_weights=learn_weights(store), evidence=evidence)
     build_site(payload, site_dir)
     build_bets_page(store, payload["games"], cfg.bankroll, payload["generated_at"], date, site_dir)
     # history (markdown for GitHub, html for the site) and the front-page block with clickable links
@@ -191,5 +207,14 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
         export_dataset(store, export_dir, feats, Path(model_dir) / "registry.json", Path(report_dir) / "walkforward_predictions.csv")
     except Exception as e:                 # never let a dashboard export break the daily report
         log.warning("BI export failed: %s", e)
+    try:                                   # the evidence page: live results from the logs just written, kept apart from the backtest
+        from nhlbet.report.validation import run_validation
+        from nhlbet.site.build import HERE
+        from nhlbet.site.validation_page import render_validation_html
+        res = run_validation(".", export_dir=export_dir, report_dir=report_dir, logs_dir=log_root, archive_dir=Path(site_dir) / "archive")
+        Path(report_dir, "VALIDATION.json").write_text(json.dumps(res, indent=1, default=float))
+        Path(site_dir, "validation.html").write_text(render_validation_html(res, (HERE / "theme.css").read_text()))
+    except Exception as e:                 # same rule: a failed evidence page must not stop the picks
+        log.warning("validation page failed: %s", e)
     log.info("report written for %s (%d games, %d bets); exported %d log files", date, len(slate), sum(s.rec.action == "BET" for s in slate), len(written))
     return {"date": date, "games": len(slate), "bets": sum(s.rec.action == "BET" for s in slate), "model": entry["version"], "status": status, "notes": notes}

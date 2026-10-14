@@ -13,6 +13,7 @@ from nhlbet.data.loaders import load_tables
 from nhlbet.data.store import Store
 from nhlbet.features.builder import BuilderConfig, FeatureBuilder
 from nhlbet.models.bundle import ModelBundle
+from nhlbet.models.goals import coherence_issues
 from nhlbet.odds.props import STATS
 from nhlbet.report.props import PropEngine
 from nhlbet.report.ranking import learn_weights, rank_picks
@@ -120,6 +121,9 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
                if row.get("h_gp_season") == row.get("h_gp_season") else None}
         books = [{"book": r.book, "home": float(r.home), "away": float(r.away)} for r in prices.itertuples()] if len(prices) else []
         dist = dist_by_game.get(g.game_id)
+        if dist is not None and coherence_issues(dist):          # markets from one joint grid must agree; if they do not, price none of them
+            log.warning("incoherent score distribution for game %s: %s", g.game_id, coherence_issues(dist))
+            dist = None
         alt = alt_quotes(latest_alt_prices(store, g.game_id, now=now), dist, g.home, g.away, cal=getattr(bundle.goals, "cal", None)) if dist is not None else []
         goals = {"lam_home": dist.lam_home, "lam_away": dist.lam_away, "exp_total": dist.expected_total()} if dist is not None else {}
         inputs.append((int(g.game_id), g.home, g.away, quotes, ctx))

@@ -21,12 +21,33 @@ log = logging.getLogger("nhlbet.train")
 WF_PATH = Path("reports/walkforward_predictions.csv")
 
 
-def resolved_history(wf_path: Path = WF_PATH, live_log: Path | None = None) -> pd.DataFrame:
-    """Resolved out-of-sample predictions of the deployed stack: walk-forward backtest, plus the live log if present."""
+def live_predictions(store: Store, F: pd.DataFrame, after: pd.Timestamp | None = None) -> pd.DataFrame:
+    """Resolved LIVE predictions of the deployed stack: the last pre-game run's raw stack probability per game, with the result and the Elo baseline.
+
+    Without this the drift monitor and the production calibrator only ever saw the static backtest, so "model health" could not react to how the model
+    does on games played after it was deployed. ``after`` drops games already covered by the backtest file.
+    """
+    rec = store.df("SELECT game_id, run_at, p_stack_raw FROM recommendations WHERE p_stack_raw IS NOT NULL")
+    if rec.empty:
+        return pd.DataFrame(columns=["game_date", "y", "stack", "elo"])
+    rec = rec.sort_values("run_at").groupby("game_id", as_index=False).tail(1)           # the last pre-game decision (in-play rows are purged on load)
+    f = F[F.home_win.notna()][["game_date", "home_win", "elo_prob"]].reset_index().rename(columns={"index": "game_id"})
+    d = rec.merge(f, on="game_id", how="inner")
+    if after is not None:
+        d = d[d.game_date > after]
+    return d.rename(columns={"home_win": "y", "p_stack_raw": "stack", "elo_prob": "elo"})[["game_date", "y", "stack", "elo"]].astype({"y": int}).sort_values("game_date")
+
+
+def resolved_history(wf_path: Path = WF_PATH, live_log: Path | None = None, live: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Resolved out-of-sample predictions of the deployed stack: walk-forward backtest, plus the live predictions (database or log file) if present."""
     parts = []
+    wf_max = None
     if wf_path.exists():
         w = pd.read_csv(wf_path, index_col=0, parse_dates=["game_date"])
         parts.append(w[["game_date", "y", "stack", "elo"]])
+        wf_max = w.game_date.max()
+    if live is not None and len(live):
+        parts.append(live[live.game_date > wf_max] if wf_max is not None else live)
     if live_log and live_log.exists():
         l = pd.read_csv(live_log, parse_dates=["game_date"])
         l = l[l.y.notna()][["game_date", "y", "stack", "elo"]] if {"stack", "elo", "y"} <= set(l.columns) else pd.DataFrame()
@@ -57,7 +78,7 @@ def retrain(db: str = "data/nhl.db", force: bool = False, model_dir: str = "data
     cpath = Path(report_dir) / "goals_calibration.json"
     gcal = json.loads(cpath.read_text()) if cpath.exists() else None
     zoo = make_zoo(features, candidate_columns(done.drop(columns=["hr", "ar", "ot", "so", "tot", "mar"])))
-    hist = resolved_history(live_log=Path(live_log) if live_log else None)
+    hist = resolved_history(live_log=Path(live_log) if live_log else None, live=live_predictions(store, F, after=None))
     version = f"{pd.Timestamp(done.game_date.max()).strftime('%Y%m%d')}-{fp.split('@')[0][:6]}"
     taken = {e["version"] for e in reg.history()}
     base, rev = version, 1

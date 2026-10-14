@@ -83,7 +83,7 @@ def ai_parlays(slate: list[SlateGame], cfg: RiskConfig, now: datetime, weights: 
 
 def build_payload(slate: list[SlateGame], cfg: RiskConfig, perf: dict | None, model_entry: dict, odds_meta: dict | None, date: str,
                   run_type: str, now: datetime | None = None, notes: list[str] | None = None, shadow=None,
-                  public_safe: bool | None = None, rank_weights: dict | None = None) -> dict:
+                  public_safe: bool | None = None, rank_weights: dict | None = None, evidence: list | None = None) -> dict:
     now = now or datetime.now(timezone.utc)
     ps = is_public_safe() if public_safe is None else public_safe
     perf = perf or {}
@@ -101,6 +101,7 @@ def build_payload(slate: list[SlateGame], cfg: RiskConfig, perf: dict | None, mo
                    "parlay_max_legs": PARLAY_MAX_LEGS, "parlay_max_pct": PARLAY_MAX_PCT},
         "games": [game_payload(s, cfg, ps) for s in slate],
         "ranking": rank_picks(slate, cfg, weights=rank_weights),
+        "evidence": evidence or [],
         "ranking_weights": {**WEIGHTS, **(rank_weights or {})},
         "ai_parlays": ai_parlays(slate, cfg, now, rank_weights),
         "track": track,
@@ -111,12 +112,42 @@ def build_payload(slate: list[SlateGame], cfg: RiskConfig, perf: dict | None, mo
     return _clean(payload)
 
 
+def static_games_table(payload: dict) -> str:
+    """The core table as plain HTML for readers without JavaScript: every game with model and market probabilities, the best price, the edge, when the prices
+    were captured and the decision under the default settings. Everything is escaped."""
+    import html
+    e = html.escape
+    rows = []
+    for g in payload.get("games", []):
+        sides = g.get("sides") or {}
+        best = max(sides, key=lambda k: sides[k]["ev"]) if sides else None
+        sd = sides.get(best) if best else None
+        mkt = f"{sides['home']['p_market'] * 100:.1f}%" if sides.get("home") else "no odds"
+        if sd:
+            side_cells = (f"<td data-label='Best side'>{e(str(sd['team']))}</td><td class='num' data-label='Best price'>{sd['best_decimal']:.2f}</td>"
+                          f"<td class='num' data-label='Edge'>{sd['edge'] * 100:+.1f} pts</td><td class='num' data-label='EV per $1'>{sd['ev'] * 100:+.1f}%</td>")
+            decision = "Qualifies under the default rules" if sd["qualifies"] else "No bet: " + e(str(g.get("blocked") or (sd["fails"][0] if sd["fails"] else "below the rules")))
+        else:
+            side_cells = "<td>-</td><td>-</td><td>-</td><td>-</td>"
+            decision = "No bet: " + e(str(g.get("blocked") or "no odds"))
+        start = e(str(g.get("start_utc") or ""))[:16].replace("T", " ")
+        rows.append(f"<tr><td data-label='Game'><b>{e(g['away'])} @ {e(g['home'])}</b><br><span class='muted'>{start} UTC</span></td>"
+                    f"<td class='num' data-label='Model P(home)'>{g['p_home'] * 100:.1f}%</td><td class='num' data-label='Market P(home), no vig'>{mkt}</td>{side_cells}"
+                    f"<td data-label='Prices as of'>{e(str(g.get('odds_captured_at') or '-'))[:16].replace('T', ' ')}</td><td data-label='Decision'>{decision}</td></tr>")
+    model = payload.get("model", {})
+    head = ("<tr><th>Game</th><th class='num'>Model P(home)</th><th class='num'>Market P(home), no vig</th><th>Best side</th><th class='num'>Best price</th><th class='num'>Edge</th>"
+            "<th class='num'>EV per $1</th><th>Prices as of</th><th>Decision</th></tr>")
+    return (f"<div class='banner'>JavaScript is off, so this is the basic table. Model {e(str(model.get('version')))} ({e(str(model.get('status')))}), generated {e(str(payload.get('generated_at')))}. "
+            "Research and education only; not betting advice. See <a href='validation.html'>the evidence page</a> for whether any of this has an edge.</div>"
+            f"<div class='card flat scroll'><table class='rtable'><thead>{head}</thead><tbody>{''.join(rows) or '<tr><td colspan=9>No games to show.</td></tr>'}</tbody></table></div>")
+
+
 def render_html(payload: dict) -> str:
     tpl = (HERE / "template.html").read_text()
     data = json.dumps(payload, allow_nan=False).replace("</", "<\\/")      # cannot close the <script> tag
     return (tpl.replace("/*__THEME__*/", (HERE / "theme.css").read_text()).replace("/*__CORE__*/", (HERE / "core.js").read_text())
                .replace("/*__CHROME__*/", (HERE / "chrome.js").read_text()).replace("/*__UI__*/", (HERE / "ui.js").read_text())
-               .replace("__DATA__", data).replace("__TITLE__", f"NHL picks {payload['date']}"))
+               .replace("__STATIC__", static_games_table(payload)).replace("__DATA__", data).replace("__TITLE__", f"NHL picks {payload['date']}"))
 
 
 def build_site(payload: dict, out_dir: str | Path = "site") -> Path:

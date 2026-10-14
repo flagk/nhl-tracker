@@ -16,7 +16,7 @@
   }
   function topbar(active) {
     var base = location.pathname.indexOf("/archive/") >= 0 ? "../" : "";
-    var links = [["picks", "Picks", "index.html"], ["bets", "Bets", "bets.html"], ["history", "History", "history.html"]].map(function (l) {
+    var links = [["picks", "Picks", "index.html"], ["bets", "Bets", "bets.html"], ["history", "History", "history.html"], ["evidence", "Evidence", "validation.html"]].map(function (l) {
       var a = make("a", { href: base + l[2], text: l[1] });
       if (l[0] === active) a.setAttribute("aria-current", "page");
       return a;

@@ -40,7 +40,7 @@ jobs:
         run: |
           git config user.name "nhl-model-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add reports/PROPS.md
+          git add reports/PROPS.md reports/props_shrink.json
           if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
           git commit -m "Player props backtest"
           for i in 1 2 3 4 5; do
