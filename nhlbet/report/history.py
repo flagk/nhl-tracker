@@ -132,7 +132,7 @@ def render_history_html(store: Store, report_dir: str | Path = "reports", public
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap">
 <style>{css}</style></head>
 <body><header class="topbar"><div class="topbar-in"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>NHL Model</a>
-<nav class="nav" aria-label="Pages"><a href="index.html">Picks</a><a href="bets.html">Bets</a><a href="history.html" aria-current="page">History</a></nav></div></header>
+<nav class="nav" aria-label="Pages"><a href="index.html">Picks</a><a href="bets.html">Bets</a><a href="history.html" aria-current="page">History</a><a href="validation.html">Evidence</a></nav></div></header>
 <main class="wrap"><div class="pagehead"><div class="stack"><h1>History</h1><div class="when">Every day's picks and how they settled. Open a day to see that day's full page.</div></div></div>
 <div class="note">Research and education only. Not betting advice. Stake only what you can afford to lose.</div>
 <nav class="chips" aria-label="Sections"><a class="chip" href="#by-day">By day</a><a class="chip" href="#bets">Recommended bets</a></nav>

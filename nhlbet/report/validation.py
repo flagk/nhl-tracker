@@ -256,3 +256,35 @@ def log_integrity(logs_root, archive_dir) -> dict:
                         "rows_without_odds": int(cap.isna().sum()), "rows_without_model_version": int(r.model_version.isna().sum()), "model_versions": int(r.model_version.nunique())})
         res[t] = row
     return res
+
+
+def run_validation(root=".", export_dir=None, report_dir=None, logs_dir=None, archive_dir=None) -> dict:
+    """Everything above, from the committed files under ``root`` (see the module docstring). Returns a JSON-able dict; cheap enough to run on every daily job."""
+    from pathlib import Path
+    root = Path(root)
+    export_dir, report_dir = Path(export_dir or root / "data/export"), Path(report_dir or root / "reports")
+    logs_dir, archive_dir = Path(logs_dir or root / "data/logs"), Path(archive_dir or root / "site/archive")
+    gp = pd.read_csv(export_dir / "games_predictions.csv")
+    paper = pd.read_csv(export_dir / "paper_trading.csv")
+    res: dict = {"data_through": str(gp.game_date.max()), "games_with_results": int(gp.home_win.notna().sum())}
+    res["game_level"] = score_vs_market(gp)
+    res["picks"], res["splits"], res["random_baseline"] = {}, {}, {}
+    for strat in ("every_game", "flat_model_side", "market_favorite", "home_ml_control"):
+        d = pick_table(gp, paper, strat)
+        res["picks"][strat] = summarize_picks(d)
+        if strat in ("every_game", "flat_model_side"):
+            res["splits"][strat] = {k: split_table(d, k).round(4).to_dict("records") for k in ("month", "side", "role", "odds_bucket")}
+            res["random_baseline"][strat] = random_pick_baseline(d, gp)
+        if strat == "every_game":
+            sd = res["picks"][strat].get("sd_unit_return", np.nan)
+            csd = res["picks"][strat].get("clv", {}).get("sd", np.nan)
+            res["required_bets"] = {"roi": {f"{e:.0%}": required_n(e, sd) for e in (0.01, 0.02, 0.03, 0.05)},
+                                    "clv_ev": {f"{e:.1%}": required_n(e, csd) for e in (0.005, 0.01, 0.02)}}
+    res["by_market"] = market_summary(paper)                           # the model's picks only
+    res["controls_by_market"] = market_summary(paper, controls=True)   # no-skill controls: the price of the bookmaker margin alone
+    res["log_integrity"] = log_integrity(logs_dir, archive_dir)
+    wf = report_dir / "walkforward_predictions.csv"
+    if wf.exists():
+        P = pd.read_csv(wf, index_col=0)
+        res["backtest_by_season"] = {m: backtest_by_period(P, m).round(4).to_dict("records") for m in ("logistic", "stack")}
+    return res

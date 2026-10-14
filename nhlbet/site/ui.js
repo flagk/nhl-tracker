@@ -88,7 +88,7 @@
     return el("div", { class: "stack", style: "gap:.9rem" }, kids);
   }
   function chips() {
-    var items = [["sec-rank", "Ranking"], ["sec-picks", "Top picks"], ["sec-games", "All games"], ["sec-stats", "Game stats"], ["sec-other", "Totals & puck line"], ["sec-props", "Player props"], ["sec-parlay", "Parlays"], ["sec-inputs", "Model inputs"], ["sec-track", "Track record"], ["sec-paper", "Fake bets"]];
+    var items = [["sec-evidence", "Evidence"], ["sec-rank", "Ranking"], ["sec-picks", "Top picks"], ["sec-games", "All games"], ["sec-stats", "Game stats"], ["sec-other", "Totals & puck line"], ["sec-props", "Player props"], ["sec-parlay", "Parlays"], ["sec-inputs", "Model inputs"], ["sec-track", "Track record"], ["sec-paper", "Fake bets"]];
     return el("nav", { class: "chips", "aria-label": "Sections" }, items.map(function (i) { return el("a", { class: "chip", href: "#" + i[0], text: i[1] }); }));
   }
   var summaryLine = el("span", { class: "muted" });
@@ -179,7 +179,7 @@
     var rows = shown.map(function (r) {
       var tag = r.recommended ? el("span", { class: "pill rec", text: "Recommended" }) : el("span", { class: "pill " + (r.has_edge ? "lean" : "mute"), text: r.has_edge ? (r.experimental ? "Experimental lean" : "Lean") : "No edge" });
       return el("tr", {}, [el("td", { class: "num" }, [el("b", { text: "#" + r.rank })]),
-        el("td", {}, [el("b", { text: r.pick }), el("div", { class: "muted", text: r.game + (r.start_utc ? " · " + when(r.start_utc) : "") })]),
+        el("td", {}, [el("b", { text: r.pick }), el("div", { class: "muted", text: r.game + (r.start_utc ? " · " + when(r.start_utc) : "") + (r.line !== null && r.line !== undefined ? " · line " + r.line : "") + (r.p_push > 0.005 ? " · P(push) " + pct(r.p_push) : "") + (r.captured_at ? " · prices as of " + new Date(r.captured_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : "") })]),
         el("td", { text: r.type }), el("td", { class: "num", text: pct(r.p_model) }), el("td", { class: "num", text: pct(r.p_market) }), el("td", { class: "num", text: price(r.price) }),
         el("td", { class: "num " + (r.score >= 0 ? "good" : "bad"), text: (r.score >= 0 ? "+" : "") + (r.score * 100).toFixed(1) + " pts" }),
         el("td", { class: "num " + (r.ev_raw >= 0 ? "good" : "bad"), text: spct(r.ev_raw) }), el("td", {}, [tag])]);
@@ -203,6 +203,15 @@
         el("div", { class: "kv" }, [kvItem("Ticket price", price(p.decimal)), kvItem("Model chance all hit", pct(p.p_model)), kvItem("Market chance all hit", pct(p.p_market)), kvItem("$ to win (fake)", usd(p.stake * (p.decimal - 1)))])]));
     });
     return el("div", { class: "stack" }, kids);
+  }
+  /* ---------- the plain verdict on whether any of this has an edge (computed on the Evidence page from the logs) ---------- */
+  function evidence() {
+    var ev = D.evidence || [];
+    var kids = [el("p", { class: "lead", text: "Short answer from the live record, kept separate from the backtest. Computed by rule from the logged picks; nothing here is hand-written." })];
+    if (!ev.length) kids.push(el("div", { class: "card muted", text: "Not enough settled picks yet." }));
+    else kids.push(el("div", { class: "card" }, [el("ul", {}, ev.map(function (x) { return el("li", {}, [el("b", { text: x[0] + ". " }), x[1]]); }))]));
+    kids.push(el("div", {}, [el("a", { class: "more", href: (location.pathname.indexOf("/archive/") >= 0 ? "../" : "") + "validation.html", text: "Full evidence: every market, intervals, closing-line value, log integrity, method and limitations" })]));
+    return section("sec-evidence", "Is there an edge?", "live record", kids);
   }
   function g_ev(g) { return g.sides[bestSide(g)].ev; }
   function isRec(g, alloc) { var a = alloc[g.game_id]; return a && a.side === bestSide(g) ? 1 : 0; }
@@ -425,7 +434,7 @@
   var dynamic = el("div", { class: "stack", style: "gap:1.5rem" });
   function render() {
     var alloc = C.allocate(D.games, cfg());
-    dynamic.replaceChildren(statusBar(alloc), rankingSection(), topPicks(alloc), allGames(alloc), gameStats(), otherMarkets(), playerProps(), section("sec-parlay", "Parlays", "", [aiParlays(), el("h3", { text: "Build your own" }), parlayBox]), modelInputs(), track(), paper());
+    dynamic.replaceChildren(statusBar(alloc), evidence(), rankingSection(), topPicks(alloc), allGames(alloc), gameStats(), otherMarkets(), playerProps(), section("sec-parlay", "Parlays", "", [aiParlays(), el("h3", { text: "Build your own" }), parlayBox]), modelInputs(), track(), paper());
     renderParlay();
   }
   document.body.insertBefore(CH.topbar("picks"), app);
