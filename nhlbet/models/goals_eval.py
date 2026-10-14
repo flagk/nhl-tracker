@@ -10,7 +10,7 @@ import pandas as pd
 from scipy.stats import poisson
 
 from nhlbet.models.evaluate import _week_groups
-from nhlbet.models.goals import GRID, GoalsModel, _pmf
+from nhlbet.models.goals import GRID, GoalsModel, ScoreDistribution, _pmf
 from nhlbet.splits import walk_forward_windows
 
 TOTAL_LINES = (5.5, 6.0, 6.5)
@@ -38,6 +38,16 @@ def walk_forward_goals(F: pd.DataFrame, features: list[str], first_test: str, st
         for pt in SPREADS:
             out[f"p_cover_{pt}"] = [d.spread_probs(pt)[0] / max(1e-9, 1 - d.spread_probs(pt)[2]) for d in ds]
             out[f"base_cover_{pt}"] = float(((Ftr.mar + pt) > 0).mean())
+        # alternative joint distributions for the same games, scored on the observed regulation score (see ``joint_table``): independent Poisson, independent negative
+        # binomial, and the production grid with the tie correction
+        hr_i, ar_i = np.clip(Fte.hr.astype(int).to_numpy(), 0, GRID - 1), np.clip(Fte.ar.astype(int).to_numpy(), 0, GRID - 1)
+        variants = {"independent Poisson": lambda a, b, p: ScoreDistribution(a, b, 0.0, m.p_ot_, p, None),
+                    "independent negative binomial": lambda a, b, p: ScoreDistribution(a, b, m.dispersion_, m.p_ot_, p, None)}
+        out["ll_cell_production"] = [np.log(max(d.grid[i, j], 1e-12)) for d, i, j in zip(ds, hr_i, ar_i)]
+        for name, mk in variants.items():
+            phs = ph if ph is not None else [None] * len(Fte)
+            out["ll_cell_" + name.replace(" ", "_")] = [np.log(max(mk(a, b, None if p is None or p != p else float(p)).grid[i, j], 1e-12))
+                                                       for a, b, p, i, j in zip(lam.lam_home, lam.lam_away, phs, hr_i, ar_i)]
         out["p_total_mean"] = [d.expected_total() for d in ds]
         out["p_tie"] = [d.p_tie for d in ds]
         rows.append(out)
@@ -62,6 +72,19 @@ def fit_platt_line(p, y, line) -> dict:
     X = np.column_stack([_logit(p), np.asarray(line, float)])
     m = LogisticRegression(C=100.0).fit(X, y)
     return {"a": float(m.intercept_[0]), "b": float(m.coef_[0, 0]), "c": float(m.coef_[0, 1]), "n": int(len(y))}
+
+
+def slope_se(p, y=None) -> float:
+    """Standard error of a logistic calibration slope from the observed information: 1 / sqrt(sum w (x - mean_w x)^2) with w = q(1-q) and x = logit(p).
+
+    When the model's probabilities barely vary (a totals model whose logits span about +-0.1), the slope is estimated very imprecisely (SE about 0.25 on 6,000
+    games), so a slope of 0.5 versus 0.8 is not evidence of anything: read ``cal_slope`` together with this.
+    """
+    x = _logit(p)
+    q = 1.0 / (1.0 + np.exp(-x))
+    w = q * (1 - q)
+    xbar = np.sum(w * x) / np.sum(w)
+    return float(1.0 / np.sqrt(np.sum(w * (x - xbar) ** 2)))
 
 
 def fit_platt(p, y) -> dict:
@@ -148,8 +171,9 @@ def evaluate(P: pd.DataFrame, calibrated: bool = False) -> pd.DataFrame:
         d = lm - lb
         lo, hi = _boot(d, Q.game_date)
         slope = fit_platt(Q[pc], y)["b"] if len(Q) > 100 else np.nan                  # logistic calibration slope (1 = calibrated)
+        slope_err = slope_se(Q[pc]) if len(Q) > 100 else np.nan
         rows.append({"market": name, "n": len(Q), "hit_rate": float(y.mean()), "mean_p": float(Q[pc].mean()), "ll_model": float(lm.mean()),
-                     "ll_base": float(lb.mean()), "diff": float(d.mean()), "ci_low": lo, "ci_high": hi, "cal_slope": slope})
+                     "ll_base": float(lb.mean()), "diff": float(d.mean()), "ci_low": lo, "ci_high": hi, "cal_slope": slope, "cal_slope_se": slope_err})
     return pd.DataFrame(rows)
 
 
@@ -169,4 +193,22 @@ def goal_rate_table(P: pd.DataFrame) -> pd.DataFrame:
                 cdf = np.cumsum(np.vstack([_pmf(np.array([m_]), k_)[0] for m_, k_ in zip(mu, P["disp"])]), 1)
                 row[name] = float(np.mean(np.sum((cdf - obs) ** 2, 1) / (GRID - 1)))
         rows.append(row)
+    return pd.DataFrame(rows)
+
+
+def joint_table(P: pd.DataFrame) -> pd.DataFrame:
+    """Out-of-sample log-likelihood of the observed regulation score (home goals, away goals) under three joint distributions fed the same expected goals.
+
+    Higher is better. The distribution is chosen by this table, not by convention: the production grid (negative binomial plus a correction that moves probability
+    onto ties, the Dixon-Coles-style fix for hockey's excess of tied regulation scores) is compared with independent Poisson and independent negative binomial.
+    ``diff_vs_production`` is the per-game log-likelihood of the variant minus production (negative = production better), with a week-clustered bootstrap interval."""
+    cols = {"production (negative binomial + tie correction)": "ll_cell_production", "independent negative binomial": "ll_cell_independent_negative_binomial",
+            "independent Poisson": "ll_cell_independent_Poisson"}
+    rows = []
+    for name, c in cols.items():
+        if c not in P:
+            continue
+        d = (P[c] - P["ll_cell_production"]).to_numpy(float)
+        lo, hi = _boot(d, P.game_date) if name != next(iter(cols)) else (0.0, 0.0)
+        rows.append({"joint distribution": name, "n": len(P), "mean_log_likelihood": float(P[c].mean()), "diff_vs_production": float(d.mean()), "ci_low": lo, "ci_high": hi})
     return pd.DataFrame(rows)

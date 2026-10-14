@@ -196,3 +196,11 @@ def test_goalie_saves_model_is_an_integer_pmf_unbiased_and_never_sees_the_future
     P2 = walk_forward_saves(d2, "2025-03-01", min_train=600)
     a, b = P[P.game_date < cut].sort_values(["game_id", "player_id"]), P2[P2.game_date < cut].sort_values(["game_id", "player_id"])
     assert len(a) > 100 and np.allclose(a.lam.to_numpy(), b.lam.to_numpy())
+
+
+def test_calibration_slope_standard_error_shows_when_a_slope_cannot_be_trusted():
+    from nhlbet.models.goals_eval import slope_se
+    rng = np.random.default_rng(0)
+    flat = 0.5 + rng.normal(0, 0.02, 6000)                                             # probabilities that barely vary (a totals-like model)
+    wide = rng.uniform(0.2, 0.8, 6000)
+    assert slope_se(flat) > 5 * slope_se(wide) and slope_se(flat) > 0.2                 # the slope of the flat model is nearly unmeasurable

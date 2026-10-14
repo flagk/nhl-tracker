@@ -175,3 +175,13 @@ def test_level_correction_recentres_a_drifting_league():
     m = GoalsModel(["a"], alpha=10.0).fit(X, hr, ar)
     recent = m.predict_lambdas(X.tail(400)).lam_home.mean()
     assert recent == pytest.approx(hr[-400:].mean(), abs=0.05) and m.level_[0] > 1.0
+
+
+def test_joint_distribution_table_scores_the_observed_regulation_score():
+    from nhlbet.models.goals_eval import goal_rate_table, joint_table, walk_forward_goals
+    F, feats = _league_frame()
+    P = walk_forward_goals(F, feats, "2024-01-01", 14, min_train=200)
+    jt = joint_table(P)
+    assert len(jt) == 3 and jt["mean_log_likelihood"].lt(0).all() and jt.iloc[0]["diff_vs_production"] == 0.0
+    assert np.isfinite(jt["mean_log_likelihood"]).all()
+    assert {"rps_model", "rps_base"} <= set(goal_rate_table(P).columns) and (goal_rate_table(P).rps_model > 0).all()

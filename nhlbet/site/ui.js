@@ -412,7 +412,8 @@
     if (!t || !t.resolved_games) return section("sec-track", "Track record", "", [el("div", { class: "card muted", text: "No resolved recommendations yet. Every recommendation is logged before its game, so this fills in automatically. Judge the model by closing-line value and log loss against the market, not by early profit." })]);
     var m = [metric("Resolved games", String(t.resolved_games))];
     if (t.bets && t.bets.n) { m.push(metric("Bets", String(t.bets.n)), metric("ROI", spct(t.bets.roi)), metric("Win rate", pct(t.bets.win_rate))); }
-    if (t.clv && t.clv.n >= 5) m.push(metric("Avg CLV per $1", spct(t.clv.mean)), metric("Beat the close", pct(t.clv.beat_close, 0)));
+    if (t.clv && t.clv.n >= 5) m.push(metric("Avg CLV per $1 (pays the margin)", spct(t.clv.mean)), metric("Beat the close", pct(t.clv.beat_close, 0)));
+    if (t.clv && t.clv.move_pts !== undefined && t.clv.move_pts !== null) m.push(metric("Line moved our way (pts)", (t.clv.move_pts >= 0 ? "+" : "") + t.clv.move_pts.toFixed(2)));
     if (t.model) m.push(metric("Model log loss", t.model.log_loss.toFixed(4)));
     if (t.vs_market) m.push(metric("Market-close log loss", t.vs_market.market_close_log_loss.toFixed(4)));
     kids.push(el("div", { class: "card stack" }, [el("div", { class: "metrics" }, m),
