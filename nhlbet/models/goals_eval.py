@@ -10,7 +10,7 @@ import pandas as pd
 from scipy.stats import poisson
 
 from nhlbet.models.evaluate import _week_groups
-from nhlbet.models.goals import GRID, GoalsModel, _pmf
+from nhlbet.models.goals import GRID, GoalsModel, ScoreDistribution, _pmf
 from nhlbet.splits import walk_forward_windows
 
 TOTAL_LINES = (5.5, 6.0, 6.5)
@@ -38,6 +38,16 @@ def walk_forward_goals(F: pd.DataFrame, features: list[str], first_test: str, st
         for pt in SPREADS:
             out[f"p_cover_{pt}"] = [d.spread_probs(pt)[0] / max(1e-9, 1 - d.spread_probs(pt)[2]) for d in ds]
             out[f"base_cover_{pt}"] = float(((Ftr.mar + pt) > 0).mean())
+        # alternative joint distributions for the same games, scored on the observed regulation score (see ``joint_table``): independent Poisson, independent negative
+        # binomial, and the production grid with the tie correction
+        hr_i, ar_i = np.clip(Fte.hr.astype(int).to_numpy(), 0, GRID - 1), np.clip(Fte.ar.astype(int).to_numpy(), 0, GRID - 1)
+        variants = {"independent Poisson": lambda a, b, p: ScoreDistribution(a, b, 0.0, m.p_ot_, p, None),
+                    "independent negative binomial": lambda a, b, p: ScoreDistribution(a, b, m.dispersion_, m.p_ot_, p, None)}
+        out["ll_cell_production"] = [np.log(max(d.grid[i, j], 1e-12)) for d, i, j in zip(ds, hr_i, ar_i)]
+        for name, mk in variants.items():
+            phs = ph if ph is not None else [None] * len(Fte)
+            out["ll_cell_" + name.replace(" ", "_")] = [np.log(max(mk(a, b, None if p is None or p != p else float(p)).grid[i, j], 1e-12))
+                                                       for a, b, p, i, j in zip(lam.lam_home, lam.lam_away, phs, hr_i, ar_i)]
         out["p_total_mean"] = [d.expected_total() for d in ds]
         out["p_tie"] = [d.p_tie for d in ds]
         rows.append(out)
@@ -183,4 +193,22 @@ def goal_rate_table(P: pd.DataFrame) -> pd.DataFrame:
                 cdf = np.cumsum(np.vstack([_pmf(np.array([m_]), k_)[0] for m_, k_ in zip(mu, P["disp"])]), 1)
                 row[name] = float(np.mean(np.sum((cdf - obs) ** 2, 1) / (GRID - 1)))
         rows.append(row)
+    return pd.DataFrame(rows)
+
+
+def joint_table(P: pd.DataFrame) -> pd.DataFrame:
+    """Out-of-sample log-likelihood of the observed regulation score (home goals, away goals) under three joint distributions fed the same expected goals.
+
+    Higher is better. The distribution is chosen by this table, not by convention: the production grid (negative binomial plus a correction that moves probability
+    onto ties, the Dixon-Coles-style fix for hockey's excess of tied regulation scores) is compared with independent Poisson and independent negative binomial.
+    ``diff_vs_production`` is the per-game log-likelihood of the variant minus production (negative = production better), with a week-clustered bootstrap interval."""
+    cols = {"production (negative binomial + tie correction)": "ll_cell_production", "independent negative binomial": "ll_cell_independent_negative_binomial",
+            "independent Poisson": "ll_cell_independent_Poisson"}
+    rows = []
+    for name, c in cols.items():
+        if c not in P:
+            continue
+        d = (P[c] - P["ll_cell_production"]).to_numpy(float)
+        lo, hi = _boot(d, P.game_date) if name != next(iter(cols)) else (0.0, 0.0)
+        rows.append({"joint distribution": name, "n": len(P), "mean_log_likelihood": float(P[c].mean()), "diff_vs_production": float(d.mean()), "ci_low": lo, "ci_high": hi})
     return pd.DataFrame(rows)

@@ -20,7 +20,7 @@ from nhlbet.config import load_builder_config
 from nhlbet.data.store import Store
 from nhlbet.features.builder import build_features
 from nhlbet.models.goals import add_goal_targets, goal_feature_columns
-from nhlbet.models.goals_eval import calibration_params, evaluate, goal_rate_table, online_calibrate_goals, walk_forward_goals
+from nhlbet.models.goals_eval import calibration_params, evaluate, goal_rate_table, joint_table, online_calibrate_goals, walk_forward_goals
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--db", default="data/nhl.db")
@@ -63,11 +63,13 @@ md = ["# Goals model: walk-forward backtest (totals and puck line)", "",
       f"{len(P):,} out-of-sample games from {P.game_date.min().date()} to {P.game_date.max().date()}; retrained every {a.step_days} days on strictly earlier games; "
       f"{len(feats)} candidate features; regularisation alpha chosen: **{best}** (of {a.alphas}).", "",
       "## Goal rates (Poisson negative log-likelihood per team-game; negative diff = model better than the training average)", "", rate.round(4).to_markdown(index=False), "",
+      "## Which joint score distribution? (out-of-sample log-likelihood of the observed regulation score; higher is better)", "", joint_table(P).round(4).to_markdown(index=False), "",
       "## Totals and puck line vs base rates (log loss; negative diff = model better)", "", ev.round(4).to_markdown(index=False), "",
       "## After walk-forward recalibration (each block mapped by a Platt fit on strictly earlier out-of-sample predictions)", "",
       (evc.round(4).to_markdown(index=False) if len(evc) else "Not enough out-of-sample predictions to calibrate."), "",
       "`cal_slope` is the logistic calibration slope (outcome on the model's logit): 1 = calibrated, below 1 = overconfident, near 0 = no signal. "
-      "The maps used in production (logit p' = a + b*logit p): " + json.dumps({k: {"a": round(v["a"], 3), "b": round(v["b"], 3)} for k, v in cal.items()}) + ".", "",
+      "The maps used in production (logit p' = a + b*logit p): " + json.dumps({k: {"a": round(v["a"], 3), "b": round(v["b"], 3), "c": round(v.get("c", 0.0), 3)} for k, v in cal.items()}) + ". "
+      "`cal_slope_se` is its standard error: totals probabilities barely vary, so a slope of 0.5 versus 0.8 is within noise.", "",
       f"Mean predicted total {P.p_total_mean.mean():.2f} vs actual {P.tot.mean():.2f}; predicted tie-after-60 rate {P.p_tie.mean():.3f} vs actual {(P.hr == P.ar).mean():.3f}.", "",
       "## Alpha comparison (mean Poisson NLL diff)", ""] + [f"- alpha {k}: {v[3]:+.5f}" for k, v in res.items()]
 Path(a.out, "GOALS.md").write_text("\n".join(md) + "\n")
