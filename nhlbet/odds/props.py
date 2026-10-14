@@ -51,6 +51,7 @@ class PropQuote:
     stat: str = "sog"                                # 'sog', 'points', 'assists' or 'goals'
     captured_at: str | None = None                   # when these prices were captured (UTC ISO)
     one_sided: bool = False                          # anytime goalscorer: only the 'over' (Yes) side exists
+    p_push: float = 0.0                              # model P(count == line) on a whole-number line (the stake is returned); p_over is conditional on no push
 
     @property
     def take(self) -> str | None:

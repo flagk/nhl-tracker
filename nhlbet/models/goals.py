@@ -160,7 +160,16 @@ class ScoreDistribution:
         return float((self.w * (self.reg_total + np.where(self.reg_margin == 0, self.p_ot, 0.0))).sum())
 
     def total_probs(self, line: float) -> tuple[float, float, float]:
-        """(P(over), P(under), P(push)) for a total line, shootout goal excluded."""
+        """(P(over), P(under), P(push)) for a total line, shootout goal excluded.
+
+        Half-point lines cannot push. Whole-number lines have three outcomes (the stake is returned on a push). Quarter lines (x.25 / x.75) are two bets of
+        half the stake on the adjacent lines, so the outcome probabilities are the average of the two legs (a half-win or half-loss is half a leg's win or loss,
+        which is exactly what averaging the leg probabilities gives for expected value).
+        """
+        frac = round((float(line) * 4) % 4)
+        if frac in (1, 3):
+            a, b = self.total_probs(line - 0.25), self.total_probs(line + 0.25)
+            return tuple((x + y) / 2.0 for x, y in zip(a, b))                  # type: ignore[return-value]
         t = self.reg_total.astype(float)
         tied = self.reg_margin == 0
         over = under = push = 0.0
@@ -182,3 +191,75 @@ class ScoreDistribution:
             cover += float(wt[mm + home_point > 0].sum()); push += float(wt[mm + home_point == 0].sum())
         away = 1.0 - cover - push
         return cover, away, push
+
+
+    # ---- every other market comes from the SAME joint grid, so all prices stay mutually consistent ----
+    def _final_goal_cells(self):
+        """Yield (weight, home_goals, away_goals) over the official pre-shootout result: regulation goals, plus one for the overtime winner.
+
+        A game tied after regulation is decided in overtime with probability ``p_ot`` (home wins it with probability ``s_home_tie``) and otherwise goes to a
+        shootout, whose goal never counts toward totals or team totals.
+        """
+        n = self.grid.shape[0]
+        for i in range(n):
+            for j in range(n):
+                w = float(self.grid[i, j])
+                if w <= 0:
+                    continue
+                if i == j:
+                    yield w * self.p_ot * self.s_home_tie, i + 1, j
+                    yield w * self.p_ot * (1.0 - self.s_home_tie), i, j + 1
+                    yield w * (1.0 - self.p_ot), i, j
+                else:
+                    yield w, i, j
+
+    def team_total_probs(self, side: str, line: float) -> tuple[float, float, float]:
+        """(P(over), P(under), P(push)) for one team's goal total (regulation + overtime goals, shootout goal excluded)."""
+        frac = round((float(line) * 4) % 4)
+        if frac in (1, 3):
+            a, b = self.team_total_probs(side, line - 0.25), self.team_total_probs(side, line + 0.25)
+            return tuple((x + y) / 2.0 for x, y in zip(a, b))                  # type: ignore[return-value]
+        over = under = push = 0.0
+        for w, h, a in self._final_goal_cells():
+            g = h if side == "home" else a
+            over += w * (g > line); under += w * (g < line); push += w * (g == line)
+        s = over + under + push
+        return over / s, under / s, push / s
+
+    def btts_prob(self) -> float:
+        """P(both teams score at least once) counting overtime goals but not the shootout goal."""
+        tot = sum(w for w, h, a in self._final_goal_cells() if h >= 1 and a >= 1)
+        return float(tot / sum(w for w, _, _ in self._final_goal_cells()))
+
+
+def coherence_issues(d: "ScoreDistribution", tol: float = 1e-9) -> list[str]:
+    """Internal-consistency checks across markets that all come from one joint score grid. Empty list = coherent.
+
+    The moneyline equals the puck line at -0.5 (an overtime or shootout winner wins by exactly one), every line's three outcomes sum to one, half-point
+    lines never push, over probabilities fall as the line rises, the team totals reproduce the game total's mean, and both-teams-to-score agrees with
+    inclusion-exclusion over the team marginals.
+    """
+    bad = []
+    if abs(d.spread_probs(-0.5)[0] - d.p_home) > 1e-7:
+        bad.append("moneyline != puck line -0.5")
+    prev = 1.0
+    for line in (3.5, 4.5, 5.0, 5.25, 5.5, 6.0, 6.5, 7.5):
+        o, u, p = d.total_probs(line)
+        if abs(o + u + p - 1.0) > 1e-7:
+            bad.append(f"total {line}: probabilities do not sum to 1")
+        if line % 1 == 0.5 and p > tol:
+            bad.append(f"total {line}: a half-point line cannot push")
+        if o > prev + 1e-9:
+            bad.append(f"total {line}: P(over) rose with the line")
+        prev = o
+    cells = list(d._final_goal_cells())
+    wsum = sum(w for w, _, _ in cells)
+    mean_total = sum(w * (h + a) for w, h, a in cells) / wsum
+    if abs(mean_total - d.expected_total()) > 1e-6:
+        bad.append("team totals do not reproduce the game total's mean")
+    p_h0 = 1.0 - d.team_total_probs("home", 0.5)[0]
+    p_a0 = 1.0 - d.team_total_probs("away", 0.5)[0]
+    p_00 = sum(w for w, h, a in cells if h == 0 and a == 0) / wsum
+    if abs(d.btts_prob() - (1.0 - p_h0 - p_a0 + p_00)) > 1e-7:
+        bad.append("both-teams-to-score disagrees with the team totals")
+    return bad

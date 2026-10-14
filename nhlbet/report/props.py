@@ -8,7 +8,7 @@ import pandas as pd
 
 from nhlbet.data.store import Store
 from nhlbet.features.players import add_asof_features, load_player_games, team_allowance
-from nhlbet.models.props import MIN_GAMES, ShotsModel
+from nhlbet.models.props import MIN_GAMES, ShotsModel, load_shrink, over_push_under
 from nhlbet.odds.props import PROP_MAX_AGE_MIN, STATS, PropQuote, consensus_one_sided, consensus_pair, latest_prop_prices, match_players, modal_line, roster_candidates
 
 log = logging.getLogger(__name__)
@@ -36,7 +36,9 @@ class PropEngine:
         allowance = team_allowance(store)
         feats = add_asof_features(pg, allowance)
         model = ShotsModel().fit(feats)
-        models = {"sog": model, **{st: ShotsModel(stat=st).fit(feats) for st in ("points", "assists", "goals")}}
+        sk = load_shrink()
+        model = ShotsModel(stat="sog", shrink_k=sk.get("sog")).fit(feats)
+        models = {"sog": model, **{st: ShotsModel(stat=st, shrink_k=sk.get(st)).fit(feats) for st in ("points", "assists", "goals")}}
         a = allowance.dropna(subset=["allow"]).sort_values("game_date").groupby("team").allow.last()
         lg = float(allowance.lg.dropna().iloc[-1]) if allowance.lg.notna().any() else float(a.mean())
         factors = {t: float(np.clip(v / lg, 0.7, 1.4)) for t, v in a.items()}
@@ -77,22 +79,21 @@ class PropEngine:
         for nm, pid in ids.items():
             rows = prices[prices.player == nm]
             line = modal_line(rows.point)
-            if abs(line - round(line)) < 1e-9 and not one_sided:
-                continue                                     # whole-number lines can push; props are normally .5 lines
             r = by_pid.loc[pid]
             if r.n_prev < MIN_GAMES:
                 continue
             pm, bo, bu, nb = consensus_one_sided(rows) if one_sided else consensus_pair(rows[rows.point == line])
             lam = float(r.lam)
-            po = float(model.p_over(lam, line))
+            ov, pu_, un = (float(x) for x in over_push_under(model, lam, line))        # whole-number line: three outcomes, the push refunds the stake
+            po = ov / (ov + un) if (ov + un) > 0 else 0.5                                # conditional on no push, comparable with the market's no-vig two-way probability
             h = self.pg[self.pg.player_id == pid].sort_values("game_date")
             last10, last20 = h.tail(10), h.tail(20)
             season = h[h.game_date >= season_start]
             out.append(PropQuote(
                 game_id=game_id, player_id=int(pid), name=str(r["name"]), team=str(r.team), opp=str(r.opp), point=float(line), lam=lam, p_over=po, p_over_market=pm,
-                over_price=bo, under_price=bu, edge_over=po - pm, ev_over=po * (bo - 1) - (1 - po), ev_under=(-1.0 if one_sided else (1 - po) * (bu - 1) - po), n_books=nb, n_prev=int(r.n_prev),
+                over_price=bo, under_price=bu, edge_over=po - pm, ev_over=ov * (bo - 1) - un, ev_under=(-1.0 if one_sided else un * (bu - 1) - ov), n_books=nb, n_prev=int(r.n_prev),
                 history=[{"date": str(d.date()), "opp": o, "sog": int(s), "val": int(s)} for d, o, s in zip(last10.game_date, last10.opp, last10[col])],
                 avg_season=float(season[col].mean()) if len(season) >= 5 else None,          # a one-game 'season average' early in the year would only mislead
                 avg_l10=float(last10[col].mean()) if len(last10) else None,
-                hit_l10=float((last10[col] > line).mean()) if len(last10) else None, hit_l20=float((last20[col] > line).mean()) if len(last20) else None, stat=stat, captured_at=captured, one_sided=one_sided))
+                hit_l10=float((last10[col] > line).mean()) if len(last10) else None, hit_l20=float((last20[col] > line).mean()) if len(last20) else None, stat=stat, captured_at=captured, one_sided=one_sided, p_push=pu_))
         return sorted(out, key=lambda q: -max(abs(q.edge_over), 0))

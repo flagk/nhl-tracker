@@ -85,19 +85,23 @@ def _modal(points: pd.Series, prefer: float) -> float:
     return float(min(top, key=lambda p: abs(abs(p) - abs(prefer))))
 
 
-def recalibrate(cond: float, cal: dict | None) -> float:
-    """Apply a fitted Platt map (logit(p') = a + b*logit(p)) to a conditional win probability; identity when no map is given."""
+def recalibrate(cond: float, cal: dict | None, line: float | None = None) -> float:
+    """Apply a fitted Platt map (logit(p') = a + b*logit(p) [+ c*line]) to a conditional win probability; identity when no map is given.
+
+    The ``c`` term makes the intercept depend on the line (5.5 and 6.5 totals have different base rates), which a single pooled intercept cannot do:
+    maps fitted before this was added were pooled across lines and left each line's overconfidence uncorrected. Old maps without ``c`` still work.
+    """
     if not cal:
         return cond
     z = np.log(np.clip(cond, 1e-6, 1 - 1e-6) / (1 - np.clip(cond, 1e-6, 1 - 1e-6)))
-    return float(1.0 / (1.0 + np.exp(-(cal["a"] + cal["b"] * z))))
+    return float(1.0 / (1.0 + np.exp(-(cal["a"] + cal["b"] * z + cal.get("c", 0.0) * (0.0 if line is None else float(line))))))
 
 
 def _pair_quotes(market: str, pairs: pd.DataFrame, cols: tuple[str, str], labels: tuple[str, str], sides: tuple[str, str], points: tuple[float, float],
                  probs: tuple[float, float, float], method: str, cal: dict | None = None) -> list[MarketQuote]:
     """``probs`` = model (P(A wins), P(B wins), P(push)). ``cal`` recalibrates the conditional probability. Returns the two sides' quotes."""
     pa, pb, pp = probs
-    cond_a = recalibrate(pa / max(1e-12, pa + pb), cal)
+    cond_a = recalibrate(pa / max(1e-12, pa + pb), cal, points[0])
     pa, pb = cond_a * (1.0 - pp), (1.0 - cond_a) * (1.0 - pp)
     mk = float(np.mean([devig([x, y], method)[0] for x, y in zip(pairs[cols[0]], pairs[cols[1]])]))
     out = []

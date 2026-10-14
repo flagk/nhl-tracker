@@ -10,7 +10,7 @@ import pandas as pd
 from scipy.stats import poisson
 
 from nhlbet.models.evaluate import _week_groups
-from nhlbet.models.goals import GoalsModel
+from nhlbet.models.goals import GRID, GoalsModel, _pmf
 from nhlbet.splits import walk_forward_windows
 
 TOTAL_LINES = (5.5, 6.0, 6.5)
@@ -31,7 +31,7 @@ def walk_forward_goals(F: pd.DataFrame, features: list[str], first_test: str, st
         ds = m.distributions(Fte, ph)
         lam = m.predict_lambdas(Fte)
         out = pd.DataFrame({"game_date": Fte.game_date, "hr": Fte.hr, "ar": Fte.ar, "tot": Fte.tot, "mar": Fte.mar,
-                            "lam_home": lam.lam_home, "lam_away": lam.lam_away, "base_home": Ftr.hr.mean(), "base_away": Ftr.ar.mean()}, index=Fte.index)
+                            "lam_home": lam.lam_home, "lam_away": lam.lam_away, "base_home": Ftr.hr.mean(), "base_away": Ftr.ar.mean(), "disp": m.dispersion_}, index=Fte.index)
         for line in TOTAL_LINES:
             out[f"p_over_{line}"] = [d.total_probs(line)[0] / max(1e-9, 1 - d.total_probs(line)[2]) for d in ds]      # conditional on no push
             out[f"base_over_{line}"] = float((Ftr.tot > line).sum() / max(1, (Ftr.tot != line).sum()))
@@ -49,6 +49,21 @@ def _logit(p):
     return np.log(p / (1 - p))
 
 
+def fit_platt_line(p, y, line) -> dict:
+    """logit(p') = a + b*logit(p) + c*line: one slope b shared by all lines, an intercept that moves with the line.
+
+    A pooled map without the line term fits the mixture of a 5.5 line (57% over) and a 6.5 line (44% over) and ends up with b near 1 although every
+    single line is overconfident (per-line slopes 0.55-0.76); the line term lets b measure the shared overconfidence.
+    """
+    from sklearn.linear_model import LogisticRegression
+    y = np.asarray(y, int)
+    if len(set(y.tolist())) < 2:
+        return {"a": 0.0, "b": float("nan"), "c": 0.0, "n": int(len(y))}
+    X = np.column_stack([_logit(p), np.asarray(line, float)])
+    m = LogisticRegression(C=100.0).fit(X, y)
+    return {"a": float(m.intercept_[0]), "b": float(m.coef_[0, 0]), "c": float(m.coef_[0, 1]), "n": int(len(y))}
+
+
 def fit_platt(p, y) -> dict:
     """logit(p') = a + b*logit(p), fit by (lightly regularised) logistic regression. b near 1 = calibrated; b < 1 = overconfident; b near 0 = no signal."""
     from sklearn.linear_model import LogisticRegression
@@ -58,23 +73,23 @@ def fit_platt(p, y) -> dict:
     return {"a": float(m.intercept_[0]), "b": float(m.coef_[0, 0]), "n": int(len(y))}
 
 
-def _pooled(P: pd.DataFrame, kind: str) -> tuple[pd.Series, pd.Series, pd.Series]:
-    """(p, y, date) stacked over the lines of one market type, pushes excluded. kind: 'totals' (5.5, 6.5) or 'spreads' (-1.5, +1.5)."""
+def _pooled(P: pd.DataFrame, kind: str, with_line: bool = False):
+    """(p, y, date[, line]) stacked over the lines of one market type, pushes excluded. kind: 'totals' (5.5, 6.5) or 'spreads' (-1.5, +1.5)."""
     parts = []
-    specs = [(f"p_over_{l}", P.tot > l, P.tot != l) for l in (5.5, 6.5)] if kind == "totals" else [(f"p_cover_{pt}", (P.mar + pt) > 0, (P.mar + pt) != 0) for pt in SPREADS]
-    for col, y, keep in specs:
-        parts.append(pd.DataFrame({"p": P.loc[keep, col], "y": y[keep].astype(int), "d": P.loc[keep, "game_date"]}))
+    specs = [(f"p_over_{l}", P.tot > l, P.tot != l, l) for l in (5.5, 6.5)] if kind == "totals" else [(f"p_cover_{pt}", (P.mar + pt) > 0, (P.mar + pt) != 0, pt) for pt in SPREADS]
+    for col, y, keep, line in specs:
+        parts.append(pd.DataFrame({"p": P.loc[keep, col], "y": y[keep].astype(int), "d": P.loc[keep, "game_date"], "line": line}))
     Q = pd.concat(parts)
-    return Q.p, Q.y, Q.d
+    return (Q.p, Q.y, Q.d, Q.line) if with_line else (Q.p, Q.y, Q.d)
 
 
 def calibration_params(P: pd.DataFrame) -> dict:
     """Platt maps per market type from ALL walk-forward predictions: what production applies to live totals / puck-line probabilities."""
     out = {}
     for kind in ("totals", "spreads"):
-        p, y, _ = _pooled(P, kind)
+        p, y, _, line = _pooled(P, kind, with_line=True)
         if len(p) >= 300:
-            c = fit_platt(p, y)
+            c = fit_platt_line(p, y, line)
             if np.isfinite(c["b"]):
                 out[kind] = c
     return out
@@ -85,7 +100,8 @@ def online_calibrate_goals(P: pd.DataFrame, step_days: int = 14, burn_in: int = 
     P = P.sort_values("game_date").copy()
     dates = pd.to_datetime(P.game_date)
     for kind, cols in (("totals", [f"p_over_{l}" for l in TOTAL_LINES]), ("spreads", [f"p_cover_{pt}" for pt in SPREADS])):
-        p, y, d = _pooled(P, kind)
+        p, y, d, ln = _pooled(P, kind, with_line=True)
+        line_of = dict(zip(cols, (5.5, 6.0, 6.5) if kind == "totals" else SPREADS))
         for c in cols:
             P[c + "_cal"] = np.nan
         start, end = dates.min(), dates.max()
@@ -94,9 +110,9 @@ def online_calibrate_goals(P: pd.DataFrame, step_days: int = 14, burn_in: int = 
             past = pd.to_datetime(d) < start
             blk = ((dates >= start) & (dates < stop)).to_numpy()
             if past.sum() >= burn_in and blk.any():
-                cal = fit_platt(p[past.to_numpy()], y[past.to_numpy()])
+                cal = fit_platt_line(p[past.to_numpy()], y[past.to_numpy()], ln[past.to_numpy()])
                 for c in cols:
-                    P.loc[blk, c + "_cal"] = 1.0 / (1.0 + np.exp(-(cal["a"] + cal["b"] * _logit(P.loc[blk, c]))))
+                    P.loc[blk, c + "_cal"] = 1.0 / (1.0 + np.exp(-(cal["a"] + cal["b"] * _logit(P.loc[blk, c]) + cal["c"] * line_of[c])))
             start = stop
     return P
 
@@ -144,6 +160,13 @@ def goal_rate_table(P: pd.DataFrame) -> pd.DataFrame:
         y = P["hr" if side == "home" else "ar"].to_numpy()
         ll_m, ll_b = poisson.logpmf(y, P[lam]), poisson.logpmf(y, P[base])
         lo, hi = _boot(-(ll_m - ll_b), P.game_date)
-        rows.append({"side": side, "n": len(P), "mean_pred": float(P[lam].mean()), "mean_actual": float(y.mean()), "nll_model": float(-ll_m.mean()),
-                     "nll_base": float(-ll_b.mean()), "diff": float(-(ll_m - ll_b).mean()), "ci_low": lo, "ci_high": hi})
+        row = {"side": side, "n": len(P), "mean_pred": float(P[lam].mean()), "mean_actual": float(y.mean()), "nll_model": float(-ll_m.mean()),
+               "nll_base": float(-ll_b.mean()), "diff": float(-(ll_m - ll_b).mean()), "ci_low": lo, "ci_high": hi}
+        if "disp" in P:                                            # the same forecast scored as a full count distribution: ranked probability score (lower is better)
+            yi = np.clip(y.astype(int), 0, GRID - 1)
+            obs = (np.arange(GRID)[None, :] >= yi[:, None]).astype(float)
+            for name, mu in (("rps_model", P[lam]), ("rps_base", P[base])):
+                cdf = np.cumsum(np.vstack([_pmf(np.array([m_]), k_)[0] for m_, k_ in zip(mu, P["disp"])]), 1)
+                row[name] = float(np.mean(np.sum((cdf - obs) ** 2, 1) / (GRID - 1)))
+        rows.append(row)
     return pd.DataFrame(rows)
