@@ -45,6 +45,7 @@ jobs:
       - name: Gate (is a wave of games about to start, and not reviewed yet?)
         id: gate
         run: |
+          if [ "${{ vars.REVIEW_ENABLED }}" = "false" ]; then echo "review switched off (repository variable REVIEW_ENABLED=false)"; echo "run=false" >> "$GITHUB_OUTPUT"; exit 0; fi
           FORCE=""; if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.gated }}" != "true" ]; then FORCE="--force"; fi
           python3 scripts/gate.py --kind review $FORCE      # standard library only
 

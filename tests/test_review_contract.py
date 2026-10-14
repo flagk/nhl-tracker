@@ -111,3 +111,13 @@ def test_reason_must_be_one_line():
     r = good_review(c)
     r["reviews"][0]["reason"] = "line one\nline two"
     assert validate_review(r, c, NOW)
+
+
+def test_kill_switch(monkeypatch):
+    from nhlbet.review.contract import enabled
+    monkeypatch.delenv("REVIEW_ENABLED", raising=False)
+    assert enabled()
+    monkeypatch.setenv("REVIEW_ENABLED", "false")
+    assert not enabled()
+    monkeypatch.setenv("REVIEW_ENABLED", "true")
+    assert enabled()

@@ -242,7 +242,9 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow, rank_weights=learn_weights(store), evidence=evidence)
     try:                                   # candidates for the pre-game review agent, and the review decisions made so far today (UNREVIEWED when there are none)
         from nhlbet.review.apply import STATE_NAME, attach_to_payload, load_state
-        from nhlbet.review.contract import build_candidates
+        from nhlbet.review.contract import build_candidates, enabled
+        if not enabled():
+            raise RuntimeError("switched off (REVIEW_ENABLED=false)")
         review_dir = Path(log_root).parent / "review"
         review_dir.mkdir(parents=True, exist_ok=True)
         (review_dir / "picks_candidate.json").write_text(json.dumps(build_candidates(payload), indent=1, allow_nan=False))
@@ -275,5 +277,10 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
         Path(site_dir, "validation.html").write_text(render_validation_html(res, (HERE / "theme.css").read_text()))
     except Exception as e:                 # same rule: a failed evidence page must not stop the picks
         log.warning("validation page failed: %s", e)
+    try:                                   # does the pre-game review agent help? grades kept / flagged / vetoed picks alike (reports/REVIEW.md)
+        from nhlbet.review.evaluate import write_review_report
+        write_review_report(store, Path(log_root).parent.parent, report_dir)
+    except Exception as e:
+        log.warning("review report failed: %s", e)
     log.info("report written for %s (%d games, %d bets); exported %d log files", date, len(slate), sum(s.rec.action == "BET" for s in slate), len(written))
     return {"date": date, "games": len(slate), "bets": sum(s.rec.action == "BET" for s in slate), "model": entry["version"], "status": status, "notes": notes}

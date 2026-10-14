@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -17,6 +18,11 @@ MAX_SOURCE_AGE = timedelta(hours=24)      # a source retrieved longer ago than t
 CHECK_KEYS = ("confirmed_goalie", "lineup_changes", "injuries", "odds_movement")
 # a pick is a candidate field-for-field; these never change between candidate and final (asserted in apply.py)
 FROZEN_FIELDS = ("pick_id", "game_id", "market", "line", "side", "label", "odds", "book", "p_model", "p_market", "edge", "ev", "p_push", "kind", "player_id", "captured_at", "rank", "score", "stake")
+
+
+def enabled() -> bool:
+    """Kill switch: set the repository variable REVIEW_ENABLED=false (see AGENT.md) and the page, the candidates and the workflow all behave as if the review did not exist."""
+    return os.environ.get("REVIEW_ENABLED", "true").strip().lower() != "false"
 
 
 def pick_id(date: str, game_id, market: str, line, side: str, player_id=0) -> str:
