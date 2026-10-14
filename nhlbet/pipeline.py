@@ -15,7 +15,7 @@ from nhlbet.data.goalies import load_confirmations
 from nhlbet.data.ingest import current_season, import_legacy_csv, ingest_day, ingest_details, ingest_schedule, reparse_skaters
 from nhlbet.data.client import NHLClient
 from nhlbet.data.store import Store
-from nhlbet.hygiene import purge_inplay
+from nhlbet.hygiene import data_freshness, purge_inplay
 from nhlbet.models.bundle import ModelBundle
 from nhlbet.odds.client import OddsAPIError, OddsClient, OddsConfigError
 from nhlbet.odds.snapshots import record_fetch
@@ -143,6 +143,9 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
         if err:
             notes.append(f"data refresh failed ({err}); using cached data")
     load_confirmations(store)
+    data_ok, data_msg = data_freshness(store, date, err if refresh else None)
+    if not data_ok:
+        notes.append(data_msg)                     # shown on the page and in the report; the slate below is built with the model marked ALERT, so nothing is picked
 
     reg = ModelRegistry(Path(model_dir) / "registry.json")
     if do_retrain is None:
@@ -163,6 +166,8 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     current = bankroll if fixed_bankroll else max(perf.get("bankroll", bankroll), 0.0)
     cfg = RiskConfig(bankroll=current)
     status = entry.get("drift", {}).get("status", "OK")
+    if not data_ok:
+        status = "ALERT"
     slate = build_slate(store, bundle, date, cfg, run_type, "OK" if status == "INSUFFICIENT_DATA" else status, now=now)
 
     text = render_report(date, run_type, slate, cfg, entry["version"], {**entry, "p_source": entry.get("p_source")}, perf, odds_meta if odds_meta.get("enabled") else None, shadow=shadow)
