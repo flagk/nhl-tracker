@@ -1,0 +1,228 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NHL Model: Evidence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap">
+<style>/* Shared look for the picks, bets and history pages. Rink-side data sheet: ice-blue neutrals, navy ink, one red-line accent.
+   Layout concept: sticky top bar (brand, page nav, theme) over a single readable column; sections are headed by a condensed
+   scoreboard face and jump-linked from a chip row; probabilities are drawn as bars, not just printed. */
+:root {
+  --bg: #edf1f6; --surface: #ffffff; --surface-2: #f4f7fb; --ink: #0d1a2b; --muted: #54657b; --line: #d6dfea; --line-strong: #bccadb;
+  --accent: #cf2f2a; --accent-ink: #ffffff; --blue: #1d5fa8; --blue-soft: #dce9f8;
+  --good: #167447; --good-bg: #e3f4ea; --warn: #8f5200; --warn-bg: #fff0d1; --bad: #b4281f; --bad-bg: #fde7e4;
+  --shadow: 0 1px 2px rgba(13, 26, 43, .06), 0 6px 18px rgba(13, 26, 43, .05);
+  --display: "Barlow Condensed", "Roboto Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a1018; --surface: #121b27; --surface-2: #172230; --ink: #e8eff7; --muted: #92a4b8; --line: #223142; --line-strong: #31465d;
+    --accent: #ff6a5c; --accent-ink: #1a0a08; --blue: #74aaf0; --blue-soft: #16304d;
+    --good: #4cc38a; --good-bg: #12301f; --warn: #e6b13b; --warn-bg: #30270f; --bad: #ff8e84; --bad-bg: #33171a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 22px rgba(0, 0, 0, .25); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a1018; --surface: #121b27; --surface-2: #172230; --ink: #e8eff7; --muted: #92a4b8; --line: #223142; --line-strong: #31465d;
+  --accent: #ff6a5c; --accent-ink: #1a0a08; --blue: #74aaf0; --blue-soft: #16304d;
+  --good: #4cc38a; --good-bg: #12301f; --warn: #e6b13b; --warn-bg: #30270f; --bad: #ff8e84; --bad-bg: #33171a;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 22px rgba(0, 0, 0, .25); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.5 var(--body); font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
+a { color: var(--blue); text-underline-offset: 2px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.1; margin: 0; text-wrap: balance; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+
+/* ---- top bar ---- */
+.topbar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.topbar-in { max-width: 1080px; margin: 0 auto; padding: .55rem 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: .55rem; text-decoration: none; color: var(--ink); font-family: var(--display); font-weight: 800; font-size: 1.35rem; letter-spacing: .02em; text-transform: uppercase; }
+.brand-mark { width: 12px; height: 26px; border-radius: 2px; background: linear-gradient(90deg, var(--accent) 0 40%, transparent 40% 60%, var(--accent) 60% 100%); }
+.nav { display: flex; gap: .15rem; margin-left: .5rem; flex: 1; min-width: 0; }
+.nav a { color: var(--muted); text-decoration: none; padding: .4rem .8rem; border-radius: 999px; font-weight: 600; font-size: .95rem; }
+.nav a:hover { color: var(--ink); background: var(--surface-2); }
+.nav a[aria-current="page"] { color: var(--ink); background: var(--surface-2); box-shadow: inset 0 -2px 0 var(--accent); border-radius: 8px 8px 0 0; }
+.theme-btn { font: inherit; font-size: .8rem; font-weight: 600; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: .3rem .75rem; cursor: pointer; }
+.theme-btn:hover { color: var(--ink); border-color: var(--line-strong); }
+
+/* ---- page ---- */
+.wrap { max-width: 1080px; margin: 0 auto; padding: 1.25rem 1rem 3rem; display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
+.pagehead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .5rem 1rem; }
+.pagehead h1 { font-size: clamp(2rem, 5vw, 3rem); text-transform: uppercase; letter-spacing: .01em; }
+.pagehead .when { color: var(--muted); font-size: .95rem; }
+.note { color: var(--muted); font-size: .88rem; }
+.statusbar { display: flex; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+.stat { flex: 1 1 140px; padding: .8rem 1rem; display: flex; flex-direction: column; gap: .1rem; border-right: 1px solid var(--line); min-width: 0; }
+.stat:last-child { border-right: 0; }
+.stat .k { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.stat .v { font-family: var(--display); font-weight: 700; font-size: 1.7rem; line-height: 1.1; }
+.chips { display: flex; gap: .4rem; flex-wrap: wrap; }
+.chip { text-decoration: none; color: var(--ink); background: var(--surface); border: 1px solid var(--line); padding: .3rem .8rem; border-radius: 999px; font-size: .88rem; font-weight: 600; }
+.chip:hover { border-color: var(--accent); }
+button.chip { font-family: inherit; cursor: pointer; }
+.chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.section { display: flex; flex-direction: column; gap: .75rem; min-width: 0; }
+.section > h2 { font-size: 1.6rem; text-transform: uppercase; letter-spacing: .02em; display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+.section > h2 .count { font-size: .95rem; color: var(--muted); font-family: var(--body); font-weight: 600; text-transform: none; letter-spacing: 0; }
+.lead { color: var(--muted); max-width: 70ch; margin: 0; }
+
+/* ---- surfaces ---- */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; box-shadow: var(--shadow); min-width: 0; }
+.card.flat { box-shadow: none; }
+.scroll { overflow-x: auto; }
+.banner { border-radius: var(--radius); padding: .65rem .9rem; font-size: .92rem; border: 1px solid var(--line); background: var(--surface); color: var(--muted); }
+.banner.disc { background: var(--warn-bg); color: var(--warn); border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
+.banner.bad { background: var(--bad-bg); color: var(--bad); border-color: color-mix(in srgb, var(--bad) 45%, transparent); }
+.banner.good { background: var(--good-bg); color: var(--good); border-color: color-mix(in srgb, var(--good) 45%, transparent); }
+.pill { display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px; padding: .1rem .65rem; font-size: .74rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.pill.rec { background: var(--accent); color: var(--accent-ink); }
+.pill.lean { background: var(--warn-bg); color: var(--warn); }
+.pill.ok { background: var(--good-bg); color: var(--good); } .pill.warn { background: var(--warn-bg); color: var(--warn); } .pill.alert { background: var(--bad-bg); color: var(--bad); }
+.pill.mute { background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); }
+.good { color: var(--good); } .bad { color: var(--bad); } .muted { color: var(--muted); }
+
+/* ---- pick cards ---- */
+.picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr)); gap: .9rem; }
+.pick { display: flex; flex-direction: column; gap: .8rem; }
+.pick.is-rec { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
+.pick-top { display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem; }
+.pick-team { font-family: var(--display); font-weight: 700; font-size: 1.9rem; line-height: 1; text-transform: uppercase; }
+.pick-sub { color: var(--muted); font-size: .88rem; margin-top: .2rem; }
+.pbar { display: flex; flex-direction: column; gap: .35rem; }
+.pbar-track { position: relative; height: 12px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.pbar-fill { position: absolute; inset: 0 auto 0 0; background: var(--blue); }
+.pbar-gap { position: absolute; top: 0; bottom: 0; }
+.pbar-gap.up { background: var(--good); } .pbar-gap.down { background: var(--bad); opacity: .85; }
+.pbar-mkt { position: absolute; top: -2px; bottom: -2px; width: 3px; margin-left: -1px; background: var(--ink); border-radius: 2px; }
+.pbar-labels { display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted); gap: .5rem; flex-wrap: wrap; }
+.pbar-labels b { color: var(--ink); font-weight: 700; }
+.kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr)); gap: .6rem 1rem; }
+.kv > div { display: flex; flex-direction: column; min-width: 0; }
+.kv .k { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.kv .v { font-family: var(--display); font-weight: 700; font-size: 1.3rem; line-height: 1.2; }
+.why { font-size: .88rem; color: var(--muted); margin: 0; }
+.why ul { margin: .3rem 0 0 1.1rem; padding: 0; }
+.mine { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; padding-top: .7rem; border-top: 1px dashed var(--line-strong); }
+.mine label { margin: 0; }
+.mine-out { font-size: .88rem; flex-basis: 100%; }
+
+/* ---- tables ---- */
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+th, td { text-align: left; padding: .5rem .65rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; white-space: nowrap; background: var(--surface); position: sticky; top: 0; }
+tbody tr:hover { background: var(--surface-2); }
+td.num, th.num { text-align: right; }
+.edge-cell { display: inline-flex; align-items: center; gap: .4rem; font-weight: 700; }
+.dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--muted); display: inline-block; }
+.dot.up { background: var(--good); } .dot.down { background: var(--bad); }
+
+.reason { display: flex; flex-direction: column; gap: .2rem; align-items: flex-start; max-width: 30ch; font-size: .82rem; }
+.mine select { padding: .3rem .4rem; font-size: .85rem; } .mine input { padding: .3rem .5rem; font-size: .85rem; width: 6rem; }
+td .mine { padding: 0; border: 0; flex-wrap: nowrap; }
+@media (max-width: 640px) {
+  table.rtable thead { display: none; }
+  table.rtable, table.rtable tbody { display: block; }
+  table.rtable tr { display: grid; grid-template-columns: 1fr 1fr; gap: .25rem 1rem; padding: .75rem .1rem; border-bottom: 1px solid var(--line); }
+  table.rtable tr:last-child { border-bottom: 0; }
+  table.rtable td { display: flex; flex-direction: column; border: 0; padding: .1rem 0; text-align: left; min-width: 0; }
+  table.rtable td.num { text-align: left; }
+  table.rtable td:first-child { grid-column: 1 / -1; font-size: 1rem; }
+  table.rtable td::before { content: attr(data-label); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  table.rtable td:first-child::before { display: none; }
+  table.rtable td[colspan] { display: block; grid-column: 1 / -1; }
+  table.rtable td[colspan]::before { display: none; }
+  .card.scroll { padding: .4rem .8rem; }
+}
+
+/* ---- game breakdowns ---- */
+details.gamebox > summary { justify-content: space-between; }
+details.gamebox > summary::after { margin-left: .5rem; }
+.gd-title { display: inline-flex; gap: .35rem; align-items: baseline; flex-wrap: wrap; }
+.drawer-body h3 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: .02em; margin-top: .4rem; }
+.drivers { display: flex; flex-direction: column; gap: .35rem; }
+.drow { display: grid; grid-template-columns: minmax(8rem, 15rem) 1fr 5.5rem; gap: .6rem; align-items: center; font-size: .88rem; }
+.dhead .dends { display: flex; justify-content: space-between; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.dtrack { position: relative; height: 10px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+.dtrack::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line-strong); }
+.irow .dtrack::after { display: none; }
+.dbar { position: absolute; top: 0; bottom: 0; }
+.dbar.home { background: var(--blue); } .dbar.away { background: var(--accent); }
+.dval { font-size: .8rem; color: var(--muted); text-align: right; white-space: nowrap; }
+.sgroup { margin-top: .8rem; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding-bottom: .2rem; border-bottom: 1px solid var(--line-strong); }
+.srow { display: grid; grid-template-columns: 1fr minmax(0, 2.2fr) 1fr; gap: .6rem; align-items: center; padding: .3rem 0; border-bottom: 1px solid var(--line); font-size: .92rem; }
+.slabel { text-align: center; color: var(--muted); font-size: .85rem; }
+.sval { font-weight: 600; padding: .1rem .5rem; border-radius: 6px; }
+.sval.away { text-align: left; } .sval.home { text-align: right; }
+.sval.better { background: var(--good-bg); color: var(--good); }
+.star { color: var(--accent); font-weight: 700; }
+.irow { display: grid; grid-template-columns: minmax(10rem, 22rem) 1fr 3rem; gap: .8rem; align-items: center; }
+.ilabel { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; font-size: .92rem; }
+a.more { font-size: .88rem; font-weight: 600; }
+@media (max-width: 640px) { .drow, .irow { grid-template-columns: 1fr; gap: .15rem; } .dval { text-align: left; } .srow { font-size: .85rem; } }
+
+/* ---- player prop history strip ---- */
+.hist { position: relative; display: flex; align-items: flex-end; gap: 5px; height: 64px; padding: 0 0 0 1.4rem; border-bottom: 1px solid var(--line-strong); }
+.hbar { flex: 1; min-width: 8px; max-width: 28px; border-radius: 3px 3px 0 0; display: flex; justify-content: center; align-items: flex-start; font-size: .68rem; color: var(--surface); font-weight: 700; }
+.hbar.over { background: var(--good); } .hbar.under { background: var(--line-strong); color: var(--ink); }
+.hbar span { margin-top: -1.05rem; color: var(--muted); }
+.hline { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--accent); pointer-events: none; }
+.hline span { position: absolute; left: 0; top: -.95rem; font-size: .68rem; color: var(--accent); font-weight: 700; }
+
+/* ---- forms ---- */
+label { display: block; font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: .25rem; }
+input, select, button { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 8px; padding: .45rem .6rem; min-width: 0; }
+input, select { width: 100%; }
+.mine input, .mine select { width: auto; }
+.mine input { width: 7.5rem; }
+button { cursor: pointer; width: auto; font-weight: 600; }
+button:hover { border-color: var(--accent); }
+.btn-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); padding: .5rem 1.1rem; }
+.btn-primary:hover { filter: brightness(1.06); }
+.btn-ghost { background: transparent; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .8rem 1rem; }
+details.drawer { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+details.drawer > summary { cursor: pointer; list-style: none; padding: .8rem 1.1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; font-weight: 600; }
+details.drawer > summary::-webkit-details-marker { display: none; }
+details.drawer > summary::after { content: "Edit"; font-size: .8rem; color: var(--blue); }
+details.drawer[open] > summary::after { content: "Close"; }
+details.drawer > .drawer-body { padding: 0 1.1rem 1.1rem; display: flex; flex-direction: column; gap: .8rem; }
+.tabs { display: inline-flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 2px; }
+.tabs button { border: 0; background: transparent; color: var(--muted); padding: .45rem 1rem; border-radius: 7px; }
+.tabs button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgba(0, 0, 0, .08); }
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); gap: .6rem 1rem; }
+.metric .v { font-family: var(--display); font-weight: 700; font-size: 1.5rem; line-height: 1.15; }
+.metric .k { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.check { display: flex; gap: .5rem; align-items: center; font-size: .9rem; text-transform: none; letter-spacing: 0; color: var(--ink); }
+.check input { width: auto; }
+.chart { width: 100%; height: auto; display: block; color: var(--muted); }
+.footer { color: var(--muted); font-size: .85rem; display: flex; flex-direction: column; gap: .6rem; }
+.stack { display: flex; flex-direction: column; gap: .6rem; }
+.row { display: flex; justify-content: space-between; gap: .75rem; flex-wrap: wrap; align-items: baseline; }
+@media (max-width: 640px) {
+  .nav { order: 3; flex-basis: 100%; margin-left: 0; }
+  .topbar-in { padding-block: .45rem; }
+  .stat { flex-basis: 45%; border-bottom: 1px solid var(--line); }
+  .pick-team { font-size: 1.6rem; }
+}
+.legs { margin: .3rem 0 .6rem; padding-left: 1.2rem; display: grid; gap: .25rem; }
+</style></head>
+<body><header class="topbar"><div class="topbar-in"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span>NHL Model</a>
+<nav class="nav" aria-label="Pages"><a href="index.html">Picks</a><a href="bets.html">Bets</a><a href="history.html">History</a><a href="validation.html" aria-current="page">Evidence</a></nav></div></header>
+<main class="wrap"><div class="pagehead"><div class="stack"><h1>Is there an edge?</h1><div class="when">Updated 2026-10-14 23:37 UTC from games through 2026-10-14. Live results only; the backtest is shown separately below.</div></div></div>
+<div class="note">Research and education only. Not betting advice. Past performance does not guarantee future results.</div>
+<section class="section"><h2>Plain verdicts</h2><div class="card"><ul><li><b>Model vs market, 100 games.</b> log loss +0.0153 (95% interval -0.0019 to +0.0298). No demonstrable difference from the market&#x27;s closing probabilities yet (the interval includes zero), and the point estimate favours the market.</li><li><b>Moneyline picks, one per game.</b> 100 picks, ROI -2.0% (95% interval -20.7% to +15.3%), win rate 58.0% against a break-even 58.3%. Random sides at the same margin match or beat this 38% of the time. Line movement toward the pick after it was made: +0.08 probability points on average (zero means no closing-line value).</li><li><b>How many bets before ROI can be trusted.</b> At the observed spread of results, detecting a true 3% ROI takes about 5,028 bets and a 5% ROI about 1,810; a 1% edge takes 45,249. Closing-line value converges much faster, which is why it is the primary measure.</li><li><b>moneyline.</b> 144 picks, ROI -7.2% (-15.8% to +1.8%): insufficient evidence (interval spans 0).</li><li><b>parlay.</b> 14 picks, ROI -100.0% (-100.0% to -100.0%): too few picks (&lt;30) to say anything.</li><li><b>player assists.</b> 76 picks, ROI -4.6% (-43.0% to +38.6%): insufficient evidence (interval spans 0).</li><li><b>player goals.</b> 39 picks, ROI -5.1% (-77.6% to +63.7%): insufficient evidence (interval spans 0).</li><li><b>player points.</b> 103 picks, ROI -17.3% (-44.3% to +14.7%): insufficient evidence (interval spans 0).</li><li><b>player sog.</b> 145 picks, ROI -5.7% (-19.7% to +9.9%): insufficient evidence (interval spans 0).</li><li><b>spreads.</b> 106 picks, ROI -8.0% (-18.4% to +0.6%): insufficient evidence (interval spans 0).</li><li><b>totals.</b> 97 picks, ROI -8.0% (-35.4% to +16.3%): insufficient evidence (interval spans 0).</li></ul></div></section>
+<section class="section" id="live"><h2>Live record by market <span class="count">paper bets, flat $10</span></h2>
+<h3>The model&#x27;s picks</h3><div class='card flat scroll'><table class='rtable'><thead><tr><th>Market</th><th class='num'>Picks</th><th class='num'>Win rate</th><th class='num'>ROI</th><th class='num'>95% interval</th><th class='num'>P(this good by luck)</th><th class='num'>Picks needed to confirm 5%</th><th>Verdict</th></tr></thead><tbody><tr><td data-label='Market'><b>moneyline</b></td><td class='num' data-label='Picks'>144</td><td class='num' data-label='Win rate'>50.7%</td><td class='num bad' data-label='ROI'>-7.2%</td><td class='num' data-label='95% interval'>-15.8% to +1.8%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.82</td><td class='num' data-label='Picks for a 5% ROI'>2,253</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr><tr><td data-label='Market'><b>parlay</b></td><td class='num' data-label='Picks'>14</td><td class='num' data-label='Win rate'>0.0%</td><td class='num bad' data-label='ROI'>-100.0%</td><td class='num' data-label='95% interval'>-100.0% to -100.0%</td><td class='num' data-label='P(ROI > 0 by luck)'>1.00</td><td class='num' data-label='Picks for a 5% ROI'>0</td><td data-label='Verdict'>too few picks (&lt;30) to say anything</td></tr><tr><td data-label='Market'><b>player assists</b></td><td class='num' data-label='Picks'>76</td><td class='num' data-label='Win rate'>43.4%</td><td class='num bad' data-label='ROI'>-4.6%</td><td class='num' data-label='95% interval'>-43.0% to +38.6%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.61</td><td class='num' data-label='Picks for a 5% ROI'>5,134</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr><tr><td data-label='Market'><b>player goals</b></td><td class='num' data-label='Picks'>39</td><td class='num' data-label='Win rate'>10.3%</td><td class='num bad' data-label='ROI'>-5.1%</td><td class='num' data-label='95% interval'>-77.6% to +63.7%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.54</td><td class='num' data-label='Picks for a 5% ROI'>20,657</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr><tr><td data-label='Market'><b>player points</b></td><td class='num' data-label='Picks'>103</td><td class='num' data-label='Win rate'>38.8%</td><td class='num bad' data-label='ROI'>-17.3%</td><td class='num' data-label='95% interval'>-44.3% to +14.7%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.94</td><td class='num' data-label='Picks for a 5% ROI'>3,126</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr><tr><td data-label='Market'><b>player sog</b></td><td class='num' data-label='Picks'>145</td><td class='num' data-label='Win rate'>50.3%</td><td class='num bad' data-label='ROI'>-5.7%</td><td class='num' data-label='95% interval'>-19.7% to +9.9%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.76</td><td class='num' data-label='Picks for a 5% ROI'>2,259</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr><tr><td data-label='Market'><b>spreads</b></td><td class='num' data-label='Picks'>106</td><td class='num' data-label='Win rate'>56.6%</td><td class='num bad' data-label='ROI'>-8.0%</td><td class='num' data-label='95% interval'>-18.4% to +0.6%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.83</td><td class='num' data-label='Picks for a 5% ROI'>1,834</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr><tr><td data-label='Market'><b>totals</b></td><td class='num' data-label='Picks'>97</td><td class='num' data-label='Win rate'>48.5%</td><td class='num bad' data-label='ROI'>-8.0%</td><td class='num' data-label='95% interval'>-35.4% to +16.3%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.79</td><td class='num' data-label='Picks for a 5% ROI'>2,255</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr></tbody></table></div><h3>No-skill controls (what the bookmaker margin alone costs)</h3><div class='card flat scroll'><table class='rtable'><thead><tr><th>Market</th><th class='num'>Picks</th><th class='num'>Win rate</th><th class='num'>ROI</th><th class='num'>95% interval</th><th class='num'>P(this good by luck)</th><th class='num'>Picks needed to confirm 5%</th><th>Verdict</th></tr></thead><tbody><tr><td data-label='Market'><b>moneyline</b></td><td class='num' data-label='Picks'>153</td><td class='num' data-label='Win rate'>52.3%</td><td class='num bad' data-label='ROI'>-4.9%</td><td class='num' data-label='95% interval'>-14.5% to +2.9%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.74</td><td class='num' data-label='Picks for a 5% ROI'>2,212</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr><tr><td data-label='Market'><b>parlay</b></td><td class='num' data-label='Picks'>6</td><td class='num' data-label='Win rate'>16.7%</td><td class='num bad' data-label='ROI'>-34.7%</td><td class='num' data-label='95% interval'>-100.0% to +96.0%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.69</td><td class='num' data-label='Picks for a 5% ROI'>6,335</td><td data-label='Verdict'>too few picks (&lt;30) to say anything</td></tr><tr><td data-label='Market'><b>player assists</b></td><td class='num' data-label='Picks'>39</td><td class='num' data-label='Win rate'>56.4%</td><td class='num good' data-label='ROI'>+4.8%</td><td class='num' data-label='95% interval'>-1.8% to +11.4%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.38</td><td class='num' data-label='Picks for a 5% ROI'>2,198</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr><tr><td data-label='Market'><b>player goals</b></td><td class='num' data-label='Picks'>40</td><td class='num' data-label='Win rate'>32.5%</td><td class='num bad' data-label='ROI'>-10.3%</td><td class='num' data-label='95% interval'>-40.5% to +20.9%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.69</td><td class='num' data-label='Picks for a 5% ROI'>4,297</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr><tr><td data-label='Market'><b>player points</b></td><td class='num' data-label='Picks'>59</td><td class='num' data-label='Win rate'>55.9%</td><td class='num bad' data-label='ROI'>-8.2%</td><td class='num' data-label='95% interval'>-20.3% to +6.6%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.77</td><td class='num' data-label='Picks for a 5% ROI'>1,767</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr><tr><td data-label='Market'><b>player sog</b></td><td class='num' data-label='Picks'>99</td><td class='num' data-label='Win rate'>49.5%</td><td class='num good' data-label='ROI'>+2.4%</td><td class='num' data-label='95% interval'>-15.7% to +19.6%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.41</td><td class='num' data-label='Picks for a 5% ROI'>2,745</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr><tr><td data-label='Market'><b>spreads</b></td><td class='num' data-label='Picks'>53</td><td class='num' data-label='Win rate'>52.8%</td><td class='num bad' data-label='ROI'>-18.0%</td><td class='num' data-label='95% interval'>-34.1% to -7.1%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.95</td><td class='num' data-label='Picks for a 5% ROI'>1,529</td><td data-label='Verdict'>credibly LOSING</td></tr><tr><td data-label='Market'><b>totals</b></td><td class='num' data-label='Picks'>147</td><td class='num' data-label='Win rate'>50.3%</td><td class='num bad' data-label='ROI'>-2.9%</td><td class='num' data-label='95% interval'>-14.0% to +9.4%</td><td class='num' data-label='P(ROI > 0 by luck)'>0.64</td><td class='num' data-label='Picks for a 5% ROI'>2,323</td><td data-label='Verdict'>insufficient evidence (interval spans 0)</td></tr></tbody></table></div></section>
+<section class="section" id="moneyline"><h2>Moneyline picks in detail</h2><div class="card flat scroll"><table class="rtable"><thead><tr><th>Strategy</th><th class="num">Picks</th><th class="num">Win rate</th><th class="num">Break-even</th><th class="num">ROI</th><th class="num">95% interval</th><th class="num">Units</th><th class="num">Max drawdown</th><th class="num">Longest losing run</th><th class="num">Edge claimed</th><th class="num">Line moved our way</th></tr></thead><tbody><tr><td data-label='Strategy'><b>every_game</b></td><td class='num' data-label='Picks'>100</td><td class='num' data-label='Win rate'>58.0%</td><td class='num' data-label='Break-even'>58.3%</td><td class='num' data-label='ROI'>-2.0%</td><td class='num' data-label='95% interval'>-20.7% to +15.3%</td><td class='num' data-label='Units ($10 each)'>-2.0</td><td class='num' data-label='Max drawdown (units)'>7.8</td><td class='num' data-label='Longest losing run'>7</td><td class='num' data-label='Edge claimed vs no-vig'>+0.9 pts</td><td class='num' data-label='Moved our way (prob. pts)'>+0.08</td></tr><tr><td data-label='Strategy'><b>flat_model_side</b></td><td class='num' data-label='Picks'>100</td><td class='num' data-label='Win rate'>44.0%</td><td class='num' data-label='Break-even'>48.1%</td><td class='num' data-label='ROI'>-11.8%</td><td class='num' data-label='95% interval'>-28.6% to +4.2%</td><td class='num' data-label='Units ($10 each)'>-11.8</td><td class='num' data-label='Max drawdown (units)'>15.3</td><td class='num' data-label='Longest losing run'>7</td><td class='num' data-label='Edge claimed vs no-vig'>+4.6 pts</td><td class='num' data-label='Moved our way (prob. pts)'>-0.02</td></tr><tr><td data-label='Strategy'><b>market_favorite</b></td><td class='num' data-label='Picks'>100</td><td class='num' data-label='Win rate'>60.0%</td><td class='num' data-label='Break-even'>59.6%</td><td class='num' data-label='ROI'>-0.5%</td><td class='num' data-label='95% interval'>-15.4% to +11.3%</td><td class='num' data-label='Units ($10 each)'>-0.5</td><td class='num' data-label='Max drawdown (units)'>8.2</td><td class='num' data-label='Longest losing run'>6</td><td class='num' data-label='Edge claimed vs no-vig'>-2.0 pts</td><td class='num' data-label='Moved our way (prob. pts)'>+0.08</td></tr><tr><td data-label='Strategy'><b>home_ml_control</b></td><td class='num' data-label='Picks'>53</td><td class='num' data-label='Win rate'>50.9%</td><td class='num' data-label='Break-even'>54.3%</td><td class='num' data-label='ROI'>-8.4%</td><td class='num' data-label='95% interval'>-18.7% to +7.8%</td><td class='num' data-label='Units ($10 each)'>-4.5</td><td class='num' data-label='Max drawdown (units)'>7.1</td><td class='num' data-label='Longest losing run'>3</td><td class='num' data-label='Edge claimed vs no-vig'>+1.8 pts</td><td class='num' data-label='Moved our way (prob. pts)'>-0.17</td></tr></tbody></table></div>
+<div class="note">every_game = the model's side of every game; flat_model_side = only games where the model sees a positive edge; market_favorite = no-skill control. "Line moved our way" is the closing-line value in probability points; a real edge shows up here first.</div><h4>By month</h4><div class='card flat scroll'><table class='rtable'><thead><tr><th>month</th><th class='num'>Picks</th><th class='num'>Win rate</th><th class='num'>ROI</th><th class='num'>Model edge claimed</th></tr></thead><tbody><tr><td data-label='month'>2026-09</td><td class='num' data-label='Picks'>3</td><td class='num' data-label='Win rate'>66.7%</td><td class='num' data-label='ROI'>+26.0%</td><td class='num' data-label='Avg edge'>+7.7 pts</td></tr><tr><td data-label='month'>2026-10</td><td class='num' data-label='Picks'>97</td><td class='num' data-label='Win rate'>57.7%</td><td class='num' data-label='ROI'>-2.9%</td><td class='num' data-label='Avg edge'>+0.7 pts</td></tr></tbody></table></div><h4>By home / away</h4><div class='card flat scroll'><table class='rtable'><thead><tr><th>side</th><th class='num'>Picks</th><th class='num'>Win rate</th><th class='num'>ROI</th><th class='num'>Model edge claimed</th></tr></thead><tbody><tr><td data-label='side'>away</td><td class='num' data-label='Picks'>32</td><td class='num' data-label='Win rate'>56.2%</td><td class='num' data-label='ROI'>-2.7%</td><td class='num' data-label='Avg edge'>-0.7 pts</td></tr><tr><td data-label='side'>home</td><td class='num' data-label='Picks'>68</td><td class='num' data-label='Win rate'>58.8%</td><td class='num' data-label='ROI'>-1.7%</td><td class='num' data-label='Avg edge'>+1.7 pts</td></tr></tbody></table></div><h4>By favourite / underdog</h4><div class='card flat scroll'><table class='rtable'><thead><tr><th>role</th><th class='num'>Picks</th><th class='num'>Win rate</th><th class='num'>ROI</th><th class='num'>Model edge claimed</th></tr></thead><tbody><tr><td data-label='role'>favorite</td><td class='num' data-label='Picks'>82</td><td class='num' data-label='Win rate'>61.0%</td><td class='num' data-label='ROI'>-0.8%</td><td class='num' data-label='Avg edge'>-0.7 pts</td></tr><tr><td data-label='role'>underdog</td><td class='num' data-label='Picks'>18</td><td class='num' data-label='Win rate'>44.4%</td><td class='num' data-label='ROI'>-7.5%</td><td class='num' data-label='Avg edge'>+8.1 pts</td></tr></tbody></table></div><h4>By odds bucket</h4><div class='card flat scroll'><table class='rtable'><thead><tr><th>odds_bucket</th><th class='num'>Picks</th><th class='num'>Win rate</th><th class='num'>ROI</th><th class='num'>Model edge claimed</th></tr></thead><tbody><tr><td data-label='odds_bucket'>&lt;1.60</td><td class='num' data-label='Picks'>31</td><td class='num' data-label='Win rate'>74.2%</td><td class='num' data-label='ROI'>+9.3%</td><td class='num' data-label='Avg edge'>-2.9 pts</td></tr><tr><td data-label='odds_bucket'>1.60-2.00</td><td class='num' data-label='Picks'>55</td><td class='num' data-label='Win rate'>54.5%</td><td class='num' data-label='ROI'>-3.0%</td><td class='num' data-label='Avg edge'>+1.1 pts</td></tr><tr><td data-label='odds_bucket'>2.00-2.50</td><td class='num' data-label='Picks'>14</td><td class='num' data-label='Win rate'>35.7%</td><td class='num' data-label='ROI'>-23.3%</td><td class='num' data-label='Avg edge'>+8.6 pts</td></tr></tbody></table></div></section>
+<section class="section" id="scoring"><h2>Model vs market probabilities <span class="count">100 games</span></h2><div class="card flat scroll"><table class="rtable"><thead><tr><th>Forecast</th><th class="num">Log loss</th><th class="num">Brier</th><th class="num">Games</th></tr></thead><tbody><tr><td data-label='Forecast'>model</td><td class='num' data-label='Log loss'>0.6584</td><td class='num' data-label='Brier'>0.2332</td><td class='num' data-label='Games'>100</td></tr><tr><td data-label='Forecast'>market at pick</td><td class='num' data-label='Log loss'>0.6458</td><td class='num' data-label='Brier'>0.2273</td><td class='num' data-label='Games'>100</td></tr><tr><td data-label='Forecast'>market close</td><td class='num' data-label='Log loss'>0.6431</td><td class='num' data-label='Brier'>0.2260</td><td class='num' data-label='Games'>100</td></tr><tr><td data-label='Forecast'>elo</td><td class='num' data-label='Log loss'>0.6580</td><td class='num' data-label='Brier'>0.2330</td><td class='num' data-label='Games'>100</td></tr><tr><td data-label='Forecast'>home rate</td><td class='num' data-label='Log loss'>0.6899</td><td class='num' data-label='Brier'>0.2484</td><td class='num' data-label='Games'>100</td></tr></tbody></table></div>
+<div class="note">Lower is better. A model that beats the market must beat the market's own no-vig probability, not a coin flip (0.6931).</div>
+<h3>Reliability</h3><div class="card flat scroll"><table class="rtable"><thead><tr><th>Model probability bin</th><th class="num">Games</th><th class="num">Model</th><th class="num">Market close</th><th class="num">Actual</th></tr></thead><tbody><tr><td data-label='Model bin'>(0.297, 0.479]</td><td class='num' data-label='Games'>20</td><td class='num' data-label='Model'>42.1%</td><td class='num' data-label='Market close'>40.1%</td><td class='num' data-label='Actual home wins'>35.0%</td></tr><tr><td data-label='Model bin'>(0.479, 0.521]</td><td class='num' data-label='Games'>20</td><td class='num' data-label='Model'>50.1%</td><td class='num' data-label='Market close'>51.3%</td><td class='num' data-label='Actual home wins'>55.0%</td></tr><tr><td data-label='Model bin'>(0.521, 0.573]</td><td class='num' data-label='Games'>20</td><td class='num' data-label='Model'>54.3%</td><td class='num' data-label='Market close'>51.2%</td><td class='num' data-label='Actual home wins'>40.0%</td></tr><tr><td data-label='Model bin'>(0.573, 0.627]</td><td class='num' data-label='Games'>20</td><td class='num' data-label='Model'>59.7%</td><td class='num' data-label='Market close'>57.9%</td><td class='num' data-label='Actual home wins'>65.0%</td></tr><tr><td data-label='Model bin'>(0.627, 0.733]</td><td class='num' data-label='Games'>20</td><td class='num' data-label='Model'>66.5%</td><td class='num' data-label='Market close'>64.8%</td><td class='num' data-label='Actual home wins'>75.0%</td></tr></tbody></table></div></section>
+<section class="section" id="backtest"><h2>Backtest (not live) <span class="count">no market prices exist for it</span></h2><div class="card flat scroll"><table class="rtable"><thead><tr><th>Season</th><th class="num">Games</th><th class="num">Model</th><th class="num">Elo</th><th class="num">Home rate</th><th class="num">Model minus Elo</th><th class="num">95% interval</th></tr></thead><tbody><tr><td data-label='Season'>2024-25</td><td class='num' data-label='Games'>1312</td><td class='num' data-label='Model'>0.6610</td><td class='num' data-label='Elo'>0.6690</td><td class='num' data-label='Home rate'>0.6867</td><td class='num' data-label='Model - Elo'>-0.0080</td><td class='num' data-label='95% interval'>-0.0133 to -0.0021</td></tr><tr><td data-label='Season'>2025-26</td><td class='num' data-label='Games'>1312</td><td class='num' data-label='Model'>0.6888</td><td class='num' data-label='Elo'>0.6908</td><td class='num' data-label='Home rate'>0.6927</td><td class='num' data-label='Model - Elo'>-0.0020</td><td class='num' data-label='95% interval'>-0.0091 to +0.0058</td></tr><tr><td data-label='Season'>2026-27</td><td class='num' data-label='Games'>5</td><td class='num' data-label='Model'>0.7624</td><td class='num' data-label='Elo'>0.7387</td><td class='num' data-label='Home rate'>0.7104</td><td class='num' data-label='Model - Elo'>+0.0238</td><td class='num' data-label='95% interval'>+0.0238 to +0.0238</td></tr></tbody></table></div>
+<div class="note">Walk-forward log loss by season. Skill versus a trivial baseline is not skill versus the betting market; reports/ABLATION.md, reports/model_comparison.md, GOALS.md and PROPS.md in the repository hold the full backtests.</div></section>
+<section class="section" id="integrity"><h2>Are the logs honest?</h2><div class="card flat scroll"><table class="rtable"><thead><tr><th>Log</th><th class="num">Rows</th><th class="num">Duplicate rows</th><th class="num">Logged at or after puck drop</th></tr></thead><tbody><tr><td data-label='Log'>recommendations</td><td class='num' data-label='Rows'>310</td><td class='num' data-label='Duplicates'>0</td><td class='num' data-label='Logged at or after puck drop'>0</td></tr><tr><td data-label='Log'>shadow_bets</td><td class='num' data-label='Rows'>4,637</td><td class='num' data-label='Duplicates'>0</td><td class='num' data-label='Logged at or after puck drop'>0</td></tr><tr><td data-label='Log'>prop_bets</td><td class='num' data-label='Rows'>1,309</td><td class='num' data-label='Duplicates'>0</td><td class='num' data-label='Logged at or after puck drop'>0</td></tr><tr><td data-label='Log'>alt_quotes</td><td class='num' data-label='Rows'>6,109</td><td class='num' data-label='Duplicates'>0</td><td class='num' data-label='Logged at or after puck drop'>0</td></tr><tr><td data-label='Log'>parlay_bets</td><td class='num' data-label='Rows'>55</td><td class='num' data-label='Duplicates'>0</td><td class='num' data-label='Logged at or after puck drop'>-</td></tr></tbody></table></div><div class="note">Odds were captured a median of 0.1 minutes (max 8.2) before each run; 0 captured after the run; 0 picks without a model version (17 versions in use).</div></section>
+<section class="section" id="method"><h2>Method</h2><div class="card"><ul><li>The moneyline model is trained only on games before each prediction; features use only games with a strictly earlier date; tuning and feature selection stopped on 2024-06-30, before the evaluation window began (checked by a test).</li><li>A pick is the model&#x27;s side in a game at the best price available in the last odds capture before the game started. Picks are logged with a timestamp, the model version and the odds capture time; the logs are append-only files in the repository history.</li><li>Moneylines settle on the final result including overtime and shootout; totals count overtime goals but not the shootout goal; the puck line uses the official margin; whole-number lines return the stake on a push; player props settle on the player&#x27;s official stats and void if he does not play.</li><li>Every paper bet is a flat $10, so profit and ROI read directly. Fake money is used so nothing here is ever a recommendation to stake.</li><li>Intervals resample whole days (bets on one slate are not independent). The &#x27;by luck&#x27; columns are one-sided tests against zero ROI; the random-pick baseline picks a random side in the same games at the same margin.</li></ul></div></section>
+<section class="section" id="limits"><h2>Known limitations</h2><div class="card"><ul><li>There are no historical sportsbook prices in this project, so the long backtest scores probabilities against base rates, not against the market. Evidence about the market only exists from the day live odds capture began.</li><li>Only one pre-game price capture exists per game for totals, puck lines and player props, so closing-line value is measurable for moneylines only.</li><li>Samples are small: a few weeks of games. Intervals that include zero mean the data cannot yet tell skill from luck, not that skill is absent.</li><li>Player props are priced before the starting lineup is confirmed; a bet on a player who does not play is void. Anytime-goalscorer market probabilities are estimated from one-sided prices with an assumed margin.</li><li>The best price across books is used, which flatters results slightly compared with a bettor who has one account.</li></ul></div></section>
+<footer class="footer"><div class="banner disc">Disclaimer. This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.</div></footer></main></body></html>

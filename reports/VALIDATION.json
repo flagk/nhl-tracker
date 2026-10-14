@@ -612,9 +612,9 @@
    "roi": -0.08237288135593217,
    "roi_ci": [
     -0.2032258064516129,
-    0.06554464285714293
+    0.06554464285714294
    ],
-   "units": -4.859999999999999,
+   "units": -4.860000000000001,
    "p_roi_not_above_0": 0.7714236100663736,
    "picks_needed_for_5pct_roi": 1767,
    "picks_needed_for_2pct_roi": 11043,
@@ -664,11 +664,11 @@
   }
  },
  "log_integrity": {
-  "games_with_known_start": 89,
+  "games_with_known_start": 88,
   "recommendations": {
-   "rows": 309,
+   "rows": 310,
    "duplicate_keys": 0,
-   "rows_with_known_start": 283,
+   "rows_with_known_start": 282,
    "logged_at_or_after_puck_drop": 0,
    "odds_age_minutes_median": 0.11666666666666667,
    "odds_age_minutes_max": 8.166666666666666,
@@ -678,21 +678,21 @@
    "model_versions": 17
   },
   "shadow_bets": {
-   "rows": 4617,
+   "rows": 4637,
    "duplicate_keys": 0,
-   "rows_with_known_start": 4331,
+   "rows_with_known_start": 4311,
    "logged_at_or_after_puck_drop": 0
   },
   "prop_bets": {
    "rows": 1309,
    "duplicate_keys": 0,
-   "rows_with_known_start": 1293,
+   "rows_with_known_start": 1270,
    "logged_at_or_after_puck_drop": 0
   },
   "alt_quotes": {
    "rows": 6109,
    "duplicate_keys": 0,
-   "rows_with_known_start": 5907,
+   "rows_with_known_start": 5807,
    "logged_at_or_after_puck_drop": 0
   },
   "parlay_bets": {
