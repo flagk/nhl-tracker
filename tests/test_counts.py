@@ -142,3 +142,57 @@ def test_kelly_with_a_push_is_neutral_and_matches_a_numeric_optimum():
     assert f == pytest.approx(grid[np.argmax(growth)], abs=2e-5)
     assert kelly_fraction_push(0.5, 0.5, dec) == pytest.approx(kelly_fraction(0.5, dec))   # no push mass: identical to the plain formula
     assert kelly_fraction_push(0.30, 0.40, dec) == 0.0                                  # negative edge: no bet
+
+
+def _saves_store(days=260, seed=0):
+    from nhlbet.data.store import Store
+    rng = np.random.default_rng(seed)
+    st = Store(":memory:")
+    teams = ["A", "B", "C", "D", "E", "F"]
+    rate = dict(zip(teams, rng.uniform(26, 33, len(teams))))
+    goalie = {t: 100 + i for i, t in enumerate(teams)}
+    sv = {t: rng.uniform(0.895, 0.92) for t in teams}
+    games, tg, gg = [], [], []
+    gid = 0
+    base = pd.Timestamp("2024-10-01")
+    for d in range(days):
+        order = list(rng.permutation(teams))
+        for i in range(0, 6, 2):
+            h, a = order[i], order[i + 1]
+            gid += 1
+            sa_h = rng.poisson(rate[h] * 0.5 + rate[a] * 0.5 - 1)          # shots against the home team
+            sa_a = rng.poisson(rate[a] * 0.5 + rate[h] * 0.5 + 1)
+            games.append(dict(game_id=gid, season=1, game_type=2, game_date=str((base + pd.Timedelta(days=d)).date()), start_utc=None, home=h, away=a, home_score=3, away_score=2,
+                              status="FINAL", last_period="REG", home_win=1, source="nhl_api", updated_at=None))
+            for t, o, ih, sa, sf in ((h, a, 1, sa_h, sa_a), (a, h, 0, sa_a, sa_h)):
+                tg.append(dict(game_id=gid, team=t, opp=o, is_home=ih, goals=3, goals_against=2, sog_for=sf, sog_against=sa))
+                saves = rng.binomial(sa, sv[t])
+                gg.append(dict(game_id=gid, team=t, player_id=goalie[t], name=f"G{t}", started=1, toi_sec=3600, shots_against=sa, saves=int(saves), goals_against=int(sa - saves), xg_faced=None))
+    st.upsert("games", games, ["game_id"]); st.upsert("team_game", tg, ["game_id", "team"]); st.upsert("goalie_game", gg, ["game_id", "player_id"])
+    return st
+
+
+def test_goalie_saves_model_is_an_integer_pmf_unbiased_and_never_sees_the_future():
+    from nhlbet.models.props_eval import evaluate
+    from nhlbet.models.saves import SavesModel, add_asof_features, goalie_starts, walk_forward_saves
+    d = goalie_starts(_saves_store())
+    assert len(d) == 260 * 6 and set(d.columns) >= {"saves", "team_sa", "opp_sf", "is_home"}
+    P = walk_forward_saves(d, "2025-03-01", min_train=600)
+    assert len(P) > 300 and abs(P.lam.mean() - P.y.mean()) < 0.6                                # unbiased out of sample
+    ev = evaluate(P, "saves")
+    assert ev.what.iloc[0].startswith("saves per player-game") and np.isfinite(ev["diff"].iloc[:2]).all()
+    assert any(w.startswith("over 26.5") or w.startswith("over 24.5") for w in ev.what)
+    # a binomially thinned NB is NB: P(over) from the model sums with push and under to one on a whole-number line
+    f = add_asof_features(d)
+    m = SavesModel().fit(f.iloc[:1200])
+    sub = f.iloc[1300:1310]
+    o, p, u = m.over_push_under(sub, 26.0)
+    assert np.allclose(o + p + u, 1.0) and (p > 0.02).all()
+    # corrupt every result after a cutoff: predictions before it must not move
+    cut = pd.Timestamp("2025-04-15")
+    d2 = d.copy()
+    late = d2.game_date >= cut
+    d2.loc[late, "saves"] = 5; d2.loc[late, "shots_against"] = 8
+    P2 = walk_forward_saves(d2, "2025-03-01", min_train=600)
+    a, b = P[P.game_date < cut].sort_values(["game_id", "player_id"]), P2[P2.game_date < cut].sort_values(["game_id", "player_id"])
+    assert len(a) > 100 and np.allclose(a.lam.to_numpy(), b.lam.to_numpy())

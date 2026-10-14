@@ -332,6 +332,7 @@
     var mine = priceBox(g.game_id + ":prop:" + q.player_id, show); mine.box.appendChild(out); show(mine.current());
     var kids = [head, probBar(pSide, mSide, q.one_sided ? "Scores" : (over ? "Over " : "Under ") + q.point), kv];
     if (hist) kids.push(el("div", { class: "stack", style: "gap:.2rem" }, [el("div", { class: "note", text: noun(q).charAt(0).toUpperCase() + noun(q).slice(1) + " in his last " + q.history.length + " games (bars above the line are overs)" }), hist]));
+    facts.push("starting lineup not confirmed: the bet is void if he does not play");
     if (q.captured_at) facts.push("prices captured " + new Date(q.captured_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }));
     if (q.one_sided) facts.push("market chance estimated from the price less an assumed margin (no opposite side to measure it)");
     kids.push(el("p", { class: "why", text: facts.join(" · ") + (facts.length ? ". " : "") + "Model blends his recent " + ({ points: "scoring", assists: "assisting", goals: "goal-scoring" }[q.stat] || "shot") + " rate (shrunk toward his position's average), tonight's opponent, home ice, ice time and rest. " + q.n_books + " book(s) quoted this line." }));

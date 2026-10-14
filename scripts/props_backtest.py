@@ -44,8 +44,8 @@ if len(pg) < 20000:
 feats = add_asof_features(pg, team_allowance(store))
 
 
-def nll(P: pd.DataFrame) -> np.ndarray:
-    pm = _pmf_matrix(P.lam, P.k)
+def nll(P: pd.DataFrame, kmax: int | None = None) -> np.ndarray:
+    pm = _pmf_matrix(P.lam, P.k) if kmax is None else _pmf_matrix(P.lam, P.k, kmax)
     return -np.log(np.maximum(pm[np.arange(len(P)), np.minimum(P.y.to_numpy(int), pm.shape[1] - 1)], 1e-12))
 
 
@@ -79,6 +79,30 @@ for stat in ("sog", "points", "assists", "goals"):
     for line in LINES_BY_STAT[stat]:
         md += [f"**Reliability of P(over {line:g}), by predicted-probability bin:**", "", calibration_table(P, line).round(4).to_markdown(index=False), ""]
     md += [f"Average {stat}: predicted {P.lam.mean():.3f}, actual {P.y.mean():.3f}.", ""]
+# ---- goalie saves: research model only (see nhlbet/models/saves.py); the goalie's save-percentage prior is chosen the same way (before --select-end, scored after) ----
+try:
+    from nhlbet.models.saves import goalie_starts, walk_forward_saves
+    gs = goalie_starts(store)
+    if len(gs) > 3000:
+        sens = {k: walk_forward_saves(gs, a.eval_start, sv_prior=k) for k in (200.0, 400.0, 800.0, 1600.0)}
+        sens = {k: v for k, v in sens.items() if not v.empty}
+        cut = pd.Timestamp(a.select_end)
+        selv = {k: float(nll(v[v.game_date <= cut], 90).mean()) for k, v in sens.items() if (v.game_date <= cut).sum() > 500}
+        kb = min(selv, key=selv.get) if selv else 400.0
+        Ps = sens[kb]
+        aft = {k: float(nll(v[v.game_date > cut], 90).mean()) for k, v in sens.items() if (v.game_date > cut).sum() > 500}
+        md += ["## Goalie saves (research model, not priced live)", "",
+               f"{len(Ps):,} goalie starts ({Ps.player_id.nunique():,} goalies) from {Ps.game_date.min().date()} to {Ps.game_date.max().date()}. Saves = shots against thinned by the goalie's shrunk save percentage; "
+               "a goalie who is pulled has fewer shots against in the history, which is how the risk of a short night enters the distribution. Settlement of a goalie who starts but is replaced differs by book, "
+               "so nothing is priced or staked from this model until a book's rule and live prices are verified.", "",
+               f"**Save-percentage prior sensitivity** (pseudo-shots of league-average goaltending). Chosen on starts up to {a.select_end}: **{kb:g}**; scored after:", "",
+               pd.DataFrame({"sv_prior": list(sens), f"NLL up to {a.select_end}": [selv.get(k, np.nan) for k in sens], "NLL after": [aft.get(k, np.nan) for k in sens]}).round(5).to_markdown(index=False), "",
+               "**Model vs the goalie's own average:**", "", evaluate(Ps, "saves").round(4).to_markdown(index=False), ""]
+        for line in LINES_BY_STAT["saves"]:
+            md += [f"**Reliability of P(over {line:g} saves):**", "", calibration_table(Ps, line).round(4).to_markdown(index=False), ""]
+        md += [f"Average saves: predicted {Ps.lam.mean():.2f}, actual {Ps.y.mean():.2f}.", ""]
+except Exception as exc:                                  # the saves section must never block the other stats
+    md += [f"_Goalie saves backtest unavailable: {exc}_", ""]
 Path(a.out).mkdir(exist_ok=True)
 Path(a.out, "PROPS.md").write_text("\n".join(md) + "\n")
 Path(a.out, "props_shrink.json").write_text(json.dumps({"shrink_k": chosen, "selected_on_games_through": a.select_end}, indent=1))

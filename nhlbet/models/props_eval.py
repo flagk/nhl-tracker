@@ -13,7 +13,8 @@ from nhlbet.models.evaluate import _week_groups
 from nhlbet.models.props import MIN_GAMES, ShotsModel, baseline_lam
 from nhlbet.splits import walk_forward_windows
 
-LINES_BY_STAT = {"sog": (1.5, 2.5, 3.5), "points": (0.5, 1.5), "assists": (0.5, 1.5), "goals": (0.5,)}
+LINES_BY_STAT = {"sog": (1.5, 2.5, 3.5), "points": (0.5, 1.5), "assists": (0.5, 1.5), "goals": (0.5,), "saves": (22.5, 24.5, 26.5, 28.5)}
+STAT_KMAX = {"saves": 60}          # the largest count scored separately; anything above shares the last bucket
 LINES = LINES_BY_STAT["sog"]
 EPS = 1e-6
 KMAX = 14                       # counts at or above this share the last bucket when scoring the PMF
@@ -51,10 +52,10 @@ def _p_over(lam, line, k):
     return np.where(kk <= 1e-9, 1.0 - poisson.cdf(np.floor(line), lam), nb)
 
 
-def _pmf_matrix(lam, k) -> np.ndarray:
-    """(n, KMAX+1) probability of 0..KMAX-1 and 'KMAX or more', negative binomial (Poisson when k ~ 0), one dispersion per row."""
+def _pmf_matrix(lam, k, kmax: int = KMAX) -> np.ndarray:
+    """(n, kmax+1) probability of 0..kmax-1 and 'kmax or more', negative binomial (Poisson when k ~ 0), one dispersion per row."""
     lam, kk = np.asarray(lam, float)[:, None], np.maximum(np.asarray(k, float), 1e-9)[:, None]
-    x = np.arange(KMAX)[None, :]
+    x = np.arange(kmax)[None, :]
     r = 1.0 / kk
     pm = np.where(kk <= 1e-8, poisson.pmf(x, lam), nbinom.pmf(x, r, r / (r + lam)))
     return np.column_stack([pm, np.clip(1.0 - pm.sum(1), 0.0, 1.0)])
@@ -62,7 +63,7 @@ def _pmf_matrix(lam, k) -> np.ndarray:
 
 def rps(pmf: np.ndarray, y: np.ndarray) -> np.ndarray:
     """Ranked probability score of an integer-count forecast (lower is better): squared distance between the forecast CDF and the outcome's step CDF."""
-    obs = (np.arange(pmf.shape[1])[None, :] >= np.minimum(np.asarray(y, int), KMAX)[:, None]).astype(float)
+    obs = (np.arange(pmf.shape[1])[None, :] >= np.minimum(np.asarray(y, int), pmf.shape[1] - 1)[:, None]).astype(float)
     return np.sum((np.cumsum(pmf, 1) - obs) ** 2, 1) / (pmf.shape[1] - 1)
 
 
@@ -86,12 +87,13 @@ def evaluate(P: pd.DataFrame, stat: str = "sog") -> pd.DataFrame:
     effect size; compare it with ``n`` and read 'insufficient evidence' when n < n_to_confirm."""
     rows = []
     y = P.y.to_numpy(float) if "y" in P else P.sog.to_numpy(float)
-    pm, pb = _pmf_matrix(P.lam, P.k), _pmf_matrix(P.base, P.k)
-    idx = np.minimum(y.astype(int), KMAX)
+    kmax = STAT_KMAX.get(stat, KMAX)
+    pm, pb = _pmf_matrix(P.lam, P.k, kmax), _pmf_matrix(P.base, P.k, kmax)
+    idx = np.minimum(y.astype(int), kmax)
     nll_m, nll_b = -np.log(np.maximum(pm[np.arange(len(y)), idx], 1e-12)), -np.log(np.maximum(pb[np.arange(len(y)), idx], 1e-12))
     d = nll_m - nll_b
     lo, hi = _boot(d, P.game_date)
-    noun = {"sog": "shots", "points": "points", "assists": "assists", "goals": "goals"}[stat]
+    noun = {"sog": "shots", "points": "points", "assists": "assists", "goals": "goals", "saves": "saves"}[stat]
     rows.append({"what": f"{noun} per player-game (PMF log-likelihood, NLL)", "n": len(P), "model": float(nll_m.mean()), "baseline": float(nll_b.mean()), "diff": float(d.mean()),
                  "ci_low": lo, "ci_high": hi, "hit_rate": np.nan, "mean_p": np.nan, "n_to_confirm": _needed(d)})
     dr = rps(pm, y) - rps(pb, y)
@@ -99,7 +101,7 @@ def evaluate(P: pd.DataFrame, stat: str = "sog") -> pd.DataFrame:
     rows.append({"what": f"{noun} per player-game (ranked probability score)", "n": len(P), "model": float(rps(pm, y).mean()), "baseline": float(rps(pb, y).mean()), "diff": float(dr.mean()),
                  "ci_low": lo, "ci_high": hi, "hit_rate": np.nan, "mean_p": np.nan, "n_to_confirm": _needed(dr)})
     for line in LINES_BY_STAT[stat]:
-        sel = P[(P.lam > line * 0.45) & (P.lam < line * 1.8)] if stat == "sog" else P[(P.lam > 0.05)]                 # players for whom this line is a realistic prop
+        sel = P[(P.lam > line * 0.45) & (P.lam < line * 1.8)] if stat in ("sog", "saves") else P[(P.lam > 0.05)]                 # players for whom this line is a realistic prop
         if len(sel) < 200:
             continue
         ys = ((sel.y if "y" in sel else sel.sog) > line).astype(float).to_numpy()
