@@ -131,3 +131,14 @@ def test_ranked_probability_score_and_pmf_scoring_by_hand():
     nll, score = ev.iloc[0], ev.iloc[1]
     assert nll["diff"] < 0 and score["diff"] < 0 and set(ev.what) >= {"over 0.5 (log loss)"}        # the true rate beats a constant rate on both count scores
     assert ev["verdict"].iloc[0] in ("skill vs own rate", "insufficient evidence") and np.isfinite(ev.n_to_confirm.iloc[0])
+
+
+def test_kelly_with_a_push_is_neutral_and_matches_a_numeric_optimum():
+    from nhlbet.risk.kelly import kelly_fraction, kelly_fraction_push
+    pw, pl, pp, dec = 0.42, 0.40, 0.18, 1.95
+    f = kelly_fraction_push(pw, pl, dec)
+    grid = np.linspace(0, 0.9, 90001)
+    growth = pw * np.log1p(grid * (dec - 1)) + pl * np.log1p(-grid)                    # a push leaves the bankroll unchanged
+    assert f == pytest.approx(grid[np.argmax(growth)], abs=2e-5)
+    assert kelly_fraction_push(0.5, 0.5, dec) == pytest.approx(kelly_fraction(0.5, dec))   # no push mass: identical to the plain formula
+    assert kelly_fraction_push(0.30, 0.40, dec) == 0.0                                  # negative edge: no bet
