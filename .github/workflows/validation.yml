@@ -1,0 +1,51 @@
+name: Validation (ablations)
+# On demand: ablations, regularisation sensitivity and per-season stability under the production walk-forward protocol -> reports/ABLATION.md
+on:
+  workflow_dispatch:
+    inputs:
+      eval_start:
+        description: "First out-of-sample date"
+        default: "2024-10-01"
+
+concurrency:
+  group: nhl-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  ablation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e .
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/nhl.db
+            data/cache
+          key: nhl-data-${{ github.run_id }}
+          restore-keys: nhl-data-
+      - run: python scripts/ablation.py --eval-start "${{ github.event.inputs.eval_start }}"
+      - run: python scripts/validate.py
+      - name: Commit
+        run: |
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add reports/ABLATION.md reports/VALIDATION.json
+          if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+          git commit -m "Validation: ablations and honest evaluation"
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push && exit 0
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 4))
+          done
+          exit 1
