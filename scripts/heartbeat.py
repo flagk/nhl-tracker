@@ -21,8 +21,9 @@ from nhlbet.gate import decide_files  # noqa: E402
 
 TARGETS = {"morning": ("daily.yml", {"run_type": "morning", "gated": "true"}),
            "late": ("daily.yml", {"run_type": "late", "gated": "true"}),
-           "close": ("odds-close.yml", {"gated": "true"})}
-COOLDOWN_S = {"morning": 3600, "late": 3600, "close": 1200}     # never dispatch the same job again sooner than this
+           "close": ("odds-close.yml", {"gated": "true"}),
+           "review": ("review.yml", {"gated": "true"})}
+COOLDOWN_S = {"morning": 3600, "late": 3600, "close": 1200, "review": 1800}     # never dispatch the same job again sooner than this
 
 
 def sh(args: list[str]) -> str:
@@ -51,7 +52,7 @@ def dispatch(workflow: str, inputs: dict, run=sh) -> None:
 def tick(now: datetime, last: dict, root: str = ".", run=sh, decide=decide_files) -> list[str]:
     """One heartbeat: returns the jobs dispatched. ``last`` remembers when each was last dispatched."""
     fired = []
-    for kind in ("morning", "late", "close"):
+    for kind in ("morning", "late", "close", "review"):
         ok, why = decide(kind, now, root)
         if not ok:
             continue

@@ -9,6 +9,10 @@ this gate whether *now* is a useful moment. Triggers that arrive too late simply
   the run is still before puck drop).
 - ``close``: only when a game starts within the next ``CLOSE_WINDOW_MIN`` minutes and has no capture in its final ``CLOSE_WINDOW_MIN`` minutes yet (one capture covers every game
   starting soon), and none happened in the last ``MIN_GAP_MIN``: about one capture per start wave instead of one every 20 minutes.
+- ``review``: the pre-game review agent, once per start wave: ``REVIEW_LEAD_MIN`` minutes before the wave's first puck drop (taken from the committed
+  schedule in ``site/picks.json``, never a fixed clock time), until ``REVIEW_LATEST_MIN`` before it. Games more than ``WAVE_GAP_MIN`` apart are different
+  waves, so a late west-coast block gets its own pass. A wave whose review already ran (``data/review/picks_final.json``), even a failed one, is not re-run
+  automatically: a failure should reach a person, not spend the subscription in a loop.
 """
 from __future__ import annotations
 
@@ -21,6 +25,9 @@ LATE_MIN_MIN = 20          # a late run needs at least this long before puck dro
 LATE_WINDOW_H = 3.0
 CLOSE_WINDOW_MIN = 25      # a game's closing snapshot is one taken in the 25 minutes before it starts
 MIN_GAP_MIN = 10           # never two captures closer than this
+REVIEW_LEAD_MIN = 75       # start the review this long before a wave's first puck drop
+REVIEW_LATEST_MIN = 5      # ...and not at all once it is this close (the answer could no longer be acted on)
+WAVE_GAP_MIN = 120         # games starting this far apart or further belong to different waves (7:00 and 8:00 pm ET share a pass, 10:00 pm gets its own)
 MORNING_FROM_ET_H = 8      # yesterday's late games are final (settlement) and the day's lines exist; a midnight run was too early
 
 
@@ -176,6 +183,9 @@ def decide_files(kind: str, now: datetime, root: str | Path = ".") -> tuple[bool
         if wait > timedelta(hours=LATE_WINDOW_H):
             return False, f"first game is {wait.total_seconds() / 3600:.1f} h away: too early (goalies not confirmed yet)"
         return True, f"first game in {int(wait.total_seconds() // 60)} min"
+    if kind == "review":
+        t = review_target(now, root)
+        return (True, t["reason"]) if t.get("key") else (False, t["reason"])
     if kind == "close":
         if slate_date not in (date, game_day(now - timedelta(hours=24))):
             return False, "no current slate"
@@ -189,3 +199,59 @@ def decide_files(kind: str, now: datetime, root: str | Path = ".") -> tuple[bool
             return False, "every game starting soon already has its closing snapshot"
         return True, f"{len(due)} game(s) start within {CLOSE_WINDOW_MIN} min without a closing snapshot"
     raise ValueError(f"unknown kind {kind!r}")
+
+
+def slate_waves(root: str | Path) -> tuple[str | None, list[dict]]:
+    """(slate date, waves) from ``site/picks.json``: each wave is ``{"key", "start", "game_ids"}`` with games sorted by start time."""
+    p = Path(root) / "site" / "picks.json"
+    try:
+        d = json.loads(p.read_text())
+    except (OSError, ValueError):
+        return None, []
+    games = []
+    for g in d.get("games", []):
+        try:
+            games.append((datetime.fromisoformat(str(g["start_utc"]).replace("Z", "+00:00")).astimezone(timezone.utc), int(g["game_id"])))
+        except (KeyError, TypeError, ValueError):
+            continue
+    games.sort()
+    waves: list[list[tuple[datetime, int]]] = []
+    for st, gid in games:
+        if waves and st - waves[-1][-1][0] < timedelta(minutes=WAVE_GAP_MIN):
+            waves[-1].append((st, gid))
+        else:
+            waves.append([(st, gid)])
+    date = d.get("date")
+    return date, [{"key": f"rv-{date}-{w[0][0]:%H%M}", "start": w[0][0], "game_ids": [g for _, g in w]} for w in waves]
+
+
+def review_target(now: datetime, root: str | Path = ".") -> dict:
+    """The wave that should be reviewed now: ``{"key", "start", "game_ids", "reason"}``, or ``{"key": None, "reason": ...}`` when nothing is due."""
+    now = now.astimezone(timezone.utc)
+    date = game_day(now)
+    slate_date, waves = slate_waves(root)
+    if slate_date != date:
+        return {"key": None, "reason": "today's slate is not built yet"}
+    if not waves:
+        return {"key": None, "reason": "no games today"}
+    try:
+        state = json.loads((Path(root) / "data" / "review" / "picks_final.json").read_text())
+    except (OSError, ValueError):
+        state = {}
+    done = {x.get("run_id") for x in state.get("passes", [])} if state.get("date") == date else set()
+    try:
+        cand = json.loads((Path(root) / "data" / "review" / "picks_candidate.json").read_text())
+    except (OSError, ValueError):
+        cand = {}
+    for w in waves:
+        wait = w["start"] - now
+        if wait > timedelta(minutes=REVIEW_LEAD_MIN):
+            return {"key": None, "reason": f"next wave starts in {int(wait.total_seconds() // 60)} min: review opens {REVIEW_LEAD_MIN} min before"}
+        if wait < timedelta(minutes=REVIEW_LATEST_MIN):
+            continue                                                        # this wave is (almost) under way; look at the next one
+        if w["key"] in done:
+            continue
+        if cand.get("date") != date or not any(p.get("game_id") in w["game_ids"] for p in cand.get("picks", [])):
+            return {"key": None, "reason": f"wave {w['key']} has no candidate picks yet"}
+        return {**w, "reason": f"wave {w['key']} starts in {int(wait.total_seconds() // 60)} min and has not been reviewed"}
+    return {"key": None, "reason": "every remaining wave is reviewed or already under way"}
