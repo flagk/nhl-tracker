@@ -67,8 +67,48 @@ EXTRA_PROPS_MIN_CREDITS = 250       # assists / anytime-goalscorer prices are on
 PROPS_MIN_CREDITS = 100             # below this no player prices are fetched at all: game moneylines come first
 
 
+CREDIT_RESERVE = 25                 # never plan to spend the last credits: they keep the moneylines alive
+CORE_AFTER_LATE = 4                 # credits the closing-line snapshots still need after the late run (about one per start wave)
+PROP_REFETCH_MIN = 60               # a game's player market fetched less than this long ago is not fetched again
+
+
+def credits_spent_today(store: Store, now: datetime) -> int:
+    """Odds credits used since 00:00 UTC today, from the quota counter the API reports with every live call."""
+    day = now.strftime("%Y-%m-%d")
+    cur = store.df("SELECT MAX(used) AS u FROM odds_fetch_log WHERE source = 'live'")
+    prev = store.df("SELECT MAX(used) AS u FROM odds_fetch_log WHERE source = 'live' AND captured_at < ?", [day])
+    if cur.empty or cur.u.iloc[0] != cur.u.iloc[0] or cur.u.iloc[0] is None:
+        return 0
+    base = prev.u.iloc[0] if len(prev) and prev.u.iloc[0] == prev.u.iloc[0] and prev.u.iloc[0] is not None else None
+    if base is None:                                    # no history before today: count from the first call today
+        first = store.df("SELECT MIN(used) AS u FROM odds_fetch_log WHERE source = 'live' AND captured_at >= ?", [day])
+        base = (first.u.iloc[0] - 1) if len(first) and first.u.iloc[0] == first.u.iloc[0] else cur.u.iloc[0]
+    return int(max(0, cur.u.iloc[0] - base))
+
+
+def props_budget(store: Store, remaining: int | None, now: datetime) -> int | None:
+    """How many credits player prices may spend today so the whole month lasts.
+
+    The plan is assumed to reset on the 1st: spread what is left (less a reserve) evenly over the days left, subtract what today has already cost and
+    what the closing snapshots still need; whatever remains is the player-price budget. ``None`` = unknown quota (no limit applied).
+    """
+    if remaining is None:
+        return None
+    nxt = (now.replace(day=28) + timedelta(days=4)).replace(day=1)
+    days_left = max(1, (nxt.date() - now.date()).days)
+    allowance = max(0, remaining - CREDIT_RESERVE) / days_left
+    return max(0, int(allowance - credits_spent_today(store, now) - CORE_AFTER_LATE))
+
+
+def _recently_fetched(store: Store, event_id: str, market: str, now: datetime, minutes: float = PROP_REFETCH_MIN) -> bool:
+    r = store.df("SELECT MAX(captured_at) AS c FROM odds_snapshots WHERE event_id = ? AND market = ?", [event_id, market])
+    if r.empty or r.c.iloc[0] is None:
+        return False
+    return (now - datetime.fromisoformat(str(r.c.iloc[0]).replace("Z", "+00:00"))) < timedelta(minutes=minutes)
+
+
 def fetch_player_props(store: Store, client: OddsClient, events: list[dict], max_games: int, now: datetime | None = None, regions: str = "us",
-                       remaining: int | None = None) -> dict:
+                       remaining: int | None = None, budget: int | None = None) -> dict:
     """Player-prop prices (shots, points, assists, anytime goalscorer) for the next few games to start (one credit per market per game).
 
     One request per market, so a market the plan lacks fails alone. Only live captures are stored: a stale cached answer would put old lines on the
@@ -82,10 +122,16 @@ def fetch_player_props(store: Store, client: OddsClient, events: list[dict], max
         return {"games": 0, "error": f"only {remaining} odds credits left: player prices skipped to protect moneylines"}
     upcoming = sorted((e for e in events if e.get("commence_time") and datetime.fromisoformat(e["commence_time"].replace("Z", "+00:00")) > now
                        and datetime.fromisoformat(e["commence_time"].replace("Z", "+00:00")) < now + timedelta(hours=6)), key=lambda e: e["commence_time"])[:max_games]
-    got, errors, ok_markets = 0, [], set()
+    got, errors, ok_markets, spent, skipped = 0, [], set(), 0, 0
     for e in upcoming:
         game_ok = False
         for m in markets:
+            if _recently_fetched(store, e["id"], m, now):
+                continue                                         # already priced within the last hour: the same credits would buy the same lines
+            if budget is not None and spent >= budget:
+                skipped += 1
+                continue                                         # today's player-price budget is used up
+            spent += 1
             try:
                 f = client.fetch_event_odds(e["id"], (m,), regions)
             except (OddsAPIError, OddsConfigError) as err:
@@ -99,7 +145,10 @@ def fetch_player_props(store: Store, client: OddsClient, events: list[dict], max
             ok_markets.add(m)
             game_ok = True
         got += int(game_ok)
-    out = {"games": got, "markets": sorted(ok_markets)}
+    out = {"games": got, "markets": sorted(ok_markets), "credits": spent}
+    if skipped:
+        out["skipped_for_budget"] = skipped
+        out["note"] = "Some player prices were skipped to make the monthly odds credits last."
     if errors and not got:
         out["error"] = errors[0]
     elif errors:
@@ -119,7 +168,8 @@ def fetch_and_store_odds(store: Store, markets: tuple[str, ...] | None = None, r
         meta = {"enabled": True, "captured_at": f.captured_at, "stale": f.stale, "remaining": f.remaining, "source": f.source}
         max_props = int(os.environ.get("ODDS_PROPS_MAX_GAMES", PROPS_MAX_GAMES if run_type != "morning" else 0))
         if max_props > 0 and not f.stale:
-            meta["props"] = fetch_player_props(store, client, f.events, max_props, regions=regions, remaining=f.remaining)
+            meta["props"] = fetch_player_props(store, client, f.events, max_props, regions=regions, remaining=f.remaining,
+                                                 budget=props_budget(store, f.remaining, datetime.now(timezone.utc)))
         return meta
     except (OddsAPIError, OddsConfigError) as e:
         log.error("odds fetch failed: %s", e)

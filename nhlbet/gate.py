@@ -7,7 +7,8 @@ this gate whether *now* is a useful moment. Triggers that arrive too late simply
 - ``morning``: once per game day (ET), from 8 am ET on, never again after ``reports/daily/<date>-morning.md`` exists.
 - ``late``: once per game day, only while the first unstarted game begins within the next ``LATE_WINDOW`` (so goalies are mostly confirmed and
   the run is still before puck drop).
-- ``close``: only when some game starts within the next ``CLOSE_WINDOW_MIN`` minutes and no live odds capture happened in the last ``MIN_GAP_MIN``.
+- ``close``: only when a game starts within the next ``CLOSE_WINDOW_MIN`` minutes and has no capture in its final ``CLOSE_WINDOW_MIN`` minutes yet (one capture covers every game
+  starting soon), and none happened in the last ``MIN_GAP_MIN``: about one capture per start wave instead of one every 20 minutes.
 """
 from __future__ import annotations
 
@@ -18,8 +19,8 @@ from zoneinfo import ZoneInfo
 
 LATE_MIN_MIN = 20          # a late run needs at least this long before puck drop to be worth doing
 LATE_WINDOW_H = 3.0
-CLOSE_WINDOW_MIN = 35
-MIN_GAP_MIN = 20
+CLOSE_WINDOW_MIN = 25      # a game's closing snapshot is one taken in the 25 minutes before it starts
+MIN_GAP_MIN = 10           # never two captures closer than this
 MORNING_FROM_ET_H = 8      # yesterday's late games are final (settlement) and the day's lines exist; a midnight run was too early
 
 
@@ -72,6 +73,17 @@ def _morning_ok(now: datetime) -> tuple[bool, str]:
     return True, "first morning run of the day"
 
 
+def _uncovered(starts: list[datetime], last: datetime | None, now: datetime) -> list[datetime]:
+    """Games starting within the close window whose closing snapshot has not been taken yet.
+
+    One capture returns every game's odds, so it covers all games starting in the next 25 minutes; a game is covered once any capture falls in its final
+    25 minutes. This replaces 'one capture every 20 minutes while anything is about to start', which spent about 17 credits on a busy night.
+    """
+    win = timedelta(minutes=CLOSE_WINDOW_MIN)
+    soon = [s for s in starts if now - timedelta(minutes=2) <= s <= now + win]
+    return [s for s in soon if last is None or not (s - win <= last <= s)]
+
+
 def decide(kind: str, now: datetime, db: str = "data/nhl.db", report_dir: str = "reports", force: bool = False) -> tuple[bool, str]:
     """(run, reason). ``force`` is for manual dispatches: always run."""
     if force:
@@ -93,13 +105,16 @@ def decide(kind: str, now: datetime, db: str = "data/nhl.db", report_dir: str = 
             return False, f"first game is {wait.total_seconds() / 3600:.1f} h away: too early (goalies not confirmed yet)"
         return True, f"first game in {int(wait.total_seconds() // 60)} min"
     if kind == "close":
-        soon = [s for s in _starts(db, date) + _starts(db, game_day(now - timedelta(hours=24))) if now - timedelta(minutes=2) <= s <= now + timedelta(minutes=CLOSE_WINDOW_MIN)]
-        if not soon:
-            return False, "no game starts in the next %d min" % CLOSE_WINDOW_MIN
+        starts = _starts(db, date) + _starts(db, game_day(now - timedelta(hours=24)))
         last = _last_live_fetch(db)
+        if not [s for s in starts if now - timedelta(minutes=2) <= s <= now + timedelta(minutes=CLOSE_WINDOW_MIN)]:
+            return False, "no game starts in the next %d min" % CLOSE_WINDOW_MIN
         if last is not None and now - last < timedelta(minutes=MIN_GAP_MIN):
             return False, f"odds were captured {int((now - last).total_seconds() // 60)} min ago"
-        return True, f"{len(soon)} game(s) start within {CLOSE_WINDOW_MIN} min"
+        due = _uncovered(starts, last, now)
+        if not due:
+            return False, "every game starting soon already has its closing snapshot"
+        return True, f"{len(due)} game(s) start within {CLOSE_WINDOW_MIN} min without a closing snapshot"
     raise ValueError(f"unknown kind {kind!r}")
 
 
@@ -164,11 +179,13 @@ def decide_files(kind: str, now: datetime, root: str | Path = ".") -> tuple[bool
     if kind == "close":
         if slate_date not in (date, game_day(now - timedelta(hours=24))):
             return False, "no current slate"
-        soon = [s for s in starts if now - timedelta(minutes=2) <= s <= now + timedelta(minutes=CLOSE_WINDOW_MIN)]
-        if not soon:
-            return False, "no game starts in the next %d min" % CLOSE_WINDOW_MIN
         last = _last_capture_from_files(root)
+        if not [s for s in starts if now - timedelta(minutes=2) <= s <= now + timedelta(minutes=CLOSE_WINDOW_MIN)]:
+            return False, "no game starts in the next %d min" % CLOSE_WINDOW_MIN
         if last is not None and now - last < timedelta(minutes=MIN_GAP_MIN):
             return False, f"odds were captured {int((now - last).total_seconds() // 60)} min ago"
-        return True, f"{len(soon)} game(s) start within {CLOSE_WINDOW_MIN} min"
+        due = _uncovered(starts, last, now)
+        if not due:
+            return False, "every game starting soon already has its closing snapshot"
+        return True, f"{len(due)} game(s) start within {CLOSE_WINDOW_MIN} min without a closing snapshot"
     raise ValueError(f"unknown kind {kind!r}")

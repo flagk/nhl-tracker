@@ -55,14 +55,26 @@ def test_late_run_skips_when_no_unstarted_games(tmp_path):
     assert not decide("late", T("2026-10-01T20:30:00"), db=db, report_dir=str(tmp_path / "r"))[0]
 
 
-def test_close_snapshot_only_just_before_a_start_and_not_twice(tmp_path):
-    db = mkdb(tmp_path, [("2026-10-01", "2026-10-01T23:00:00Z")], fetches=["2026-10-01T22:20:00+00:00"])
-    kw = dict(db=db, report_dir=str(tmp_path))
-    assert not decide("close", T("2026-10-01T21:00:00"), **kw)[0]                # 2 h before: not the close
-    run, why = decide("close", T("2026-10-01T22:35:00"), **kw)                   # 25 min before puck drop but a live capture was 15 min ago (< 20 min gap)
-    assert not run and "15 min ago" in why
-    assert decide("close", T("2026-10-01T22:45:00"), **kw)[0]                    # 25 min since the last capture: take the closing snapshot
-    assert not decide("close", T("2026-10-01T23:05:00"), **kw)[0]                # puck has dropped: nothing starts soon, in-play prices are not wanted
+def _close_db(tmp_path, name, starts, fetches=()):
+    d = tmp_path / name
+    d.mkdir()
+    return dict(db=mkdb(d, [("2026-10-01", s) for s in starts], fetches=fetches), report_dir=str(tmp_path))
+
+
+def test_close_snapshot_is_taken_once_per_start_wave(tmp_path):
+    waves = ["2026-10-01T23:00:00Z", "2026-10-01T23:30:00Z", "2026-10-02T00:00:00Z"]
+    a = _close_db(tmp_path, "a", waves, fetches=["2026-10-01T22:20:00+00:00"])
+    assert not decide("close", T("2026-10-01T21:00:00"), **a)[0]                 # 2 h before: not the close
+    assert decide("close", T("2026-10-01T22:40:00"), **a)[0]                     # 20 min before 23:00; the 22:20 capture is outside its final 25 min: take the closing snapshot
+    b = _close_db(tmp_path, "b", waves, fetches=["2026-10-01T22:45:00+00:00"])
+    run, why = decide("close", T("2026-10-01T22:55:00"), **b)                    # the 22:45 capture IS the 23:00 game's closing snapshot
+    assert not run
+    assert not decide("close", T("2026-10-01T23:03:00"), **b)[0]                 # 23:30 is 27 min away: not yet inside its own window
+    assert decide("close", T("2026-10-01T23:07:00"), **b)[0]                     # 23 min before 23:30 and 22:45 is outside that game's window: capture the second wave
+    c = _close_db(tmp_path, "c", waves, fetches=["2026-10-01T23:08:00+00:00"])
+    assert not decide("close", T("2026-10-01T23:20:00"), **c)[0]                 # the 23:08 capture is inside the 23:30 game's final 25 minutes: already its closing snapshot
+    d = _close_db(tmp_path, "d", ["2026-10-01T23:00:00Z"])
+    assert not decide("close", T("2026-10-01T23:05:00"), **d)[0]                 # puck has dropped: in-play prices are not wanted
 
 
 def test_morning_waits_until_8am_et(tmp_path):

@@ -394,3 +394,25 @@ def test_anytime_goalscorer_is_one_sided_fresh_only_and_settles_on_goals():
     s2.upsert("prop_bets", [bet(10, "player_goals", "goal_edge", 0.5), bet(11, "player_goals", "goal_control", 0.5), bet(11, "player_assists", "ast_edge", 1.5)], ["run_id", "game_id", "strategy", "player_id", "side"])
     d = shadow_resolved(s2).set_index("strategy")
     assert d.loc["goal_edge", "profit"] == 20.0 and d.loc["goal_control", "profit"] == -10.0 and d.loc["ast_edge", "profit"] == 20.0
+
+
+def test_player_price_budget_dedupe_and_credit_plan(tmp_path):
+    from nhlbet.pipeline import credits_spent_today, props_budget
+    st = Store(":memory:")
+    now = datetime(2026, 10, 14, 20, 30, tzinfo=timezone.utc)
+    log = lambda at, used, rem=0: st.upsert("odds_fetch_log", [{"captured_at": at, "ok": 1, "source": "live", "remaining": rem, "used": used, "events": 1, "note": "x"}], ["captured_at"])
+    log("2026-10-13T22:00:00+00:00", 280); log("2026-10-14T12:00:00+00:00", 284); log("2026-10-14T20:29:00+00:00", 287)
+    assert credits_spent_today(st, now) == 7                                      # used counter 280 -> 287 since midnight UTC
+    # 196 credits left in October with 18 days to go (14th..31st): (196 - 25) / 18 = 9.5 a day, less 7 spent, less 4 for the closing snapshots -> nothing for player prices
+    assert props_budget(st, 196, now) == 0
+    assert props_budget(st, 400, now) == int((400 - 25) / 18 - 7 - 4) and props_budget(st, None, now) is None
+    # dedupe + budget in the fetcher
+    ev = lambda i, hours: {**prop_event("2026-10-14"), "id": f"e{i}", "commence_time": (now + timedelta(hours=hours)).isoformat().replace("+00:00", "Z")}
+    events = [ev(1, 1), ev(2, 2)]
+    sess = FakeSession({"/events/": {**prop_event("2026-10-14")}})
+    client = OddsClient(api_key="k", cache_dir=tmp_path / "c", session=sess, sleep=lambda s: None)
+    r = fetch_player_props(st, client, events, max_games=3, now=now, remaining=300, budget=3)
+    assert r["credits"] == 3 and r["skipped_for_budget"] == 5 and "credits last" in r["note"] and len(sess.calls) == 3          # 2 games x 4 markets wanted, only 3 affordable, soonest game / best markets first
+    sess.calls.clear()
+    r2 = fetch_player_props(st, client, events, max_games=3, now=now, remaining=300, budget=None)
+    assert len(sess.calls) <= 5                                                    # what was fetched in the last hour is not fetched again

@@ -57,14 +57,16 @@ def test_late_needs_todays_slate(tmp_path):
     assert not decide_files("late", utc("2026-10-03T21:00:00"), r)[0]
 
 
-def test_close_window_and_gap(tmp_path):
-    r = repo(tmp_path)
+def test_close_window_and_coverage(tmp_path):
+    r = repo(tmp_path)                                                    # one game at 23:00Z
     assert not decide_files("close", utc("2026-10-03T21:00:00"), r)[0]
     assert decide_files("close", utc("2026-10-03T22:40:00"), r)[0]
     (r / "data" / "logs" / "odds_fetch_log").mkdir(parents=True)
     (r / "data" / "logs" / "odds_fetch_log" / "2026-10-03T22-35-00.csv").write_text("x")
-    assert not decide_files("close", utc("2026-10-03T22:40:00"), r)[0]
-    assert decide_files("close", utc("2026-10-03T22:58:00"), r)[0]
+    assert not decide_files("close", utc("2026-10-03T22:50:00"), r)[0]    # 22:35 is inside the game's final 25 minutes: already its closing snapshot
+    (r / "data" / "logs" / "odds_fetch_log" / "2026-10-03T22-35-00.csv").unlink()
+    (r / "data" / "logs" / "odds_fetch_log" / "2026-10-03T22-10-00.csv").write_text("x")
+    assert decide_files("close", utc("2026-10-03T22:50:00"), r)[0]        # only a 22:10 capture exists: too early to count as the close
 
 
 def test_tick_dispatches_respects_cooldown_and_busy(tmp_path):

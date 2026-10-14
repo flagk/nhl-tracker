@@ -343,6 +343,8 @@
     var items = [];
     D.games.forEach(function (g) { (g.props || []).forEach(function (q) { items.push({ g: g, q: q }); }); });
     var kids = [el("p", { class: "lead", text: "Player shots, points, assists and anytime-goalscorer lines, priced by separate models built from each player's own history, the opponent's shots allowed, home ice, ice time and rest. Experimental and paper-traded only: it has no track record against the market, so treat \"Take\" as a lean to check against your own app, not a recommendation. Only a few games a day are priced (each game costs an odds-API credit)." })];
+    var pn = D.odds && D.odds.props && D.odds.props.note;
+    if (pn) kids.push(el("div", { class: "banner", text: pn }));
     var pe = D.odds && D.odds.props && D.odds.props.error;
     if (pe) kids.push(el("div", { class: "banner bad", text: "Player-prop prices could not be fetched on the last run (" + pe + "). Your odds plan may not include player props." }));
     if (!items.length) return section("sec-props", "Player props", "experimental", kids.concat([el("div", { class: "card muted", text: "No player-prop prices yet today. They are fetched for the first few games to start, in the late run." })]));
