@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-10-16
 
-**2 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-16 12:03 UTC
+**2 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-10-16 22:02 UTC
 
 | | |
 |---|---|
@@ -23,8 +23,8 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| PIT @ COL | 60.8% | 65.4% | no bet |
-| BOS @ ANA | 55.3% | 49.1% | no bet |
+| PIT @ COL | 60.8% | 65.6% | no bet |
+| BOS @ ANA | 55.3% | 49.9% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
