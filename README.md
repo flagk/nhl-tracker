@@ -9,9 +9,9 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 <!-- PICKS:START -->
 
-### Today's picks: 2026-10-16
+### Today's picks: 2026-10-17
 
-**2 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-10-16 22:02 UTC
+**14 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-17 12:05 UTC
 
 | | |
 |---|---|
@@ -23,8 +23,20 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| PIT @ COL | 60.8% | 65.6% | no bet |
-| BOS @ ANA | 55.3% | 49.9% | no bet |
+| NJD @ WSH | 52.2% | 52.8% | no bet |
+| CAR @ WPG | 36.8% | 37.4% | no bet |
+| VAN @ TBL | 71.5% | 78.9% | no bet |
+| SEA @ FLA | 59.9% | 63.3% | no bet |
+| NYI @ TOR | 47.2% | 55.0% | no bet |
+| BUF @ MTL | 49.5% | 56.8% | no bet |
+| SJS @ DET | 60.1% | 54.8% | no bet |
+| OTT @ PHI | 43.1% | 42.1% | no bet |
+| NYR @ CBJ | 52.6% | 54.9% | no bet |
+| DAL @ CHI | 36.1% | 35.7% | no bet |
+| STL @ NSH | 48.4% | 48.8% | no bet |
+| BOS @ LAK | 60.4% | 55.8% | no bet |
+| EDM @ UTA | 57.7% | 55.2% | no bet |
+| PIT @ VGK | 60.9% | 68.3% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
