@@ -9,9 +9,9 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 <!-- PICKS:START -->
 
-### Today's picks: 2026-10-18
+### Today's picks: 2026-10-19
 
-**2 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-10-18 19:05 UTC
+**4 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-19 12:04 UTC
 
 | | |
 |---|---|
@@ -23,8 +23,10 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| CBJ @ MIN | 59.0% | 62.9% | no bet |
-| CAR @ CGY | 36.6% | 33.5% | no bet |
+| ANA @ NYR | 53.3% | 56.2% | no bet |
+| COL @ PHI | 38.2% | 31.8% | no bet |
+| SJS @ TOR | 54.5% | 56.6% | no bet |
+| PIT @ UTA | 57.2% | 62.4% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
