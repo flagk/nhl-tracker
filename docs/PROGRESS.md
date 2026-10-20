@@ -6,7 +6,7 @@ Resume rule: a new session reads this file and continues from "Next". Do not red
 - Branch: `hardening` (from `main`, with the review-agent branch merged in; 327 tests green at the merge).
 - Approved decisions (owner): (1) real-data checks run in GitHub Actions on `hardening`, (2) holdout rule below, (3) ntfy.sh push + Healthchecks.io dead-man switch, (4) policy immutability via hash + owner-email check + manual branch protection, (5) proposed policy values.
 - Phase 0: done (inventory, corrections, plan approved).
-- Phase 1: in progress. Code, tests and CI workflow written; real-data run pending; `reports/phase1_leakage.md` to finalise.
+- Phase 1: DONE (checkpoint). Real-data run passed: truncation invariance 1e-13 over 959 games, sentinels caught, shuffled null AUC 0.48-0.50, shuffled ROI -3.4% to -4.8%. Report: `reports/phase1_leakage.md`.
 - Credits spent on the odds API: 0 (no live calls made).
 
 ## Phase 1 findings so far
@@ -16,11 +16,12 @@ Resume rule: a new session reads this file and continues from "Next". Do not red
 4. REAL FINDING, goalie confirmations: reloading the manual file re-stamped `captured_at` to "now" and the slate did not filter confirmations by decision time. Fixed: first-seen time is kept and `as_of` filtering added.
 5. Availability guard added to every model fit; planted-outcome sentinels are caught; truncation invariance holds for features, all models, the stack and calibrators (weighted average differs ~4e-7 from solver tie-order noise only).
 6. Holdout locked: 656 games, 2026-01-05 to 2026-09-29 (rule: larger of 20% and a half-season), previously examined.
-7. `reports/baseline/before.json` holds the pre-change baseline (code at the merge commit); live record: moneyline 144 picks, ROI -7.2% (CI -15.8% to +1.8%).
+7. Settlement sensitivity on the real database: 465 totals paper bets, 15 results flip, profit -$348.90 (old rule) vs -$518.00 (new default).
+8. `reports/baseline/before.json` holds the pre-change baseline (code at the merge commit); live record: moneyline 144 picks, ROI -7.2% (CI -15.8% to +1.8%).
 
 ## Next
-- Push, let `phase1-realdata` run (trigger: `ci/phase1_trigger.txt`), pull the report, finish `reports/phase1_leakage.md`, checkpoint commit.
-- Phase 2.
+- Phase 2 (count models and the joint distribution). Note: the totals goal model now follows the shootout rule switch, so its out-of-sample metrics must be re-run in CI (goals workflow) and compared with the old rule.
+- Real-data jobs: push a change to `ci/phase1_trigger.txt` style trigger files on `hardening` (workflow files only exist on the branch, so push-triggered).
 
 ## Open blockers
 - None blocking. Manual items accumulating for OPERATIONS.md: verify each book's shootout/total rules; branch protection + CODEOWNERS for `config/policy.yaml` and `.github/**`.
