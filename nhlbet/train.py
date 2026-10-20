@@ -75,7 +75,11 @@ def retrain(db: str = "data/nhl.db", force: bool = False, model_dir: str = "data
     features = load_selected_features()
     done = add_goal_targets(done, store.df("SELECT game_id, home_score, away_score, last_period FROM games"))
     gpath = Path(report_dir) / "goals_model.json"
-    galpha = json.loads(gpath.read_text()).get("alpha", 50.0) if gpath.exists() else 50.0
+    gj = json.loads(gpath.read_text()) if gpath.exists() else {}
+    galpha = gj.get("alpha", 50.0)
+    if gj.get("pinned_to_grid_edge"):
+        log.warning("the goals regularisation (%s) sits on the edge of its tuning grid: using the default 50.0 until the grid brackets the optimum", galpha)
+        galpha = 50.0
     cpath = Path(report_dir) / "goals_calibration.json"
     gcal = json.loads(cpath.read_text()) if cpath.exists() else None
     from nhlbet.settle import rules_for

@@ -158,8 +158,13 @@ class ScoreDistribution:
     def p_home(self) -> float:
         return self.p_home_reg + self.p_tie * self.s_home_tie
 
-    def expected_total(self) -> float:
-        return float((self.w * (self.reg_total + np.where(self.reg_margin == 0, self.p_ot, 0.0))).sum())
+    def expected_total(self, so_in_total: bool | None = None) -> float:
+        """Expected game total under the shootout rule (default: the policy's): a tied game adds a goal in overtime, and in a shootout too when the book counts it."""
+        if so_in_total is None:
+            from nhlbet.settle import shootout_in_total
+            so_in_total = shootout_in_total()
+        p_extra = 1.0 if so_in_total else self.p_ot
+        return float((self.w * (self.reg_total + np.where(self.reg_margin == 0, p_extra, 0.0))).sum())
 
     def total_probs(self, line: float, so_in_total: bool | None = None) -> tuple[float, float, float]:
         """(P(over), P(under), P(push)) for a total line. ``so_in_total`` (default: the policy's rule set) says whether a shootout adds a goal to the total.

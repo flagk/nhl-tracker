@@ -150,3 +150,13 @@ def test_the_goal_calibration_is_only_applied_under_the_rule_it_was_fitted_for()
 def test_saves_are_never_priced_live():
     from nhlbet.odds.props import STATS
     assert "saves" not in STATS and not any("save" in v["odds"] for v in STATS.values())
+
+
+@pytest.mark.parametrize("so", [True, False])
+def test_expected_total_is_the_mean_of_the_total_pmf_under_the_same_rule(so):
+    """A bias check: the predicted mean total must describe the same total that is settled (the first Phase 2 run showed 6.11 predicted vs 6.24 actual because it ignored the shootout goal)."""
+    for d in dists():
+        pmf = d.total_pmf(40, so_in_total=so)
+        assert d.expected_total(so) == pytest.approx(float((np.arange(40) * pmf).sum()), abs=1e-9)
+    d = dists()[0]
+    assert d.expected_total(True) - d.expected_total(False) == pytest.approx(d.p_tie * (1 - d.p_ot), abs=1e-9)
