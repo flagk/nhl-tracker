@@ -15,7 +15,8 @@ def tables():
 
 def test_truncation_invariance_report_passes_on_a_clean_pipeline(tables):
     r = realdata.truncation_invariance(tables, FEATS, pd.Timestamp("2024-05-01"), "2024-02-01", step_days=14, min_train=120)
-    assert r["pass"] and r["games_compared"] > 50 and r["max_abs_diff_models_stack_calibrators"] < 1e-9
+    detail = {k: r[k] for k in ("same_games", "games_compared", "max_abs_diff_models_stack_calibrators", "max_abs_diff_weighted_average")}
+    assert r["pass"] and r["games_compared"] > 50 and r["max_abs_diff_models_stack_calibrators"] < 1e-9, detail
 
 
 def test_availability_report_catches_every_planted_sentinel(tables):

@@ -206,7 +206,10 @@ def market_summary(paper: pd.DataFrame, controls: bool = False) -> dict:
         lo, hi = cluster_bootstrap(r, g.date.to_numpy(), np.mean)
         t = stats.ttest_1samp(r, 0.0) if len(r) > 2 else None
         sd = float(r.std(ddof=1)) if len(r) > 1 else float("nan")
-        verdict = ("too few picks (<30) to say anything" if len(g) < 30 else "insufficient evidence (interval spans 0)" if lo <= 0 <= hi else "credible edge" if lo > 0 else "credibly LOSING")
+        from nhlbet.policy import policy_get
+        minimum = int(policy_get("evaluation", "min_picks_per_market", default=100))
+        verdict = (f"insufficient evidence (n={len(g)} < {minimum}, the policy minimum)" if len(g) < minimum else "insufficient evidence (interval spans 0)" if lo <= 0 <= hi
+                   else "credible edge" if lo > 0 else "credibly LOSING")
         out[m] = {"picks": int(len(g)), "win_rate": float(g.won.mean()), "roi": float(r.mean()), "roi_ci": [lo, hi], "units": float(g.profit.sum() / g.stake.mean()),
                   "p_roi_not_above_0": float(t.pvalue / 2 if t.statistic > 0 else 1 - t.pvalue / 2) if t is not None else float("nan"),
                   "picks_needed_for_5pct_roi": required_n(0.05, sd), "picks_needed_for_2pct_roi": required_n(0.02, sd), "verdict": verdict}

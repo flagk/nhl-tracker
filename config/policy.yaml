@@ -42,3 +42,17 @@ settlement:
     default: {ruleset: so_adds_goal, verified: false}
     draftkings: {ruleset: so_adds_goal, verified: false, note: "whole-number total equal to the line is void (2023 house rules); team totals offered both with and without OT/SO"}
     fanduel: {ruleset: so_adds_goal, verified: false, note: "overtime goals count toward game totals; team totals are 60 minutes of regulation only"}
+
+# Evaluation (Phase 3). The primary no-vig method is proportional normalisation; power and Shin are sensitivity checks. Production edges still use Shin
+# (changing it would alter live picks and make the stored closing consensus inconsistent), so the evaluation recomputes every market probability itself.
+evaluation:
+  devig:
+    primary: proportional
+    sensitivity: [power, shin]
+    production: shin
+  min_picks_per_market: 100      # below this a market's result is labelled "insufficient evidence" everywhere it appears
+  min_clv_picks: 30
+  alpha: 0.05
+  multiple_comparisons: holm     # applied across markets (and across split cells) whenever significance is reported
+  bootstrap_resamples: 4000      # resampling whole game dates: same-day bets are correlated
+  edge_thresholds: [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08]
