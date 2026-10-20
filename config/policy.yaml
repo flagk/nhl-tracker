@@ -56,3 +56,31 @@ evaluation:
   multiple_comparisons: holm     # applied across markets (and across split cells) whenever significance is reported
   bootstrap_resamples: 4000      # resampling whole game dates: same-day bets are correlated
   edge_thresholds: [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08]
+
+# Staking and risk (Phase 5). Values are the ones the code used before they moved here, so behaviour is unchanged; kelly_fraction may never exceed kelly_fraction_max.
+staking:
+  kelly_fraction: 0.25            # fraction of full Kelly (quarter Kelly)
+  kelly_fraction_max: 0.25        # hard ceiling: loading a policy with a larger kelly_fraction is an error
+  max_bet_pct: 0.02               # per bet, share of bankroll
+  max_game_exposure_pct: 0.03     # per game: every market on one game is correlated, so their stakes count together
+  max_daily_exposure_pct: 0.05    # per day, all bets
+  max_bets_per_day: 5
+  min_stake: 1.0
+  min_edge: 0.03                  # raw edge: model probability minus the no-vig market probability
+  min_edge_unconfirmed_goalie: 0.04
+  min_ev: 0.01                    # per $1 after shrinkage toward the market
+  min_prob: 0.40
+  max_decimal: 4.0
+  max_disagreement: 0.12          # a larger gap to the market is presumed a model error, not an edge
+  trust_w0: 0.5
+  trust_d0: 0.06
+  min_games_played: 10
+  allow_stale_odds: false
+
+risk:
+  kill_switch:
+    max_drawdown_pct: 0.20        # of the high-water bankroll; breaching it is a HARD halt (Phase 7)
+  simulation:
+    paths: 10000
+    horizons: [200, 500]
+    ruin_level: 0.5               # "ruin" = the bankroll ever falling to this share of its start
