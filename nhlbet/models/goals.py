@@ -186,8 +186,25 @@ class ScoreDistribution:
         s = over + under + push
         return over / s, under / s, push / s
 
+    def total_pmf(self, n: int = 20, so_in_total: bool | None = None) -> np.ndarray:
+        """P(game total = k) for k = 0..n-1 (the last cell also holds any mass beyond), under the given shootout rule (default: the policy's). Sums to 1."""
+        if so_in_total is None:
+            from nhlbet.settle import shootout_in_total
+            so_in_total = shootout_in_total()
+        p_extra = 1.0 if so_in_total else self.p_ot
+        t = self.reg_total.astype(int)
+        tied = self.reg_margin == 0
+        pmf = np.zeros(n)
+        np.add.at(pmf, np.minimum(t, n - 1), np.where(tied, self.w * (1.0 - p_extra), self.w))
+        np.add.at(pmf, np.minimum(t + 1, n - 1), np.where(tied, self.w * p_extra, 0.0))
+        return pmf / pmf.sum()
+
     def spread_probs(self, home_point: float) -> tuple[float, float, float]:
         """(P(home covers), P(away covers), P(push)) where the home team gets ``home_point`` goals (-1.5 = favourite giving 1.5)."""
+        frac = round((float(home_point) * 4) % 4)
+        if frac in (1, 3):                                                   # quarter line: half the stake on each adjacent line
+            a, b = self.spread_probs(home_point - 0.25), self.spread_probs(home_point + 0.25)
+            return tuple((x + y) / 2.0 for x, y in zip(a, b))                  # type: ignore[return-value]
         m = self.reg_margin.astype(float)
         tied = self.reg_margin == 0
         cover = push = 0.0

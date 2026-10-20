@@ -20,7 +20,8 @@ from nhlbet.config import load_builder_config
 from nhlbet.data.store import Store
 from nhlbet.features.builder import build_features
 from nhlbet.models.goals import add_goal_targets, goal_feature_columns
-from nhlbet.models.goals_eval import calibration_params, evaluate, goal_rate_table, joint_table, online_calibrate_goals, walk_forward_goals
+from nhlbet.models.goals_eval import calibration_params, evaluate, goal_rate_table, joint_table, online_calibrate_goals, pit_table, totals_pmf_table, walk_forward_goals
+from nhlbet.settle import rules_for
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--db", default="data/nhl.db")
@@ -65,6 +66,11 @@ md = ["# Goals model: walk-forward backtest (totals and puck line)", "",
       "## Goal rates (Poisson negative log-likelihood per team-game; negative diff = model better than the training average)", "", rate.round(4).to_markdown(index=False), "",
       "## Which joint score distribution? (out-of-sample log-likelihood of the observed regulation score; higher is better)", "", joint_table(P).round(4).to_markdown(index=False), "",
       "## Totals and puck line vs base rates (log loss; negative diff = model better)", "", ev.round(4).to_markdown(index=False), "",
+      f"## Totals as a whole distribution (shootout rule `{rules_for()['ruleset']}`: a shootout adds one goal to the total = {rules_for()['shootout_in_total']})", "",
+      "Each forecast is scored on the observed game total under the CURRENT rule. `log_score` is higher-is-better, `rps` (ranked probability score) lower-is-better; the interval is for the "
+      "paired RPS difference to the training base rate, resampling whole days. 'previous model' is the same goal model with the shootout goal excluded, i.e. what the pipeline "
+      "published before the rule was made explicit.", "", totals_pmf_table(P).round(5).to_markdown(index=False), "",
+      "Randomised probability-integral-transform of the totals forecast (a calibrated forecast fills the bins equally):", "", pit_table(P).round(4).to_markdown(index=False), "",
       "## After walk-forward recalibration (each block mapped by a Platt fit on strictly earlier out-of-sample predictions)", "",
       (evc.round(4).to_markdown(index=False) if len(evc) else "Not enough out-of-sample predictions to calibrate."), "",
       "`cal_slope` is the logistic calibration slope (outcome on the model's logit): 1 = calibrated, below 1 = overconfident, near 0 = no signal. "
@@ -74,5 +80,5 @@ md = ["# Goals model: walk-forward backtest (totals and puck line)", "",
       "## Alpha comparison (mean Poisson NLL diff)", ""] + [f"- alpha {k}: {v[3]:+.5f}" for k, v in res.items()]
 Path(a.out, "GOALS.md").write_text("\n".join(md) + "\n")
 Path(a.out, "goals_model.json").write_text(json.dumps({"alpha": best, "features_n": len(feats)}))
-Path(a.out, "goals_calibration.json").write_text(json.dumps(cal))
+Path(a.out, "goals_calibration.json").write_text(json.dumps({**cal, "_rule": rules_for()["ruleset"]}))     # the maps are only valid for the shootout rule they were fitted under
 print("\n".join(md))
