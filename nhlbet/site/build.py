@@ -150,7 +150,13 @@ def _review_text(rv: dict | None) -> str:
     if not rv:
         return "-"
     label = "UNREVIEWED" if rv.get("status") == "UNREVIEWED" else {"flag": "Flagged", "veto": "Vetoed"}.get(rv.get("decision"), "Kept")
+    if rv.get("shadow") and rv.get("status") != "UNREVIEWED":
+        label = f"Shadow: would be {'vetoed' if rv.get('decision') == 'veto' else 'flagged' if rv.get('decision') == 'flag' else 'kept'}"
     out = f"<b>{label}</b>"
+    if rv.get("shadow"):
+        out += "<br><span class='muted'>shadow mode: this pick is published unchanged</span>"
+    if rv.get("odds_status") == "not_refreshed":
+        out += "<br><span class='muted'>odds movement: unconfirmed (price not refreshed)</span>"
     note = rv.get("warning") or rv.get("reason")
     if note:
         out += f"<br><span class='muted'>{e(str(note))}</span>"

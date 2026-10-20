@@ -176,7 +176,10 @@
     if (!rv) return [el("span", { class: "muted", text: "-" })];
     var cls = rv.status === "UNREVIEWED" ? "bad" : rv.decision === "flag" ? "lean" : rv.decision === "veto" ? "bad" : "rec";
     var label = rv.status === "UNREVIEWED" ? "UNREVIEWED" : rv.decision === "flag" ? "Flagged" : rv.decision === "veto" ? "Vetoed" : "Kept";
+    if (rv.shadow && rv.status !== "UNREVIEWED") label = "Shadow: would be " + (rv.decision === "veto" ? "vetoed" : rv.decision === "flag" ? "flagged" : "kept");
     var out = [el("span", { class: "pill " + cls, text: label })];
+    if (rv.shadow) out.push(el("div", { class: "muted", text: "shadow mode: this pick is published unchanged" }));
+    if (rv.odds_status === "not_refreshed") out.push(el("div", { class: "muted", text: "odds movement: unconfirmed (price not refreshed)" }));
     if (rv.warning) out.push(el("div", { class: "muted", text: "\u26a0 " + rv.warning }));
     else if (rv.reason) out.push(el("div", { class: "muted", text: rv.reason }));
     var links = sourceLinks(rv.sources);

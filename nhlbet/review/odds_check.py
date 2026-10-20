@@ -9,32 +9,86 @@ from __future__ import annotations
 
 import logging
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 from nhlbet.odds.math import best_price, consensus_prob
 from nhlbet.odds.snapshots import parse_events
+from nhlbet.policy import policy_get
 
 log = logging.getLogger(__name__)
 REFRESHABLE = {"h2h", "totals", "spreads"}
-MIN_CREDITS_TO_FETCH = 60            # do not spend the month's last credits on a review: they keep the closing-line snapshots alive
 SEVERITY = {"keep": 0, "flag": 1, "veto": 2}
 
 
-def fetch_current(min_credits: int = MIN_CREDITS_TO_FETCH):
-    """(events, captured_at, remaining, note). ``events`` is None when no fresh prices could be bought, and ``note`` says why."""
+def _used_series(root: str | Path) -> list[tuple[str, int]]:
+    """(captured_at, API 'used' counter) of every live call logged under data/logs/odds_fetch_log, oldest first."""
+    rows = []
+    for f in sorted((Path(root) / "data" / "logs" / "odds_fetch_log").glob("*.csv")):
+        try:
+            for ln in f.read_text().splitlines()[1:]:
+                c = ln.split(",")
+                if len(c) >= 5 and c[2] == "live" and c[4]:
+                    rows.append((c[0], int(float(c[4]))))
+        except (OSError, ValueError):
+            continue
+    return sorted(rows)
+
+
+def credits_spent_today(root: str | Path, now: datetime) -> int:
+    """Credits used since 00:00 UTC today, from the committed fetch logs (the API's own counter), so review waves and the daily jobs share one tally."""
+    day = now.astimezone(timezone.utc).strftime("%Y-%m-%d")
+    rows = _used_series(root)
+    if not rows:
+        return 0
+    cur = max(u for _, u in rows)
+    before = [u for c, u in rows if c < day]
+    base = max(before) if before else (min(u for c, u in rows if c >= day) - 1)
+    return int(max(0, cur - base))
+
+
+def daily_budget_left(root: str | Path, remaining: int | None, now: datetime) -> int | None:
+    """Credits the day can still spend beyond the closing-line snapshots, by the same formula the daily job uses for player prices (spread what is left over the days left)."""
+    if remaining is None:
+        return None
+    res, core = int(policy_get("odds", "reserve_credits", default=25)), int(policy_get("odds", "core_after_late", default=4))
+    nxt = (now.replace(day=28) + timedelta(days=4)).replace(day=1)
+    days_left = max(1, (nxt.date() - now.date()).days)
+    return int(max(0, remaining - res) / days_left - credits_spent_today(root, now) - core)
+
+
+def record_credit_spend(root: str | Path, captured_at: str, remaining, used, note: str) -> Path:
+    """Append the call to the committed odds-fetch log (same format the daily job writes) so the next run's budget counts it."""
+    d = Path(root) / "data" / "logs" / "odds_fetch_log"
+    d.mkdir(parents=True, exist_ok=True)
+    p = d / (captured_at.replace(":", "-").replace("+", "-") + ".csv")
+    p.write_text("captured_at,ok,source,remaining,used,events,note\n" + f"{captured_at},1,live,{'' if remaining is None else remaining},{'' if used is None else used},,{note}\n")
+    return p
+
+
+def fetch_current(root: str | Path = ".", now: datetime | None = None):
+    """(events, captured_at, remaining, note). ``events`` is None when no fresh prices could be bought, and ``note`` says why. A live call is recorded in the credit log."""
+    now = now or datetime.now(timezone.utc)
     if not os.environ.get("ODDS_API_KEY"):
         return None, None, None, "ODDS_API_KEY is not set: prices not refreshed"
     from nhlbet.odds.client import OddsAPIError, OddsClient
+    need = int(policy_get("review", "credits_per_wave", default=3))
+    floor = int(policy_get("review", "min_credits_to_fetch", default=60))
     try:
         client = OddsClient()
         rem = client.remaining_credits()
-        if rem is not None and rem < min_credits:
-            return None, None, rem, f"only {rem} odds credits left (< {min_credits}): prices not refreshed"
+        if rem is not None and rem < floor:
+            return None, None, rem, f"only {rem} odds credits left (< {floor}): prices not refreshed"
+        left = daily_budget_left(root, rem, now)
+        if left is not None and left < need:
+            return None, None, rem, f"today's odds-credit budget has {max(left, 0)} credits left (< {need}): prices not refreshed"
         f = client.fetch_odds(("h2h", "spreads", "totals"))
     except OddsAPIError as e:
         return None, None, None, f"odds fetch failed ({str(e)[:100]}): prices not refreshed"
     if f.stale:
         return None, None, f.remaining, "the odds feed only returned stale data: prices not refreshed"
+    if f.source == "live":
+        record_credit_spend(root, f.captured_at, f.remaining, f.used, "review:h2h,spreads,totals")
     return f.events, f.captured_at, f.remaining, "refreshed"
 
 

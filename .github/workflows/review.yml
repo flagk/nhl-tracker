@@ -85,14 +85,26 @@ jobs:
         id: agent
         if: steps.prepare.outputs.run == 'true' && steps.prepare.outputs.agent_needed == 'true'
         timeout-minutes: 20
-        uses: anthropics/claude-code-action@v1
+        # Pinned to a full commit SHA (a tag can be moved). v1.0.242 is the newest release at least two weeks old on 2026-10-20; it bundles Claude Code 2.1.290. To upgrade, read the
+        # release notes, pick a SHA, change this line and the comment, and run the workflow with dry_run=true first.
+        uses: anthropics/claude-code-action@6c690188da61cf16ee7debb28383ba67f02abb4c # v1.0.242
         with:
+          # claude_code_oauth_token: a Claude subscription token from `claude setup-token`; docs: https://code.claude.com/docs/en/github-actions (Manual setup, step 2) and
+          # https://code.claude.com/docs/en/authentication#generate-a-long-lived-token. The docs say nothing about usage limits or terms for automated runs: see VALIDATION_REPORT.md "Docs vs reality".
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          github_token: ${{ github.token }}              # act as the workflow's own token: no Claude GitHub App needed for this job
-          allowed_bots: "github-actions"                 # heartbeat-dispatched and scheduled runs can be attributed to a bot
+          # github_token: when given, the action uses it as is and never asks for an OIDC token or the Claude GitHub App (src/github/token.ts at the pinned SHA: setupGitHubToken returns
+          # OVERRIDE_GITHUB_TOKEN first), so `id-token: write` is not required.
+          github_token: ${{ github.token }}
+          # allowed_bots: the action rejects bot actors unless listed; schedule and dispatch runs can be attributed to github-actions[bot] (checkHumanActor applies in agent mode).
+          # Docs: https://code.claude.com/docs/en/github-actions#who-can-trigger-runs. Matching strips "[bot]" and ignores case (src/github/validation/actor.ts).
+          allowed_bots: "github-actions"
           prompt: |
             Review the picks in agent/work/review_input.json following the instructions in your system prompt (agent/review_prompt.md) exactly.
             Write only agent/work/picks_review.json, then reply "done".
+          # claude_args flags are documented at https://code.claude.com/docs/en/cli-reference: --model (alias `sonnet`, https://code.claude.com/docs/en/model-config), --max-turns (exits with an
+          # error at the limit), --append-system-prompt-file, --tools (restricts the built-in tools; it does not affect MCP tools), --allowedTools, --disallowedTools. Path rules for file
+          # edits are written as Edit(path) and also govern the Write tool: https://code.claude.com/docs/en/permissions#read-and-edit. The action denies WebSearch and WebFetch unless
+          # they are named in --allowedTools (src/create-prompt/index.ts at the pinned SHA), so they are named here. In agent mode the action also registers MCP servers; `mcp__*` removes them.
           claude_args: |
             --model ${{ env.REVIEW_MODEL }}
             --max-turns 45
@@ -132,7 +144,7 @@ jobs:
         run: |
           git config user.name "nhl-model-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add -A data/review data/logs/review review_logs site
+          git add -A data/review data/logs/review data/logs/odds_fetch_log review_logs site
           if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
           git commit -m "Pre-game review ${{ steps.prepare.outputs.run_id }}"
           for i in 1 2 3 4 5; do

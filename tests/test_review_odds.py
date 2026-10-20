@@ -69,5 +69,37 @@ def test_the_agent_can_never_soften_a_code_veto():
 
 def test_fetch_is_skipped_without_a_key_or_with_few_credits(monkeypatch):
     monkeypatch.delenv("ODDS_API_KEY", raising=False)
-    ev_, at, rem, note = fetch_current()
+    ev_, at, rem, note = fetch_current(".")
     assert ev_ is None and "not set" in note
+
+
+def test_review_waves_share_one_credit_tally_with_the_daily_jobs(tmp_path):
+    from datetime import datetime, timezone
+    from nhlbet.review.odds_check import credits_spent_today, daily_budget_left, record_credit_spend
+    d = tmp_path / "data/logs/odds_fetch_log"
+    d.mkdir(parents=True)
+    (d / "a.csv").write_text("captured_at,ok,source,remaining,used,events,note\n2026-10-19T23:00:00+00:00,1,live,200,300,11,h2h\n")
+    (d / "b.csv").write_text("captured_at,ok,source,remaining,used,events,note\n2026-10-20T12:00:00+00:00,1,live,196,304,11,h2h\n")
+    now = datetime(2026, 10, 20, 21, 0, tzinfo=timezone.utc)
+    assert credits_spent_today(tmp_path, now) == 4
+    p = record_credit_spend(tmp_path, "2026-10-20T21:00:00+00:00", 193, 307, "review:h2h,spreads,totals")      # a review wave's call is logged in the same format
+    assert p.exists() and credits_spent_today(tmp_path, now) == 7
+    left = daily_budget_left(tmp_path, 193, now)                                                                 # (193 - 25) / 12 days left - 7 spent - 4 held for the closes
+    assert left == int((193 - 25) / 12 - 7 - 4)
+    assert daily_budget_left(tmp_path, None, now) is None
+
+
+def test_the_review_refuses_to_buy_prices_when_the_daily_budget_is_spent(tmp_path, monkeypatch):
+    from datetime import datetime, timezone
+    from nhlbet.review import odds_check
+    monkeypatch.setenv("ODDS_API_KEY", "x")
+    class FakeClient:
+        def remaining_credits(self): return 150
+        def fetch_odds(self, *a, **k): raise AssertionError("must not call the API")
+    import nhlbet.odds.client as c
+    monkeypatch.setattr(c, "OddsClient", lambda: FakeClient())
+    d = tmp_path / "data/logs/odds_fetch_log"
+    d.mkdir(parents=True)
+    (d / "a.csv").write_text("captured_at,ok,source,remaining,used,events,note\n2026-10-19T23:00:00+00:00,1,live,160,340,11,h2h\n2026-10-20T20:00:00+00:00,1,live,150,350,11,h2h\n")
+    ev_, at, rem, note = odds_check.fetch_current(tmp_path, datetime(2026, 10, 20, 21, 0, tzinfo=timezone.utc))
+    assert ev_ is None and "budget" in note and rem == 150

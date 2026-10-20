@@ -48,7 +48,7 @@ def main() -> int:
     if a.no_fetch:
         events, captured, remaining, note = None, None, None, "fetching was switched off for this run"
     else:
-        events, captured, remaining, note = fetch_current()
+        events, captured, remaining, note = fetch_current(root, now)
     facts = odds_facts(wave_picks, cand["games"], events, captured, cand["min_edge"], note)
     inp = prepare_input(cand, wave_ids, facts, now)
     work.mkdir(parents=True, exist_ok=True)

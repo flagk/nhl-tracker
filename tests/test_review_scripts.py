@@ -80,8 +80,9 @@ def test_happy_path_logs_publishes_and_is_idempotent(repo):
     st = state(repo)
     assert len(st["picks"]) == 1 and len(st["vetoed"]) == 1 and st["passes"][0]["status"] == "reviewed"
     p = page(repo)
-    assert [x["pick"] for x in p["vetoed"]] == ["Over 6.5"] and p["review"]["n_vetoed"] == 1
+    assert p["vetoed"] == [] and p["review"]["mode"] == "shadow" and p["review"]["n_shadow_vetoed"] == 1            # shadow is the policy default: nothing is removed
     by = {x["pick"]: x for x in p["ranking"]}
+    assert by["Over 6.5"]["review"]["decision"] == "veto" and by["Over 6.5"]["review"]["shadow"] is True
     assert by["BBB moneyline"]["review"]["decision"] == "keep" and by["CCC moneyline"]["review"]["status"] == "UNREVIEWED"
     assert (repo / "review_logs/rv-2026-10-14-2330.json").exists()
     log = (repo / "data/logs/review/final_picks.jsonl").read_text()

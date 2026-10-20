@@ -5,7 +5,7 @@ from nhlbet.site.build import render_html
 from tests.review_helpers import NOW, good_review, payload
 
 
-def page(decisions, failure=False):
+def page(decisions, failure=False, mode="active"):
     p = payload()
     for g in p["games"]:
         g.update({"p_home": 0.55, "blocked": None, "odds_captured_at": "x", "sides": {}})
@@ -19,7 +19,7 @@ def page(decisions, failure=False):
     rv["reviews"][1]["reason"] = "<script>alert(1)</script> goalie unconfirmed"
     rv["reviews"][1]["sources"][0]["url"] = "https://example.com/a?x=1&y='2'"
     res = apply_review(c, {1, 2}, facts, None if failure else rv, ["agent timed out"] if failure else [], "rv-1", NOW)
-    attach_to_payload(p, merge_state({}, res))
+    attach_to_payload(p, merge_state({}, res), mode=mode)
     return p, render_html(p)
 
 
@@ -49,3 +49,11 @@ def test_javascript_payload_carries_the_review_fields_and_ui_renders_them():
     ui = open("nhlbet/site/ui.js").read()
     for needle in ("reviewCell", "vetoedSection", "UNREVIEWED", "noopener noreferrer", "safeUrl"):
         assert needle in ui
+
+
+def test_shadow_mode_page_labels_decisions_as_shadow_and_removes_nothing():
+    p, h = page(["veto", "flag", "keep"], mode="shadow")
+    n = noscript(h)
+    assert "Shadow: would be vetoed" in n and "Shadow: would be flagged" in n and "shadow mode: this pick is published unchanged" in n
+    assert "Vetoed by the pre-game review" not in n and p["vetoed"] == [] and len(p["ranking"]) == 4
+    assert "Shadow: would be" in open("nhlbet/site/ui.js").read()

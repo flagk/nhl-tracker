@@ -84,3 +84,22 @@ risk:
     paths: 10000
     horizons: [200, 500]
     ruin_level: 0.5               # "ruin" = the bankroll ever falling to this share of its start
+
+# Odds credits (Phase 6/7). The plan is assumed to reset on the 1st; these were module constants in pipeline.py and review/odds_check.py.
+odds:
+  monthly_plan_credits: 500
+  reserve_credits: 25               # never plan to spend the last credits: they keep the moneylines alive
+  core_after_late: 4                # credits the closing-line snapshots still need after the late run
+  props_min_credits: 100            # below this no player prices are fetched at all
+  extra_props_min_credits: 250      # assists / anytime-goalscorer prices only while at least this many credits remain
+  prop_refetch_min: 60              # minutes before a game's player market is fetched again
+  props_max_games: 3
+
+# The pre-game review agent (Phase 6). It is in SHADOW mode until the owner changes this value: decisions are logged and shown on the page as "shadow" annotations,
+# but every published pick stays exactly as the model made it. "active" lets vetoes remove picks from the page.
+review:
+  mode: shadow                      # shadow | active
+  min_credits_to_fetch: 60          # no price refresh for a review wave below this many remaining credits
+  credits_per_wave: 3               # one bulk call: h2h + spreads + totals
+  min_vetoed_for_verdict: 30        # vetoed picks with a closing-line value before any comparison with kept picks is read
+  min_kept_for_verdict: 100

@@ -146,17 +146,49 @@ def test_page_payload_shows_status_and_moves_vetoes_and_is_reversible():
     state = merge_state({}, res)
     p = payload()
     n = len(p["ranking"])
-    attach_to_payload(p, state)
+    attach_to_payload(p, state, mode="active")
     by_label = {r["pick"]: r for r in p["ranking"]}
     assert "BBB moneyline" not in by_label and [r["pick"] for r in p["vetoed"]] == ["BBB moneyline"]
     assert by_label["Over 6.5"]["review"]["decision"] == "keep"
     assert by_label["CCC moneyline"]["review"]["status"] == "UNREVIEWED"             # game 2 is a later wave: not reviewed yet
     assert "review" not in by_label["Tiny edge"]                                       # below the minimum edge: not a candidate at all
     assert p["review"]["n_vetoed"] == 1 and p["review"]["n_unreviewed"] == 1
-    again = attach_to_payload(json.loads(json.dumps(p)), state)                        # idempotent
+    again = attach_to_payload(json.loads(json.dumps(p)), state, mode="active")                        # idempotent
     assert again["ranking"] == p["ranking"] and again["vetoed"] == p["vetoed"]
     strip_review(p)
     assert len(p["ranking"]) == n and "vetoed" not in p and all("review" not in r for r in p["ranking"])
+
+
+def test_shadow_mode_is_the_default_and_never_removes_or_changes_a_published_pick():
+    from nhlbet.review.apply import review_mode
+    assert review_mode() == "shadow"                                              # config/policy.yaml: switching to active is the owner's decision
+    c = candidate()
+    inp = prepare_input(c, {1}, facts_for(c), NOW)
+    rv = good_review(inp)
+    rv["reviews"][0]["decision"] = "veto"
+    state = merge_state({}, apply_review(c, {1}, facts_for(c), rv, [], "rv-1", NOW))
+    p, q = payload(), payload()
+    attach_to_payload(p, state)
+    assert [r["pick"] for r in p["ranking"]] == [r["pick"] for r in q["ranking"]] and p["vetoed"] == []                     # the same picks, none moved
+    for a, b in zip(p["ranking"], q["ranking"]):
+        for k in ("p_model", "price", "p_market", "rank", "score", "pick", "line"):
+            assert a[k] == b[k]
+    r0 = [r for r in p["ranking"] if r["pick"] == "BBB moneyline"][0]["review"]
+    assert r0["decision"] == "veto" and r0["shadow"] is True and p["review"]["mode"] == "shadow" and p["review"]["n_shadow_vetoed"] == 1
+
+
+def test_an_unrefreshed_price_is_carried_as_unconfirmed_never_as_confirmed():
+    c = candidate()
+    facts = {x["pick_id"]: {"floor": "keep", "status": "not_refreshed", "summary": "unconfirmed: current price not refreshed (credit budget)"} for x in c["picks"]}
+    inp = prepare_input(c, {1, 2}, facts, NOW)
+    assert all(p["odds_movement_fact"].startswith("unconfirmed") for p in inp["picks"])
+    rv = good_review(inp)
+    rv["reviews"][0]["checks"]["odds_movement"] = {"found": "odds moved in our favour", "source_urls": []}           # an agent that invents a confirmation
+    res = apply_review(c, {1, 2}, facts, rv, [], "rv-1", NOW)
+    assert all(r["review"]["checks"]["odds_movement"].startswith("unconfirmed") and r["review"]["odds_fact"]["status"] == "not_refreshed" for r in res["final"])
+    p = payload()
+    attach_to_payload(p, merge_state({}, res), mode="active")
+    assert all(r["review"]["odds_status"] == "not_refreshed" for r in p["ranking"] if r.get("review") and r["review"]["status"] == "REVIEWED")
 
 
 def test_other_days_state_is_ignored_on_the_page():

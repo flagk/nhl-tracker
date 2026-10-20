@@ -23,6 +23,11 @@ Resume rule: a new session reads this file and continues from "Next". Do not red
 - Phase 3: evaluation module and real-data run DONE (`reports/evaluation.md`, `evaluation.json`). Moneyline model picks: 201 bets, ROI -9.4%, CLV +0.04 points (interval -0.04 to +0.12, adjusted p=0.15): no demonstrable edge. Closing price exists for moneylines only (the closing capture is h2h-only). Remaining for the checkpoint: summary in VALIDATION_REPORT at the end.
 - CI: the test suite was flaky because the synthetic league used process-random `hash(team)` ids; fixed with crc32 (commit `675966a`); CI now echoes failing test names as annotations.
 
+- Phase 4: DONE. Protocol committed first (`reports/model_comparison_protocol.md`); nothing qualified to replace `stack__online`; single holdout evaluation recorded (`reports/holdout_eval.json`): stack log loss 0.6826, Elo 0.6785, home rate 0.6916; gain over home rate +0.009 (CI -0.004 to +0.021). Live market-blend check: every model weight above 0 scored worse than the market alone (122 games). Disclosure: a local dry run printed the holdout numbers before the recorded run (selection unaffected). Report `reports/model_comparison_phase4.md`.
+- Phase 5: DONE. Policy-driven staking, Kelly ceiling, push-aware stake/EV, correlated-exposure caps (`risk/caps.py`), 10,000-path simulation on the real moneyline template (`reports/risk.md`): with no skill the median bankroll ends at 98% of its start after 500 bets, P(20% drawdown kill switch) 0.7%, no ruin.
+- Phase 6: DONE except the failure alert (needs the Phase 7 notifier). Action pinned to SHA (v1.0.242), settings checked against the action source at that SHA, shadow mode default, odds credits shared with the daily tally, CLV-first agent evaluation with permutation test and flag rate.
+- CI: pytest step fails with no FAILED lines in the latest runs: the workflow now also echoes the last lines of the pytest output as annotations; diagnosing.
+
 ## Next
 - Phase 4 (model comparison; only if Phases 1 to 3 are clean: they are, but nothing shows an edge, so Phase 4 is a check that no simpler or market-blended model is better, then ONE holdout evaluation).
 - Real-data jobs: push a change to `ci/phase1_trigger.txt` style trigger files on `hardening` (workflow files only exist on the branch, so push-triggered).

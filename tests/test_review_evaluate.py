@@ -81,3 +81,82 @@ def test_report_renders_with_empty_and_small_logs():
     assert "Insufficient data" in render_md(report(pd.DataFrame(columns=["group"])))
     md = render_md(report(synth(20, 20, 0.5, 0.5)))
     assert "| kept |" in md and "insufficient data" in md
+
+
+def clv_frame(n_kept, n_veto, mean_kept, mean_veto, days=40, seed=0, sd=1.0):
+    rng = np.random.default_rng(seed)
+    rows = []
+    for grp, n, m in (("kept", n_kept, mean_kept), ("vetoed_by_agent", n_veto, mean_veto)):
+        for i in range(n):
+            rows.append({"group": grp, "clv_move_pts": rng.normal(m, sd), "date": f"2026-{1 + (i % days) // 28:02d}-{1 + (i % days) % 28:02d}", "result": "won", "profit": 1.0, "stake": 10.0, "pick_id": f"{grp}{i}"})
+    return pd.DataFrame(rows)
+
+
+def test_clv_comparison_is_insufficient_below_the_policy_minimum_and_does_not_read_a_verdict():
+    from nhlbet.review.evaluate import compare_clv
+    c = compare_clv(clv_frame(40, 10, 0.5, -0.5), n_perm=500)
+    assert c["verdict"].startswith("insufficient data") and "at least 100 and 30" in c["verdict"]
+
+
+def test_vetoes_that_really_do_worse_on_clv_are_detected_with_an_interval_and_a_permutation_test():
+    from nhlbet.review.evaluate import compare_clv
+    c = compare_clv(clv_frame(300, 60, 0.3, -0.3, sd=1.0), n_perm=1500)
+    assert c["diff"] > 0.4 and c["diff_ci"][0] > 0 and c["p_permutation_one_sided"] < 0.01 and "carry information" in c["verdict"]
+
+
+def test_no_difference_or_a_reverse_difference_is_reported_as_no_demonstrated_value():
+    from nhlbet.review.evaluate import compare_clv
+    same = compare_clv(clv_frame(300, 60, 0.0, 0.0, seed=2), n_perm=1500)
+    assert same["verdict"].startswith("the agent adds no demonstrated value") and same["p_permutation_one_sided"] > 0.05
+    rev = compare_clv(clv_frame(300, 60, -0.3, 0.3, seed=3), n_perm=800)
+    assert rev["diff"] < 0 and rev["verdict"].startswith("the agent adds no demonstrated value")
+
+
+def test_permutation_labels_are_shuffled_within_dates_so_a_day_effect_alone_is_not_a_finding():
+    from nhlbet.review.evaluate import compare_clv
+    rng = np.random.default_rng(5)
+    rows = []
+    for day in range(60):
+        shift = rng.normal(0, 1.5)                                    # a big day effect shared by both groups
+        for grp, n in (("kept", 6), ("vetoed_by_agent", 1)):
+            for i in range(n):
+                rows.append({"group": grp, "clv_move_pts": shift + rng.normal(0, 0.1), "date": f"2026-{1 + day // 28:02d}-{1 + day % 28:02d}", "result": "won", "profit": 1.0, "stake": 10.0, "pick_id": f"{grp}{day}{i}"})
+    c = compare_clv(pd.DataFrame(rows), n_perm=1000)
+    assert abs(c["diff"]) < 0.3 and c["p_permutation_one_sided"] > 0.05
+
+
+def test_flag_rate_is_reported_per_day():
+    from nhlbet.review.evaluate import flag_rate_table
+    d = pd.DataFrame({"date": ["2026-10-14"] * 4 + ["2026-10-15"] * 2, "group": ["kept", "flagged", "flagged", "vetoed_by_agent", "kept", "kept"], "pick_id": list("abcdef")})
+    t = flag_rate_table(d).set_index("date")
+    assert t.loc["2026-10-14", "flag_rate"] == 0.5 and t.loc["2026-10-14", "veto_rate"] == 0.25 and t.loc["2026-10-15", "flag_rate"] == 0.0 and t.loc["2026-10-14", "picks"] == 4
+
+
+def test_the_review_schema_has_no_field_that_could_carry_a_probability_price_stake_or_new_pick():
+    import json
+    from pathlib import Path
+    schema = json.loads((Path(__file__).resolve().parent.parent / "agent" / "picks_review.schema.json").read_text())
+    names = set()
+
+    def walk(x):
+        if isinstance(x, dict):
+            names.update(x.get("properties", {}).keys())
+            for v in x.values():
+                walk(v)
+        elif isinstance(x, list):
+            for v in x:
+                walk(v)
+    walk(schema)
+    banned = {"p_model", "p_market", "p_adj", "p_win", "probability", "prob", "price", "prices", "odds", "stake", "stakes", "edge", "ev", "line", "point", "new_pick", "new_picks", "picks", "bet", "bets",
+              "kelly", "units", "decimal", "side", "market", "pick"}
+    assert not (names & banned), names & banned                       # exact names: "odds_movement" and "lineup_changes" are the allowed check names
+    def closed(x):
+        if isinstance(x, dict):
+            if x.get("type") == "object":
+                assert x.get("additionalProperties") is False, x
+            for v in x.values():
+                closed(v)
+        elif isinstance(x, list):
+            for v in x:
+                closed(v)
+    closed(schema)

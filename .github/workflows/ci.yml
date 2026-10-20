@@ -19,4 +19,5 @@ jobs:
           python -m pytest -q -ra 2>&1 | tee pytest.out || rc=$?
           grep -E "^(FAILED|ERROR)" pytest.out | head -20 | while read -r line; do echo "::error title=pytest::${line}"; done
           grep -E "^E  " pytest.out | head -25 | while read -r line; do echo "::error title=pytest-detail::${line}"; done
+          tail -n 12 pytest.out | while read -r line; do echo "::error title=pytest-tail::${line}"; done
           exit ${rc:-0}

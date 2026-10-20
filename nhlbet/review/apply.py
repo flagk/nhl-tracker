@@ -172,11 +172,23 @@ def strip_review(payload: dict) -> dict:
 
 
 def _slim(rev: dict) -> dict:
-    return {k: rev.get(k) for k in ("status", "decision", "decided_by", "reason", "confidence", "sources", "warning", "reviewed_at", "run_id", "checks")}
+    out = {k: rev.get(k) for k in ("status", "decision", "decided_by", "reason", "confidence", "sources", "warning", "reviewed_at", "run_id", "checks")}
+    fact = rev.get("odds_fact") or {}
+    out["odds_status"] = fact.get("status")              # "refreshed" / "not_refreshed" / "line_gone": an unrefreshed price is shown as unconfirmed, never as confirmed
+    return out
 
 
-def attach_to_payload(payload: dict, state: dict | None) -> dict:
-    """Mark every candidate pick on the page: kept / flagged (with a warning) / UNREVIEWED; move vetoed picks to ``payload['vetoed']``."""
+def review_mode() -> str:
+    """``shadow`` (the default: decisions are logged and annotated, published picks never change) or ``active`` (vetoes remove picks). Set only in config/policy.yaml."""
+    from nhlbet.policy import policy_get
+    m = str(policy_get("review", "mode", default="shadow")).lower()
+    return m if m in ("shadow", "active") else "shadow"
+
+
+def attach_to_payload(payload: dict, state: dict | None, mode: str | None = None) -> dict:
+    """Mark every candidate pick on the page: kept / flagged (with a warning) / UNREVIEWED. In ACTIVE mode vetoed picks move to ``payload['vetoed']``; in SHADOW mode (default)
+    nothing is removed or changed: every decision is only an annotation marked ``shadow``."""
+    mode = mode or review_mode()
     strip_review(payload)
     cand = {p["pick_id"] for p in build_candidates(payload)["picks"]}
     state = state if state and state.get("date") == payload.get("date") else {"picks": {}, "vetoed": {}, "passes": []}
@@ -187,17 +199,24 @@ def attach_to_payload(payload: dict, state: dict | None) -> dict:
         r["pick_id"] = pid
         if pid in state.get("vetoed", {}):
             r["review"] = _slim(state["vetoed"][pid]["review"])
-            vetoed_rows.append(r)
+            if mode == "active":
+                vetoed_rows.append(r)
+                continue
+            r["review"]["shadow"] = True
+            keep_rows.append(r)
             continue
         if pid in state.get("picks", {}):
             r["review"] = _slim(state["picks"][pid]["review"])
+            if mode != "active":
+                r["review"]["shadow"] = True
         elif pid in cand:
             r["review"] = {"status": "UNREVIEWED", "decision": None, "decided_by": None, "reason": "no review has run for this pick yet", "confidence": None, "sources": [],
                            "warning": "UNREVIEWED: no review has run for this pick yet", "reviewed_at": None, "run_id": None, "checks": None}
         keep_rows.append(r)
     payload["ranking"] = keep_rows
     payload["vetoed"] = vetoed_rows
-    payload["review"] = {"enabled": True, "date": payload.get("date"), "passes": state.get("passes", []), "n_vetoed": len(vetoed_rows),
+    shadow_vetoed = sum(1 for r in keep_rows if (r.get("review") or {}).get("decision") == "veto")
+    payload["review"] = {"enabled": True, "mode": mode, "date": payload.get("date"), "passes": state.get("passes", []), "n_vetoed": len(vetoed_rows), "n_shadow_vetoed": shadow_vetoed,
                          "n_unreviewed": sum(1 for r in keep_rows if (r.get("review") or {}).get("status") == "UNREVIEWED"),
                          "n_flagged": sum(1 for r in keep_rows if (r.get("review") or {}).get("decision") == "flag"),
                          "n_kept": sum(1 for r in keep_rows if (r.get("review") or {}).get("decision") == "keep")}

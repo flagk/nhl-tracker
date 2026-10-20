@@ -60,16 +60,14 @@ def refresh_data(store: Store, days_back: int = 7, days_ahead: int = 2) -> str |
 
 DEFAULT_MARKETS = ("h2h", "spreads", "totals")      # 3 credits per fetch
 MORNING_MARKETS = ("h2h",)                          # the morning run only needs moneylines: spreads, totals and props are priced closer to game time (late run)
-PROPS_MAX_GAMES = 3                                 # props cost 1 credit per market (shots, points, assists, anytime goals) per game: 3 games a day is ~12 credits/day on top of ~12 for game odds
+from nhlbet.policy import policy_get as _odds_pol                  # credit limits live in config/policy.yaml (``odds:``)
 
-
-EXTRA_PROPS_MIN_CREDITS = 250       # assists / anytime-goalscorer prices are only fetched while at least this many odds credits remain
-PROPS_MIN_CREDITS = 100             # below this no player prices are fetched at all: game moneylines come first
-
-
-CREDIT_RESERVE = 25                 # never plan to spend the last credits: they keep the moneylines alive
-CORE_AFTER_LATE = 4                 # credits the closing-line snapshots still need after the late run (about one per start wave)
-PROP_REFETCH_MIN = 60               # a game's player market fetched less than this long ago is not fetched again
+PROPS_MAX_GAMES = int(_odds_pol("odds", "props_max_games", default=3))                           # props cost 1 credit per market per game
+EXTRA_PROPS_MIN_CREDITS = int(_odds_pol("odds", "extra_props_min_credits", default=250))         # assists / anytime-goalscorer prices only while at least this many credits remain
+PROPS_MIN_CREDITS = int(_odds_pol("odds", "props_min_credits", default=100))                     # below this no player prices are fetched at all: game moneylines come first
+CREDIT_RESERVE = int(_odds_pol("odds", "reserve_credits", default=25))                           # never plan to spend the last credits: they keep the moneylines alive
+CORE_AFTER_LATE = int(_odds_pol("odds", "core_after_late", default=4))                           # credits the closing-line snapshots still need after the late run
+PROP_REFETCH_MIN = int(_odds_pol("odds", "prop_refetch_min", default=60))                        # a game's player market fetched less than this long ago is not fetched again
 
 
 def credits_spent_today(store: Store, now: datetime) -> int:
