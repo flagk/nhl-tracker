@@ -29,6 +29,9 @@ def fit_stack(zoo: dict[str, Factory], X: pd.DataFrame, y: np.ndarray, dates: pd
 
     Returns (fitted_models, stacker, wavg, calibrators) where calibrators maps output-name -> {method: Calibrator}.
     """
+    from nhlbet.validity.availability import assert_features_clean
+    used = {c for fac in zoo.values() for c in (getattr(fac(), "features", None) or [])}
+    assert_features_clean(X, y, used)                                  # fails closed before any model sees the data
     inputs = [m for m in stack_inputs if m in zoo]
     folds = expanding_folds(dates, inner_folds, 0.4)
     oof = {m: np.full(len(X), np.nan) for m in zoo}
