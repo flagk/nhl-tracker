@@ -1,0 +1,48 @@
+{
+ "evaluated_at": "2026-10-20T20:47:29+00:00",
+ "lock_hash": "f1a2ca36d67b63fb2de77239b1c66529d307144efcc22a9932a0d39650413590",
+ "result": {
+  "n": 656,
+  "from": "2026-01-05",
+  "to": "2026-09-29",
+  "selected": "stack__online",
+  "reference": "stack__online",
+  "scores": [
+   {
+    "model": "stack__online",
+    "n": 656,
+    "log_loss": 0.6826351539739511,
+    "brier": 0.2447815549619607,
+    "cal_slope": 0.8549035080778029,
+    "gain_over_home_rate": 0.008978250087248715,
+    "ci_low": -0.004047854793438687,
+    "ci_high": 0.0212929628279873
+   },
+   {
+    "model": "elo",
+    "n": 656,
+    "log_loss": 0.6784910814348815,
+    "brier": 0.24266325161743635,
+    "cal_slope": 0.8936440545202522,
+    "gain_over_home_rate": 0.01312232262631843,
+    "ci_low": -0.0009687760801741381,
+    "ci_high": 0.026775470475606716
+   },
+   {
+    "model": "home_rate",
+    "n": 656,
+    "log_loss": 0.6916134040611998,
+    "brier": 0.24923323406956066,
+    "cal_slope": 0.016550849494480706,
+    "gain_over_home_rate": 0.0,
+    "ci_low": 0.0,
+    "ci_high": 0.0
+   }
+  ],
+  "research_window_log_loss": {
+   "stack__online": 0.6731286785498262,
+   "elo": 0.682284634834102,
+   "home_rate": 0.6888045769899884
+  }
+ }
+}
