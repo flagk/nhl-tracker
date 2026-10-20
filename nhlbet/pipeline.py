@@ -220,6 +220,16 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     status = entry.get("drift", {}).get("status", "OK")
     if not data_ok:
         status = "ALERT"
+    from nhlbet.ops import chain as ops_chain, gate as ops_gate, notify as ops_notify, state as ops_state
+    repo_root = Path(log_root).resolve().parent.parent
+    state_path = repo_root / "state" / "system_state.json"
+    ops = ops_state.load_state(state_path)
+    scheduled = int(store.df("SELECT COUNT(*) AS n FROM games WHERE game_date = ? AND game_type IN (2, 3)", [date]).n.iloc[0])
+    checks, pol_sha = ops_gate.pre_checks(store, date, err if refresh else None, odds_meta, odds_meta.get("remaining"), scheduled, perf, repo_root, ops)
+    ops, ops_events = ops_gate.apply(ops, checks, pol_sha)
+    if not ops_state.can_publish(ops):                 # a halt (soft or hard) withholds every pick: the slate is built with the model marked ALERT, exactly like stale data
+        status = "ALERT"
+        notes.append("picks withheld: system " + ops["status"] + " (" + "; ".join(f"{h['check']}: {h['reason']}" for h in ops_state.open_halts(ops))[:300] + ")")
     slate = build_slate(store, bundle, date, cfg, run_type, "OK" if status == "INSUFFICIENT_DATA" else status, now=now)
 
     text = render_report(date, run_type, slate, cfg, entry["version"], {**entry, "p_source": entry.get("p_source")}, perf, odds_meta if odds_meta.get("enabled") else None, shadow=shadow)
@@ -238,6 +248,16 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     except Exception as e:
         log.warning("evidence summary unavailable: %s", e)
     payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow, rank_weights=learn_weights(store), evidence=evidence)
+    from nhlbet.ops import health as ops_health
+    rc = ops_gate._safe("value_ranges", "soft", lambda: ops_health.range_check(payload))
+    if not rc.ok:                          # impossible numbers in what was just built: halt, rebuild the slate with nothing picked
+        ops, more = ops_gate.apply(ops, checks + [rc], pol_sha)
+        ops_events += more
+        status = "ALERT"
+        notes.append("picks withheld: system " + ops["status"] + f" ({rc.detail})")
+        slate = build_slate(store, bundle, date, cfg, run_type, "ALERT", now=now)
+        payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow, rank_weights=learn_weights(store), evidence=evidence)
+    payload["system"] = ops_gate.system_block(ops)
     try:                                   # candidates for the pre-game review agent, and the review decisions made so far today (UNREVIEWED when there are none)
         from nhlbet.review.apply import STATE_NAME, attach_to_payload, load_state
         from nhlbet.review.contract import build_candidates, enabled
@@ -259,6 +279,15 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
         if not update_readme(readme_path, block):
             log.warning("README has no picks markers; front-page block not updated")
     written = export_logs(store, log_root)
+    try:                                   # the hash-chained ledger commits to every log file just written
+        ops_chain.append_new(repo_root)
+    except Exception as e:
+        log.error("ledger append failed: %s", e)
+        ops, more = ops_gate.apply(ops, checks + [ops_gate.failed("log_integrity", "hard", f"ledger append failed: {e}", "Do not edit the logs; restore data/logs from the log-backup branch.")], pol_sha)
+        ops_events += more
+    ops_state.save_state(ops, state_path)
+    if not ops_state.can_publish(ops):     # liveness ("ok") pings come from the always-on heartbeat job; a halt reports /fail so the external service alerts at once
+        ops_notify.ping("fail")
     try:                                   # BI datasets (Power BI / Excel); context columns come from the as-of features
         from nhlbet.data.loaders import load_tables
         from nhlbet.features.builder import BuilderConfig, FeatureBuilder

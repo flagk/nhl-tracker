@@ -29,6 +29,7 @@ jobs:
         id: beat
         env:
           GH_TOKEN: ${{ github.token }}
+          HC_PING_URL: ${{ secrets.HC_PING_URL }}    # Healthchecks.io dead-man's switch: set its period to 60 min and grace to 6 h (policy autonomy.heartbeat)
         run: python3 scripts/heartbeat.py --minutes 340 --interval 180
       - name: Start the next link
         # only after a full-length run: a crash loop must not respawn itself every few seconds (the hourly cron restarts a broken chain)

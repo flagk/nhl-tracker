@@ -26,6 +26,23 @@ TARGETS = {"morning": ("daily.yml", {"run_type": "morning", "gated": "true"}),
 COOLDOWN_S = {"morning": 3600, "late": 3600, "close": 1200, "review": 1800}     # never dispatch the same job again sooner than this
 
 
+def ping_liveness(url: str | None = None, timeout: float = 10.0) -> bool:
+    """Tell the external dead-man's switch (Healthchecks.io, HC_PING_URL) this heartbeat is alive. Never raises: a missed ping is the alarm, not a crash.
+    Docs: https://healthchecks.io/docs/http_api/ (a GET on the check's ping URL means "alive")."""
+    import urllib.request
+    url = url or os.environ.get("HC_PING_URL", "").strip()
+    if not url:
+        return False
+    for _ in range(2):
+        try:
+            with urllib.request.urlopen(url, timeout=timeout) as r:
+                if 200 <= r.status < 300:
+                    return True
+        except Exception:                                    # noqa: BLE001
+            time.sleep(2)
+    return False
+
+
 def sh(args: list[str]) -> str:
     return subprocess.run(args, capture_output=True, text=True, check=False).stdout
 
@@ -99,8 +116,12 @@ def main() -> None:
     ap.add_argument("--minutes", type=float, default=340)
     ap.add_argument("--interval", type=float, default=180)
     a = ap.parse_args()
-    start, last = time.time(), {}
+    start, last, last_ping = time.time(), {}, 0.0
+    ping_every = float(os.environ.get("HEARTBEAT_PING_MIN", "10")) * 60          # config/policy.yaml autonomy.heartbeat.ping_interval_min
     while time.time() - start < a.minutes * 60:
+        if time.time() - last_ping >= ping_every:
+            ping_liveness()
+            last_ping = time.time()
         refresh()
         now = datetime.now(timezone.utc)
         fired = tick(now, last)

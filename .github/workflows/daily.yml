@@ -92,6 +92,11 @@ jobs:
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}      # optional: without it odds are disabled and every game is "no bet"
           BANKROLL: ${{ vars.BANKROLL || '1000' }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}            # push alerts for halts (https://docs.ntfy.sh/publish/); without it alerts are only logged
+          HC_PING_URL: ${{ secrets.HC_PING_URL }}          # Healthchecks.io: a halt pings /fail (https://healthchecks.io/docs/http_api/)
+          POLICY_OWNER_LOGINS: ${{ vars.POLICY_OWNER_LOGINS }}      # who may change config/policy.yaml; read from repo variables, never from files
+          POLICY_OWNER_EMAILS: ${{ vars.POLICY_OWNER_EMAILS }}
+          GITHUB_TOKEN: ${{ github.token }}                # lets the policy guard ask the commits API who changed the policy file
           REVIEW_ENABLED: ${{ vars.REVIEW_ENABLED || (secrets.CLAUDE_CODE_OAUTH_TOKEN != '' && 'true' || 'false') }}     # review labels on the page only once the review is configured (see AGENT.md)
         run: |
           DATE_ARG=""
@@ -111,7 +116,7 @@ jobs:
         run: |
           git config user.name "nhl-model-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add -A reports data/logs data/models data/export data/review site README.md
+          git add -A reports data/logs data/models data/export data/review site state README.md
           if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
           git commit -m "Daily ${{ steps.gate_and_type.outputs.type }} run $(date -u +%F)"
           for i in 1 2 3 4 5; do
@@ -120,6 +125,21 @@ jobs:
             sleep $((i * 4))
           done
           exit 1
+
+      - name: Tamper-evident backup of the logs (a normal push, never forced)
+        if: steps.gate_and_type.outputs.run == 'true' && success()
+        # The ledger in data/logs/chain.jsonl is verified every run; this second copy lets the owner restore a tampered history. A non-fast-forward push fails on purpose.
+        run: |
+          git push origin HEAD:refs/heads/log-backup || echo "::warning::log-backup could not be fast-forwarded (diverged history?), investigate"
+
+      - name: Alert that the daily job crashed
+        if: steps.gate_and_type.outputs.run == 'true' && failure()
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          pip install requests >/dev/null 2>&1 || true
+          python scripts/notify.py --title "NHL daily job FAILED" --priority urgent --key "daily_failed:${{ github.run_id }}" \
+            --message "The daily ${{ steps.gate_and_type.outputs.type }} run crashed before publishing. Picks were not updated. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - name: Publish the site
         if: steps.gate_and_type.outputs.run == 'true' && success()

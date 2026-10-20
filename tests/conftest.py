@@ -80,3 +80,14 @@ def so_excluded(monkeypatch):
     """The old assumption (totals exclude the shootout goal), pinned explicitly for tests written against it; the policy default is ``so_adds_goal`` (see tests/test_settlement.py)."""
     import nhlbet.settle as settle
     monkeypatch.setattr(settle, "shootout_in_total", lambda book=None: False)
+
+
+@pytest.fixture(autouse=True)
+def _synthetic_history_is_small(request, monkeypatch):
+    """Pipeline tests run on a few hundred synthetic games: the 'cache is truncated' row-count check (policy autonomy.health.min_completed_games) is not what they test.
+    tests/test_ops.py and tests/test_ops_pipeline.py exercise the real check."""
+    if request.module.__name__.rsplit(".", 1)[-1] in ("test_ops", "test_ops_pipeline"):
+        return
+    from nhlbet.ops import health
+    from nhlbet.ops.checks import passed
+    monkeypatch.setattr(health, "row_count_check", lambda store: passed("row_counts", "soft", "skipped in synthetic tests"))

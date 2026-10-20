@@ -159,3 +159,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run pages.yml --ref main || echo "could not start the Pages deploy (the next daily run deploys it)"
+
+      - name: Alert if the review agent or its guards failed
+        # A failed review publishes UNREVIEWED picks (fail-safe), but the owner must still hear about it. https://docs.ntfy.sh/publish/
+        if: always() && steps.prepare.outputs.run == 'true' && (failure() || steps.agent.outcome == 'failure' || steps.apply.outcome == 'failure')
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          pip install requests >/dev/null 2>&1 || true
+          python scripts/notify.py --title "NHL review agent FAILED" --priority high --key "review_failed:${{ github.run_id }}" \
+            --message "The pre-game review step failed; picks stay UNREVIEWED. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
