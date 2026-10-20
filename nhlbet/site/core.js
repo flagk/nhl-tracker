@@ -10,8 +10,9 @@
   function round2(x) { return Math.round(x * 100) / 100; }
   function floor2(x) { return Math.floor(x * 100 + 1e-9) / 100; }
 
-  /* settings: {bankroll, unit, mode: 'quarter'|'half'|'flat', maxPct, dailyPct, maxBets, minStake} */
-  function kellyMultiplier(mode) { return mode === "half" ? 0.5 : 0.25; }
+  /* settings: {bankroll, unit, mode: 'quarter'|'flat', maxPct, dailyPct, maxBets, minStake}.
+     The Kelly fraction is fixed at the policy ceiling (config/policy.yaml staking.kelly_fraction_max = 0.25); the page offers nothing more aggressive. */
+  function kellyMultiplier() { return 0.25; }
 
   function rawStake(side, s) {
     var pct;

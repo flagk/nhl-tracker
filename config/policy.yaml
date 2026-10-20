@@ -147,3 +147,13 @@ autonomy:
     keepalive_max_success_age_days: 40
   digest:
     weekday: 0                         # Monday
+
+# Betting-eligibility gate (Phase 8), pre-registered. The page says RESEARCH ONLY unless EVERY criterion holds, and returns to RESEARCH ONLY the run any criterion fails.
+# Only moneylines can qualify: closing prices (and so closing-line value) are captured for them alone. Totals, puck lines and props stay RESEARCH ONLY.
+betting_gate:
+  markets: [h2h]
+  min_live_clv_picks: 300           # live, settled, official picks that have a closing price
+  clv_interval_level: 0.95          # the clustered (by game date) interval of mean margin-free CLV must lie entirely above zero
+  min_mean_clv_pts: 0.5             # and the mean must be at least this many probability points
+  max_drawdown_pct: 0.10            # current drawdown must be within half of the kill-switch limit
+  require_system_ok: true           # no halt open

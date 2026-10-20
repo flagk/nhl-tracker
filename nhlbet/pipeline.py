@@ -174,6 +174,25 @@ def fetch_and_store_odds(store: Store, markets: tuple[str, ...] | None = None, r
         return {"enabled": True, "error": str(e)}
 
 
+def _betting_status(store: Store, perf: dict, ops: dict, date: str, now: datetime) -> dict:
+    """The pre-registered betting gate (config/policy.yaml ``betting_gate``), recomputed from the live log; a change of status is recorded in the state and alerted once."""
+    import numpy as np
+    from nhlbet.betting_gate import evaluate_gate
+    from nhlbet.ops import notify as ops_notify
+    from nhlbet.report.betlog import resolved
+    d = resolved(store)
+    bets = d[d.is_bet & d.clv_move_pts.notna()] if len(d) else d
+    curve = perf.get("curve")
+    equity = np.r_[float(curve.bankroll.iloc[0] - curve.profit.iloc[0]), curve.bankroll.to_numpy()] if curve is not None and len(curve) else []
+    g = evaluate_gate(bets.clv_move_pts if len(bets) else [], bets.game_date if len(bets) else [], equity, ops.get("status", "OK"))
+    prev = (ops.get("betting") or {}).get("status")
+    ops = {**ops, "betting": {"status": g["status"], "since": (ops.get("betting") or {}).get("since") if prev == g["status"] else now.isoformat(timespec="seconds")}}
+    if prev is not None and prev != g["status"]:
+        ops = ops_notify.dispatch([{"type": "warning", "check": "betting_status", "key": f"betting_status:{g['status']}:{date}",
+                                    "message": f"Betting status changed from {prev} to {g['status']}: {g['why']}. This is research output, not advice."}], ops)
+    return {**g, "since": ops["betting"]["since"], "_state": ops}
+
+
 def run_daily(date: str | None = None, run_type: str = "morning", db: str = "data/nhl.db", bankroll: float = 1000.0, fixed_bankroll: bool = False,
               refresh: bool = True, odds: bool = True, do_retrain: bool | None = None, log_root: str = "data/logs", report_dir: str = "reports",
               model_dir: str = "data/models", site_dir: str = "site", readme_path: str = "README.md", export_dir: str = "data/export", now: datetime | None = None) -> dict:
@@ -227,6 +246,8 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     scheduled = int(store.df("SELECT COUNT(*) AS n FROM games WHERE game_date = ? AND game_type IN (2, 3)", [date]).n.iloc[0])
     checks, pol_sha = ops_gate.pre_checks(store, date, err if refresh else None, odds_meta, odds_meta.get("remaining"), scheduled, perf, repo_root, ops)
     ops, ops_events = ops_gate.apply(ops, checks, pol_sha)
+    betting = _betting_status(store, perf, ops, date, now or datetime.now(timezone.utc))
+    ops = betting.pop("_state")
     if not ops_state.can_publish(ops):                 # a halt (soft or hard) withholds every pick: the slate is built with the model marked ALERT, exactly like stale data
         status = "ALERT"
         notes.append("picks withheld: system " + ops["status"] + " (" + "; ".join(f"{h['check']}: {h['reason']}" for h in ops_state.open_halts(ops))[:300] + ")")
@@ -258,6 +279,7 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
         slate = build_slate(store, bundle, date, cfg, run_type, "ALERT", now=now)
         payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow, rank_weights=learn_weights(store), evidence=evidence)
     payload["system"] = ops_gate.system_block(ops)
+    payload["betting"] = betting
     try:                                   # candidates for the pre-game review agent, and the review decisions made so far today (UNREVIEWED when there are none)
         from nhlbet.review.apply import STATE_NAME, attach_to_payload, load_state
         from nhlbet.review.contract import build_candidates, enabled

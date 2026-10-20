@@ -48,6 +48,7 @@ def test_halt_withholds_picks_alerts_once_and_rerun_is_idempotent(league, tmp_pa
     assert (Store(str(tmp_path / "t.db")).df("SELECT action FROM recommendations").action != "BET").all()
     pj = json.loads((tmp_path / "site/picks.json").read_text())
     assert pj["system"]["status"] == "HALT_SOFT" and pj["system"]["halts"][0]["next_step"]
+    assert pj["betting"]["status"] == "RESEARCH ONLY" and pj["betting"]["criteria"]
     assert len(net.posts) == 1 and "HALT (soft): row_counts" in net.posts[0][1]
     assert net.gets and net.gets[-1].endswith("/fail")                                                   # heartbeat reports the halt
     go(day, tmp_path, k=1, run_type="late")

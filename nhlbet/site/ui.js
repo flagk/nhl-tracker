@@ -14,8 +14,9 @@
   function save() { try { localStorage.setItem("nhlSettings", JSON.stringify(S)); } catch (e) { /* ignore */ } }
   function num(x, d) { var v = parseFloat(x); return isFinite(v) && v >= 0 ? v : d; }
   function cfg() {
-    return { bankroll: Math.max(1, num(S.bankroll, defaults.bankroll)), unit: Math.max(0.01, num(S.unit, defaults.unit)), mode: S.mode,
-             maxPct: Math.min(num(S.maxPct, 2), 25) / 100, dailyPct: Math.min(num(S.dailyPct, 5), 100) / 100, maxBets: P.max_bets_per_day, minStake: P.min_stake };
+    /* the caps can be lowered here but never raised above the policy limits (config/policy.yaml staking); an old saved "half Kelly" setting becomes quarter Kelly */
+    return { bankroll: Math.max(1, num(S.bankroll, defaults.bankroll)), unit: Math.max(0.01, num(S.unit, defaults.unit)), mode: S.mode === "flat" ? "flat" : "quarter",
+             maxPct: Math.min(num(S.maxPct, P.max_bet_pct * 100), P.max_bet_pct * 100) / 100, dailyPct: Math.min(num(S.dailyPct, P.max_daily_exposure_pct * 100), P.max_daily_exposure_pct * 100) / 100, maxBets: P.max_bets_per_day, minStake: P.min_stake };
   }
 
   /* ---------- helpers ---------- */
@@ -79,6 +80,13 @@
       el("div", { class: "stack" }, [el("h1", { text: "Today's picks" }),
         el("div", { class: "when", text: D.date + " · " + D.run_type + " run · built " + new Date(D.generated_at).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) })]),
       el("div", { class: "note" }, ["Model ", el("b", { text: D.model.version || "?" }), " · health ", el("span", { class: "pill " + cls, text: st })])])];
+    var sy = D.system || { status: "OK", halts: [] };
+    if (sy.status !== "OK") {
+      kids.push(el("div", { class: "banner bad" }, [el("b", { text: "System " + sy.status + ": picks are withheld. " }), (sy.halts || []).map(function (h) { return h.check + ": " + h.reason + " Next step: " + h.next_step; }).join(" | ")]));
+    }
+    var bt = D.betting || { status: "RESEARCH ONLY", why: "no live evidence yet" };
+    kids.push(el("div", { class: "banner " + (bt.status === "ELIGIBLE" ? "" : "bad"), role: "status" }, [el("b", { text: "Betting status: " + bt.status + ". " }),
+      bt.status === "ELIGIBLE" ? "The live record clears the pre-registered bar for moneylines only. That is not a promise of profit." : "These picks are research output, not recommendations to bet. Not yet met: " + (bt.why || "")]));
     if (st === "ALERT") kids.push(el("div", { class: "banner bad", text: "Model health is ALERT (" + (D.model.reasons.join("; ") || "performance drift") + "). Recommendations are suspended." }));
     else if (st === "WARN") kids.push(el("div", { class: "banner", text: "Model health WARN: " + (D.model.reasons.join("; ") || "see report") + ". Treat picks with extra scepticism." }));
     if (D.odds && D.odds.stale) kids.push(el("div", { class: "banner bad", text: "Odds are STALE (the odds API was unreachable). No bets are recommended on stale prices." }));
@@ -88,18 +96,18 @@
     return el("div", { class: "stack", style: "gap:.9rem" }, kids);
   }
   function chips() {
-    var items = [["sec-evidence", "Evidence"], ["sec-rank", "Ranking"]].concat((D.vetoed || []).length ? [["sec-vetoed", "Vetoed"]] : []).concat([["sec-picks", "Top picks"], ["sec-games", "All games"], ["sec-stats", "Game stats"], ["sec-other", "Totals & puck line"], ["sec-props", "Player props"], ["sec-parlay", "Parlays"], ["sec-inputs", "Model inputs"], ["sec-track", "Track record"], ["sec-paper", "Fake bets"]]);
+    var items = [["sec-evidence", "Evidence"], ["sec-rank", "Ranking"]].concat((D.vetoed || []).length ? [["sec-vetoed", "Vetoed"]] : []).concat([["sec-picks", "Top picks"], ["sec-games", "All games"], ["sec-stats", "Game stats"], ["sec-other", "Totals & puck line"], ["sec-props", "Player props"], ["sec-parlay", "Parlays"], ["sec-inputs", "Model inputs"], ["sec-track", "Live record"], ["sec-method", "Method & limits"], ["sec-paper", "Fake bets"]]);
     return el("nav", { class: "chips", "aria-label": "Sections" }, items.map(function (i) { return el("a", { class: "chip", href: "#" + i[0], text: i[1] }); }));
   }
   var summaryLine = el("span", { class: "muted" });
-  function updateSummary() { var c = cfg(); summaryLine.textContent = "1 unit = " + usd(c.unit) + " · " + (S.mode === "flat" ? "flat 1 unit" : S.mode === "half" ? "half Kelly" : "quarter Kelly") + " · max " + (c.maxPct * 100).toFixed(1) + "% per bet"; }
+  function updateSummary() { var c = cfg(); summaryLine.textContent = "1 unit = " + usd(c.unit) + " · " + (S.mode === "flat" ? "flat 1 unit" : "quarter Kelly") + " · max " + (c.maxPct * 100).toFixed(1) + "% per bet"; }
   function settingsPanel() {
     function field(label, input) { return el("div", {}, [el("label", { text: label }), input]); }
     function inp(key, step) {
       return el("input", { type: "number", min: "0", step: step || "any", value: String(S[key]), "aria-label": key, oninput: function (e) { S[key] = e.target.value; save(); updateSummary(); render(); } });
     }
     var mode = el("select", { "aria-label": "Staking mode", onchange: function (e) { S.mode = e.target.value; save(); updateSummary(); render(); } }, [
-      el("option", { value: "quarter", text: "Quarter Kelly (default)" }), el("option", { value: "half", text: "Half Kelly (more aggressive)" }), el("option", { value: "flat", text: "Flat: 1 unit" })]);
+      el("option", { value: "quarter", text: "Quarter Kelly (default, the policy ceiling)" }), el("option", { value: "flat", text: "Flat: 1 unit" })]);
     mode.value = S.mode;
     updateSummary();
     var d = el("details", { class: "drawer", id: "settings" }, [
@@ -445,7 +453,7 @@
 
   function track() {
     var t = D.track, kids = [];
-    if (!t || !t.resolved_games) return section("sec-track", "Track record", "", [el("div", { class: "card muted", text: "No resolved recommendations yet. Every recommendation is logged before its game, so this fills in automatically. Judge the model by closing-line value and log loss against the market, not by early profit." })]);
+    if (!t || !t.resolved_games) return section("sec-track", "Live record", "", [el("div", { class: "card muted", text: "No resolved recommendations yet. Every recommendation is logged before its game, so this fills in automatically. Judge the model by closing-line value and log loss against the market, not by early profit." })]);
     var m = [metric("Resolved games", String(t.resolved_games))];
     if (t.bets && t.bets.n) { m.push(metric("Bets", String(t.bets.n)), metric("ROI", spct(t.bets.roi)), metric("Win rate", pct(t.bets.win_rate))); }
     if (t.clv && t.clv.n >= 5) m.push(metric("Avg CLV per $1 (pays the margin)", spct(t.clv.mean)), metric("Beat the close", pct(t.clv.beat_close, 0)));
@@ -454,7 +462,8 @@
     if (t.vs_market) m.push(metric("Market-close log loss", t.vs_market.market_close_log_loss.toFixed(4)));
     kids.push(el("div", { class: "card stack" }, [el("div", { class: "metrics" }, m),
       el("div", { class: "note", text: (t.bets && t.bets.n < 500 ? "Fewer than 500 bets cannot separate skill from luck (about 6,900 are needed to detect a true 3% ROI). " : "") + "Coin-flip log loss is 0.6931." })]));
-    return section("sec-track", "Track record", "", kids);
+    kids.unshift(el("p", { class: "lead", text: "Live record: only picks that were logged before their games, settled from the append-only log. Backtest and holdout results are kept apart on the evidence page. Moneyline closing-line value is the main evidence; totals, puck lines and props have no closing prices captured yet, so their value cannot be measured." }));
+    return section("sec-track", "Live record", "", kids);
   }
 
   function paper() {
@@ -469,10 +478,23 @@
     return section("sec-paper", "Fake bets", "paper trading", kids);
   }
 
+  function methodology() {
+    var li = function (t) { return el("li", { text: t }); };
+    return section("sec-method", "Method and limits", "", [el("div", { class: "card stack" }, [
+      el("p", { text: "Model probabilities come from an ensemble trained only on information available before each game. Market probabilities remove the bookmaker margin (proportional method; power and Shin as sensitivity checks). Edge is model probability minus no-vig market probability. Stakes use a quarter-Kelly fraction with per-bet, per-game and daily caps from the committed policy file." }),
+      el("ul", {}, [li("No edge has been demonstrated. The evidence page reports closing-line value with multiplicity-corrected intervals and says \"insufficient evidence\" where that is the case."),
+        li("A single season of results cannot separate skill from luck; thousands of bets are needed to detect a few percent of ROI."),
+        li("Settlement rules differ by book (shootout goal in totals, overtime in props); the policy file records which rule is assumed and none is verified per book yet."),
+        li("Totals, puck line and player props are experimental and paper-traded only; they have no closing-price record."),
+        li("Prices shown are the best seen at capture time and may not be obtainable when you read this. Injuries and lineups are not inputs."),
+        li("The system halts and withholds picks when data, results or its own logs look wrong; it never adjusts its own rules to continue.")]),
+      el("p", { class: "note", text: "Research and education only. Nothing here is betting advice and nothing guarantees profit. The project never places bets. Only stake money you can afford to lose." })])]);
+  }
+
   var dynamic = el("div", { class: "stack", style: "gap:1.5rem" });
   function render() {
     var alloc = C.allocate(D.games, cfg());
-    dynamic.replaceChildren(statusBar(alloc), evidence(), rankingSection(), vetoedSection() || "", topPicks(alloc), allGames(alloc), gameStats(), otherMarkets(), playerProps(), section("sec-parlay", "Parlays", "", [aiParlays(), el("h3", { text: "Build your own" }), parlayBox]), modelInputs(), track(), paper());
+    dynamic.replaceChildren(statusBar(alloc), evidence(), rankingSection(), vetoedSection() || "", topPicks(alloc), allGames(alloc), gameStats(), otherMarkets(), playerProps(), section("sec-parlay", "Parlays", "", [aiParlays(), el("h3", { text: "Build your own" }), parlayBox]), modelInputs(), track(), paper(), methodology());
     renderParlay();
   }
   document.body.insertBefore(CH.topbar("picks"), app);
