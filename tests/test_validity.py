@@ -51,10 +51,7 @@ def test_predictions_for_games_up_to_D_do_not_change_when_later_data_is_added(bi
     a = a[a.game_date <= D]
     assert len(a) > 60 and set(a.index) == set(b.index)
     a, b = a.sort_index(), b.sort_index()
-    exact = [c for c in a.columns if not c.startswith("wavg")]
-    pd.testing.assert_frame_equal(a[exact], b[exact], check_exact=False, rtol=1e-9, atol=1e-9)         # every model, the stack and every calibrator: identical
-    # the weighted average comes from an SLSQP optimiser whose last digits depend on the row order of ties within a date (about 4e-7), not on any data
-    pd.testing.assert_frame_equal(a[[c for c in a.columns if c.startswith("wavg")]], b[[c for c in b.columns if c.startswith("wavg")]], check_exact=False, atol=1e-5)
+    pd.testing.assert_frame_equal(a, b, check_exact=False, rtol=1e-9, atol=1e-9)         # every model, the stack, every calibrator and the weighted average: identical
 
 
 def test_the_truncation_test_would_catch_a_leak(big_league):

@@ -46,8 +46,8 @@ def truncation_invariance(tables, features, D, first_test, step_days=28, min_tra
     worst_exact = float(diff[exact].max()) if same_games else float("nan")
     worst_wavg = float(diff[[c for c in diff.index if c.startswith("wavg")]].max()) if same_games else float("nan")
     return {"truncated_at": str(pd.Timestamp(D).date()), "games_compared": int(len(a)), "same_games": bool(same_games), "max_abs_diff_models_stack_calibrators": worst_exact,
-            "max_abs_diff_weighted_average": worst_wavg, "note": "weighted-average differences are SLSQP solver noise from tie order within a date",
-            "pass": bool(same_games and len(a) > 0 and worst_exact < 1e-9 and worst_wavg < 1e-5), "features_used": feats}
+            "max_abs_diff_weighted_average": worst_wavg, "note": "walk_forward sorts ties within a date stably, so even the SLSQP weighted average is bit-for-bit reproducible",
+            "pass": bool(same_games and len(a) > 0 and worst_exact < 1e-9 and worst_wavg < 1e-9), "features_used": feats}
 
 
 def availability_and_sentinel(tables, features) -> dict:

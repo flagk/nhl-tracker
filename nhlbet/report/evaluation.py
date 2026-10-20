@@ -356,10 +356,18 @@ def baselines(store, d: pd.DataFrame, method: str, B: int = 5000, seed: int = 0)
 def score_games(store, method: str, B: int = 4000, seed: int = 0) -> dict:
     """Log loss and Brier of the model versus the no-vig market (at the decision and at the close) on the same finished games, with a paired date-clustered interval
     for the log-loss difference and reliability of both."""
+    d = live_game_frame(store, method)
+    if len(d) < 20:
+        return {"n": int(len(d))}
+    return _score_frame(d, method, B)
+
+
+def live_game_frame(store, method: str) -> pd.DataFrame:
+    """Finished games with the model's final pre-game probability, the no-vig market probability at the decision and at the close (columns p_model, p_market, p_close, home_win, date)."""
     from nhlbet.report.betlog import final_recommendations
     r = final_recommendations(store)
     if r.empty:
-        return {"n": 0}
+        return pd.DataFrame()
     g = store.df("SELECT game_id, game_date AS date, home, away, start_utc, home_win FROM games WHERE home_win IS NOT NULL")
     d = r.drop(columns=[c for c in ("home", "away", "start_utc") if c in r]).merge(g, on="game_id")
     q = Quotes(store.df("SELECT captured_at, game_id, home, away, book, market, outcome, point, price FROM odds_snapshots WHERE market='h2h'"))
@@ -372,9 +380,10 @@ def score_games(store, method: str, B: int = 4000, seed: int = 0) -> dict:
         pm.append(p0)
         pc.append(p1)
     d["p_market"], d["p_close"] = pm, pc
-    d = d[d.p_market.notna() & d.p_close.notna() & d.p_model.notna()]
-    if len(d) < 20:
-        return {"n": int(len(d))}
+    return d[d.p_market.notna() & d.p_close.notna() & d.p_model.notna()]
+
+
+def _score_frame(d: pd.DataFrame, method: str, B: int) -> dict:
     y = d.home_win.astype(float).to_numpy()
     ll = lambda p: -(y * np.log(np.clip(p, EPS, 1)) + (1 - y) * np.log(np.clip(1 - p, EPS, 1)))
     out = {"n": int(len(d)), "method": method}
@@ -387,3 +396,33 @@ def score_games(store, method: str, B: int = 4000, seed: int = 0) -> dict:
     bins = pd.qcut(d.p_model, 5, duplicates="drop")
     out["reliability"] = [{"bin": str(k), "n": int(len(x)), "model": float(x.p_model.mean()), "market_at_decision": float(x.p_market.mean()), "actual": float(x.home_win.mean())} for k, x in d.groupby(bins, observed=True)]
     return out
+
+
+def blend_scores(d: pd.DataFrame, weights=(0.0, 0.25, 0.5, 0.75, 1.0), B: int = 4000) -> pd.DataFrame:
+    """Log loss of p = (1 - w) * market + w * model for fixed weights w (the market at the decision time), with a date-clustered interval for the gain over the market alone."""
+    y = d.home_win.astype(float).to_numpy()
+    ll = lambda p: -(y * np.log(np.clip(p, EPS, 1)) + (1 - y) * np.log(np.clip(1 - p, EPS, 1)))
+    base = ll(d.p_market.to_numpy(float))
+    rows = []
+    for w in weights:
+        p = (1 - w) * d.p_market.to_numpy(float) + w * d.p_model.to_numpy(float)
+        loss = ll(p)
+        g = mean_ci_p(base - loss, d.date.to_numpy(), B)
+        rows.append({"model_weight": w, "n": int(len(d)), "log_loss": float(loss.mean()), "gain_over_market": g["mean"], "ci_low": g["ci"][0], "ci_high": g["ci"][1], "p_not_better_than_market": g["p_not_above_0"]})
+    return pd.DataFrame(rows)
+
+
+def dm_test(loss_ref, loss_cand, lag: int | None = None) -> dict:
+    """One-sided Diebold-Mariano test that the candidate's loss is lower than the reference's (H1: mean(ref - cand) > 0), Bartlett-kernel HAC variance, default lag floor(n^(1/3))."""
+    d = np.asarray(loss_ref, float) - np.asarray(loss_cand, float)
+    d = d[~np.isnan(d)]
+    n = len(d)
+    if n < 10:
+        return {"n": n, "mean_diff": float(d.mean()) if n else np.nan, "stat": np.nan, "p": np.nan, "lag": 0}
+    L = int(np.floor(n ** (1 / 3))) if lag is None else int(lag)
+    x = d - d.mean()
+    var = float(np.dot(x, x) / n)
+    for k in range(1, L + 1):
+        var += 2.0 * (1 - k / (L + 1)) * float(np.dot(x[k:], x[:-k]) / n)
+    stat = float(d.mean() / np.sqrt(max(var, 1e-18) / n))
+    return {"n": n, "mean_diff": float(d.mean()), "stat": stat, "p": float(1 - stats.norm.cdf(stat)), "lag": L}
