@@ -19,8 +19,12 @@ Resume rule: a new session reads this file and continues from "Next". Do not red
 7. Settlement sensitivity on the real database: 465 totals paper bets, 15 results flip, profit -$348.90 (old rule) vs -$518.00 (new default).
 8. `reports/baseline/before.json` holds the pre-change baseline (code at the merge commit); live record: moneyline 144 picks, ROI -7.2% (CI -15.8% to +1.8%).
 
+- Phase 2: DONE (checkpoint). Quarter-line fixes (puck line, props), PMF/line/direct-summation tests, totals PMF scoring (RPS, PIT), grid-edge audit. Real data: totals show NO skill over the base rate; puck line weak; saves RESEARCH ONLY. Report `reports/phase2_counts.md`.
+- Phase 3: evaluation module and real-data run DONE (`reports/evaluation.md`, `evaluation.json`). Moneyline model picks: 201 bets, ROI -9.4%, CLV +0.04 points (interval -0.04 to +0.12, adjusted p=0.15): no demonstrable edge. Closing price exists for moneylines only (the closing capture is h2h-only). Remaining for the checkpoint: summary in VALIDATION_REPORT at the end.
+- CI: the test suite was flaky because the synthetic league used process-random `hash(team)` ids; fixed with crc32 (commit `675966a`); CI now echoes failing test names as annotations.
+
 ## Next
-- Phase 2 (count models and the joint distribution). Note: the totals goal model now follows the shootout rule switch, so its out-of-sample metrics must be re-run in CI (goals workflow) and compared with the old rule.
+- Phase 4 (model comparison; only if Phases 1 to 3 are clean: they are, but nothing shows an edge, so Phase 4 is a check that no simpler or market-blended model is better, then ONE holdout evaluation).
 - Real-data jobs: push a change to `ci/phase1_trigger.txt` style trigger files on `hardening` (workflow files only exist on the branch, so push-triggered).
 
 ## Open blockers
