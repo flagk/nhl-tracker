@@ -15,7 +15,7 @@ def test_all_markets_from_one_grid_are_coherent(args):
     assert coherence_issues(dist(**args)) == []
 
 
-def test_moneyline_equals_puck_line_minus_half_and_probabilities_sum_to_one():
+def test_moneyline_equals_puck_line_minus_half_and_probabilities_sum_to_one(so_excluded):
     d = dist()
     assert d.spread_probs(-0.5)[0] == pytest.approx(d.p_home, abs=1e-9)
     for line in (4.5, 5.0, 5.25, 6.0, 6.25, 6.5, 6.75):

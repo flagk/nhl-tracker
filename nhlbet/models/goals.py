@@ -5,8 +5,9 @@ need the *distribution* of the score. Here each team's regulation goals are mode
 overdispersion) with a mean from a regularised Poisson regression on the same leak-free as-of features.
 
 Settlement conventions (match North American sportsbooks):
-- **Totals** count regulation + overtime goals but NOT the shootout goal. A game tied after regulation adds one goal if it is decided
-  in overtime and none if it goes to a shootout.
+- **Totals**: a game tied after regulation adds one goal if it is decided in overtime. Whether a shootout adds one as well is the settlement rule in
+  config/policy.yaml (``nhlbet.settle.shootout_in_total``; the industry convention is yes, the repo assumed no before Phase 1). Team totals and
+  both-teams-to-score always exclude the shootout goal.
 - **Puck line** uses the official result: an overtime or shootout winner wins by exactly one goal.
 Regulation goals are therefore the official score minus the extra goal of an OT/SO winner; tied-after-regulation games have equal
 regulation goals. ``home_win`` from the production moneyline model splits those ties, so all three markets stay consistent.
@@ -48,7 +49,8 @@ def add_goal_targets(F: pd.DataFrame, games: pd.DataFrame) -> pd.DataFrame:
     g = games.drop_duplicates("game_id").set_index("game_id")
     sub = g.loc[g.index.intersection(F.index)]
     t = regulation_goals(sub)
-    t["tot"] = t.hr + t.ar + t.ot.astype(float)                          # regulation + overtime goals, shootout goal excluded (totals settlement)
+    from nhlbet.settle import shootout_in_total
+    t["tot"] = t.hr + t.ar + t.ot.astype(float) + (t.so.astype(float) if shootout_in_total() else 0.0)   # totals settlement (shootout goal per the policy's rule set)
     t["mar"] = sub.home_score.astype(float) - sub.away_score.astype(float)   # official margin (an OT/SO winner wins by one): puck-line settlement
     return F.join(t)
 
@@ -159,8 +161,8 @@ class ScoreDistribution:
     def expected_total(self) -> float:
         return float((self.w * (self.reg_total + np.where(self.reg_margin == 0, self.p_ot, 0.0))).sum())
 
-    def total_probs(self, line: float) -> tuple[float, float, float]:
-        """(P(over), P(under), P(push)) for a total line, shootout goal excluded.
+    def total_probs(self, line: float, so_in_total: bool | None = None) -> tuple[float, float, float]:
+        """(P(over), P(under), P(push)) for a total line. ``so_in_total`` (default: the policy's rule set) says whether a shootout adds a goal to the total.
 
         Half-point lines cannot push. Whole-number lines have three outcomes (the stake is returned on a push). Quarter lines (x.25 / x.75) are two bets of
         half the stake on the adjacent lines, so the outcome probabilities are the average of the two legs (a half-win or half-loss is half a leg's win or loss,
@@ -168,12 +170,16 @@ class ScoreDistribution:
         """
         frac = round((float(line) * 4) % 4)
         if frac in (1, 3):
-            a, b = self.total_probs(line - 0.25), self.total_probs(line + 0.25)
+            a, b = self.total_probs(line - 0.25, so_in_total), self.total_probs(line + 0.25, so_in_total)
             return tuple((x + y) / 2.0 for x, y in zip(a, b))                  # type: ignore[return-value]
+        if so_in_total is None:
+            from nhlbet.settle import shootout_in_total
+            so_in_total = shootout_in_total()
+        p_extra = 1.0 if so_in_total else self.p_ot                       # tied games: +1 goal if decided in OT, and also in a shootout when the book counts it
         t = self.reg_total.astype(float)
         tied = self.reg_margin == 0
         over = under = push = 0.0
-        for add, pr in ((0.0, 1.0 - self.p_ot), (1.0, self.p_ot)):       # tied games: +1 goal only if decided in OT
+        for add, pr in ((0.0, 1.0 - p_extra), (1.0, p_extra)):
             tt = np.where(tied, t + add, t)
             wt = np.where(tied, self.w * pr, self.w if add == 0.0 else 0.0)
             over += float(wt[tt > line].sum()); under += float(wt[tt < line].sum()); push += float(wt[tt == line].sum())

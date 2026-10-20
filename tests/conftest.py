@@ -71,3 +71,10 @@ def conviction_stakes(monkeypatch, request):
     from nhlbet.risk import shadow
     if "flat_stakes" not in request.keywords:
         monkeypatch.setattr(shadow, "FLAT_STAKE", None)
+
+
+@pytest.fixture
+def so_excluded(monkeypatch):
+    """The old assumption (totals exclude the shootout goal), pinned explicitly for tests written against it; the policy default is ``so_adds_goal`` (see tests/test_settlement.py)."""
+    import nhlbet.settle as settle
+    monkeypatch.setattr(settle, "shootout_in_total", lambda book=None: False)

@@ -108,7 +108,7 @@ def test_alt_strategies_follow_their_rules():
     assert by["every_puckline"][1]["side"] == "away" and by["every_puckline"][1]["market"] == "spreads"
 
 
-def test_settlement_by_hand_for_totals_and_puckline():
+def test_settlement_by_hand_for_totals_and_puckline(so_excluded):
     st = Store(":memory:")
     games = [(1, 4, 3, "SO"), (2, 5, 2, "REG"), (3, 3, 2, "OT")]     # 1: SO win (total 6 excl. shootout goal), 2: home by 3, 3: OT win (total 5)
     st.upsert("games", [dict(game_id=g, season=1, game_type=2, game_date="2026-10-08", start_utc="2026-10-08T23:00:00Z", home="H", away="A", home_score=h, away_score=a,
@@ -161,7 +161,7 @@ def test_end_to_end_alt_markets(league, tmp_path, monkeypatch):
     assert any((tmp_path / "data/logs/alt_quotes").glob("*.csv"))
 
 
-def test_alt_predictions_export_settles_outcomes_by_hand():
+def test_alt_predictions_export_settles_outcomes_by_hand(so_excluded):
     from nhlbet.report.export import alt_market_predictions
     st = Store(":memory:")
     st.upsert("games", [dict(game_id=g, season=1, game_type=2, game_date="2026-10-08", start_utc=None, home="H", away="A", home_score=h, away_score=a, status="FINAL" if h is not None else "FUT",

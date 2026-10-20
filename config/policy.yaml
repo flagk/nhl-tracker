@@ -1,0 +1,44 @@
+# Policy file: the ONLY place thresholds, limits and eligibility criteria live.
+# Only the owner (flagk) edits this file. Code opens it read-only (nhlbet/policy.py); a test and a CI check fail if anything else writes to it.
+# STATUS: PROPOSED. Every value below is a proposal for the owner to approve; sections are added phase by phase (see docs/PROGRESS.md).
+meta:
+  status: proposed
+  schema_version: 1
+
+# Holdout lock (Phase 1.8). Written by scripts/holdout_lock.py, mirrored in reports/holdout_lock.json (a test compares the two and recomputes the hash).
+# Rule: the larger of 20% of walk-forward games and one half-season (656 games), cut at a date boundary. These games were EXAMINED in earlier reports
+# (model comparison, ablations), so this is a discipline lock for new decisions, not a pristine sample; the live record since 2026-09-30 is the only unseen data.
+holdout:
+  start: "2026-01-05"
+  end: "2026-09-29"
+  n_games: 656
+  hash_sha256: "f1a2ca36d67b63fb2de77239b1c66529d307144efcc22a9932a0d39650413590"
+  previously_examined: true
+
+# Settlement rules (Phase 1.6). A rule set says how a bet is graded; each book maps to one. "verified: false" means the book's own rules page could not be
+# read from the build environment, so the industry convention (cited in docs/SETTLEMENT.md) is applied and flagged. Verify against each book's rules page.
+settlement:
+  default_ruleset: so_adds_goal
+  rulesets:
+    so_adds_goal:       # industry convention: a shootout winner is credited one goal, and one goal is added to the game total
+      shootout_in_total: true
+      overtime_in_total: true
+      puck_line_uses_official_margin: true
+      moneyline_includes_ot_so: true
+      props_overtime_counts: true
+      props_shootout_counts: false
+      prop_void_if_player_did_not_play: true
+      whole_line_push_refunds_stake: true
+    so_excluded:        # the assumption the repo used until Phase 1: totals exclude the shootout goal
+      shootout_in_total: false
+      overtime_in_total: true
+      puck_line_uses_official_margin: true
+      moneyline_includes_ot_so: true
+      props_overtime_counts: true
+      props_shootout_counts: false
+      prop_void_if_player_did_not_play: true
+      whole_line_push_refunds_stake: true
+  books:
+    default: {ruleset: so_adds_goal, verified: false}
+    draftkings: {ruleset: so_adds_goal, verified: false, note: "whole-number total equal to the line is void (2023 house rules); team totals offered both with and without OT/SO"}
+    fanduel: {ruleset: so_adds_goal, verified: false, note: "overtime goals count toward game totals; team totals are 60 minutes of regulation only"}

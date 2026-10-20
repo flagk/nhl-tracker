@@ -252,7 +252,11 @@ def log_integrity(logs_root, archive_dir) -> dict:
         if t == "recommendations":
             cap = pd.to_datetime(r.odds_captured_at, utc=True, errors="coerce")
             age = (pd.to_datetime(r.run_at, utc=True) - cap).dt.total_seconds() / 60
-            row.update({"odds_age_minutes_median": float(age.median()), "odds_age_minutes_max": float(age.max()), "odds_captured_after_run": int((age < 0).sum()),
+            bets = (r["action"] == "BET") if "action" in r else pd.Series(False, index=r.index)
+            nobook = (r["book"].isna() | (r["book"].astype(str).str.strip() == "")) if "book" in r else pd.Series(True, index=r.index)
+            row.update({"bets_without_book": int((bets & nobook).sum()),             # a price with no named book cannot be obtained or audited
+                        "odds_captured_after_puck_drop": int(((cap > r.start) & r.start.notna()).sum()),                                # a price captured after the game started is not a decision-time price
+                        "odds_age_minutes_median": float(age.median()), "odds_age_minutes_max": float(age.max()), "odds_captured_after_run": int((age < 0).sum()),
                         "rows_without_odds": int(cap.isna().sum()), "rows_without_model_version": int(r.model_version.isna().sum()), "model_versions": int(r.model_version.nunique())})
         res[t] = row
     return res
