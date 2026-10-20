@@ -88,7 +88,7 @@
     return el("div", { class: "stack", style: "gap:.9rem" }, kids);
   }
   function chips() {
-    var items = [["sec-evidence", "Evidence"], ["sec-rank", "Ranking"], ["sec-picks", "Top picks"], ["sec-games", "All games"], ["sec-stats", "Game stats"], ["sec-other", "Totals & puck line"], ["sec-props", "Player props"], ["sec-parlay", "Parlays"], ["sec-inputs", "Model inputs"], ["sec-track", "Track record"], ["sec-paper", "Fake bets"]];
+    var items = [["sec-evidence", "Evidence"], ["sec-rank", "Ranking"]].concat((D.vetoed || []).length ? [["sec-vetoed", "Vetoed"]] : []).concat([["sec-picks", "Top picks"], ["sec-games", "All games"], ["sec-stats", "Game stats"], ["sec-other", "Totals & puck line"], ["sec-props", "Player props"], ["sec-parlay", "Parlays"], ["sec-inputs", "Model inputs"], ["sec-track", "Track record"], ["sec-paper", "Fake bets"]]);
     return el("nav", { class: "chips", "aria-label": "Sections" }, items.map(function (i) { return el("a", { class: "chip", href: "#" + i[0], text: i[1] }); }));
   }
   var summaryLine = el("span", { class: "muted" });
@@ -164,6 +164,37 @@
     else kids.push(el("div", { class: "picks" }, ranked.map(function (g) { return pickCard(g, alloc); })));
     return section("sec-picks", "Top picks", ranked.length ? "best " + ranked.length + " by expected value" : "", kids);
   }
+  /* ---------- pre-game review: an agent may only keep, flag or veto picks the model already made; it never changes a number ---------- */
+  function safeUrl(u) { return typeof u === "string" && /^https:\/\/[^\s]+$/.test(u); }
+  function sourceLinks(srcs) {
+    return (srcs || []).filter(function (x) { return safeUrl(x.url); }).map(function (x) {
+      var host = x.url.replace(/^https:\/\//, "").split("/")[0];
+      return el("a", { href: x.url, target: "_blank", rel: "noopener noreferrer", title: "retrieved " + (x.retrieved_at || ""), text: host });
+    });
+  }
+  function reviewCell(rv) {
+    if (!rv) return [el("span", { class: "muted", text: "-" })];
+    var cls = rv.status === "UNREVIEWED" ? "bad" : rv.decision === "flag" ? "lean" : rv.decision === "veto" ? "bad" : "rec";
+    var label = rv.status === "UNREVIEWED" ? "UNREVIEWED" : rv.decision === "flag" ? "Flagged" : rv.decision === "veto" ? "Vetoed" : "Kept";
+    var out = [el("span", { class: "pill " + cls, text: label })];
+    if (rv.warning) out.push(el("div", { class: "muted", text: "\u26a0 " + rv.warning }));
+    else if (rv.reason) out.push(el("div", { class: "muted", text: rv.reason }));
+    var links = sourceLinks(rv.sources);
+    if (links.length) out.push(el("div", { class: "muted" }, ["Sources: "].concat(links.reduce(function (a, l) { return a.concat(a.length ? [", ", l] : [l]); }, []))));
+    if (rv.reviewed_at) out.push(el("div", { class: "muted", text: "checked " + when(rv.reviewed_at) + (rv.decided_by === "code" ? " (rule-based)" : "") }));
+    return out;
+  }
+  function vetoedSection() {
+    var v = D.vetoed || [];
+    if (!v.length) return null;
+    var rows = v.map(function (r) {
+      return el("tr", {}, [el("td", {}, [el("b", { text: r.pick }), el("div", { class: "muted", text: r.game + (r.start_utc ? " \u00b7 " + when(r.start_utc) : "") })]),
+        el("td", { class: "num", text: pct(r.p_model) }), el("td", { class: "num", text: price(r.price) }), el("td", {}, reviewCell(r.review))]);
+    });
+    return section("sec-vetoed", "Vetoed by the pre-game review", String(v.length), [
+      el("p", { class: "lead", text: "These picks were removed from today's list because a key assumption behind them was confirmed false (for example the backup goalie is starting) or because the price moved until the edge was gone. They are kept here, with the reason, and are graded after the games like every other pick so the review itself can be judged." }),
+      table(["Pick", "Model", "Best price", "Why it was vetoed"], rows, [1, 2])]);
+  }
   /* ---------- one ranked list of every pick across all markets (a ranking, not a recommendation) ---------- */
   var rankFilter = "all", showAllRank = false;
   var RANK_FILTERS = [["all", "All"], ["moneyline", "Moneyline"], ["totals", "Totals"], ["spreads", "Puck line"], ["player", "Player props"]];
@@ -182,9 +213,9 @@
         el("td", {}, [el("b", { text: r.pick }), el("div", { class: "muted", text: r.game + (r.start_utc ? " · " + when(r.start_utc) : "") + (r.line !== null && r.line !== undefined ? " · line " + r.line : "") + (r.p_push > 0.005 ? " · P(push) " + pct(r.p_push) : "") + (r.captured_at ? " · prices as of " + new Date(r.captured_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : "") })]),
         el("td", { text: r.type }), el("td", { class: "num", text: pct(r.p_model) }), el("td", { class: "num", text: pct(r.p_market) }), el("td", { class: "num", text: price(r.price) }),
         el("td", { class: "num " + (r.score >= 0 ? "good" : "bad"), text: (r.score >= 0 ? "+" : "") + (r.score * 100).toFixed(1) + " pts" }),
-        el("td", { class: "num " + (r.ev_raw >= 0 ? "good" : "bad"), text: spct(r.ev_raw) }), el("td", {}, [tag])]);
+        el("td", { class: "num " + (r.ev_raw >= 0 ? "good" : "bad"), text: spct(r.ev_raw) }), el("td", {}, [tag]), el("td", {}, reviewCell(r.review))]);
     });
-    kids.push(rows.length ? table(["Rank", "Pick", "Type", "Model", "Market", "Best price", "Score (edge)", "EV per $1", "Status"], rows, [0, 3, 4, 5, 6, 7]) : el("div", { class: "card muted", text: "No picks of this type today." }));
+    kids.push(rows.length ? table(["Rank", "Pick", "Type", "Model", "Market", "Best price", "Score (edge)", "EV per $1", "Status", "Pre-game review"], rows, [0, 3, 4, 5, 6, 7]) : el("div", { class: "card muted", text: "No picks of this type today." }));
     if (list.length > 15) kids.push(el("div", {}, [el("button", { type: "button", class: "btn-ghost", text: showAllRank ? "Show the top 15 only" : "Show all " + list.length, onclick: function () { showAllRank = !showAllRank; render(); } })]));
     kids.push(el("div", { class: "note", text: "Rank is across all kinds of pick, so the numbers on the left are positions in the full list even when a filter is on. Prices are the best available today; check the price in your own app before using any of it." }));
     return section("sec-rank", "Pick ranking", String(all.length), kids);
@@ -438,7 +469,7 @@
   var dynamic = el("div", { class: "stack", style: "gap:1.5rem" });
   function render() {
     var alloc = C.allocate(D.games, cfg());
-    dynamic.replaceChildren(statusBar(alloc), evidence(), rankingSection(), topPicks(alloc), allGames(alloc), gameStats(), otherMarkets(), playerProps(), section("sec-parlay", "Parlays", "", [aiParlays(), el("h3", { text: "Build your own" }), parlayBox]), modelInputs(), track(), paper());
+    dynamic.replaceChildren(statusBar(alloc), evidence(), rankingSection(), vetoedSection() || "", topPicks(alloc), allGames(alloc), gameStats(), otherMarkets(), playerProps(), section("sec-parlay", "Parlays", "", [aiParlays(), el("h3", { text: "Build your own" }), parlayBox]), modelInputs(), track(), paper());
     renderParlay();
   }
   document.body.insertBefore(CH.topbar("picks"), app);

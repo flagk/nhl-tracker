@@ -7,3 +7,6 @@ data/*.db-journal
 .pytest_cache/
 *.egg-info/
 /logs/
+
+# pre-game review agent: scratch space for one run (the agent's single permitted output file lives here)
+agent/work/
