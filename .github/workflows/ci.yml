@@ -13,4 +13,9 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements.txt && pip install -e .
-      - run: python -m pytest -q
+      - name: Tests (failing test names are echoed as annotations so a red run can be diagnosed from the API as well as the log)
+        run: |
+          set -o pipefail
+          python -m pytest -q -ra 2>&1 | tee pytest.out || rc=$?
+          grep -E "^(FAILED|ERROR)" pytest.out | head -20 | while read -r line; do echo "::error title=pytest::${line}"; done
+          exit ${rc:-0}
