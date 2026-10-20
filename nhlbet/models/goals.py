@@ -283,8 +283,10 @@ def coherence_issues(d: "ScoreDistribution", tol: float = 1e-9) -> list[str]:
     cells = list(d._final_goal_cells())
     wsum = sum(w for w, _, _ in cells)
     mean_total = sum(w * (h + a) for w, h, a in cells) / wsum
-    if abs(mean_total - d.expected_total()) > 1e-6:
+    if abs(mean_total - d.expected_total(so_in_total=False)) > 1e-6:                 # team totals never count the shootout goal
         bad.append("team totals do not reproduce the game total's mean")
+    if abs(float((np.arange(40) * d.total_pmf(40)).sum()) - d.expected_total()) > 1e-6:      # the game total under the settlement rule in force
+        bad.append("the total's PMF does not reproduce its expected value")
     p_h0 = 1.0 - d.team_total_probs("home", 0.5)[0]
     p_a0 = 1.0 - d.team_total_probs("away", 0.5)[0]
     p_00 = sum(w for w, h, a in cells if h == 0 and a == 0) / wsum

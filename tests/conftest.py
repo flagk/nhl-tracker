@@ -1,6 +1,8 @@
 """Shared fixtures: a synthetic league with results, goalies, skaters and advanced stats."""
 from __future__ import annotations
 
+import zlib
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -43,13 +45,13 @@ def make_league(n_days: int = 150, seed: int = 0, start: str = "2023-10-10") -> 
                                pen_taken=int(rng.integers(1, 5)), pen_drawn=int(rng.integers(1, 5)),
                                pp_opps=int(rng.integers(1, 5)), pp_goals=int(rng.integers(0, 2)),
                                pk_opps=int(rng.integers(1, 5)), pk_goals_against=int(rng.integers(0, 2))))
-                g1, g2 = (hash(team) % 9000 + 100), (hash(team) % 9000 + 101)
+                g1, g2 = (zlib.crc32(team.encode()) % 9000 + 100), (zlib.crc32(team.encode()) % 9000 + 101)
                 pid = g1 if rng.random() < 0.7 else g2
                 sa = sog_a
                 gg.append(dict(game_id=gid, team=team, player_id=pid, name="G", started=1, toi_sec=3600,
                                shots_against=sa, saves=max(sa - ga, 0), goals_against=ga, xg_faced=float(rng.uniform(2, 3.5))))
                 for k in range(18):
-                    sk.append(dict(game_id=gid, team=team, player_id=hash(team) % 5000 * 100 + k, name="S", position="C",
+                    sk.append(dict(game_id=gid, team=team, player_id=zlib.crc32(team.encode()) % 5000 * 100 + k, name="S", position="C",
                                    toi_sec=900, goals=0, assists=0, points=int(rng.random() < 0.15 * (1 + (k < 6)))))
     return {"games": pd.DataFrame(games), "team_game": pd.DataFrame(tg), "goalie_game": pd.DataFrame(gg),
             "skater_game": pd.DataFrame(sk)}
