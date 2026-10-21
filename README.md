@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-10-21
 
-**2 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-21 12:05 UTC
+**2 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-10-21 20:34 UTC
 
 | | |
 |---|---|
@@ -23,8 +23,8 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| PHI @ BUF | 66.4% | 62.7% | no bet |
-| FLA @ OTT | 54.1% | 49.7% | no bet |
+| PHI @ BUF | 66.4% | 64.3% | no bet |
+| FLA @ OTT | 54.1% | 50.0% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
