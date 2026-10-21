@@ -82,7 +82,9 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
     now = now or datetime.now(timezone.utc)
     tables = load_tables(store)
     games = tables["games"]
-    today = games[(games.game_date == pd.Timestamp(date)) & (games.source == "nhl_api") & (games.home_score.isna())]
+    from nhlbet.settle import VOID_STATES
+    today = games[(games.game_date == pd.Timestamp(date)) & (games.source == "nhl_api") & (games.home_score.isna())
+                  & ~games.get("status", pd.Series("", index=games.index)).astype(str).str.upper().isin(VOID_STATES)]    # postponed / cancelled games get no picks
     if len(today):                       # a game that started within the last 12h is in progress / awaiting its score: its odds are in-play prices
         start = pd.to_datetime(today.start_utc, utc=True, errors="coerce")
         live = (start <= pd.Timestamp(now)) & (start > pd.Timestamp(now) - pd.Timedelta(hours=IN_PLAY_WINDOW_H))
@@ -92,7 +94,7 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
     if today.empty:
         log.info("no unplayed games on %s", date)
         return []
-    overrides = starter_overrides(store, today)
+    overrides = starter_overrides(store, today, as_of=now)
     bcfg = BuilderConfig(**{**bundle.builder_cfg, "goalie_mode": "actual" if overrides else "probable"})
     F = FeatureBuilder(bcfg).build(tables, starter_override=overrides)
     rows = F.loc[today.game_id]
@@ -113,7 +115,7 @@ def build_slate(store: Store, bundle: ModelBundle, date: str, cfg: RiskConfig, r
         age_min = (now - pd.to_datetime(cap, utc=True)).total_seconds() / 60 if cap else None
         stale = bool(cap and (age_min > max_odds_age_min or fetch_stale))
         quotes = evaluate_game(p_home, g.home, g.away, prices) if len(prices) else None
-        hg, hs = goalie_display(store, g.home, date); ag, as_ = goalie_display(store, g.away, date)
+        hg, hs = goalie_display(store, g.home, date, as_of=now); ag, as_ = goalie_display(store, g.away, date, as_of=now)
         status = hs if hs == as_ else "mixed"
         row = rows.loc[g.game_id]
         ctx = {"model_status": model_status, "odds_stale": stale, "goalie_confirmed": hs == "confirmed" and as_ == "confirmed",

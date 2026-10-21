@@ -54,6 +54,8 @@ md = ["# Player count models: walk-forward backtest", "",
       "whether it beats the *market* is measured by the paper-trading bets going forward. `n_to_confirm` is the number of player-games a significance test would need at the observed effect "
       "size; where `n` is smaller the verdict reads \"insufficient evidence\".", ""]
 chosen: dict[str, float] = {}
+audit: dict[str, dict] = {}                 # tuned value per parameter against its grid: a value on the edge of its grid is not a result (Phase 2.5)
+SV_GRID = (200.0, 400.0, 800.0, 1600.0, 3200.0, 6400.0, 12800.0)
 for stat in ("sog", "points", "assists", "goals"):
     sens = {}
     for k in GRID:
@@ -67,6 +69,7 @@ for stat in ("sog", "points", "assists", "goals"):
     sel = {k: float(nll(P[P.game_date <= cut]).mean()) for k, P in sens.items() if (P.game_date <= cut).sum() > 1000}
     k_best = min(sel, key=sel.get) if sel else SHRINK_K
     chosen[stat] = k_best
+    audit[stat] = {"parameter": "shrink_k", "grid": list(GRID), "chosen": k_best, "pinned_to_grid_edge": bool(k_best in (min(GRID), max(GRID)))}
     P = sens[k_best]
     after = {k: float(nll(P2[P2.game_date > cut]).mean()) for k, P2 in sens.items() if (P2.game_date > cut).sum() > 1000}
     md += [f"## {NAMES[stat]}", "",
@@ -78,18 +81,23 @@ for stat in ("sog", "points", "assists", "goals"):
            "**Model vs the player's own rate** (negative diff = model better):", "", evaluate(P, stat).round(4).to_markdown(index=False), ""]
     for line in LINES_BY_STAT[stat]:
         md += [f"**Reliability of P(over {line:g}), by predicted-probability bin:**", "", calibration_table(P, line).round(4).to_markdown(index=False), ""]
-    md += [f"Average {stat}: predicted {P.lam.mean():.3f}, actual {P.y.mean():.3f}.", ""]
+    kmax_ = 60 if stat == "saves" else 15
+    fam = pd.DataFrame({"family": ["Poisson (dispersion 0)", "negative binomial (fitted dispersion)"],
+                        "mean_count_NLL": [float(nll(P.assign(k=0.0)).mean()), float(nll(P).mean())], "dispersion": [0.0, float(P.k.mean())]})
+    fam["nll_vs_poisson"] = fam.mean_count_NLL - fam.mean_count_NLL.iloc[0]
+    md += [f"Average {stat}: predicted {P.lam.mean():.3f}, actual {P.y.mean():.3f}.", "", "**Why this family** (out-of-sample count NLL; the simplest family that is calibrated wins ties):", "", fam.round(5).to_markdown(index=False), ""]
 # ---- goalie saves: research model only (see nhlbet/models/saves.py); the goalie's save-percentage prior is chosen the same way (before --select-end, scored after) ----
 try:
     from nhlbet.models.saves import goalie_starts, walk_forward_saves
     gs = goalie_starts(store)
     if len(gs) > 3000:
-        sens = {k: walk_forward_saves(gs, a.eval_start, sv_prior=k) for k in (200.0, 400.0, 800.0, 1600.0)}
+        sens = {k: walk_forward_saves(gs, a.eval_start, sv_prior=k) for k in SV_GRID}
         sens = {k: v for k, v in sens.items() if not v.empty}
         cut = pd.Timestamp(a.select_end)
         selv = {k: float(nll(v[v.game_date <= cut], 90).mean()) for k, v in sens.items() if (v.game_date <= cut).sum() > 500}
         kb = min(selv, key=selv.get) if selv else 400.0
         Ps = sens[kb]
+        audit["saves"] = {"parameter": "sv_prior", "grid": list(SV_GRID), "chosen": kb, "pinned_to_grid_edge": bool(kb in (min(SV_GRID), max(SV_GRID)))}
         aft = {k: float(nll(v[v.game_date > cut], 90).mean()) for k, v in sens.items() if (v.game_date > cut).sum() > 500}
         md += ["## Goalie saves (research model, not priced live)", "",
                f"{len(Ps):,} goalie starts ({Ps.player_id.nunique():,} goalies) from {Ps.game_date.min().date()} to {Ps.game_date.max().date()}. Saves = shots against thinned by the goalie's shrunk save percentage; "
@@ -105,5 +113,7 @@ except Exception as exc:                                  # the saves section mu
     md += [f"_Goalie saves backtest unavailable: {exc}_", ""]
 Path(a.out).mkdir(exist_ok=True)
 Path(a.out, "PROPS.md").write_text("\n".join(md) + "\n")
-Path(a.out, "props_shrink.json").write_text(json.dumps({"shrink_k": chosen, "selected_on_games_through": a.select_end}, indent=1))
+status = {st: ("RESEARCH ONLY: tuned value sits on the edge of its grid" if v["pinned_to_grid_edge"] else "tuned inside its grid") for st, v in audit.items()}
+status["saves"] = "RESEARCH ONLY: not priced live (no verified settlement rule or live prices)" + ("; tuned value on the grid edge" if audit.get("saves", {}).get("pinned_to_grid_edge") else "")
+Path(a.out, "props_shrink.json").write_text(json.dumps({"shrink_k": chosen, "selected_on_games_through": a.select_end, "grid_audit": audit, "market_status": status}, indent=1))
 print("\n".join(md))
