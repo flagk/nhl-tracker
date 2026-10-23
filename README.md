@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-10-23
 
-**2 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-23 12:04 UTC
+**2 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-10-23 21:03 UTC
 
 | | |
 |---|---|
@@ -23,8 +23,8 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| MTL @ CHI | 42.3% | 42.0% | no bet |
-| TBL @ COL | 52.5% | 53.8% | no bet |
+| MTL @ CHI | 42.3% | 40.2% | no bet |
+| TBL @ COL | 52.5% | 52.7% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
