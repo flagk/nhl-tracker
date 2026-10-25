@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-10-25
 
-**5 game(s) · 1 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-25 12:06 UTC
+**5 game(s) · 1 recommended bet(s)** · late run · model health **WARN** · updated 2026-10-25 16:06 UTC
 
 | | |
 |---|---|
@@ -23,11 +23,11 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| FLA @ CHI | 40.8% | 37.3% | no bet |
-| NYI @ DAL | 60.5% | 63.8% | no bet |
-| MTL @ WPG | 50.3% | 47.4% | no bet |
-| COL @ NSH | 36.7% | 32.0% | no bet |
-| MIN @ VAN | 41.1% | 37.1% | **BET VAN** $3.60 |
+| FLA @ CHI | 40.8% | 36.9% | no bet |
+| NYI @ DAL | 60.5% | 63.6% | no bet |
+| MTL @ WPG | 50.3% | 48.1% | no bet |
+| COL @ NSH | 36.7% | 32.1% | no bet |
+| MIN @ VAN | 41.1% | 36.0% | **BET VAN** $2.34 |
 
 *Research and educational project; no guarantee of profit. The numbers above are not betting advice.*
 
