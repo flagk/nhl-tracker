@@ -6,13 +6,14 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 ## Overall
 
-- Games with a logged recommendation and a result: **162** (bet on 0; passed on 100%)
+- Games with a logged recommendation and a result: **174** (bet on 0; passed on 100%)
 - ⚠️ Far too few bets to separate skill from luck (about 6,900 would be needed to detect a true 3% ROI). Closing-line value converges much faster.
 
 ## By day
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
+| 2026-10-25 | 5 | 1 | - | - | - | 1 | [report](daily/2026-10-25-morning.md) · [page](../site/archive/2026-10-25.html) |
 | 2026-10-24 | 12 | 0 | - | - | - | - | [report](daily/2026-10-24-late.md) · [page](../site/archive/2026-10-24.html) |
 | 2026-10-23 | 2 | 0 | - | - | - | - | [report](daily/2026-10-23-late.md) · [page](../site/archive/2026-10-23.html) |
 | 2026-10-22 | 12 | 0 | - | - | - | - | [report](daily/2026-10-22-late.md) · [page](../site/archive/2026-10-22.html) |
@@ -41,7 +42,9 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 ## Recommended bets
 
-No recommended bets yet.
+| Date | Game | Pick | Price | Stake | Edge | Result | Profit | CLV |
+|---|---|---|---|---|---|---|---|---|
+| 2026-10-25 | MIN @ VAN | VAN | 2.66 | $3.60 | +4.0% | pending | - | - |
 
 ---
 > **Disclaimer.** This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.
