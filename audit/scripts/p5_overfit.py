@@ -60,11 +60,13 @@ def main() -> int:
     if th is not None and bets is not None and len(bets) >= 20:
         tmpl = pd.DataFrame({"decimal": bets["decimal"].astype(float), "p_market": bets["p_market"].astype(float), "p_model": bets["p_model"].astype(float)}).dropna()
         res["template"] = {"bets": int(len(tmpl)), "mean_decimal": float(tmpl.decimal.mean()), "mean_claimed_edge_pts": float((tmpl.p_model - tmpl.p_market).mean() * 100)}
+        scen = {"estimated from the live record": (th["theta"], th["se"]), "no skill (theta = 0, known)": (0.0, 0.0), "optimistic prior (theta ~ N(0.5, 0.3))": (0.5, 0.3)}
         res["simulations"] = []
-        for kf in (0.25, 0.5, 1.0):
-            for hc in (0.0, 0.02):
-                for horizon in (200, 500):
-                    res["simulations"].append(simulate_uncertain(tmpl, th["theta"], th["se"], kelly_fraction=kf, max_bet_pct=0.02, price_haircut=hc, horizon=horizon, n_paths=10000))
+        for name, (mu, se) in scen.items():
+            for kf in (0.25, 0.5):
+                for hc in (0.0, 0.02):
+                    for horizon in (200, 500):
+                        res["simulations"].append({"theta_scenario": name, **simulate_uncertain(tmpl, mu, se, kelly_fraction=kf, max_bet_pct=0.02, price_haircut=hc, horizon=horizon, n_paths=10000)})
     (ROOT / "audit/results/phase5_real.json").write_text(json.dumps(res, indent=1, default=float))
     print("phase 5 done")
     return 0
