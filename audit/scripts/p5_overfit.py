@@ -55,9 +55,9 @@ def main() -> int:
     sr_all = sr_all[sr_all.is_bet & (sr_all.market.fillna("h2h") == "h2h")] if len(sr_all) else sr_all
     templates = {}
     if len(sr_all):
-        a = sr_all[sr_all.strategy == "edge_1pct"]
-        templates["policy-like: edge floor 1%, claim = shrunk p_adj (what the policy stakes on)"] = (a, "p_adj", "p_adj")
-        b = sr_all[sr_all.strategy.isin(["no_guard", "every_game", "flat_model_side", "no_shrink"])].drop_duplicates(["game_id", "side"])
+        a = sr_all[sr_all.strategy == "no_guard"]
+        templates["policy-like: the live policy without its early-season guard (3% edge floor, shrunk claims)"] = (a, "p_adj", "p_adj")
+        b = sr_all[sr_all.strategy.isin(["every_game", "flat_model_side"])].drop_duplicates(["game_id", "side"])
         templates["aggressive: any model pick, claim = unshrunk p_model"] = (b, "p_model", "p_model")
     res["simulations"], res["theta"], res["templates"] = [], {}, {}
     for tname, (bets, claim, live_claim) in templates.items():
