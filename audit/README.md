@@ -1,13 +1,16 @@
 # Audit
 
-Goal: decide whether a real, durable betting edge exists, how confident we can be, and how decay would be detected. Negative findings are reported as found.
+Goal: decide whether a real, durable betting edge exists, how confident we can be, and how decay would be detected. Negative findings are reported as found. **Start with [REPORT.md](REPORT.md).**
 
 | Phase | Status | Document |
 |---|---|---|
 | 1 Reconnaissance | done | [PHASE1_RECON.md](PHASE1_RECON.md) |
-| 2 Raw data and point-in-time rebuild | built; not run against the live NHL API (blocked from the sandbox) | [PHASE2_PIT.md](PHASE2_PIT.md) |
+| 2 Raw data and point-in-time rebuild | built and tested; endpoints verified live; ingestion and DVC not run (need a private remote) | [PHASE2_PIT.md](PHASE2_PIT.md) |
 | 3 Leakage attack | done | [PHASE3_LEAKAGE.md](PHASE3_LEAKAGE.md) |
-| 4 to 7 | not started: stopped for review after Phase 3 as instructed | |
+| 4 Honest evaluation | done | [PHASE4_EVALUATION.md](PHASE4_EVALUATION.md) |
+| 5 Overfitting and risk accounting | done | [PHASE5_OVERFITTING_RISK.md](PHASE5_OVERFITTING_RISK.md) |
+| 6 Independent verification | (a) and (b) done; (c) locked, cannot run until the trigger | [PHASE6_VERIFICATION.md](PHASE6_VERIFICATION.md), [preregistration.md](preregistration.md) |
+| 7 Operations | done | [PHASE7_OPERATIONS.md](PHASE7_OPERATIONS.md) |
 
 Older files in this folder (`leakage_probes.*`, `statistics.*`, `legacy_predictions.csv`, `reproduce_legacy.py`) belong to the first audit (`AUDIT.md` at the repository root).
 

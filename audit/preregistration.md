@@ -31,7 +31,7 @@ Reported but not tested: ROI (it is noise on this sample size), the other market
 
 ## When the evaluation happens, and once only
 
-The first of: (a) 1,312 qualifying forward games (one regular season), or (b) 2027-06-30. It runs once with `scripts/prereg_eval.py`, which refuses to run before the trigger, refuses a second run, and checks that this file still matches its recorded hash. There are no interim significance tests, no early stopping for success, and no peeking: interim monitoring exists only to halt betting for safety (the kill switch and the decay thresholds in `config/policy.yaml` and `audit/PHASE7_OPERATIONS.md`) and its numbers are not used to declare anything.
+The first of: (a) 1,312 qualifying forward games (one regular season), or (b) 2027-06-30. It runs once with `audit/scripts/p6_prereg_eval.py`, which refuses to run before the trigger, refuses a second run, and checks that this file still matches its recorded hash. There are no interim significance tests, no early stopping for success, and no peeking: interim monitoring exists only to halt betting for safety (the kill switch and the decay thresholds in `config/policy.yaml` and `audit/PHASE7_OPERATIONS.md`) and its numbers are not used to declare anything.
 
 ## What would change the plan
 
