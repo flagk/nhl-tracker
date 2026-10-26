@@ -1,0 +1,125 @@
+{
+ "mutants": [
+  {
+   "id": "M1",
+   "description": "results of a date folded into the state before that date's features are emitted",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_no_leakage.py::test_future_corruption_never_changes_earlier_or_same_day_features[2023-11-15]"
+   ],
+   "pytest_tail": "1 failed in 2.81s"
+  },
+  {
+   "id": "M2",
+   "description": "a game's own result included in its rolling window",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_no_leakage.py::test_future_corruption_never_changes_earlier_or_same_day_features[2023-11-15]"
+   ],
+   "pytest_tail": "1 failed in 2.41s"
+  },
+  {
+   "id": "M3",
+   "description": "default goalie mode switched to 'actual' (post-game starter identity)",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_no_leakage.py::test_default_mode_ignores_tonights_starter_identity"
+   ],
+   "pytest_tail": "1 failed, 8 passed in 10.60s"
+  },
+  {
+   "id": "M4",
+   "description": "market features use snapshots after the decision time (closing line leaks in)",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+   ],
+   "pytest_tail": "1 failed, 14 passed in 20.64s"
+  },
+  {
+   "id": "M5",
+   "description": "walk-forward training window includes the test block",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_validity.py::test_predictions_for_games_up_to_D_do_not_change_when_later_data_is_added"
+   ],
+   "pytest_tail": "1 failed, 11 passed in 16.50s"
+  },
+  {
+   "id": "M6",
+   "description": "online calibrator fitted on the block it is applied to",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+   ],
+   "pytest_tail": "1 failed, 14 passed in 20.38s"
+  },
+  {
+   "id": "M7",
+   "description": "availability guard disabled",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+   ],
+   "pytest_tail": "1 failed, 14 passed in 21.16s"
+  },
+  {
+   "id": "M8",
+   "description": "outcome shuffle is a no-op (the null world is not null)",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+   ],
+   "pytest_tail": "1 failed, 14 passed in 21.55s"
+  },
+  {
+   "id": "M9",
+   "description": "goalie confirmations ignore the decision time",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+   ],
+   "pytest_tail": "1 failed, 14 passed in 20.43s"
+  },
+  {
+   "id": "M10",
+   "description": "point-in-time resolver ignores knowledge time",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+   ],
+   "pytest_tail": "1 failed, 14 passed in 37.54s"
+  },
+  {
+   "id": "M11",
+   "description": "snapshot as_of returns versions fetched after the decision time",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+   ],
+   "pytest_tail": "1 failed, 14 passed in 35.47s"
+  },
+  {
+   "id": "M12",
+   "description": "walk-forward row order left to the input order (unstable ties)",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_validity.py::test_predictions_for_games_up_to_D_do_not_change_when_later_data_is_added"
+   ],
+   "pytest_tail": "1 failed, 11 passed in 23.78s"
+  },
+  {
+   "id": "M13",
+   "description": "league goalie-start counters updated with the current game before it is emitted",
+   "status": "KILLED",
+   "killed_by": [
+    "FAILED tests/test_no_leakage.py::test_default_mode_ignores_tonights_starter_identity"
+   ],
+   "pytest_tail": "1 failed, 8 passed in 11.36s"
+  }
+ ],
+ "killed": 13,
+ "survived": [],
+ "invalid": [],
+ "total": 13
+}

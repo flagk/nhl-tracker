@@ -3,7 +3,7 @@
 Three independent checks, each of which raises ``LeakageError``:
 1. a model input may not be an outcome column (scores, results, goal targets) or a closing-line column;
 2. every input must exist in the frame;
-3. no input may be (nearly) a copy of the outcome: |correlation| above ``MAX_ABS_CORR`` with the label, or an exact copy / complement. A real pre-game feature in hockey
+3. no input may be (nearly) a copy of the outcome: |correlation| above ``MAX_ABS_CORR`` with the label, an exact copy / complement, or a univariate AUC above ``MAX_UNIVARIATE_AUC``. A real pre-game feature in hockey
    has |correlation| with the winner of a few percent; anything near 1 is a leak, whatever it is called.
 """
 from __future__ import annotations
@@ -17,6 +17,7 @@ OUTCOME_COLUMNS = frozenset({"y", "home_win", "home_score", "away_score", "hr", 
 OUTCOME_PREFIXES = ("tgt_", "target", "label", "outcome")
 MAX_ABS_CORR = 0.98
 MIN_ROWS = 30
+MAX_UNIVARIATE_AUC = 0.75      # the best honest pre-game hockey features rank winners at an AUC near 0.55 to 0.60; a single input at 0.75 is not a hockey feature (found in the audit: the correlation test alone missed a perfect ranker)
 
 
 class LeakageError(ValueError):
@@ -42,7 +43,13 @@ def assert_features_clean(X: pd.DataFrame, y, columns, max_abs_corr: float = MAX
         m = np.isfinite(x) & np.isfinite(yv)
         if m.sum() < MIN_ROWS or np.std(x[m]) == 0 or np.std(yv[m]) == 0:
             continue
+        if len(np.unique(yv[m])) == 2:
+            from sklearn.metrics import roc_auc_score
+            a = roc_auc_score(yv[m], x[m])
+            if max(a, 1 - a) > MAX_UNIVARIATE_AUC:
+                bad.append(c)
+                continue
         if np.array_equal(x[m], yv[m]) or np.array_equal(x[m], 1.0 - yv[m]) or abs(np.corrcoef(x[m], yv[m])[0, 1]) > max_abs_corr:
             bad.append(c)
     if bad:
-        raise LeakageError(f"model inputs that reproduce the outcome (|corr| > {max_abs_corr} or an exact copy): {bad}")
+        raise LeakageError(f"model inputs that reproduce or near-perfectly rank the outcome (|corr| > {max_abs_corr}, univariate AUC > {MAX_UNIVARIATE_AUC}, or an exact copy): {bad}")

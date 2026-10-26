@@ -1,2 +1,4 @@
 audit/scripts/p1_odds_timing.py
 scripts/pit_ingest.py probe
+scripts/phase1_realdata.py --out audit/results/p1check
+audit/scripts/p3_realdata.py
