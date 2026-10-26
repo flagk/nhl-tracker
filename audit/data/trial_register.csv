@@ -1,0 +1,19 @@
+family,variants,source,note
+base models in the zoo,7,nhlbet/models/base.py make_zoo,"home_rate, elo, logistic, rf, lgbm, xgb, lgbm_all"
+hyper-parameter grid points (tuned by time-series CV),61,nhlbet/models/tune.py GRIDS,one chosen per model
+ensemble heads and calibration maps,6,"nhlbet/models/walkforward.py, calibration.py","stack, weighted average; platt, isotonic, online platt, online isotonic (beta added by the audit, not counted in the original work)"
+candidate features screened for the 14 kept,149,data/models/feature_selection.json,"14 kept, 135 dropped"
+"builder settings (half-life, shrinkage, window, Elo K, home advantage, regression)",6,nhlbet/features/builder.py BuilderConfig,"fields exist; the number of values tried is not recorded, counted once each"
+goals-model regularisation grid,9,scripts/goals_backtest.py,alpha grid 0.3 .. 300
+props shrinkage grid and dispersions,16,"nhlbet/models/props.py, scripts/props_backtest.py",
+paper-trading game strategies,20,nhlbet/risk/shadow.py STRATEGIES,
+paper-trading prop strategies,14,nhlbet/risk/shadow.py PROP_STRATEGIES,
+paper-trading parlay strategies,4,nhlbet/risk/parlays.py,
+edge thresholds examined in reports,8,config/policy.yaml evaluation.edge_thresholds,
+de-vig methods,3,nhlbet/odds/math.py,"proportional, power, Shin"
+settlement rule sets,2,config/policy.yaml settlement.rulesets,
+model-selection candidates compared in Phase 4 (hardening),9,reports/model_comparison_phase4.md,
+walk-forward step lengths and minimum training sizes tried,2,scripts/backtest.py defaults,recorded values only
+"markets reported (h2h, totals, spreads, 4 player props, parlays)",8,reports/evaluation.md,
+UNKNOWN manual experiments,0,not recoverable,"README history, ablations in prose, anything run interactively and not committed"
+"TOTAL (sum, lower bound)",324,,used as the number of trials in the deflated Sharpe ratio; the strategy matrix used for PBO and the reality check has fewer columns (only paper strategies have return series)
