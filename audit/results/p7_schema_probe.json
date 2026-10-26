@@ -5,14 +5,7 @@
  },
  "goalie_game": {
   "rows": 22756,
-  "failures": [
-   "toi_sec: in_range(0, 4000) (4884.0)",
-   "toi_sec: in_range(0, 4000) (4021.0)",
-   "toi_sec: in_range(0, 4000) (5550.0)",
-   "toi_sec: in_range(0, 4000) (5472.0)",
-   "toi_sec: in_range(0, 4000) (4398.0)",
-   "... and 159 more"
-  ]
+  "failures": []
  },
  "team_game": {
   "rows": 21388,
