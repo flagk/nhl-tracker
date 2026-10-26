@@ -51,6 +51,8 @@ def main() -> int:
     res["strategies_with_positive_mean"] = [str(c) for c in M0.columns if M0[c].mean() > 0]
     # bankroll simulation: moneyline picks, decision-time prices, theta estimated from all live games with a market price
     live = live_game_frame(store, "shin")
+    from nhlbet.risk.shrink import shrink_to_market
+    live["p_adj"] = [shrink_to_market(a, b) for a, b in zip(live.p_model, live.p_market)]       # the logged p_adj exists only for bets; the shrinkage is a deterministic function of the two probabilities
     sr_all = shadow_resolved(store)
     sr_all = sr_all[sr_all.is_bet & (sr_all.market.fillna("h2h") == "h2h")] if len(sr_all) else sr_all
     templates = {}

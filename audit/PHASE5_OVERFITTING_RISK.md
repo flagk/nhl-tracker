@@ -52,45 +52,35 @@ The headline Sharpe of the best strategy looks passable on its own (probabilisti
 
 ## 4. Bankroll simulation under parameter uncertainty
 
-True win probability of a bet: p_true = p_market + theta x (p_model - p_market). theta is estimated by a date-clustered regression on all 161 live games with a market price: **theta = -0.60, standard error 0.59, 95% interval -1.61 to 0.67**. The interval contains 0 (no skill) and 1 (the model is exactly right), so the data cannot say which; each simulated path draws its own theta from the sampling distribution. Bets: the 260 paper moneyline picks that cleared the policy's edge floor (mean decimal 2.02, mean claimed edge 1.5 points), at the logged decision-time best price, with an optional 2% price haircut for the best price not being obtainable at your own book. Stakes: Kelly on the model's claim x Kelly fraction, capped at the policy's 2% per bet, 10,000 paths, $1,000 start, ruin = bankroll at or below $500, policy kill switch at 20% drawdown.
+True win probability of a bet: p_true = p_market + theta x (p_model - p_market), where theta is how much of the model's disagreement with the market is real. theta is estimated by a date-clustered regression on the live games with a market price; each simulated path draws its own theta from the estimate's sampling distribution. Bets come from the paper record at the logged decision-time best price, with a 2% price haircut (the best price across books is not always obtainable at your own book; 0% is in the JSON). Stakes: Kelly on the model's claim x Kelly fraction, capped at the policy's 2% per bet; 10,000 paths; $1,000 start; ruin = at or below $500; the policy kill switch trips at a 20% drawdown.
 
-### 200 bets
+### policy-like: the live policy without its early-season guard (3% edge floor, shrunk claims)
 
-| theta scenario | Kelly | price haircut | median final | 5th to 95th pct | P(end below start) | P(ruin) | P(drawdown at least 20%) | median / 95th pct max drawdown |
+{'bets': 15, 'note': 'too few bets or games'}
+
+### Template: aggressive: any model pick, claim = unshrunk p_model
+
+260 bets, mean decimal 2.02, mean claimed edge 1.5 points, 67% with a positive claimed edge. **theta = -0.60, standard error 0.59, 95% interval -1.61 to 0.67** over 161 games: the interval contains 0 (no skill) and 1 (exactly right).
+
+| theta scenario | Kelly | bets | median final | 5th to 95th pct | P(end below start) | P(ruin) | P(drawdown at least 20%) | median / 95th pct max drawdown |
 |---|---|---|---|---|---|---|---|---|
-| estimated from the live record | 0.25 | 0% | $835 | $591 to $1,195 | 80% | 1% | 65% | 24% / 43% |
-| estimated from the live record | 0.25 | 2% | $835 | $605 to $1,170 | 81% | 0% | 63% | 23% / 42% |
-| estimated from the live record | 0.5 | 0% | $812 | $547 to $1,221 | 80% | 3% | 75% | 28% / 48% |
-| estimated from the live record | 0.5 | 2% | $810 | $557 to $1,191 | 82% | 2% | 74% | 27% / 47% |
-| no skill (theta = 0, known) | 0.25 | 0% | $947 | $713 to $1,273 | 62% | 0% | 44% | 19% / 34% |
-| no skill (theta = 0, known) | 0.25 | 2% | $940 | $721 to $1,240 | 65% | 0% | 40% | 18% / 32% |
-| no skill (theta = 0, known) | 0.5 | 0% | $933 | $675 to $1,314 | 63% | 0% | 57% | 22% / 38% |
-| no skill (theta = 0, known) | 0.5 | 2% | $925 | $679 to $1,276 | 66% | 0% | 55% | 21% / 37% |
-| optimistic prior (theta ~ N(0.5, 0.3)) | 0.25 | 0% | $1,052 | $778 to $1,444 | 40% | 0% | 27% | 15% / 29% |
-| optimistic prior (theta ~ N(0.5, 0.3)) | 0.25 | 2% | $1,038 | $782 to $1,393 | 42% | 0% | 24% | 15% / 28% |
-| optimistic prior (theta ~ N(0.5, 0.3)) | 0.5 | 0% | $1,051 | $740 to $1,509 | 41% | 0% | 39% | 18% / 34% |
-| optimistic prior (theta ~ N(0.5, 0.3)) | 0.5 | 2% | $1,035 | $742 to $1,459 | 44% | 0% | 37% | 17% / 33% |
-
-### 500 bets
-
-| theta scenario | Kelly | price haircut | median final | 5th to 95th pct | P(end below start) | P(ruin) | P(drawdown at least 20%) | median / 95th pct max drawdown |
-|---|---|---|---|---|---|---|---|---|
-| estimated from the live record | 0.25 | 0% | $643 | $332 to $1,249 | 86% | 31% | 93% | 43% / 68% |
-| estimated from the live record | 0.25 | 2% | $644 | $345 to $1,196 | 88% | 29% | 93% | 42% / 67% |
-| estimated from the live record | 0.5 | 0% | $598 | $281 to $1,286 | 87% | 40% | 97% | 48% / 74% |
-| estimated from the live record | 0.5 | 2% | $593 | $290 to $1,218 | 88% | 40% | 96% | 48% / 73% |
-| no skill (theta = 0, known) | 0.25 | 0% | $874 | $556 to $1,379 | 69% | 3% | 86% | 30% / 50% |
-| no skill (theta = 0, known) | 0.25 | 2% | $858 | $560 to $1,315 | 73% | 3% | 84% | 30% / 49% |
-| no skill (theta = 0, known) | 0.5 | 0% | $846 | $499 to $1,430 | 70% | 8% | 93% | 35% / 56% |
-| no skill (theta = 0, known) | 0.5 | 2% | $824 | $500 to $1,352 | 74% | 8% | 92% | 34% / 55% |
-| optimistic prior (theta ~ N(0.5, 0.3)) | 0.25 | 0% | $1,141 | $676 to $1,930 | 34% | 1% | 62% | 23% / 42% |
-| optimistic prior (theta ~ N(0.5, 0.3)) | 0.25 | 2% | $1,099 | $674 to $1,799 | 38% | 1% | 59% | 22% / 41% |
-| optimistic prior (theta ~ N(0.5, 0.3)) | 0.5 | 0% | $1,134 | $623 to $2,077 | 36% | 2% | 77% | 26% / 48% |
-| optimistic prior (theta ~ N(0.5, 0.3)) | 0.5 | 2% | $1,090 | $619 to $1,934 | 40% | 2% | 75% | 26% / 47% |
+| estimated from the live record | 0.25 | 200 | $835 | $609 to $1,161 | 82% | 0% | 63% | 23% / 41% |
+| estimated from the live record | 0.25 | 500 | $640 | $339 to $1,195 | 88% | 29% | 92% | 42% / 68% |
+| estimated from the live record | 0.5 | 200 | $807 | $562 to $1,184 | 82% | 2% | 73% | 27% / 46% |
+| estimated from the live record | 0.5 | 500 | $592 | $283 to $1,224 | 88% | 40% | 96% | 48% / 73% |
+| no skill (theta = 0, known) | 0.25 | 200 | $943 | $722 to $1,227 | 65% | 0% | 40% | 18% / 32% |
+| no skill (theta = 0, known) | 0.25 | 500 | $856 | $564 to $1,312 | 72% | 3% | 84% | 30% / 49% |
+| no skill (theta = 0, known) | 0.5 | 200 | $926 | $682 to $1,263 | 66% | 0% | 55% | 21% / 37% |
+| no skill (theta = 0, known) | 0.5 | 500 | $824 | $503 to $1,354 | 74% | 7% | 92% | 35% / 55% |
+| optimistic prior (theta ~ N(0.5, 0.3)) | 0.25 | 200 | $1,037 | $784 to $1,387 | 42% | 0% | 23% | 15% / 28% |
+| optimistic prior (theta ~ N(0.5, 0.3)) | 0.25 | 500 | $1,096 | $679 to $1,784 | 38% | 1% | 59% | 22% / 41% |
+| optimistic prior (theta ~ N(0.5, 0.3)) | 0.5 | 200 | $1,034 | $746 to $1,448 | 44% | 0% | 37% | 17% / 32% |
+| optimistic prior (theta ~ N(0.5, 0.3)) | 0.5 | 500 | $1,085 | $622 to $1,917 | 40% | 2% | 75% | 26% / 47% |
 
 Reading:
-- With no skill the policy loses roughly the margin, and the 20% drawdown kill switch is the mechanism that would stop it; a drawdown of that size is the likely outcome over 500 bets, not a tail event.
-- The "estimated" scenario is worse because the point estimate of theta is negative (the model's disagreements with the market lost money on average), with a standard error so large that the interval spans everything from harmful to perfect.
+- The aggressive template (any model pick, unshrunk claims) overstates what the actual policy would do: the policy stakes on shrunk probabilities with a 3% edge floor, and in fact has placed no bets in the live record (at a 1% floor it would have placed 1, and with no shrinkage none). The policy-like template (the policy's own rules with only the early-season guard removed; the guard blocks nearly everything in the first weeks of a season) is the relevant one; compare it with `reports/risk.md` from the hardening branch, which used a different, smaller template and reported a 0.7% kill-switch probability under no skill.
+- With no skill every template loses roughly the margin; whether the 20% drawdown kill switch trips depends on stake size, which is why the two templates differ so much.
+- The "estimated" scenario is worse than no skill when the point estimate of theta is negative (the model's disagreements with the market lost money on average), with a standard error so large that the interval spans everything from harmful to perfect.
 - Only the optimistic prior, which the live record neither supports nor excludes, produces profitable paths.
 - Quarter Kelly (the policy) has shallower drawdowns than half Kelly in every row; nothing here argues for more aggressive staking.
 
