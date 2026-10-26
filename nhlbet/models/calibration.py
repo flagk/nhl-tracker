@@ -16,7 +16,7 @@ from nhlbet.models.base import EPS, expit, logit
 
 class Calibrator:
     def __init__(self, method: str = "platt") -> None:
-        if method not in ("platt", "isotonic", "none"):
+        if method not in ("platt", "isotonic", "beta", "none"):
             raise ValueError(method)
         self.method = method
 
@@ -24,6 +24,9 @@ class Calibrator:
         p, y = np.asarray(p, float), np.asarray(y, int)
         if self.method == "platt":
             self.m_ = LogisticRegression(C=1e6, max_iter=1000).fit(logit(p).reshape(-1, 1), y)
+        elif self.method == "beta":                      # Kull et al. 2017: logistic regression on [ln p, -ln(1-p)] (a Platt map that can also bend the two tails differently)
+            pc = np.clip(p, EPS, 1 - EPS)
+            self.m_ = LogisticRegression(C=1e6, max_iter=1000).fit(np.column_stack([np.log(pc), -np.log(1 - pc)]), y)
         elif self.method == "isotonic":
             self.m_ = IsotonicRegression(y_min=0.02, y_max=0.98, out_of_bounds="clip").fit(p, y)
         return self
@@ -34,6 +37,9 @@ class Calibrator:
             return p
         if self.method == "platt":
             return self.m_.predict_proba(logit(p).reshape(-1, 1))[:, 1]
+        if self.method == "beta":
+            pc = np.clip(p, EPS, 1 - EPS)
+            return self.m_.predict_proba(np.column_stack([np.log(pc), -np.log(1 - pc)]))[:, 1]
         return np.clip(self.m_.predict(p), EPS, 1 - EPS)
 
 

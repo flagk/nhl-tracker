@@ -68,12 +68,12 @@ def _block(F, y, dates, zoo, tr, te, inner_folds):
 
 
 def walk_forward(F: pd.DataFrame, zoo: dict[str, Factory], first_test: str, step_days: int = 14, min_train: int = 300,
-                 inner_folds: int = 4, n_jobs: int = -1) -> pd.DataFrame:
+                 inner_folds: int = 4, n_jobs: int = -1, embargo_days: int = 0) -> pd.DataFrame:
     """Run the full stack over all blocks. ``F`` needs ``home_win`` and ``game_date``; returns OOS predictions per game."""
     F = F[F.home_win.notna()].sort_values(["game_date", "game_id"] if "game_id" in F.columns else ["game_date"], kind="stable").copy()      # a stable, fully determined order: ties within a date must not change the weighted-average optimiser's path
     y = F.home_win.astype(int).to_numpy()
     dates = F.game_date.reset_index(drop=True)
-    wins = list(walk_forward_windows(dates, first_test, step_days, min_train))
+    wins = list(walk_forward_windows(dates, first_test, step_days, min_train, embargo_days))
     log.info("walk-forward: %d blocks, %d test games", len(wins), sum(len(te) for _, te in wins))
     parts = Parallel(n_jobs=n_jobs)(delayed(_block)(F, y, dates, zoo, tr, te, inner_folds) for tr, te in wins)
     out = pd.concat(parts)

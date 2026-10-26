@@ -12,18 +12,21 @@ import pandas as pd
 
 
 def walk_forward_windows(dates: pd.Series, first_test: str | pd.Timestamp, step_days: int = 14,
-                         min_train: int = 300) -> Iterator[tuple[np.ndarray, np.ndarray]]:
+                         min_train: int = 300, embargo_days: int = 0) -> Iterator[tuple[np.ndarray, np.ndarray]]:
     """Yield (train_idx, test_idx) positional index arrays.
 
     Test block k covers ``[first_test + k*step, first_test + (k+1)*step)``; training is *every* game
     dated strictly before the block starts (expanding window) - i.e. retraining happens only on data
     that existed before the block's first prediction date.
+
+    ``embargo_days`` (default 0 = previous behaviour) additionally drops training games dated within that many days before the block: games whose result may not
+    have been final, and whose features overlap the block's earliest decision times, at the moment the block's first prediction is made (purge and embargo).
     """
     d = pd.to_datetime(pd.Series(dates)).reset_index(drop=True)
     start, end = pd.Timestamp(first_test), d.max()
     while start <= end:
         stop = start + pd.Timedelta(days=step_days)
-        train = np.flatnonzero((d < start).to_numpy())
+        train = np.flatnonzero((d < start - pd.Timedelta(days=embargo_days)).to_numpy())
         test = np.flatnonzero(((d >= start) & (d < stop)).to_numpy())
         if len(test) and len(train) >= min_train:
             yield train, test
