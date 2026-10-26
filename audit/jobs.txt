@@ -1,2 +1,2 @@
-audit/scripts/p5_overfit.py
+audit/scripts/p7_schema_probe.py
 audit/scripts/p6_forward_verify.py --repo ../main-logs

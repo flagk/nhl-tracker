@@ -8,6 +8,10 @@ on:
     paths: ["ci/phase2_trigger.txt"]
   workflow_dispatch:
 
+concurrency:
+  group: phase2-realdata
+  cancel-in-progress: false
+
 permissions:
   contents: write
 

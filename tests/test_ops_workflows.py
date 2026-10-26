@@ -34,3 +34,17 @@ def test_no_workflow_stages_the_policy_file():
 def test_policy_guard_and_digest_exist():
     assert "POLICY_OWNER_LOGINS" in (W / "policy-guard.yml").read_text()
     assert "ops_watch.py" in (W / "weekly-digest.yml").read_text()
+
+
+def test_every_workflow_has_a_concurrency_group_and_every_job_a_timeout():
+    """Per-run caps (Phase 7 of the audit): no workflow may run unbounded or overlap itself."""
+    for f in W.glob("*.yml"):
+        y = yaml.safe_load(f.read_text())
+        assert "concurrency" in y, f"{f.name} has no concurrency group"
+        for name, job in y["jobs"].items():
+            assert "timeout-minutes" in job, f"{f.name}:{name} has no timeout-minutes"
+
+
+def test_the_review_agent_has_a_turn_cap_and_a_step_timeout():
+    t = (W / "review.yml").read_text()
+    assert "--max-turns" in t and "timeout-minutes: 20" in t

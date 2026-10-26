@@ -12,6 +12,10 @@ on:
       - "config/policy.yaml"
   workflow_dispatch:
 
+concurrency:
+  group: policy-guard-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 

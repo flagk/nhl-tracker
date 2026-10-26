@@ -7,6 +7,10 @@ on:
     paths: ["ci/phase3_trigger.txt"]
   workflow_dispatch:
 
+concurrency:
+  group: phase3-eval
+  cancel-in-progress: false
+
 permissions:
   contents: write
 

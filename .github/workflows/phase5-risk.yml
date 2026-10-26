@@ -5,6 +5,10 @@ on:
     branches: [hardening]
     paths: ["ci/phase5_trigger.txt"]
 
+concurrency:
+  group: phase5-risk
+  cancel-in-progress: false
+
 permissions:
   contents: write
 

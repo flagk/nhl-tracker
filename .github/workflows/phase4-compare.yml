@@ -6,6 +6,10 @@ on:
     branches: [hardening]
     paths: ["ci/phase4_trigger.txt"]
 
+concurrency:
+  group: phase4-compare
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
