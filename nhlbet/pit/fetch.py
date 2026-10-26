@@ -69,10 +69,16 @@ def probe(get: Callable = http_get, game_id: int | None = None, date: str | None
     """Status and top-level shape of each endpoint for one real game (the newest final game on ``date``, or ``game_id``). Nothing is stored as data."""
     res = {"probed_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "endpoints": {}}
     if game_id is None:
-        status, sched = get(SCHEDULE.format(date=date or datetime.now(timezone.utc).date().isoformat()))
-        res["endpoints"]["schedule"] = {"url": SCHEDULE.format(date=date or "today"), "status": status, "top_level_keys": sorted(sched) if isinstance(sched, dict) else None}
-        games = [g for d in (sched or {}).get("gameWeek", []) for g in d.get("games", []) if g.get("gameState") in ("OFF", "FINAL")] if isinstance(sched, dict) else []
-        game_id = games[-1]["id"] if games else None
+        from datetime import timedelta
+        start = datetime.fromisoformat(date).date() if date else datetime.now(timezone.utc).date()
+        for back in range(0 if date else 1, 7):                       # the newest day that has a FINAL game (today's schedule has none yet)
+            day = (start - timedelta(days=back)).isoformat()
+            status, sched = get(SCHEDULE.format(date=day))
+            res["endpoints"]["schedule"] = {"url": SCHEDULE.format(date=day), "status": status, "top_level_keys": sorted(sched) if isinstance(sched, dict) else None}
+            games = [g for d in (sched or {}).get("gameWeek", []) if d.get("date") == day for g in d.get("games", []) if g.get("gameState") in ("OFF", "FINAL")] if isinstance(sched, dict) else []
+            if games:
+                game_id = games[-1]["id"]
+                break
     res["game_id"] = game_id
     if game_id is None:
         res["note"] = "no final game found to probe"

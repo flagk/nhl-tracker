@@ -40,7 +40,8 @@ for tname, t in r["templates"].items():
         L += [f"### {tname}", "", str(t), ""]
         continue
     th = r["theta"][tname]
-    L += [f"### Template: {tname}", "",
+    small = [f"**Caution: only {t['bets']} settled bets, resampled with replacement, so these paths are indicative of stake size and drawdown depth, not of outcomes. Theta here is measured on the shrunk scale (the policy shrinks claims toward the market, so p_adj - p_market is small and theta is large in magnitude and very uncertain); it is not comparable with the other template's theta.**", ""] if t["bets"] < 30 else []
+    L += [f"### Template: {tname}", "", *small,
           f"{t['bets']} bets, mean decimal {t['mean_decimal']:.2f}, mean claimed edge {t['mean_claimed_edge_pts']:.1f} points, {pct(t['share_with_positive_claimed_edge'])} with a positive claimed edge. **theta = {th['theta']:.2f}, standard error {th['se']:.2f}, 95% interval {th['ci95'][0]:.2f} to {th['ci95'][1]:.2f}** over {th['n']} games: the interval contains 0 (no skill) and 1 (exactly right).", "",
           "| theta scenario | Kelly | bets | median final | 5th to 95th pct | P(end below start) | P(ruin) | P(drawdown at least 20%) | median / 95th pct max drawdown |", "|---|---|---|---|---|---|---|---|---|"]
     for sm in r["simulations"]:
@@ -51,6 +52,7 @@ L += ["Reading:", "- The aggressive template (any model pick, unshrunk claims) o
       "- With no skill every template loses roughly the margin; whether the 20% drawdown kill switch trips depends on stake size, which is why the two templates differ so much.",
       "- The \"estimated\" scenario is worse than no skill when the point estimate of theta is negative (the model's disagreements with the market lost money on average), with a standard error so large that the interval spans everything from harmful to perfect.",
       "- Only the optimistic prior, which the live record neither supports nor excludes, produces profitable paths.",
+      "- The policy-like template shows the practical consequence of the policy's caution: because stakes are sized on claims shrunk toward the market, drawdowns stay shallow even under a negative theta; the 20% kill switch is a remote event at quarter Kelly and the risk that matters is the slow loss of the margin, not ruin.",
       "- Quarter Kelly (the policy) has shallower drawdowns than half Kelly in every row; nothing here argues for more aggressive staking.", "",
       "## 5. Limits of this phase", "",
       f"- The strategy matrix covers {M['days']} days of paper trading (since 2026-09-30). PBO and the reality check need far more periods to mean much; they are reported because the instructions require them and because their direction is consistent with every other test, not because they are conclusive.",

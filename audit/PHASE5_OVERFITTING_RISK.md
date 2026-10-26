@@ -54,9 +54,26 @@ The headline Sharpe of the best strategy looks passable on its own (probabilisti
 
 True win probability of a bet: p_true = p_market + theta x (p_model - p_market), where theta is how much of the model's disagreement with the market is real. theta is estimated by a date-clustered regression on the live games with a market price; each simulated path draws its own theta from the estimate's sampling distribution. Bets come from the paper record at the logged decision-time best price, with a 2% price haircut (the best price across books is not always obtainable at your own book; 0% is in the JSON). Stakes: Kelly on the model's claim x Kelly fraction, capped at the policy's 2% per bet; 10,000 paths; $1,000 start; ruin = at or below $500; the policy kill switch trips at a 20% drawdown.
 
-### policy-like: the live policy without its early-season guard (3% edge floor, shrunk claims)
+### Template: policy-like: the live policy without its early-season guard (3% edge floor, shrunk claims)
 
-{'bets': 15, 'note': 'too few bets or games'}
+**Caution: only 15 settled bets, resampled with replacement, so these paths are indicative of stake size and drawdown depth, not of outcomes. Theta here is measured on the shrunk scale (the policy shrinks claims toward the market, so p_adj - p_market is small and theta is large in magnitude and very uncertain); it is not comparable with the other template's theta.**
+
+15 bets, mean decimal 2.41, mean claimed edge 1.4 points, 100% with a positive claimed edge. **theta = -5.06, standard error 2.67, 95% interval -10.12 to 0.45** over 161 games: the interval contains 0 (no skill) and 1 (exactly right).
+
+| theta scenario | Kelly | bets | median final | 5th to 95th pct | P(end below start) | P(ruin) | P(drawdown at least 20%) | median / 95th pct max drawdown |
+|---|---|---|---|---|---|---|---|---|
+| estimated from the live record | 0.25 | 200 | $971 | $932 to $1,013 | 88% | 0% | 0% | 4% / 7% |
+| estimated from the live record | 0.25 | 500 | $931 | $860 to $1,007 | 93% | 0% | 0% | 8% / 15% |
+| estimated from the live record | 0.5 | 200 | $943 | $868 to $1,025 | 88% | 0% | 0% | 8% / 14% |
+| estimated from the live record | 0.5 | 500 | $865 | $739 to $1,014 | 93% | 0% | 26% | 15% / 27% |
+| no skill (theta = 0, known) | 0.25 | 200 | $996 | $961 to $1,032 | 57% | 0% | 0% | 2% / 5% |
+| no skill (theta = 0, known) | 0.25 | 500 | $992 | $938 to $1,049 | 59% | 0% | 0% | 4% / 8% |
+| no skill (theta = 0, known) | 0.5 | 200 | $992 | $924 to $1,065 | 57% | 0% | 0% | 5% / 9% |
+| no skill (theta = 0, known) | 0.5 | 500 | $983 | $878 to $1,098 | 60% | 0% | 0% | 8% / 15% |
+| optimistic prior (theta ~ N(0.5, 0.3)) | 0.25 | 200 | $999 | $964 to $1,035 | 52% | 0% | 0% | 2% / 5% |
+| optimistic prior (theta ~ N(0.5, 0.3)) | 0.25 | 500 | $998 | $943 to $1,056 | 52% | 0% | 0% | 4% / 7% |
+| optimistic prior (theta ~ N(0.5, 0.3)) | 0.5 | 200 | $997 | $929 to $1,071 | 52% | 0% | 0% | 4% / 9% |
+| optimistic prior (theta ~ N(0.5, 0.3)) | 0.5 | 500 | $995 | $888 to $1,115 | 53% | 0% | 0% | 7% / 14% |
 
 ### Template: aggressive: any model pick, claim = unshrunk p_model
 
@@ -82,6 +99,7 @@ Reading:
 - With no skill every template loses roughly the margin; whether the 20% drawdown kill switch trips depends on stake size, which is why the two templates differ so much.
 - The "estimated" scenario is worse than no skill when the point estimate of theta is negative (the model's disagreements with the market lost money on average), with a standard error so large that the interval spans everything from harmful to perfect.
 - Only the optimistic prior, which the live record neither supports nor excludes, produces profitable paths.
+- The policy-like template shows the practical consequence of the policy's caution: because stakes are sized on claims shrunk toward the market, drawdowns stay shallow even under a negative theta; the 20% kill switch is a remote event at quarter Kelly and the risk that matters is the slow loss of the margin, not ruin.
 - Quarter Kelly (the policy) has shallower drawdowns than half Kelly in every row; nothing here argues for more aggressive staking.
 
 ## 5. Limits of this phase

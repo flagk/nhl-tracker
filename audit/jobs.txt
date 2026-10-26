@@ -1,1 +1,1 @@
-audit/scripts/p5_overfit.py
+scripts/pit_ingest.py probe
