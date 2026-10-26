@@ -5,5 +5,88 @@
   "assists": 50.0,
   "goals": 100.0
  },
- "selected_on_games_through": "2024-06-30"
+ "selected_on_games_through": "2024-06-30",
+ "grid_audit": {
+  "sog": {
+   "parameter": "shrink_k",
+   "grid": [
+    3.0,
+    6.0,
+    12.0,
+    25.0,
+    50.0,
+    100.0,
+    200.0,
+    400.0
+   ],
+   "chosen": 25.0,
+   "pinned_to_grid_edge": false
+  },
+  "points": {
+   "parameter": "shrink_k",
+   "grid": [
+    3.0,
+    6.0,
+    12.0,
+    25.0,
+    50.0,
+    100.0,
+    200.0,
+    400.0
+   ],
+   "chosen": 50.0,
+   "pinned_to_grid_edge": false
+  },
+  "assists": {
+   "parameter": "shrink_k",
+   "grid": [
+    3.0,
+    6.0,
+    12.0,
+    25.0,
+    50.0,
+    100.0,
+    200.0,
+    400.0
+   ],
+   "chosen": 50.0,
+   "pinned_to_grid_edge": false
+  },
+  "goals": {
+   "parameter": "shrink_k",
+   "grid": [
+    3.0,
+    6.0,
+    12.0,
+    25.0,
+    50.0,
+    100.0,
+    200.0,
+    400.0
+   ],
+   "chosen": 100.0,
+   "pinned_to_grid_edge": false
+  },
+  "saves": {
+   "parameter": "sv_prior",
+   "grid": [
+    200.0,
+    400.0,
+    800.0,
+    1600.0,
+    3200.0,
+    6400.0,
+    12800.0
+   ],
+   "chosen": 12800.0,
+   "pinned_to_grid_edge": true
+  }
+ },
+ "market_status": {
+  "sog": "tuned inside its grid",
+  "points": "tuned inside its grid",
+  "assists": "tuned inside its grid",
+  "goals": "tuned inside its grid",
+  "saves": "RESEARCH ONLY: not priced live (no verified settlement rule or live prices); tuned value on the grid edge"
+ }
 }

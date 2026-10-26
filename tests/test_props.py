@@ -335,7 +335,7 @@ def test_points_market_is_priced_strategies_and_settles_on_points():
     cfg = RiskConfig(bankroll=1000)
     q = pq(1, "Pts", 0.60)
     q.stat = "points"
-    rows = prop_shadow_bets([Gm(1, [q])], cfg, "r", "t", "d")
+    rows = prop_shadow_bets([Gm(1, [q])], cfg, "r", "t", "2026-10-08")      # the fixture used the placeholder date "d"; a pick now carries its real date, which settlement compares with the game's
     assert {r["strategy"] for r in rows} >= {"pts_edge", "pts_over_edge", "pts_over_control"} and not any(r["strategy"].startswith("sog_") for r in rows)
     assert all(r["market"] == "player_points" for r in rows)
     # settlement uses points, not shots

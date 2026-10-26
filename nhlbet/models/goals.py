@@ -5,8 +5,9 @@ need the *distribution* of the score. Here each team's regulation goals are mode
 overdispersion) with a mean from a regularised Poisson regression on the same leak-free as-of features.
 
 Settlement conventions (match North American sportsbooks):
-- **Totals** count regulation + overtime goals but NOT the shootout goal. A game tied after regulation adds one goal if it is decided
-  in overtime and none if it goes to a shootout.
+- **Totals**: a game tied after regulation adds one goal if it is decided in overtime. Whether a shootout adds one as well is the settlement rule in
+  config/policy.yaml (``nhlbet.settle.shootout_in_total``; the industry convention is yes, the repo assumed no before Phase 1). Team totals and
+  both-teams-to-score always exclude the shootout goal.
 - **Puck line** uses the official result: an overtime or shootout winner wins by exactly one goal.
 Regulation goals are therefore the official score minus the extra goal of an OT/SO winner; tied-after-regulation games have equal
 regulation goals. ``home_win`` from the production moneyline model splits those ties, so all three markets stay consistent.
@@ -48,7 +49,8 @@ def add_goal_targets(F: pd.DataFrame, games: pd.DataFrame) -> pd.DataFrame:
     g = games.drop_duplicates("game_id").set_index("game_id")
     sub = g.loc[g.index.intersection(F.index)]
     t = regulation_goals(sub)
-    t["tot"] = t.hr + t.ar + t.ot.astype(float)                          # regulation + overtime goals, shootout goal excluded (totals settlement)
+    from nhlbet.settle import shootout_in_total
+    t["tot"] = t.hr + t.ar + t.ot.astype(float) + (t.so.astype(float) if shootout_in_total() else 0.0)   # totals settlement (shootout goal per the policy's rule set)
     t["mar"] = sub.home_score.astype(float) - sub.away_score.astype(float)   # official margin (an OT/SO winner wins by one): puck-line settlement
     return F.join(t)
 
@@ -156,11 +158,16 @@ class ScoreDistribution:
     def p_home(self) -> float:
         return self.p_home_reg + self.p_tie * self.s_home_tie
 
-    def expected_total(self) -> float:
-        return float((self.w * (self.reg_total + np.where(self.reg_margin == 0, self.p_ot, 0.0))).sum())
+    def expected_total(self, so_in_total: bool | None = None) -> float:
+        """Expected game total under the shootout rule (default: the policy's): a tied game adds a goal in overtime, and in a shootout too when the book counts it."""
+        if so_in_total is None:
+            from nhlbet.settle import shootout_in_total
+            so_in_total = shootout_in_total()
+        p_extra = 1.0 if so_in_total else self.p_ot
+        return float((self.w * (self.reg_total + np.where(self.reg_margin == 0, p_extra, 0.0))).sum())
 
-    def total_probs(self, line: float) -> tuple[float, float, float]:
-        """(P(over), P(under), P(push)) for a total line, shootout goal excluded.
+    def total_probs(self, line: float, so_in_total: bool | None = None) -> tuple[float, float, float]:
+        """(P(over), P(under), P(push)) for a total line. ``so_in_total`` (default: the policy's rule set) says whether a shootout adds a goal to the total.
 
         Half-point lines cannot push. Whole-number lines have three outcomes (the stake is returned on a push). Quarter lines (x.25 / x.75) are two bets of
         half the stake on the adjacent lines, so the outcome probabilities are the average of the two legs (a half-win or half-loss is half a leg's win or loss,
@@ -168,20 +175,41 @@ class ScoreDistribution:
         """
         frac = round((float(line) * 4) % 4)
         if frac in (1, 3):
-            a, b = self.total_probs(line - 0.25), self.total_probs(line + 0.25)
+            a, b = self.total_probs(line - 0.25, so_in_total), self.total_probs(line + 0.25, so_in_total)
             return tuple((x + y) / 2.0 for x, y in zip(a, b))                  # type: ignore[return-value]
+        if so_in_total is None:
+            from nhlbet.settle import shootout_in_total
+            so_in_total = shootout_in_total()
+        p_extra = 1.0 if so_in_total else self.p_ot                       # tied games: +1 goal if decided in OT, and also in a shootout when the book counts it
         t = self.reg_total.astype(float)
         tied = self.reg_margin == 0
         over = under = push = 0.0
-        for add, pr in ((0.0, 1.0 - self.p_ot), (1.0, self.p_ot)):       # tied games: +1 goal only if decided in OT
+        for add, pr in ((0.0, 1.0 - p_extra), (1.0, p_extra)):
             tt = np.where(tied, t + add, t)
             wt = np.where(tied, self.w * pr, self.w if add == 0.0 else 0.0)
             over += float(wt[tt > line].sum()); under += float(wt[tt < line].sum()); push += float(wt[tt == line].sum())
         s = over + under + push
         return over / s, under / s, push / s
 
+    def total_pmf(self, n: int = 20, so_in_total: bool | None = None) -> np.ndarray:
+        """P(game total = k) for k = 0..n-1 (the last cell also holds any mass beyond), under the given shootout rule (default: the policy's). Sums to 1."""
+        if so_in_total is None:
+            from nhlbet.settle import shootout_in_total
+            so_in_total = shootout_in_total()
+        p_extra = 1.0 if so_in_total else self.p_ot
+        t = self.reg_total.astype(int)
+        tied = self.reg_margin == 0
+        pmf = np.zeros(n)
+        np.add.at(pmf, np.minimum(t, n - 1), np.where(tied, self.w * (1.0 - p_extra), self.w))
+        np.add.at(pmf, np.minimum(t + 1, n - 1), np.where(tied, self.w * p_extra, 0.0))
+        return pmf / pmf.sum()
+
     def spread_probs(self, home_point: float) -> tuple[float, float, float]:
         """(P(home covers), P(away covers), P(push)) where the home team gets ``home_point`` goals (-1.5 = favourite giving 1.5)."""
+        frac = round((float(home_point) * 4) % 4)
+        if frac in (1, 3):                                                   # quarter line: half the stake on each adjacent line
+            a, b = self.spread_probs(home_point - 0.25), self.spread_probs(home_point + 0.25)
+            return tuple((x + y) / 2.0 for x, y in zip(a, b))                  # type: ignore[return-value]
         m = self.reg_margin.astype(float)
         tied = self.reg_margin == 0
         cover = push = 0.0
@@ -255,8 +283,10 @@ def coherence_issues(d: "ScoreDistribution", tol: float = 1e-9) -> list[str]:
     cells = list(d._final_goal_cells())
     wsum = sum(w for w, _, _ in cells)
     mean_total = sum(w * (h + a) for w, h, a in cells) / wsum
-    if abs(mean_total - d.expected_total()) > 1e-6:
+    if abs(mean_total - d.expected_total(so_in_total=False)) > 1e-6:                 # team totals never count the shootout goal
         bad.append("team totals do not reproduce the game total's mean")
+    if abs(float((np.arange(40) * d.total_pmf(40)).sum()) - d.expected_total()) > 1e-6:      # the game total under the settlement rule in force
+        bad.append("the total's PMF does not reproduce its expected value")
     p_h0 = 1.0 - d.team_total_probs("home", 0.5)[0]
     p_a0 = 1.0 - d.team_total_probs("away", 0.5)[0]
     p_00 = sum(w for w, h, a in cells if h == 0 and a == 0) / wsum

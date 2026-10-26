@@ -85,10 +85,10 @@ def test_market_summary_separates_model_picks_from_controls_and_counts_distinct_
     paper = pd.DataFrame(rows)
     m = market_summary(paper)["totals"]
     assert m["picks"] == 40 and m["roi"] == pytest.approx((14 * 9 - 26 * 10) / 400) and m["roi_ci"][0] <= m["roi"] <= m["roi_ci"][1]
-    assert m["verdict"] in ("insufficient evidence (interval spans 0)", "credibly LOSING")
+    assert m["verdict"].startswith("insufficient evidence") or m["verdict"] == "credibly LOSING"      # 40 picks is below the policy minimum (100): the label now says so
     c = market_summary(paper, controls=True)["totals"]
     assert c["picks"] == 40 and c["roi"] == pytest.approx(-1.0)
-    assert market_summary(paper.head(10))["totals"]["verdict"].startswith("too few picks")
+    assert market_summary(paper.head(10))["totals"]["verdict"].startswith("insufficient evidence (n=")      # label now comes from the policy minimum (100), not a hard-coded 30
 
 
 def test_log_integrity_flags_rows_logged_after_puck_drop_and_duplicates(tmp_path):

@@ -19,24 +19,39 @@ from nhlbet.risk.kelly import kelly_fraction
 from nhlbet.risk.shrink import shrink_to_market
 
 
+def _pol(key: str, default):
+    from nhlbet.policy import policy_get
+    return policy_get("staking", key, default=default)
+
+
+def _checked_kelly() -> float:
+    """The policy's Kelly fraction, refusing a value above the policy's own ceiling."""
+    k, cap = float(_pol("kelly_fraction", 0.25)), float(_pol("kelly_fraction_max", 0.25))
+    if not 0 < k <= cap:
+        raise ValueError(f"config/policy.yaml: staking.kelly_fraction={k} must be in (0, kelly_fraction_max={cap}]")
+    return k
+
+
 @dataclass
 class RiskConfig:
+    """Every default comes from config/policy.yaml (``staking:``); explicit arguments override it (tests, what-if runs), the live pipeline uses the defaults."""
     bankroll: float = 1000.0
-    kelly_fraction: float = 0.25           # quarter Kelly
-    max_bet_pct: float = 0.02              # hard cap per bet (share of bankroll)
-    max_daily_exposure_pct: float = 0.05   # hard cap on total stakes per day
-    max_bets_per_day: int = 5
-    min_edge: float = 0.03                 # raw edge: model prob - no-vig market prob
-    min_edge_unconfirmed_goalie: float = 0.04
-    min_ev: float = 0.01                   # EV per $1 after shrinkage
-    min_prob: float = 0.40                 # minimum model win probability for the chosen side (no long-shot noise)
-    max_decimal: float = 4.0
-    max_disagreement: float = 0.12         # beyond this the model is presumed broken, not brilliant
-    trust_w0: float = 0.5
-    trust_d0: float = 0.06
-    min_stake: float = 1.0
-    allow_stale_odds: bool = False
-    min_games_played: int = 10             # early-season sample-size guard: skip if either team has played fewer games
+    kelly_fraction: float = field(default_factory=_checked_kelly)           # fraction of full Kelly
+    max_bet_pct: float = field(default_factory=lambda: float(_pol("max_bet_pct", 0.02)))
+    max_game_exposure_pct: float = field(default_factory=lambda: float(_pol("max_game_exposure_pct", 0.03)))     # all markets on one game together
+    max_daily_exposure_pct: float = field(default_factory=lambda: float(_pol("max_daily_exposure_pct", 0.05)))
+    max_bets_per_day: int = field(default_factory=lambda: int(_pol("max_bets_per_day", 5)))
+    min_edge: float = field(default_factory=lambda: float(_pol("min_edge", 0.03)))                  # raw edge: model prob - no-vig market prob
+    min_edge_unconfirmed_goalie: float = field(default_factory=lambda: float(_pol("min_edge_unconfirmed_goalie", 0.04)))
+    min_ev: float = field(default_factory=lambda: float(_pol("min_ev", 0.01)))                      # EV per $1 after shrinkage
+    min_prob: float = field(default_factory=lambda: float(_pol("min_prob", 0.40)))                  # minimum model win probability for the chosen side
+    max_decimal: float = field(default_factory=lambda: float(_pol("max_decimal", 4.0)))
+    max_disagreement: float = field(default_factory=lambda: float(_pol("max_disagreement", 0.12)))  # beyond this the model is presumed broken, not brilliant
+    trust_w0: float = field(default_factory=lambda: float(_pol("trust_w0", 0.5)))
+    trust_d0: float = field(default_factory=lambda: float(_pol("trust_d0", 0.06)))
+    min_stake: float = field(default_factory=lambda: float(_pol("min_stake", 1.0)))
+    allow_stale_odds: bool = field(default_factory=lambda: bool(_pol("allow_stale_odds", False)))
+    min_games_played: int = field(default_factory=lambda: int(_pol("min_games_played", 10)))        # early-season sample-size guard
 
 
 @dataclass
@@ -141,22 +156,18 @@ def recommend_game(game_id, home: str, away: str, quotes: Mapping[str, SideQuote
 
 
 def apply_portfolio_caps(recs: list[Recommendation], cfg: RiskConfig) -> list[Recommendation]:
-    """Enforce max bets/day (keep best EV) and total daily exposure (scale stakes down proportionally)."""
-    bets = sorted((r for r in recs if r.action == "BET"), key=lambda r: -(r.ev or 0))
-    for r in bets[cfg.max_bets_per_day:]:
-        r.action, r.stake, r.stake_pct = "NO_BET", 0.0, 0.0
-        r.reasons = [f"more than {cfg.max_bets_per_day} qualifying bets today; kept only the highest-EV ones"]
-    kept = [r for r in bets[:cfg.max_bets_per_day]]
-    total, cap = sum(r.stake for r in kept), cfg.bankroll * cfg.max_daily_exposure_pct
-    if total > cap > 0:
-        scale = cap / total
-        for r in kept:
-            r.stake = math.floor(r.stake * scale * 100) / 100                                   # round DOWN: never exceed the cap
-            r.stake_pct = r.stake / cfg.bankroll
-            r.reasons.append(f"Scaled by {scale:.2f} to respect the {cfg.max_daily_exposure_pct:.0%} daily exposure cap.")
-            if r.stake < cfg.min_stake:
-                r.action, r.stake, r.stake_pct = "NO_BET", 0.0, 0.0
-                r.reasons = ["stake fell below the minimum after the daily exposure cap"]
+    """Enforce max bets/day (keep best EV), the per-game cap (every market on a game counts together) and total daily exposure (stakes scaled down proportionally)."""
+    from nhlbet.risk.caps import apply_caps
+    bets = [r for r in recs if r.action == "BET"]
+    out = apply_caps([{"id": i, "game_id": r.game_id, "stake": r.stake, "ev": r.ev or 0.0} for i, r in enumerate(bets)], cfg.bankroll, cfg.max_bet_pct, cfg.max_game_exposure_pct,
+                     cfg.max_daily_exposure_pct, cfg.max_bets_per_day, cfg.min_stake)
+    for o, r in zip(out, bets):
+        if o["dropped"]:
+            r.action, r.stake, r.stake_pct = "NO_BET", 0.0, 0.0
+            r.reasons = [o["reason"]]
+        else:
+            r.stake, r.stake_pct = o["stake"], o["stake"] / cfg.bankroll
+            r.reasons += o["notes"]
     return recs
 
 

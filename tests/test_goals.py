@@ -37,7 +37,7 @@ def test_mirror_symmetry_and_favourite_covers_more():
     assert dist(3.6, 3.2).total_probs(6.5)[0] > dist(2.6, 2.4).total_probs(6.5)[0]
 
 
-def test_total_probs_match_a_direct_simulation():
+def test_total_probs_match_a_direct_simulation(so_excluded):
     """Independent check of the tie/overtime/shootout logic by sampling games from the same grid."""
     d = dist(3.0, 3.0, 0.5)
     rng = np.random.default_rng(0)

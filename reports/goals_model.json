@@ -1,1 +1,1 @@
-{"alpha": 10.0, "features_n": 63}
+{"alpha": 3.0, "features_n": 63, "grid": [0.3, 1.0, 3.0, 10.0, 30.0, 100.0, 300.0], "selected_on_games_through": "2024-06-30", "pinned_to_grid_edge": false}
