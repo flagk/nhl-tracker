@@ -157,3 +157,10 @@ betting_gate:
   min_mean_clv_pts: 0.5             # and the mean must be at least this many probability points
   max_drawdown_pct: 0.10            # current drawdown must be within half of the kill-switch limit
   require_system_ok: true           # no halt open
+
+# Audit archive (phase 2 of the audit). OFF by default: every capture costs a credit and the plan has 500 a month.
+audit:
+  odds_archive:
+    enabled: false
+    min_interval_min: 10               # never two archived captures closer than this
+    min_credits_remaining: 150         # never archive below this balance: the live pipeline needs the credits

@@ -1,1 +1,2 @@
 audit/scripts/p1_odds_timing.py
+scripts/pit_ingest.py probe

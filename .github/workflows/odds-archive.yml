@@ -1,0 +1,46 @@
+name: Odds archive (manual until the policy enables it)
+# One raw timestamped h2h snapshot per run into the private point-in-time store. The schedule is deliberately NOT enabled: at one credit per capture, a capture every
+# 10 minutes for an 8-hour evening is ~48 credits a day (~1,440 a month) against a 500-credit plan. Enable audit.odds_archive.enabled in config/policy.yaml and add a cron
+# only after the plan is upgraded. Without DVC_REMOTE_URL it refuses to run: raw per-book quotes must not reach the public repository.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: nhl-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e . "dvc[s3]"
+      - name: Require a private DVC remote
+        env:
+          DVC_REMOTE_URL: ${{ secrets.DVC_REMOTE_URL }}
+        run: |
+          if [ -z "$DVC_REMOTE_URL" ]; then echo "::error::DVC_REMOTE_URL is not set: refusing to archive raw quotes without a private store"; exit 1; fi
+          dvc remote add -f -d store "$DVC_REMOTE_URL"
+      - name: Capture
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: python scripts/odds_archive.py
+      - name: Push the objects, commit the manifest
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DVC_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_AWS_SECRET_ACCESS_KEY }}
+        run: |
+          dvc add audit/snapshots/objects
+          dvc push
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add audit/snapshots/manifest.jsonl audit/snapshots/objects.dvc audit/snapshots/.gitignore .dvc/config
+          if git diff --cached --quiet; then echo "nothing to commit"; else git commit -m "Odds archive $(date -u +%F-%H%M)" && git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push; fi

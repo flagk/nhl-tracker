@@ -100,6 +100,24 @@ class GoalieState:
     apps: list = field(default_factory=list)  # (day, season, sa, saves, ga, xg_faced)
 
 
+class LazyAdv:
+    """Advanced stats of a past game, resolved when read for the CURRENT decision date (point-in-time mode): ``resolver(game_id, team, day)`` returns the version of the
+    statistics known at that date's decision time. Behaves like the dict it replaces for the operations the builder uses, ``.get`` and ``[]``."""
+
+    def __init__(self, game_id, team, resolver, clock) -> None:
+        self.game_id, self.team, self.resolver, self.clock = game_id, team, resolver, clock
+        self._day, self._val = None, {}
+
+    def get(self, key, default=None):
+        if self._day != self.clock["day"]:                    # resolved once per decision date, not once per read
+            self._day, self._val = self.clock["day"], self.resolver(self.game_id, self.team, self.clock["day"])
+        return self._val.get(key, default)
+
+    def __getitem__(self, key):
+        self.get(key)
+        return self._val[key]
+
+
 def _ewm(vals: list[float], hl: float) -> float:
     a = np.asarray(vals, float)
     if a.size == 0:
@@ -138,8 +156,11 @@ class FeatureBuilder:
 
     # ---------------------------------------------------------------------------------------
     def build(self, tables: dict[str, pd.DataFrame], market: pd.DataFrame | None = None,
-              starter_override: dict | None = None) -> pd.DataFrame:
+              starter_override: dict | None = None, adv_asof=None) -> pd.DataFrame:
+        """``adv_asof``: optional point-in-time resolver ``(game_id, team, day) -> {stat: value}`` (``nhlbet.pit.asof.make_adv_asof``). When given, the advanced
+        statistics of past games are read in the version known at each decision date instead of from ``tables['team_game']``."""
         cfg = self.cfg
+        self._clock = {"day": 0}
         games = tables["games"].sort_values(["game_date", "game_id"]).reset_index(drop=True)
         if games.empty:
             return pd.DataFrame()
@@ -172,6 +193,7 @@ class FeatureBuilder:
 
         for day_ts, day_games in games.groupby("game_date", sort=True):
             day = day_ts.toordinal()
+            self._clock["day"] = day
             season = int(day_games.season.iloc[0])
             if season != cur_season:
                 if cur_season is not None:
@@ -190,8 +212,8 @@ class FeatureBuilder:
             for g in day_games.itertuples(index=False):
                 if g.home_score != g.home_score or g.home_score is None:
                     continue  # not played yet
-                self._update(g, day, season, teams, goalies, elo, snapshot, league, season_pts, adv_lookup,
-                             starter_of, skaters_of, appear, pending)
+                self._update(g, day, season, teams, goalies, elo, snapshot, league, season_pts,
+                             _AdvView(adv_lookup, adv_asof, self._clock), starter_of, skaters_of, appear, pending)
 
         out = pd.DataFrame(rows).set_index("game_id")
         if market is not None and len(market):
@@ -466,6 +488,18 @@ class FeatureBuilder:
             xg = r.xg_faced if r.xg_faced is not None and r.xg_faced == r.xg_faced else NAN
             goalies[r.player_id].apps.append((day, season, r.shots_against or 0, r.saves or 0, r.goals_against or 0, xg))
         elo.update(g.home, g.away, hs, as_, rh, ra)
+
+
+class _AdvView:
+    """``adv_lookup.get((game_id, team), {})`` in plain mode; a LazyAdv in point-in-time mode."""
+
+    def __init__(self, lookup, resolver, clock) -> None:
+        self.lookup, self.resolver, self.clock = lookup, resolver, clock
+
+    def get(self, key, default=None):
+        if self.resolver is None:
+            return self.lookup.get(key, default)
+        return LazyAdv(key[0], key[1], self.resolver, self.clock)
 
 
 GROUPS_FLAT = [b for bs in GROUPS.values() for b in bs]

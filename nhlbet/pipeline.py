@@ -211,6 +211,11 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
         if err:
             notes.append(f"data refresh failed ({err}); using cached data")
     load_confirmations(store)
+    try:                                   # every goalie confirmation with the time it was first seen (the table keeps only the latest per team and date)
+        from nhlbet.pit.goalie_log import append_events
+        append_events(store, Path(log_root) / "goalie_events" / "log.jsonl")
+    except Exception as e:
+        log.warning("goalie event log failed: %s", e)
     data_ok, data_msg = data_freshness(store, date, err if refresh else None)
     problems = validate_inputs(store)
     if problems:

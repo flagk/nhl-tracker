@@ -1,0 +1,54 @@
+name: Point-in-time ingestion
+# Archives raw NHL play-by-play, boxscore and shift-chart payloads as immutable timestamped snapshots (nhlbet/pit). Objects are pushed with DVC to a PRIVATE remote
+# (DVC docs: https://dvc.org/doc/command-reference/remote/add); the hash manifest audit/snapshots/manifest.jsonl is committed. Without the DVC_REMOTE_URL secret the job
+# FAILS CLOSED: nothing is committed, because a manifest without its objects would claim data that does not exist.
+# Cron: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule (UTC, best effort, may start late).
+on:
+  schedule:
+    - cron: "23 13 * * *"
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "how many past days of final games to fetch"
+        default: "3"
+
+concurrency:
+  group: pit-ingest
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e . "dvc[s3]"
+      - name: Require a private DVC remote
+        env:
+          DVC_REMOTE_URL: ${{ secrets.DVC_REMOTE_URL }}
+        run: |
+          if [ -z "$DVC_REMOTE_URL" ]; then echo "::error::DVC_REMOTE_URL is not set: refusing to ingest without a private store"; exit 1; fi
+          dvc remote add -f -d store "$DVC_REMOTE_URL"
+      - name: Probe the endpoints and fetch the final games
+        run: |
+          python scripts/pit_ingest.py probe || echo "::warning::an endpoint probe failed, see audit/data/endpoint_probe.json"
+          python scripts/pit_ingest.py games --days "${{ github.event.inputs.days || '3' }}"
+      - name: Verify, push the objects, commit the manifest
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DVC_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_AWS_SECRET_ACCESS_KEY }}
+        run: |
+          python scripts/pit_ingest.py verify
+          dvc add audit/snapshots/objects
+          dvc push
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add audit/snapshots/manifest.jsonl audit/snapshots/objects.dvc audit/snapshots/.gitignore audit/data/endpoint_probe.json .dvc/config
+          if git diff --cached --quiet; then echo "nothing to commit"; else git commit -m "PIT snapshots $(date -u +%F)" && git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push; fi
