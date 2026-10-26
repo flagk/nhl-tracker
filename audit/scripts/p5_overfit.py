@@ -63,7 +63,7 @@ def main() -> int:
     for tname, (bets, claim, live_claim) in templates.items():
         tmpl = pd.DataFrame({"decimal": bets["decimal"].astype(float), "p_market": bets["p_market"].astype(float), "p_model": bets[claim].astype(float)}).dropna()
         lv = live[live[live_claim].notna()] if live_claim in live else live
-        if len(lv) < 40 or len(tmpl) < 20:
+        if len(lv) < 40 or len(tmpl) < 10:
             res["templates"][tname] = {"bets": int(len(tmpl)), "note": "too few bets or games"}
             continue
         th = estimate_theta(lv[live_claim], lv.p_market, lv.home_win.astype(int), lv.date, B=2000)
