@@ -92,3 +92,21 @@ def test_labels_inside_a_walk_forward_test_block_never_change_that_blocks_predic
     alt = walk_forward(flipped, _zoo(feats), first, 28, min_train=100, inner_folds=3, n_jobs=1)
     ids = base.index[(base.game_date >= first) & (base.game_date < first + pd.Timedelta(days=28))]
     pd.testing.assert_frame_equal(base.loc[ids].drop(columns=["game_date", "y"]), alt.loc[ids].drop(columns=["game_date", "y"]), check_exact=False, rtol=0, atol=1e-9)
+
+
+def test_online_calibrator_never_sees_the_labels_of_the_block_it_calibrates():
+    """Found by mutation testing (M6 survived): fitting the calibrator on the block it is applied to was not caught by any test."""
+    from nhlbet.models.calibration import online_calibrate
+    rng = np.random.default_rng(0)
+    n = 1200
+    P = pd.DataFrame({"game_date": pd.date_range("2024-01-01", periods=n, freq="D"), "p": np.clip(rng.uniform(0.2, 0.8, n), 0.01, 0.99)})
+    P["y"] = (rng.uniform(size=n) < P.p).astype(int)
+    base = online_calibrate(P, "p", min_history=100, block_days=14)
+    dates = pd.to_datetime(P.game_date)
+    block = (dates - dates.min()).dt.days // 14
+    b = 40
+    flipped = P.copy()
+    flipped.loc[block == b, "y"] = 1 - flipped.loc[block == b, "y"]
+    alt = online_calibrate(flipped, "p", min_history=100, block_days=14)
+    pd.testing.assert_series_equal(base[block <= b], alt[block <= b], check_exact=False, atol=1e-12)           # this block and everything before it: untouched by its own labels
+    assert not np.allclose(base[block == b + 1].to_numpy(), alt[block == b + 1].to_numpy())                 # the NEXT block legitimately learns from them (the test can fail)

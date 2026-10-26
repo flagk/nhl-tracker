@@ -46,6 +46,7 @@ PEEK = ("        recs = ts.recs + ([Rec(day, season, is_home, opp, g.home, int(g
         " if g.home_score == g.home_score and g.home_score is not None else [])\n")
 
 MUTATIONS = {
+    "M0": ("(control)", "features/builder.py", "CONTROL: no leak introduced (must SURVIVE, otherwise the harness itself breaks the tests)", lambda src: src + "\n# control\n"),
     "M1": ("builder.py", "features/builder.py", "results of a date folded into the state before that date's features are emitted", fold_before_emit),
     "M2": ("builder.py", "features/builder.py", "a game's own result included in its rolling window", sub("        recs = ts.recs\n", PEEK)),
     "M3": ("builder.py", "features/builder.py", "default goalie mode switched to 'actual' (post-game starter identity)", sub('goalie_mode: str = "probable"', 'goalie_mode: str = "actual"')),
@@ -66,6 +67,9 @@ def run(mid: str, desc: str, rel: str, fn, keep: bool = False) -> dict:
     with tempfile.TemporaryDirectory() as d:
         pkg = Path(d) / "nhlbet"
         shutil.copytree(ROOT / "nhlbet", pkg, ignore=shutil.ignore_patterns("__pycache__"))
+        for extra in ("config", "reports", "state", "data/models", "data/logs"):         # modules locate these relative to the package: without them tests fail for the wrong reason
+            if (ROOT / extra).exists():
+                shutil.copytree(ROOT / extra, Path(d) / extra, ignore=shutil.ignore_patterns("__pycache__", "*.joblib"))
         f = pkg / rel
         before = f.read_text()
         after = fn(before)
@@ -75,14 +79,14 @@ def run(mid: str, desc: str, rel: str, fn, keep: bool = False) -> dict:
         # the package is installed in editable mode, and its import finder outranks PYTHONPATH: drop it so the tests import the mutated copy
         launcher = ("import sys; sys.meta_path = [f for f in sys.meta_path if 'editable' not in (getattr(f, '__name__', '') + type(f).__name__).lower()]; "
                     f"sys.path.insert(0, {d!r}); import nhlbet, pytest; assert nhlbet.__file__.startswith({d!r}), nhlbet.__file__; "
-                    f"sys.exit(pytest.main(['-q', '-x', '-p', 'no:cacheprovider', *{TESTS!r}]))")
+                    f"sys.exit(pytest.main(['-q', '-p', 'no:cacheprovider', *{TESTS!r}]))")
         env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
         p = subprocess.run([sys.executable, "-c", launcher], cwd=ROOT, env=env, capture_output=True, text=True)
         if "AssertionError" in p.stderr and "nhlbet/__init__" in p.stderr:
             return {"id": mid, "description": desc, "status": "INVALID", "detail": "tests did not import the mutated copy"}
-        failed = [ln for ln in p.stdout.splitlines() if ln.startswith(("FAILED", "ERROR"))]
+        failed = [ln.split(" - ")[0] for ln in p.stdout.splitlines() if ln.startswith(("FAILED", "ERROR"))]
         status = "KILLED" if p.returncode != 0 else "SURVIVED"
-        return {"id": mid, "description": desc, "status": status, "killed_by": failed[:3], "pytest_tail": p.stdout.strip().splitlines()[-1] if p.stdout.strip() else ""}
+        return {"id": mid, "description": desc, "status": status, "n_failing_tests": len(failed), "killed_by": failed[:6], "pytest_tail": p.stdout.strip().splitlines()[-1] if p.stdout.strip() else ""}
 
 
 def main() -> int:
@@ -98,11 +102,15 @@ def main() -> int:
         r = run(mid, desc, rel, fn)
         print(mid, r["status"], "-", desc, flush=True)
         res.append(r)
-    out = {"mutants": res, "killed": sum(r["status"] == "KILLED" for r in res), "survived": [r["id"] for r in res if r["status"] == "SURVIVED"], "invalid": [r["id"] for r in res if r["status"] == "INVALID"], "total": len(res)}
+    control = next((r for r in res if r["id"] == "M0"), None)
+    if control is not None and control["status"] != "SURVIVED":
+        print("HARNESS BROKEN: the unmutated control fails the tests", control)
+        res = [dict(r, status="INVALID" if r["id"] != "M0" else r["status"]) for r in res]
+    out = {"mutants": res, "killed": sum(r["status"] == "KILLED" for r in res if r["id"] != "M0"), "control": (control or {}).get("status"), "survived": [r["id"] for r in res if r["status"] == "SURVIVED" and r["id"] != "M0"], "invalid": [r["id"] for r in res if r["status"] == "INVALID"], "total": len([r for r in res if r["id"] != "M0"])}
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(out, indent=1))
     print(json.dumps({k: v for k, v in out.items() if k != "mutants"}))
-    return 1 if out["survived"] or out["invalid"] else 0
+    return 1 if out["survived"] or out["invalid"] or out["control"] != "SURVIVED" else 0
 
 
 if __name__ == "__main__":

@@ -1,124 +1,162 @@
 {
  "mutants": [
   {
+   "id": "M0",
+   "description": "CONTROL: no leak introduced (must SURVIVE, otherwise the harness itself breaks the tests)",
+   "status": "SURVIVED",
+   "n_failing_tests": 0,
+   "killed_by": [],
+   "pytest_tail": "92 passed in 66.10s (0:01:06)"
+  },
+  {
    "id": "M1",
    "description": "results of a date folded into the state before that date's features are emitted",
    "status": "KILLED",
+   "n_failing_tests": 9,
    "killed_by": [
-    "FAILED tests/test_no_leakage.py::test_future_corruption_never_changes_earlier_or_same_day_features[2023-11-15]"
+    "FAILED tests/test_no_leakage.py::test_future_corruption_never_changes_earlier_or_same_day_features[2023-11-15]",
+    "FAILED tests/test_no_leakage.py::test_future_corruption_never_changes_earlier_or_same_day_features[2024-02-20]",
+    "FAILED tests/test_no_leakage.py::test_same_day_results_do_not_leak",
+    "FAILED tests/test_no_leakage.py::test_actual_goalie_mode_uses_identity_not_tonights_stats",
+    "FAILED tests/test_no_leakage.py::test_default_mode_ignores_tonights_starter_identity",
+    "FAILED tests/test_audit_leakage.py::test_clean_pipeline_raises_no_alarm"
    ],
-   "pytest_tail": "1 failed in 2.81s"
+   "pytest_tail": "9 failed, 83 passed in 74.27s (0:01:14)"
   },
   {
    "id": "M2",
    "description": "a game's own result included in its rolling window",
    "status": "KILLED",
+   "n_failing_tests": 6,
    "killed_by": [
-    "FAILED tests/test_no_leakage.py::test_future_corruption_never_changes_earlier_or_same_day_features[2023-11-15]"
+    "FAILED tests/test_no_leakage.py::test_future_corruption_never_changes_earlier_or_same_day_features[2023-11-15]",
+    "FAILED tests/test_no_leakage.py::test_future_corruption_never_changes_earlier_or_same_day_features[2024-02-20]",
+    "FAILED tests/test_no_leakage.py::test_same_day_results_do_not_leak",
+    "FAILED tests/test_audit_leakage.py::test_clean_pipeline_raises_no_alarm",
+    "FAILED tests/test_audit_leakage.py::test_no_single_detector_is_sufficient",
+    "FAILED tests/test_audit_leakage.py::test_labels_inside_a_walk_forward_test_block_never_change_that_blocks_predictions"
    ],
-   "pytest_tail": "1 failed in 2.41s"
+   "pytest_tail": "6 failed, 86 passed in 64.23s (0:01:04)"
   },
   {
    "id": "M3",
    "description": "default goalie mode switched to 'actual' (post-game starter identity)",
    "status": "KILLED",
+   "n_failing_tests": 2,
    "killed_by": [
-    "FAILED tests/test_no_leakage.py::test_default_mode_ignores_tonights_starter_identity"
+    "FAILED tests/test_no_leakage.py::test_default_mode_ignores_tonights_starter_identity",
+    "FAILED tests/test_audit_leakage.py::test_default_configuration_is_morning_safe"
    ],
-   "pytest_tail": "1 failed, 8 passed in 10.60s"
+   "pytest_tail": "2 failed, 90 passed in 64.55s (0:01:04)"
   },
   {
    "id": "M4",
    "description": "market features use snapshots after the decision time (closing line leaks in)",
    "status": "KILLED",
+   "n_failing_tests": 1,
    "killed_by": [
-    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+    "FAILED tests/test_audit_leakage.py::test_market_features_ignore_snapshots_after_the_decision_time"
    ],
-   "pytest_tail": "1 failed, 14 passed in 20.64s"
+   "pytest_tail": "1 failed, 91 passed in 63.90s (0:01:03)"
   },
   {
    "id": "M5",
    "description": "walk-forward training window includes the test block",
    "status": "KILLED",
+   "n_failing_tests": 2,
    "killed_by": [
-    "FAILED tests/test_validity.py::test_predictions_for_games_up_to_D_do_not_change_when_later_data_is_added"
+    "FAILED tests/test_validity.py::test_predictions_for_games_up_to_D_do_not_change_when_later_data_is_added",
+    "FAILED tests/test_audit_leakage.py::test_labels_inside_a_walk_forward_test_block_never_change_that_blocks_predictions"
    ],
-   "pytest_tail": "1 failed, 11 passed in 16.50s"
+   "pytest_tail": "2 failed, 90 passed in 66.59s (0:01:06)"
   },
   {
    "id": "M6",
    "description": "online calibrator fitted on the block it is applied to",
    "status": "KILLED",
+   "n_failing_tests": 1,
    "killed_by": [
-    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+    "FAILED tests/test_audit_leakage.py::test_online_calibrator_never_sees_the_labels_of_the_block_it_calibrates"
    ],
-   "pytest_tail": "1 failed, 14 passed in 20.38s"
+   "pytest_tail": "1 failed, 92 passed in 65.91s (0:01:05)",
+   "first_run": "SURVIVED: no test failed. Added tests/test_audit_leakage.py::test_online_calibrator_never_sees_the_labels_of_the_block_it_calibrates"
   },
   {
    "id": "M7",
    "description": "availability guard disabled",
    "status": "KILLED",
+   "n_failing_tests": 2,
    "killed_by": [
-    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+    "FAILED tests/test_validity.py::test_a_planted_outcome_feature_is_caught_before_any_model_is_fit",
+    "FAILED tests/test_validity.py::test_the_guard_runs_inside_every_model_fit"
    ],
-   "pytest_tail": "1 failed, 14 passed in 21.16s"
+   "pytest_tail": "2 failed, 90 passed in 64.45s (0:01:04)"
   },
   {
    "id": "M8",
    "description": "outcome shuffle is a no-op (the null world is not null)",
    "status": "KILLED",
+   "n_failing_tests": 1,
    "killed_by": [
-    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+    "FAILED tests/test_validity.py::test_shuffling_outcomes_within_season_removes_skill_and_the_pipeline_notices"
    ],
-   "pytest_tail": "1 failed, 14 passed in 21.55s"
+   "pytest_tail": "1 failed, 92 passed in 66.06s (0:01:06)"
   },
   {
    "id": "M9",
    "description": "goalie confirmations ignore the decision time",
    "status": "KILLED",
+   "n_failing_tests": 1,
    "killed_by": [
-    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+    "FAILED tests/test_data_integrity.py::test_a_goalie_confirmation_captured_after_the_decision_time_is_ignored"
    ],
-   "pytest_tail": "1 failed, 14 passed in 20.43s"
+   "pytest_tail": "1 failed, 92 passed in 66.93s (0:01:06)"
   },
   {
    "id": "M10",
    "description": "point-in-time resolver ignores knowledge time",
    "status": "KILLED",
+   "n_failing_tests": 2,
    "killed_by": [
-    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+    "FAILED tests/test_pit.py::test_asof_resolver_hides_later_versions_and_unknown_games",
+    "FAILED tests/test_pit.py::test_a_late_correction_changes_only_decisions_after_it_was_fetched"
    ],
-   "pytest_tail": "1 failed, 14 passed in 37.54s"
+   "pytest_tail": "2 failed, 91 passed in 66.23s (0:01:06)"
   },
   {
    "id": "M11",
    "description": "snapshot as_of returns versions fetched after the decision time",
    "status": "KILLED",
+   "n_failing_tests": 1,
    "killed_by": [
-    "FAILED tests/test_validity.py::test_selection_and_tuning_cutoffs_precede_the_holdout"
+    "FAILED tests/test_pit.py::test_snapshots_are_immutable_versioned_and_verifiable"
    ],
-   "pytest_tail": "1 failed, 14 passed in 35.47s"
+   "pytest_tail": "1 failed, 92 passed in 69.11s (0:01:09)"
   },
   {
    "id": "M12",
    "description": "walk-forward row order left to the input order (unstable ties)",
    "status": "KILLED",
+   "n_failing_tests": 1,
    "killed_by": [
     "FAILED tests/test_validity.py::test_predictions_for_games_up_to_D_do_not_change_when_later_data_is_added"
    ],
-   "pytest_tail": "1 failed, 11 passed in 23.78s"
+   "pytest_tail": "1 failed, 92 passed in 68.18s (0:01:08)"
   },
   {
    "id": "M13",
    "description": "league goalie-start counters updated with the current game before it is emitted",
    "status": "KILLED",
+   "n_failing_tests": 2,
    "killed_by": [
-    "FAILED tests/test_no_leakage.py::test_default_mode_ignores_tonights_starter_identity"
+    "FAILED tests/test_no_leakage.py::test_default_mode_ignores_tonights_starter_identity",
+    "FAILED tests/test_audit_leakage.py::test_changing_the_games_own_starter_does_not_move_features_in_default_mode_but_does_in_actual_mode"
    ],
-   "pytest_tail": "1 failed, 8 passed in 11.36s"
+   "pytest_tail": "2 failed, 91 passed in 66.05s (0:01:06)"
   }
  ],
  "killed": 13,
+ "control": "SURVIVED",
  "survived": [],
  "invalid": [],
  "total": 13

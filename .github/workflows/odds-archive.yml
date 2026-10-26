@@ -28,7 +28,7 @@ jobs:
           DVC_REMOTE_URL: ${{ secrets.DVC_REMOTE_URL }}
         run: |
           if [ -z "$DVC_REMOTE_URL" ]; then echo "::error::DVC_REMOTE_URL is not set: refusing to archive raw quotes without a private store"; exit 1; fi
-          dvc remote add -f -d store "$DVC_REMOTE_URL"
+          dvc remote add --local -f -d store "$DVC_REMOTE_URL"   # --local keeps the private URL in the git-ignored .dvc/config.local
       - name: Capture
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
@@ -42,5 +42,5 @@ jobs:
           dvc push
           git config user.name "nhl-model-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add audit/snapshots/manifest.jsonl audit/snapshots/objects.dvc audit/snapshots/.gitignore .dvc/config
+          git add audit/snapshots/manifest.jsonl audit/snapshots/objects.dvc audit/snapshots/.gitignore
           if git diff --cached --quiet; then echo "nothing to commit"; else git commit -m "Odds archive $(date -u +%F-%H%M)" && git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push; fi
