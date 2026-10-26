@@ -1,0 +1,7 @@
+{
+ "source": "data/logs (committed, public-safe)",
+ "recommendation_rows": 387,
+ "consensus_rows": 2467,
+ "games_rows": 0,
+ "note": "no game start times in data/nhl.db here (the full database exists only in the Actions cache): run via the audit-realdata workflow"
+}

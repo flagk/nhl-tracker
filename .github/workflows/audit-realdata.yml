@@ -1,0 +1,58 @@
+name: Audit real-data jobs
+# Runs the audit scripts that need the real database (it exists only in the Actions cache, and api-web.nhle.com is not reachable from the authoring sandbox).
+# Triggered by pushing a change to ci/audit_trigger.txt on the audit branch, or manually. Commits only audit/data and audit/results back to the branch it ran on.
+# Docs: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#push
+on:
+  push:
+    branches: [audit]
+    paths: ["ci/audit_trigger.txt"]
+  workflow_dispatch:
+
+concurrency:
+  group: audit-realdata
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore the database cache (created by the daily job on the default branch)
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/nhl.db
+            data/cache
+          key: nhl-data-${{ github.run_id }}
+          restore-keys: nhl-data-
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e .
+      - name: Run the audit jobs listed in audit/jobs.txt (one script per line)
+        run: |
+          mkdir -p audit/results
+          rc=0
+          while read -r job; do
+            [ -z "$job" ] && continue
+            echo "::group::$job"
+            python $job || { echo "::error::$job failed"; rc=1; }
+            echo "::endgroup::"
+          done < audit/jobs.txt
+          exit $rc
+        continue-on-error: true
+        id: jobs
+      - name: Commit the results
+        run: |
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add audit/data audit/results
+          if git diff --cached --quiet; then echo "nothing to commit"; else git commit -m "Audit real-data results" && git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push; fi
+      - name: Fail if a job failed
+        if: steps.jobs.outcome == 'failure'
+        run: exit 1
