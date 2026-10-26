@@ -57,7 +57,18 @@ Summary of knowledge times:
 | "Closing" price | the last consensus capture at or before puck drop. It is a true close only if a capture landed in the final 25 minutes; `gate.py --kind close` tries for one per start wave (about 1 to 2 captures per wave), and GitHub cron has been 3 to 6 hours late | `odds/clv.py`, `nhlbet/gate.py` (`CLOSE_WINDOW_MIN = 25`) |
 | Open | the first capture seen, not the bookmakers' opening line | `features/market.py` |
 
-Quantification of how close the "close" really is, and how far decision prices are from puck drop, is produced by `audit/scripts/p1_odds_timing.py` on the real database (job in `audit/jobs.txt`, results in `audit/data/odds_timing.json` after the workflow runs). Until that file exists, the claim "the close is a true close" is **unverified**; the CLV numbers in earlier reports inherit that uncertainty.
+Measured on the real database by `audit/scripts/p1_odds_timing.py` (GitHub Actions run, result `audit/data/odds_timing.json`; 387 logged recommendations, 146 games with captures):
+
+| Quantity (minutes before puck drop) | p5 | p25 | median | p75 | p95 |
+|---|---|---|---|---|---|
+| Decision time, morning runs (n=197) | 200 | 476 | **656** | 716 | 867 |
+| Decision time, late runs (n=190) | 96 | 177 | **238** | 388 | 627 |
+| Last capture before start (the "close") | 5.8 | 10.8 | **13.2** | 23.6 | 658 |
+| Captures per game | 5 | 9 | 13 | 19 | 42 |
+
+Findings:
+1. **Decisions are made 4 to 11 hours before puck drop** (median), not near it. Closing-line value therefore measures how far the market moves over the last several hours; it is the right test for an early-price edge, but a model decision at a late run is not comparable with a morning one.
+2. **The "close" is a true close for about half the games.** 48.6% of games have no capture in their final 15 minutes, and **16.4% have a last capture more than 60 minutes before the start**, where the "close" is really a mid-afternoon price. CLV for those games understates the market's final move; the sign of the bias is unknown. Every CLV number reported so far (including the +0.04 points moneyline figure) mixes true closes with stale ones. Phase 4 therefore reports CLV with and without the games whose last capture is older than 15 minutes.
 
 ## 5. Every place a future-leaking value could enter
 
