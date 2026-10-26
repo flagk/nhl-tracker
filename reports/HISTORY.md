@@ -14,7 +14,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
-| 2026-10-26 | 3 | 1 | - | - | - | 1 | [report](daily/2026-10-26-morning.md) · [page](../site/archive/2026-10-26.html) |
+| 2026-10-26 | 3 | 0 | - | - | - | - | [report](daily/2026-10-26-late.md) · [page](../site/archive/2026-10-26.html) |
 | 2026-10-25 | 5 | 1 | $2.34 | $-2.34 | -100.0% | - | [report](daily/2026-10-25-late.md) · [page](../site/archive/2026-10-25.html) |
 | 2026-10-24 | 12 | 0 | - | - | - | - | [report](daily/2026-10-24-late.md) · [page](../site/archive/2026-10-24.html) |
 | 2026-10-23 | 2 | 0 | - | - | - | - | [report](daily/2026-10-23-late.md) · [page](../site/archive/2026-10-23.html) |
@@ -46,7 +46,6 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Game | Pick | Price | Stake | Edge | Result | Profit | CLV |
 |---|---|---|---|---|---|---|---|---|
-| 2026-10-26 | TOR @ CGY | CGY | 2.36 | $3.12 | +9.8% | pending | - | - |
 | 2026-10-25 | MIN @ VAN | VAN | 2.71 | $2.34 | +5.1% | lost | $-2.34 | -4.4% |
 
 ---
