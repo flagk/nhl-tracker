@@ -1,21 +1,103 @@
 {
- "probed_at": "2026-10-26T02:17:25+00:00",
+ "probed_at": "2026-10-26T03:24:37+00:00",
  "endpoints": {
   "schedule": {
-   "url": "https://api-web.nhle.com/v1/schedule/today",
+   "url": "https://api-web.nhle.com/v1/schedule/2026-10-25",
    "status": 200,
    "top_level_keys": [
     "gameWeek",
     "nextStartDate",
     "numberOfGames",
+    "oddsPartners",
     "playoffEndDate",
     "preSeasonStartDate",
     "previousStartDate",
     "regularSeasonEndDate",
     "regularSeasonStartDate"
    ]
+  },
+  "pbp": {
+   "url": "https://api-web.nhle.com/v1/gamecenter/2026020183/play-by-play",
+   "status": 200,
+   "top_level_keys": [
+    "awayTeam",
+    "clock",
+    "displayPeriod",
+    "easternUTCOffset",
+    "gameDate",
+    "gameOutcome",
+    "gameScheduleState",
+    "gameState",
+    "gameType",
+    "homeTeam",
+    "id",
+    "limitedScoring",
+    "maxPeriods",
+    "otInUse",
+    "periodDescriptor",
+    "plays",
+    "regPeriods",
+    "rosterSpots",
+    "season",
+    "shootoutInUse",
+    "startTimeUTC",
+    "summary",
+    "tvBroadcasts",
+    "venue",
+    "venueLocation",
+    "venueUTCOffset"
+   ],
+   "has_required_keys": true,
+   "required": [
+    "plays",
+    "homeTeam",
+    "awayTeam"
+   ]
+  },
+  "boxscore": {
+   "url": "https://api-web.nhle.com/v1/gamecenter/2026020183/boxscore",
+   "status": 200,
+   "top_level_keys": [
+    "awayTeam",
+    "clock",
+    "easternUTCOffset",
+    "gameDate",
+    "gameOutcome",
+    "gameScheduleState",
+    "gameState",
+    "gameType",
+    "homeTeam",
+    "id",
+    "limitedScoring",
+    "periodDescriptor",
+    "playerByGameStats",
+    "regPeriods",
+    "season",
+    "startTimeUTC",
+    "tvBroadcasts",
+    "venue",
+    "venueLocation",
+    "venueUTCOffset"
+   ],
+   "has_required_keys": true,
+   "required": [
+    "playerByGameStats",
+    "homeTeam",
+    "awayTeam"
+   ]
+  },
+  "shifts": {
+   "url": "https://api.nhle.com/stats/rest/en/shiftcharts?cayenneExp=gameId=2026020183",
+   "status": 200,
+   "top_level_keys": [
+    "data",
+    "total"
+   ],
+   "has_required_keys": true,
+   "required": [
+    "data"
+   ]
   }
  },
- "game_id": null,
- "note": "no final game found to probe"
+ "game_id": 2026020183
 }
