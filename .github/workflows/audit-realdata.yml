@@ -21,6 +21,10 @@ jobs:
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check out the default branch beside this one (the daily job commits the logs there)
+        run: git worktree add ../main-logs origin/main
       - name: Restore the database cache (created by the daily job on the default branch)
         uses: actions/cache/restore@v4
         with:

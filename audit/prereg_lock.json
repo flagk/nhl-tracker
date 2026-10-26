@@ -1,0 +1,17 @@
+{
+ "locked_at": "2026-10-26T03:15:00+00:00",
+ "preregistration_sha256": "a09dc641ead3e12be57ad32b96c886dbf61af84b1c6dcb388c17191d3f4aa4cd",
+ "parent_commit": "0380584d1635cfb7106864f2d33049776d32fff1",
+ "frozen_paths_sha256": {
+  "nhlbet/features": "72d7d4ba30a99a764e9d8bf3711474b57d201fed1554a8fecb0507429f4daee5",
+  "nhlbet/models": "68a880ae7d90dfd7fa11134c98b754e9bfdc008aab05aefc30955426756d9e8a",
+  "nhlbet/odds": "62bc05191d477051ff6e6f5dd25c02079f1770332315ec0e672b07892a326545",
+  "nhlbet/risk": "61c9c9c19efb1d7afd687ca2eaa954cdbee3dc1907a604afc38aad83de950388",
+  "nhlbet/train.py": "6f0a2266a923c788a3d18b7f51b1d79dadec8d77e65216388b6a2a6c65b96533",
+  "config/policy.yaml#staking,evaluation,settlement,risk": "c7e9c474f3435d0ce4630b8945211e55f7625534ba14c01f2b73a888b196a3b8"
+ },
+ "trigger": {
+  "qualifying_games": 1312,
+  "or_date": "2027-06-30"
+ }
+}

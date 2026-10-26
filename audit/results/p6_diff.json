@@ -1,0 +1,47 @@
+{
+ "devig": {
+  "proportional": {
+   "cases": 3000,
+   "max_abs_diff": 0.0,
+   "mismatches_over_1e-7": 0
+  },
+  "power": {
+   "cases": 3000,
+   "max_abs_diff": 1.2456702336294256e-13,
+   "mismatches_over_1e-7": 0
+  },
+  "shin": {
+   "cases": 3000,
+   "max_abs_diff": 0.0,
+   "mismatches_over_1e-7": 0
+  }
+ },
+ "elo": {
+  "games": 2987,
+  "max_abs_diff": 0.0,
+  "mean_abs_diff": 0.0,
+  "games_differing_over_1e-9": 0,
+  "first_difference": null
+ },
+ "decisions": {
+  "slates": 1500,
+  "games": 8007,
+  "bets_by_our_code": 865,
+  "disagreements_by_kind": {
+   "action": 0,
+   "side": 0,
+   "stake": 0,
+   "odds": 0
+  },
+  "games_with_any_disagreement": 0,
+  "examples": []
+ },
+ "positive_control": {
+  "description": "one constant in a copy of the reimplementation changed (min_edge 0.03 -> 0.031)",
+  "games": 8007,
+  "games_with_disagreement": 17,
+  "kinds": {
+   "action": 17
+  }
+ }
+}
