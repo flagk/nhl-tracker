@@ -2,6 +2,63 @@
  "source": "data/logs (committed, public-safe)",
  "recommendation_rows": 387,
  "consensus_rows": 2467,
- "games_rows": 0,
- "note": "no game start times in data/nhl.db here (the full database exists only in the Actions cache): run via the audit-realdata workflow"
+ "games_rows": 11859,
+ "decision_lead_minutes_before_start_all_runs": {
+  "n": 387,
+  "p5": 108.9,
+  "p25": 227.7,
+  "p50": 460.9,
+  "p75": 657.4,
+  "p95": 835.6,
+  "max": 1256.9
+ },
+ "decision_lead_by_run_type": {
+  "late": {
+   "n": 190,
+   "p5": 95.8,
+   "p25": 176.9,
+   "p50": 237.6,
+   "p75": 387.5,
+   "p95": 626.5,
+   "max": 748.6
+  },
+  "morning": {
+   "n": 197,
+   "p5": 200.4,
+   "p25": 476.0,
+   "p50": 655.9,
+   "p75": 715.9,
+   "p95": 866.9,
+   "max": 1256.9
+  }
+ },
+ "captures_per_game": {
+  "n": 146,
+  "p5": 5.0,
+  "p25": 9.2,
+  "p50": 13.0,
+  "p75": 19.0,
+  "p95": 42.0,
+  "max": 100.0
+ },
+ "last_capture_before_start_minutes": {
+  "n": 146,
+  "p5": 5.8,
+  "p25": 10.8,
+  "p50": 13.2,
+  "p75": 23.6,
+  "p95": 657.7,
+  "max": 867.7
+ },
+ "first_capture_before_start_minutes": {
+  "n": 146,
+  "p5": 1385.7,
+  "p25": 1616.0,
+  "p50": 1721.0,
+  "p75": 1882.0,
+  "p95": 6275.1,
+  "max": 14795.1
+ },
+ "share_games_whose_last_capture_is_over_60_min_before_start": 0.164,
+ "share_games_whose_last_capture_is_over_15_min_before_start": 0.486
 }
