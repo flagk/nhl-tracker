@@ -249,7 +249,14 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     state_path = repo_root / "state" / "system_state.json"
     ops = ops_state.load_state(state_path)
     scheduled = int(store.df("SELECT COUNT(*) AS n FROM games WHERE game_date = ? AND game_type IN (2, 3)", [date]).n.iloc[0])
-    checks, pol_sha = ops_gate.pre_checks(store, date, err if refresh else None, odds_meta, odds_meta.get("remaining"), scheduled, perf, repo_root, ops)
+    from nhlbet.ops import rolling as ops_rolling
+    from nhlbet.report.betlog import resolved as _resolved
+    res_df = _resolved(store)
+    checks, pol_sha = ops_gate.pre_checks(store, date, err if refresh else None, odds_meta, odds_meta.get("remaining"), scheduled, perf, repo_root, ops, resolved_df=res_df)
+    try:                                               # the decay trackers: rolling CLV, calibration and gain over the market, kept for the page and the weekly digest
+        ops_rolling.save(ops_rolling.compute(res_df, now), repo_root / "state" / "rolling_metrics.json")
+    except Exception as e:
+        log.warning("rolling metrics failed: %s", e)
     ops, ops_events = ops_gate.apply(ops, checks, pol_sha)
     betting = _betting_status(store, perf, ops, date, now or datetime.now(timezone.utc))
     ops = betting.pop("_state")
@@ -313,7 +320,10 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
         ops, more = ops_gate.apply(ops, checks + [ops_gate.failed("log_integrity", "hard", f"ledger append failed: {e}", "Do not edit the logs; restore data/logs from the log-backup branch.")], pol_sha)
         ops_events += more
     ops_state.save_state(ops, state_path)
-    if not ops_state.can_publish(ops):     # liveness ("ok") pings come from the always-on heartbeat job; a halt reports /fail so the external service alerts at once
+    gates_url = os.environ.get("HC_GATES_PING_URL", "").strip()
+    if gates_url:                          # the dead-man's switch for the GATES: a success ping only when every gate passed, /fail otherwise; silence means the run itself died
+        ops_notify.ping("ok" if ops_state.can_publish(ops) else "fail", url=gates_url)
+    elif not ops_state.can_publish(ops):   # without a separate gates check, a halt still reports /fail on the shared check (liveness pings come from the heartbeat job)
         ops_notify.ping("fail")
     try:                                   # BI datasets (Power BI / Excel); context columns come from the as-of features
         from nhlbet.data.loaders import load_tables

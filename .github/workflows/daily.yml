@@ -77,7 +77,7 @@ jobs:
 
       - name: Publish gate (leakage, settlement, count-model and staking tests must pass before anything is published)
         if: steps.gate_and_type.outputs.run == 'true'
-        run: python -m pytest -q -x tests/test_no_leakage.py tests/test_audit_phase1.py tests/test_counts.py tests/test_validation.py tests/test_gate.py tests/test_risk.py
+        run: python -m pytest -q -x tests/test_no_leakage.py tests/test_audit_phase1.py tests/test_counts.py tests/test_validation.py tests/test_gate.py tests/test_risk.py tests/test_audit_leakage.py tests/test_ops_schemas.py tests/test_audit_reimpl.py
 
       - name: Detect repository visibility (public repos publish only public-safe outputs)
         if: steps.gate_and_type.outputs.run == 'true'
@@ -93,7 +93,8 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}      # optional: without it odds are disabled and every game is "no bet"
           BANKROLL: ${{ vars.BANKROLL || '1000' }}
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}            # push alerts for halts (https://docs.ntfy.sh/publish/); without it alerts are only logged
-          HC_PING_URL: ${{ secrets.HC_PING_URL }}          # Healthchecks.io: a halt pings /fail (https://healthchecks.io/docs/http_api/)
+          HC_PING_URL: ${{ secrets.HC_PING_URL }}          # Healthchecks.io heartbeat check (a halt without a gates check pings /fail here) (https://healthchecks.io/docs/http_api/)
+          HC_GATES_PING_URL: ${{ secrets.HC_GATES_PING_URL }}   # second check: pinged OK only when every gate passed, /fail otherwise; period 2 days, grace 12 h; pause it in the off-season
           POLICY_OWNER_LOGINS: ${{ vars.POLICY_OWNER_LOGINS }}      # who may change config/policy.yaml; read from repo variables, never from files
           POLICY_OWNER_EMAILS: ${{ vars.POLICY_OWNER_EMAILS }}
           GITHUB_TOKEN: ${{ github.token }}                # lets the policy guard ask the commits API who changed the policy file

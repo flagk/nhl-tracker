@@ -52,3 +52,22 @@ def disagreement_check(p_model, p_market) -> tuple[CheckResult, list[str]]:
     if d > halt:
         return failed("model_market_disagreement", "soft", f"mean |model - market| = {d:.1f} points over {len(a)} games exceeds the {halt:.0f}-point halt limit", "Likely a model or odds-parsing error: inspect the latest picks against the market; the halt clears after healthy runs."), []
     return passed("model_market_disagreement", "soft", f"mean |model - market| = {d:.1f} points"), ([f"mean |model - market| = {d:.1f} points > {warn:.0f}"] if d > warn else [])
+
+
+def market_decay_check(p_model, p_market, y) -> tuple[CheckResult, list[str]]:
+    """Rolling log-loss gain of the model over the decision-time market versus the baseline measured in the audit. Fails (soft) only when the gain has WORSENED by more than the margin."""
+    cfg = lambda k, d: policy_get("autonomy", "decay", k, default=d)
+    win, mn = int(cfg("market_gain_window_games", 150)), int(cfg("min_games", 100))
+    base, margin = float(cfg("market_gain_baseline", -0.012)), float(cfg("market_gain_margin", 0.03))
+    a, b, yy = np.asarray(p_model, float), np.asarray(p_market, float), np.asarray(y, float)
+    ok = ~(np.isnan(a) | np.isnan(b) | np.isnan(yy))
+    a, b, yy = a[ok][-win:], b[ok][-win:], yy[ok][-win:]
+    if len(a) < mn:
+        return passed("market_decay", "soft", f"{len(a)} games with a market price (needs {mn})"), []
+    ll = lambda p: -(yy * np.log(np.clip(p, 1e-6, 1)) + (1 - yy) * np.log(np.clip(1 - p, 1e-6, 1)))
+    gain = float(np.mean(ll(b) - ll(a)))
+    if gain < base - margin:
+        return failed("market_decay", "soft", f"rolling {len(a)}-game log-loss gain over the market is {gain:+.4f}, below the audit baseline {base:+.3f} by more than {margin}",
+                      "The model has got worse relative to the market since the audit: inspect recent picks, data feeds and the last retrain; the halt clears after healthy runs."), []
+    warn = [f"rolling model-vs-market gain {gain:+.4f} (baseline {base:+.3f})"] if gain < base - margin / 2 else []
+    return passed("market_decay", "soft", f"rolling {len(a)}-game gain over the market {gain:+.4f} (baseline {base:+.3f})"), warn

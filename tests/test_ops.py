@@ -307,3 +307,32 @@ def test_digest():
     st, _ = run(S.empty_state(), [hard_fail()])
     title, body = digest.build_digest(st, None, None, 120, ["token expires in 20 days"], T0)
     assert "HALT_HARD" in body and "RESEARCH ONLY" in body and "120" in body and "token expires" in body and "—" not in body
+
+
+def test_market_decay_is_a_change_detector_not_a_level_test():
+    from nhlbet.ops.drift import market_decay_check
+    rng = np.random.default_rng(0)
+    n = 300
+    mk = rng.uniform(0.35, 0.65, n)
+    y = (rng.uniform(size=n) < mk).astype(float)
+    worse = np.clip(mk + rng.normal(0, 0.06, n), 0.02, 0.98)                          # a model that disagrees with an efficient market: worse than it, as measured in the audit
+    r, _ = market_decay_check(worse, mk, y)
+    assert r.ok, r.detail                                                              # already worse than the market at about the baseline: no halt (a level test would halt forever)
+    broken = np.clip(0.5 + 0.9 * (rng.uniform(size=n) - 0.5), 0.02, 0.98)             # a model that has stopped tracking the game at all
+    r2, _ = market_decay_check(broken, mk, y)
+    assert not r2.ok and r2.level == "soft" and "below the audit baseline" in r2.detail
+    assert market_decay_check(worse[:20], mk[:20], y[:20])[0].ok                      # too few games
+
+
+def test_rolling_metrics_cover_clv_calibration_and_gain_over_market(tmp_path):
+    from nhlbet.ops import rolling
+    rng = np.random.default_rng(1)
+    n = 400
+    mk = rng.uniform(0.35, 0.65, n)
+    d = pd.DataFrame({"game_date": pd.date_range("2026-10-01", periods=n), "p_model": np.clip(mk + rng.normal(0, 0.04, n), 0.02, 0.98), "p_market": mk,
+                      "home_win": (rng.uniform(size=n) < mk).astype(int), "is_bet": rng.uniform(size=n) < 0.5, "clv_move_pts": rng.normal(0.1, 1.5, n)})
+    m = rolling.compute(d)
+    assert m["rolling_clv_pts"]["n"] == 100 and m["rolling_calibration"]["n"] == 200 and m["rolling_gain_over_market"]["n"] == 150
+    rolling.save(m, tmp_path / "s" / "r.json")
+    assert json.loads((tmp_path / "s" / "r.json").read_text())["games_resolved"] == n
+    assert rolling.compute(d.iloc[0:0])["games_resolved"] == 0

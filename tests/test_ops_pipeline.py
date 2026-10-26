@@ -84,3 +84,24 @@ def test_policy_change_by_a_non_owner_opens_a_hard_halt(league, tmp_path, monkey
     go(day, tmp_path, k=1, run_type="late")
     s = json.loads((tmp_path / "state/system_state.json").read_text())
     assert s["status"] == "HALT_HARD" and any(h["check"] == "policy_unchanged" for h in s["halts"])
+
+
+def test_the_gates_check_is_pinged_ok_only_when_every_gate_passed_and_fail_otherwise(league, tmp_path, monkeypatch, net):
+    monkeypatch.setenv("HC_GATES_PING_URL", "https://hc.example/gates")
+    st, day = _e2e_setup(tmp_path, league, monkeypatch)
+    go(day, tmp_path)                                                   # the synthetic history is below the policy minimum: a soft halt, so the gates must NOT report success
+    gate_pings = [u for u in net.gets if "gates" in u]
+    assert gate_pings and all(u.endswith("/fail") for u in gate_pings)
+    assert not any(u == "https://hc.example/gates" for u in net.gets)
+
+
+def test_a_fully_healthy_run_pings_the_gates_check_ok(league, tmp_path, monkeypatch, net):
+    from nhlbet.ops import health
+    from nhlbet.ops.checks import passed
+    monkeypatch.setenv("HC_GATES_PING_URL", "https://hc.example/gates")
+    monkeypatch.setattr(health, "row_count_check", lambda store: passed("row_counts", "soft", "test"))     # the one gate a small synthetic history cannot satisfy
+    st, day = _e2e_setup(tmp_path, league, monkeypatch)
+    go(day, tmp_path)
+    state = json.loads((tmp_path / "state/system_state.json").read_text())
+    assert state["status"] == "OK", state["halts"]
+    assert "https://hc.example/gates" in net.gets and not any(u.endswith("/fail") for u in net.gets if "gates" in u)

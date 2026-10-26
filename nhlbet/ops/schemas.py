@@ -25,7 +25,7 @@ GAMES = DataFrameSchema({
 
 GOALIE_GAME = DataFrameSchema({
     "game_id": Column(int, Check.gt(0), coerce=True), "player_id": Column(int, Check.gt(0), coerce=True),
-    "started": Column(int, Check.isin([0, 1]), coerce=True), "toi_sec": Column(float, Check.in_range(0, 4000), nullable=True, coerce=True),
+    "started": Column(int, Check.isin([0, 1]), coerce=True), "toi_sec": Column(float, Check.in_range(0, 12000), nullable=True, coerce=True),
     "shots_against": Column(float, nonneg, nullable=True, coerce=True), "saves": Column(float, nonneg, nullable=True, coerce=True),
 }, checks=[Check(lambda d: (d.saves.isna() | d.shots_against.isna() | (d.saves <= d.shots_against)), error="more saves than shots against")], strict=False)
 

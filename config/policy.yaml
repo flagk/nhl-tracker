@@ -133,6 +133,11 @@ autonomy:
     performance_min_ref: 400
     performance_slope_warn: 0.5
     performance_z_warn: 2.0
+  decay:                               # audit phase 7: CHANGE detectors, not level tests (the model is already worse than the market; a level test would halt forever)
+    market_gain_window_games: 150      # rolling window of finished games with a decision-time market price
+    market_gain_baseline: -0.012       # log-loss gain of the model over the Shin market measured in the audit (audit/PHASE4_EVALUATION.md); negative = market better
+    market_gain_margin: 0.03           # halt (soft) when the rolling gain falls this far below the baseline (about 3.5 standard errors of a 150-game mean)
+    min_games: 100
   heartbeat:
     ping_interval_min: 10              # the always-on heartbeat job pings the external dead-man's switch at most this often
     recommended_period_min: 60         # configure the external check with this period...

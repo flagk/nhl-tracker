@@ -11,7 +11,7 @@ from pathlib import Path
 
 import numpy as np
 
-from nhlbet.ops import chain, health, killswitch, notify, policyguard
+from nhlbet.ops import chain, drift, health, killswitch, notify, policyguard, schemas
 from nhlbet.ops import state as S
 from nhlbet.ops.checks import CheckResult, failed, passed
 from nhlbet.policy import policy_get, policy_hash
@@ -29,7 +29,7 @@ def _safe(name: str, level: str, fn) -> CheckResult:
 
 
 def pre_checks(store, date: str, refresh_error: str | None, odds_meta: dict | None, remaining_credits: int | None, scheduled_games: int, perf: dict | None, repo_root: Path,
-               state: dict) -> tuple[list[CheckResult], str]:
+               state: dict, resolved_df=None) -> tuple[list[CheckResult], str]:
     """All checks that do not need the built payload. Returns (results, policy hash to record)."""
     res = [_safe("schema", "soft", lambda: health.schema_check(store)),
            _safe("freshness", "soft", lambda: health.freshness_check(store, date, refresh_error)),
@@ -51,6 +51,15 @@ def pre_checks(store, date: str, refresh_error: str | None, odds_meta: dict | No
         res.append(_safe("drawdown", "hard", lambda: killswitch.drawdown_check(np.r_[start, curve.bankroll.to_numpy()])))
     else:
         res.append(passed("drawdown", "hard", "no settled official bets yet"))
+    d = resolved_df
+    if d is not None and len(d):
+        done = d[d.p_model.notna() & d.home_win.notna()].sort_values("game_date")
+        res.append(_safe("calibration", "soft", lambda: drift.calibration_check(done.p_model.to_numpy(float), done.home_win.to_numpy(float))[0]))
+        mk = done[done.p_market.notna()]
+        res.append(_safe("model_market_disagreement", "soft", lambda: drift.disagreement_check(mk.p_model.to_numpy(float), mk.p_market.to_numpy(float))[0]))
+        res.append(_safe("market_decay", "soft", lambda: drift.market_decay_check(mk.p_model.to_numpy(float), mk.p_market.to_numpy(float), mk.home_win.to_numpy(float))[0]))
+        bets = d[d.is_bet & d.clv_move_pts.notna()] if {"is_bet", "clv_move_pts"} <= set(d.columns) else d.iloc[0:0]
+        res.append(_safe("live_clv", "hard", lambda: killswitch.clv_check(bets.clv_move_pts.to_numpy(float), dates=bets.game_date.to_numpy())))
     res.append(_safe("log_integrity", "hard", lambda: killswitch.integrity_check(chain.verify(repo_root))))
     return res, rec
 
