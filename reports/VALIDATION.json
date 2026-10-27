@@ -467,12 +467,12 @@
   "player_assists": {
    "picks": 76,
    "win_rate": 0.4342105263157895,
-   "roi": -0.04592105263157891,
+   "roi": -0.04592105263157892,
    "roi_ci": [
     -0.42973684210526314,
     0.38612499999999994
    ],
-   "units": -3.4899999999999984,
+   "units": -3.4899999999999998,
    "p_roi_not_above_0": 0.6090537396474441,
    "picks_needed_for_5pct_roi": 5134,
    "picks_needed_for_2pct_roi": 32087,
@@ -498,9 +498,9 @@
    "roi": -0.23523178807947018,
    "roi_ci": [
     -0.428142380140462,
-    -0.0023161837748344287
+    -0.0023161837748344283
    ],
-   "units": -35.519999999999996,
+   "units": -35.52,
    "p_roi_not_above_0": 0.996286213393552,
    "picks_needed_for_5pct_roi": 2806,
    "picks_needed_for_2pct_roi": 17534,
@@ -509,12 +509,12 @@
   "player_sog": {
    "picks": 213,
    "win_rate": 0.5258215962441315,
-   "roi": -0.025492957746478858,
+   "roi": -0.025492957746478872,
    "roi_ci": [
     -0.13717405063291138,
     0.09089733560620215
    ],
-   "units": -5.430000000000001,
+   "units": -5.43,
    "p_roi_not_above_0": 0.6532795778880631,
    "picks_needed_for_5pct_roi": 2198,
    "picks_needed_for_2pct_roi": 13732,
@@ -581,13 +581,13 @@
   "player_assists": {
    "picks": 39,
    "win_rate": 0.5641025641025641,
-   "roi": 0.04820512820512821,
+   "roi": 0.0482051282051282,
    "roi_ci": [
-    -0.01794871794871793,
+    -0.01794871794871794,
     0.11435897435897435
    ],
-   "units": 1.8799999999999997,
-   "p_roi_not_above_0": 0.37559711963753023,
+   "units": 1.8800000000000003,
+   "p_roi_not_above_0": 0.3755971196375303,
    "picks_needed_for_5pct_roi": 2198,
    "picks_needed_for_2pct_roi": 13734,
    "verdict": "insufficient evidence (interval spans 0)"
@@ -595,13 +595,13 @@
   "player_goals": {
    "picks": 40,
    "win_rate": 0.325,
-   "roi": -0.10275000000000001,
+   "roi": -0.10274999999999998,
    "roi_ci": [
     -0.40528125,
-    0.20874999999999994
+    0.20875000000000005
    ],
    "units": -4.11,
-   "p_roi_not_above_0": 0.6876196954429049,
+   "p_roi_not_above_0": 0.6876196954429048,
    "picks_needed_for_5pct_roi": 4297,
    "picks_needed_for_2pct_roi": 26854,
    "verdict": "insufficient evidence (interval spans 0)"
@@ -614,7 +614,7 @@
     -0.2238727155576382,
     0.10862034574468087
    ],
-   "units": -5.92,
+   "units": -5.919999999999999,
    "p_roi_not_above_0": 0.7645248771789552,
    "picks_needed_for_5pct_roi": 1818,
    "picks_needed_for_2pct_roi": 11357,
@@ -623,7 +623,7 @@
   "player_sog": {
    "picks": 146,
    "win_rate": 0.4657534246575342,
-   "roi": -0.04527397260273972,
+   "roi": -0.045273972602739736,
    "roi_ci": [
     -0.2193049343357442,
     0.12082289304182166
@@ -666,11 +666,11 @@
  "log_integrity": {
   "games_with_known_start": 179,
   "recommendations": {
-   "rows": 481,
+   "rows": 492,
    "duplicate_keys": 0,
-   "rows_with_known_start": 453,
+   "rows_with_known_start": 464,
    "logged_at_or_after_puck_drop": 0,
-   "odds_age_minutes_median": 0.2,
+   "odds_age_minutes_median": 0.23333333333333334,
    "odds_age_minutes_max": 8.166666666666666,
    "odds_captured_after_run": 0,
    "rows_without_odds": 0,
@@ -678,9 +678,9 @@
    "model_versions": 30
   },
   "shadow_bets": {
-   "rows": 8057,
+   "rows": 8277,
    "duplicate_keys": 0,
-   "rows_with_known_start": 7731,
+   "rows_with_known_start": 7951,
    "logged_at_or_after_puck_drop": 0
   },
   "prop_bets": {
@@ -690,13 +690,13 @@
    "logged_at_or_after_puck_drop": 0
   },
   "alt_quotes": {
-   "rows": 6709,
+   "rows": 6753,
    "duplicate_keys": 0,
-   "rows_with_known_start": 6407,
+   "rows_with_known_start": 6451,
    "logged_at_or_after_puck_drop": 0
   },
   "parlay_bets": {
-   "rows": 130,
+   "rows": 133,
    "duplicate_keys": 0
   }
  },
