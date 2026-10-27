@@ -1,15 +1,15 @@
 {
- "generated_at": "2026-10-26T20:04:49+00:00",
+ "generated_at": "2026-10-27T12:03:13+00:00",
  "public_safe": true,
- "date": "2026-10-26",
- "run_type": "late",
+ "date": "2026-10-27",
+ "run_type": "morning",
  "notes": [],
  "model": {
-  "version": "20261025-249957",
+  "version": "20261026-2a1170",
   "p_source": "online_platt",
   "status": "WARN",
   "reasons": [],
-  "train_end": "2026-10-25",
+  "train_end": "2026-10-26",
   "inputs": [
    {
     "feature": "d_elo",
@@ -127,14 +127,10 @@
  },
  "odds": {
   "enabled": true,
-  "captured_at": "2026-10-26T20:03:43+00:00",
+  "captured_at": "2026-10-27T12:02:20+00:00",
   "stale": false,
-  "remaining": 93,
-  "source": "live",
-  "props": {
-   "games": 0,
-   "error": "only 93 odds credits left: player prices skipped to protect moneylines"
-  }
+  "remaining": 89,
+  "source": "live"
  },
  "policy": {
   "bankroll": 997.66,
@@ -148,33 +144,35 @@
  },
  "games": [
   {
-   "game_id": 2026020185,
-   "start_utc": "2026-10-26T23:00:00+00:00",
-   "home": "NYR",
-   "away": "LAK",
-   "home_goalie": "D. Garand",
-   "away_goalie": "A. Forsberg",
+   "game_id": 2026020188,
+   "start_utc": "2026-10-27T23:00:00+00:00",
+   "home": "PHI",
+   "away": "CBJ",
+   "home_goalie": "D. Vladar",
+   "away_goalie": "J. Greaves",
    "goalie_status": "probable",
-   "p_home": 0.5610698835232901,
+   "p_home": 0.4894044189892681,
    "blocked": "early-season sample size: a team has only played 9 games (< 10)",
    "notes": [
-    "NYR have the clearly better goal differential this season (gap 0.71 goals/game).",
+    "CBJ have the clearly better goal differential this season (gap 0.30 goals/game).",
+    "CBJ are creating the better share of expected goals recently.",
+    "Division/rival game.",
     "Early in the season: team ratings lean on last year's results and are less reliable."
    ],
-   "model_side": "home",
+   "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-26T20:03:43+00:00",
+   "odds_captured_at": "2026-10-27T12:02:20+00:00",
    "sides": {
     "home": {
-     "team": "NYR",
-     "p_model": 0.5610698835232901,
-     "p_market": 0.5508291391460701,
-     "p_adj": 0.5558045703277057,
-     "edge": 0.010240744377220001,
-     "ev": -0.016225910519960918,
+     "team": "PHI",
+     "p_model": 0.4894044189892681,
+     "p_market": 0.4698357015689713,
+     "p_adj": 0.4786793543015873,
+     "edge": 0.01956871742029681,
+     "ev": -0.004346943052698449,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.77,
+     "best_decimal": 2.08,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 9 games (< 10)"
@@ -182,15 +180,15 @@
      "qualifies": false
     },
     "away": {
-     "team": "LAK",
-     "p_model": 0.4389301164767099,
-     "p_market": 0.4491708608539299,
-     "p_adj": 0.44419542967229425,
-     "edge": -0.010240744377220001,
-     "ev": -0.0405378719078443,
+     "team": "CBJ",
+     "p_model": 0.5105955810107319,
+     "p_market": 0.5301642984310286,
+     "p_adj": 0.5213206456984126,
+     "edge": -0.019568717420296755,
+     "ev": -0.04598321837190483,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.16,
+     "best_decimal": 1.83,
      "books": {},
      "fails": [
       "early-season sample size: a team has only played 9 games (< 10)"
@@ -198,68 +196,11 @@
      "qualifies": false
     }
    },
-   "alt": [
-    {
-     "market": "totals",
-     "side": "over",
-     "label": "Over 5.5",
-     "point": 5.5,
-     "p_model": 0.5776562077839564,
-     "p_market": 0.5356555483692512,
-     "p_push": 0.0,
-     "edge": 0.04200065941470521,
-     "ev": 0.05133429816680074,
-     "best_decimal": 1.82,
-     "best_book": null,
-     "n_books": 5
-    },
-    {
-     "market": "totals",
-     "side": "under",
-     "label": "Under 5.5",
-     "point": 5.5,
-     "p_model": 0.42234379221604357,
-     "p_market": 0.4643444516307488,
-     "p_push": 0.0,
-     "edge": -0.04200065941470521,
-     "ev": -0.11307803634630847,
-     "best_decimal": 2.1,
-     "best_book": null,
-     "n_books": 5
-    },
-    {
-     "market": "spreads",
-     "side": "home",
-     "label": "NYR -1.5",
-     "point": -1.5,
-     "p_model": 0.3686753828545111,
-     "p_market": 0.3262951505847035,
-     "p_push": 0.0,
-     "edge": 0.04238023226980764,
-     "ev": 0.07653211793517245,
-     "best_decimal": 2.92,
-     "best_book": null,
-     "n_books": 9
-    },
-    {
-     "market": "spreads",
-     "side": "away",
-     "label": "LAK +1.5",
-     "point": 1.5,
-     "p_model": 0.6313246171454889,
-     "p_market": 0.6737048494152965,
-     "p_push": 0.0,
-     "edge": -0.04238023226980758,
-     "ev": -0.0845793051390411,
-     "best_decimal": 1.45,
-     "best_book": null,
-     "n_books": 9
-    }
-   ],
+   "alt": [],
    "goals": {
-    "lam_home": 3.2615221467521,
-    "lam_away": 2.7965802701534197,
-    "exp_total": 6.169179380825742
+    "lam_home": 2.9388037719870717,
+    "lam_away": 3.168707798723169,
+    "exp_total": 6.2202880096582716
    },
    "props": [],
    "stats": [
@@ -268,54 +209,54 @@
      "label": "Elo rating",
      "group": "Strength",
      "tip": "Overall team strength from results, goal margin and home ice.",
-     "home": 1496.949267442555,
-     "away": 1462.310121958966,
-     "home_s": "1497",
-     "away_s": "1462",
-     "better": "home"
+     "home": 1477.9343770697535,
+     "away": 1492.0494586507862,
+     "home_s": "1478",
+     "away_s": "1492",
+     "better": "away"
     },
     {
      "key": "gd_season_shrunk",
      "label": "Goal differential per game (season)",
      "group": "Strength",
      "tip": "Goals for minus against, blended with last season early in the year.",
-     "home": 0.13937282229965176,
-     "away": -0.5673449612403099,
-     "home_s": "+0.14",
-     "away_s": "-0.57",
-     "better": "home"
+     "home": -0.631211180124224,
+     "away": -0.3333333333333335,
+     "home_s": "-0.63",
+     "away_s": "-0.33",
+     "better": "away"
     },
     {
      "key": "gd_l10",
      "label": "Goal differential, last 10 games",
      "group": "Strength",
      "tip": "Recent form.",
-     "home": 0.2,
-     "away": -1.5,
-     "home_s": "+0.20",
-     "away_s": "-1.50",
-     "better": "home"
+     "home": -0.9,
+     "away": -0.9,
+     "home_s": "-0.90",
+     "away_s": "-0.90",
+     "better": null
     },
     {
      "key": "win_pct_l10",
      "label": "Win % last 10",
      "group": "Strength",
      "tip": "Recent results.",
-     "home": 0.5,
-     "away": 0.2,
-     "home_s": "50%",
-     "away_s": "20%",
-     "better": "home"
+     "home": 0.3,
+     "away": 0.4,
+     "home_s": "30%",
+     "away_s": "40%",
+     "better": "away"
     },
     {
      "key": "cf_pct",
      "label": "Corsi % (shot attempts)",
      "group": "Puck possession and chances",
      "tip": "Share of all shot attempts, last 20 games. Above 50% means they control play.",
-     "home": 0.49044585987261147,
-     "away": 0.4975144987572494,
-     "home_s": "49.0%",
-     "away_s": "49.8%",
+     "home": 0.42434782608695654,
+     "away": 0.4937580714593198,
+     "home_s": "42.4%",
+     "away_s": "49.4%",
      "better": "away"
     },
     {
@@ -323,10 +264,10 @@
      "label": "Corsi %, 5-on-5",
      "group": "Puck possession and chances",
      "tip": "Same, at even strength only.",
-     "home": 0.48242074927953893,
-     "away": 0.4927385892116183,
-     "home_s": "48.2%",
-     "away_s": "49.3%",
+     "home": 0.4127074985689754,
+     "away": 0.4978540772532189,
+     "home_s": "41.3%",
+     "away_s": "49.8%",
      "better": "away"
     },
     {
@@ -334,10 +275,10 @@
      "label": "Expected-goals share",
      "group": "Puck possession and chances",
      "tip": "Share of shot quality (distance, angle, type), last 20 games.",
-     "home": 0.5095134504201567,
-     "away": 0.5387227823848175,
-     "home_s": "51.0%",
-     "away_s": "53.9%",
+     "home": 0.406392844217816,
+     "away": 0.49241001566346276,
+     "home_s": "40.6%",
+     "away_s": "49.2%",
      "better": "away"
     },
     {
@@ -345,10 +286,10 @@
      "label": "High-danger chances share",
      "group": "Puck possession and chances",
      "tip": "Share of the best scoring chances.",
-     "home": 0.5176252319109462,
-     "away": 0.5311871227364185,
-     "home_s": "51.8%",
-     "away_s": "53.1%",
+     "home": 0.40963855421686746,
+     "away": 0.486815415821501,
+     "home_s": "41.0%",
+     "away_s": "48.7%",
      "better": "away"
     },
     {
@@ -356,10 +297,10 @@
      "label": "Expected goals for per game",
      "group": "Puck possession and chances",
      "tip": "How much quality offence they create.",
-     "home": 2.49077205768228,
-     "away": 2.5282930214626047,
-     "home_s": "2.49",
-     "away_s": "2.53",
+     "home": 1.921707741679106,
+     "away": 2.3196266124306217,
+     "home_s": "1.92",
+     "away_s": "2.32",
      "better": "away"
     },
     {
@@ -367,10 +308,10 @@
      "label": "Expected goals against per game",
      "group": "Puck possession and chances",
      "tip": "How much quality offence they allow.",
-     "home": 2.3977584720384395,
-     "away": 2.1648313536944275,
-     "home_s": "2.40",
-     "away_s": "2.16",
+     "home": 2.806987089003298,
+     "away": 2.3911358388676245,
+     "home_s": "2.81",
+     "away_s": "2.39",
      "better": "away"
     },
     {
@@ -378,10 +319,10 @@
      "label": "Shooting %",
      "group": "Luck check",
      "tip": "Very high or low values tend to move back toward the league average.",
-     "home": 0.12585616438356165,
-     "away": 0.09111791730474732,
-     "home_s": "12.6%",
-     "away_s": "9.1%",
+     "home": 0.07685512367491167,
+     "away": 0.08492063492063492,
+     "home_s": "7.7%",
+     "away_s": "8.5%",
      "better": null
     },
     {
@@ -389,10 +330,10 @@
      "label": "Team save %",
      "group": "Luck check",
      "tip": "Same idea for goaltending results.",
-     "home": 0.8983739837398375,
-     "away": 0.8893072289156626,
-     "home_s": "89.8%",
-     "away_s": "88.9%",
+     "home": 0.9020547945205479,
+     "away": 0.883307573415765,
+     "home_s": "90.2%",
+     "away_s": "88.3%",
      "better": null
     },
     {
@@ -400,10 +341,10 @@
      "label": "PDO vs league (shooting % + save %)",
      "group": "Luck check",
      "tip": "Positive = running hot, which usually fades; negative = running cold.",
-     "home": 0.024230148123399076,
-     "away": -0.019574853779590118,
-     "home_s": "+0.024",
-     "away_s": "-0.020",
+     "home": -0.021090081804540417,
+     "away": -0.0317717916636,
+     "home_s": "-0.021",
+     "away_s": "-0.032",
      "better": null
     },
     {
@@ -411,10 +352,10 @@
      "label": "Starting goalie save % (season)",
      "group": "Goaltending",
      "tip": "Shrunk toward the league average so small samples don't mislead.",
-     "home": 0.9057830120791075,
-     "away": 0.9020177163415102,
-     "home_s": "0.906",
-     "away_s": "0.902",
+     "home": 0.9038103871951337,
+     "away": 0.900061692615329,
+     "home_s": "0.904",
+     "away_s": "0.900",
      "better": "home"
     },
     {
@@ -422,21 +363,21 @@
      "label": "Starting goalie save %, last 5",
      "group": "Goaltending",
      "tip": "Recent form.",
-     "home": 0.8979842110965639,
-     "away": 0.9034412269699506,
-     "home_s": "0.898",
-     "away_s": "0.903",
-     "better": "away"
+     "home": 0.9071549499792391,
+     "away": 0.8962108644480407,
+     "home_s": "0.907",
+     "away_s": "0.896",
+     "better": "home"
     },
     {
      "key": "g_gsax100_season",
      "label": "Goalie goals saved above expected / 100 shots",
      "group": "Goaltending",
      "tip": "Saves vs the quality of shots faced; positive is better than average.",
-     "home": -0.7837023569846183,
-     "away": -1.1518613558048192,
-     "home_s": "-0.78",
-     "away_s": "-1.15",
+     "home": -0.948799378399621,
+     "away": -1.2396847163831406,
+     "home_s": "-0.95",
+     "away_s": "-1.24",
      "better": "home"
     },
     {
@@ -444,10 +385,10 @@
      "label": "Goalie days of rest",
      "group": "Goaltending",
      "tip": "Backups usually start on the second night of a back-to-back.",
-     "home": 6.421639479661367,
-     "away": 2.7369399132768946,
-     "home_s": "6",
-     "away_s": "3",
+     "home": 4.894158323872432,
+     "away": 5.5255444318299105,
+     "home_s": "5",
+     "away_s": "6",
      "better": null
     },
     {
@@ -455,21 +396,21 @@
      "label": "Power play %",
      "group": "Special teams",
      "tip": "Shrunk toward the league average.",
-     "home": 0.25773195876288657,
+     "home": 0.15789473684210525,
      "away": 0.16666666666666666,
-     "home_s": "25.8%",
+     "home_s": "15.8%",
      "away_s": "16.7%",
-     "better": "home"
+     "better": "away"
     },
     {
      "key": "pk_pct",
      "label": "Penalty kill %",
      "group": "Special teams",
      "tip": "Shrunk toward the league average.",
-     "home": 0.8608695652173913,
-     "away": 0.7127659574468085,
-     "home_s": "86.1%",
-     "away_s": "71.3%",
+     "home": 0.8114754098360656,
+     "away": 0.7346938775510203,
+     "home_s": "81.1%",
+     "away_s": "73.5%",
      "better": "home"
     },
     {
@@ -477,10 +418,10 @@
      "label": "Penalties taken per game",
      "group": "Special teams",
      "tip": "More penalties means more time shorthanded.",
-     "home": 4.166666666666667,
-     "away": 3.3,
-     "home_s": "4.2",
-     "away_s": "3.3",
+     "home": 4.7,
+     "away": 3.466666666666667,
+     "home_s": "4.7",
+     "away_s": "3.5",
      "better": "away"
     },
     {
@@ -488,9 +429,9 @@
      "label": "Penalties drawn per game",
      "group": "Special teams",
      "tip": "More penalties drawn means more power plays.",
-     "home": 3.933333333333333,
-     "away": 3.433333333333333,
-     "home_s": "3.9",
+     "home": 4.466666666666667,
+     "away": 3.3666666666666667,
+     "home_s": "4.5",
      "away_s": "3.4",
      "better": "home"
     },
@@ -499,10 +440,411 @@
      "label": "Days of rest",
      "group": "Schedule and travel",
      "tip": "Days since the last game.",
+     "home": 3.0,
+     "away": 3.0,
+     "home_s": "3",
+     "away_s": "3",
+     "better": null
+    },
+    {
+     "key": "b2b",
+     "label": "Second game in two nights",
+     "group": "Schedule and travel",
+     "tip": "Back-to-backs lower win chances a little.",
+     "home": 0.0,
+     "away": 0.0,
+     "home_s": "no",
+     "away_s": "no",
+     "better": null
+    },
+    {
+     "key": "games_last_7d",
+     "label": "Games in the last 7 days",
+     "group": "Schedule and travel",
+     "tip": "Schedule congestion.",
      "home": 2.0,
      "away": 2.0,
      "home_s": "2",
      "away_s": "2",
+     "better": null
+    },
+    {
+     "key": "travel_km",
+     "label": "Travel since last game (km)",
+     "group": "Schedule and travel",
+     "tip": "Distance from the previous game's arena.",
+     "home": 0.0,
+     "away": 667.7650001255995,
+     "home_s": "0",
+     "away_s": "668",
+     "better": "home"
+    },
+    {
+     "key": "tz_shift",
+     "label": "Time-zone change",
+     "group": "Schedule and travel",
+     "tip": "Hours of time-zone shift for the trip.",
+     "home": 0.0,
+     "away": 0.0,
+     "home_s": "+0 h",
+     "away_s": "+0 h",
+     "better": null
+    },
+    {
+     "key": "gp_season",
+     "label": "Games played this season",
+     "group": "Context",
+     "tip": "Early in the season the model leans on last year's ratings.",
+     "home": 13.0,
+     "away": 9.0,
+     "home_s": "13",
+     "away_s": "9",
+     "better": null
+    }
+   ],
+   "drivers": [
+    {
+     "feature": "d_xg_share",
+     "label": "Expected-goals share (home minus away)",
+     "value": -0.17383709308150533,
+     "raw": -0.08601717144564675
+    },
+    {
+     "feature": "d_cf_pct",
+     "label": "Corsi % (shot attempts) (home minus away)",
+     "value": -0.11328065959051749,
+     "raw": -0.06941024537236329
+    },
+    {
+     "feature": "a_b2b",
+     "label": "Second game in two nights (away team)",
+     "value": -0.05326439424569758,
+     "raw": 0.0
+    },
+    {
+     "feature": "d_pen_drawn_pg",
+     "label": "Penalties drawn per game (home minus away)",
+     "value": 0.050244050275757866,
+     "raw": 1.1
+    },
+    {
+     "feature": "d_elo",
+     "label": "Elo rating (home minus away)",
+     "value": -0.04120499665529076,
+     "raw": -14.115081581032655
+    },
+    {
+     "feature": "d_xga_pg",
+     "label": "Expected goals against per game (home minus away)",
+     "value": -0.03880944777944901,
+     "raw": 0.4158512501356735
+    }
+   ],
+   "server_action": "NO_BET",
+   "server_side": null,
+   "server_stake": 0.0
+  },
+  {
+   "game_id": 2026020189,
+   "start_utc": "2026-10-28T00:00:00+00:00",
+   "home": "CAR",
+   "away": "BOS",
+   "home_goalie": "B. Bussi",
+   "away_goalie": "J. Swayman",
+   "goalie_status": "probable",
+   "p_home": 0.6648648718034855,
+   "blocked": null,
+   "notes": [
+    "CAR are creating the better share of expected goals recently.",
+    "Goaltending edge to BOS (goals saved above expected).",
+    "Early in the season: team ratings lean on last year's results and are less reliable."
+   ],
+   "model_side": "home",
+   "odds_stale": false,
+   "odds_captured_at": "2026-10-27T12:02:20+00:00",
+   "sides": {
+    "home": {
+     "team": "CAR",
+     "p_model": 0.6648648718034855,
+     "p_market": 0.6361307891295209,
+     "p_adj": 0.6478175194283063,
+     "edge": 0.0287340826739646,
+     "ev": -0.002361020080408227,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 1.54,
+     "books": {},
+     "fails": [
+      "edge +2.9% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    },
+    "away": {
+     "team": "BOS",
+     "p_model": 0.3351351281965145,
+     "p_market": 0.3638692108704791,
+     "p_adj": 0.3521824805716936,
+     "edge": -0.0287340826739646,
+     "ev": -0.04910730245642725,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 2.7,
+     "books": {},
+     "fails": [
+      "edge -2.9% below the 4% minimum (starting goalie unconfirmed)",
+      "model win probability 33.5% below the 40% confidence floor"
+     ],
+     "qualifies": false
+    }
+   },
+   "alt": [],
+   "goals": {
+    "lam_home": 3.499080169828281,
+    "lam_away": 2.6858852157213584,
+    "exp_total": 6.289019033958348
+   },
+   "props": [],
+   "stats": [
+    {
+     "key": "elo",
+     "label": "Elo rating",
+     "group": "Strength",
+     "tip": "Overall team strength from results, goal margin and home ice.",
+     "home": 1607.8073379722186,
+     "away": 1537.6943052397812,
+     "home_s": "1608",
+     "away_s": "1538",
+     "better": "home"
+    },
+    {
+     "key": "gd_season_shrunk",
+     "label": "Goal differential per game (season)",
+     "group": "Strength",
+     "tip": "Goals for minus against, blended with last season early in the year.",
+     "home": 0.8629773691654874,
+     "away": 0.859006734006734,
+     "home_s": "+0.86",
+     "away_s": "+0.86",
+     "better": "home"
+    },
+    {
+     "key": "gd_l10",
+     "label": "Goal differential, last 10 games",
+     "group": "Strength",
+     "tip": "Recent form.",
+     "home": 2.1,
+     "away": 1.8,
+     "home_s": "+2.10",
+     "away_s": "+1.80",
+     "better": "home"
+    },
+    {
+     "key": "win_pct_l10",
+     "label": "Win % last 10",
+     "group": "Strength",
+     "tip": "Recent results.",
+     "home": 0.8,
+     "away": 0.7,
+     "home_s": "80%",
+     "away_s": "70%",
+     "better": "home"
+    },
+    {
+     "key": "cf_pct",
+     "label": "Corsi % (shot attempts)",
+     "group": "Puck possession and chances",
+     "tip": "Share of all shot attempts, last 20 games. Above 50% means they control play.",
+     "home": 0.5705574912891986,
+     "away": 0.4630669546436285,
+     "home_s": "57.1%",
+     "away_s": "46.3%",
+     "better": "home"
+    },
+    {
+     "key": "ev_cf_pct",
+     "label": "Corsi %, 5-on-5",
+     "group": "Puck possession and chances",
+     "tip": "Same, at even strength only.",
+     "home": 0.5779920589903573,
+     "away": 0.48032786885245904,
+     "home_s": "57.8%",
+     "away_s": "48.0%",
+     "better": "home"
+    },
+    {
+     "key": "xg_share",
+     "label": "Expected-goals share",
+     "group": "Puck possession and chances",
+     "tip": "Share of shot quality (distance, angle, type), last 20 games.",
+     "home": 0.5578580876031985,
+     "away": 0.47394330584389427,
+     "home_s": "55.8%",
+     "away_s": "47.4%",
+     "better": "home"
+    },
+    {
+     "key": "hd_share",
+     "label": "High-danger chances share",
+     "group": "Puck possession and chances",
+     "tip": "Share of the best scoring chances.",
+     "home": 0.5504587155963303,
+     "away": 0.47509578544061304,
+     "home_s": "55.0%",
+     "away_s": "47.5%",
+     "better": "home"
+    },
+    {
+     "key": "xgf_pg",
+     "label": "Expected goals for per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they create.",
+     "home": 2.7960142129969525,
+     "away": 2.3474152609181784,
+     "home_s": "2.80",
+     "away_s": "2.35",
+     "better": "home"
+    },
+    {
+     "key": "xga_pg",
+     "label": "Expected goals against per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they allow.",
+     "home": 2.2160386282728544,
+     "away": 2.605530021721518,
+     "home_s": "2.22",
+     "away_s": "2.61",
+     "better": "home"
+    },
+    {
+     "key": "sh_pct",
+     "label": "Shooting %",
+     "group": "Luck check",
+     "tip": "Very high or low values tend to move back toward the league average.",
+     "home": 0.12296195652173914,
+     "away": 0.1245928338762215,
+     "home_s": "12.3%",
+     "away_s": "12.5%",
+     "better": null
+    },
+    {
+     "key": "sv_pct_team",
+     "label": "Team save %",
+     "group": "Luck check",
+     "tip": "Same idea for goaltending results.",
+     "home": 0.8915343915343915,
+     "away": 0.9154411764705882,
+     "home_s": "89.2%",
+     "away_s": "91.5%",
+     "better": null
+    },
+    {
+     "key": "pdo_dev",
+     "label": "PDO vs league (shooting % + save %)",
+     "group": "Luck check",
+     "tip": "Positive = running hot, which usually fades; negative = running cold.",
+     "home": 0.014496348056130648,
+     "away": 0.040034010346809756,
+     "home_s": "+0.014",
+     "away_s": "+0.040",
+     "better": null
+    },
+    {
+     "key": "g_sv_season",
+     "label": "Starting goalie save % (season)",
+     "group": "Goaltending",
+     "tip": "Shrunk toward the league average so small samples don't mislead.",
+     "home": 0.8992321156928328,
+     "away": 0.910825367992038,
+     "home_s": "0.899",
+     "away_s": "0.911",
+     "better": "away"
+    },
+    {
+     "key": "g_sv_l5",
+     "label": "Starting goalie save %, last 5",
+     "group": "Goaltending",
+     "tip": "Recent form.",
+     "home": 0.8923201270690719,
+     "away": 0.9086005767657088,
+     "home_s": "0.892",
+     "away_s": "0.909",
+     "better": "away"
+    },
+    {
+     "key": "g_gsax100_season",
+     "label": "Goalie goals saved above expected / 100 shots",
+     "group": "Goaltending",
+     "tip": "Saves vs the quality of shots faced; positive is better than average.",
+     "home": -1.336723535224394,
+     "away": -0.33679006795525396,
+     "home_s": "-1.34",
+     "away_s": "-0.34",
+     "better": "away"
+    },
+    {
+     "key": "g_rest",
+     "label": "Goalie days of rest",
+     "group": "Goaltending",
+     "tip": "Backups usually start on the second night of a back-to-back.",
+     "home": 4.262772215914955,
+     "away": 3.7372277840850447,
+     "home_s": "4",
+     "away_s": "4",
+     "better": null
+    },
+    {
+     "key": "pp_pct",
+     "label": "Power play %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.2076923076923077,
+     "away": 0.17894736842105263,
+     "home_s": "20.8%",
+     "away_s": "17.9%",
+     "better": "home"
+    },
+    {
+     "key": "pk_pct",
+     "label": "Penalty kill %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.8629032258064516,
+     "away": 0.8141592920353982,
+     "home_s": "86.3%",
+     "away_s": "81.4%",
+     "better": "home"
+    },
+    {
+     "key": "pen_taken_pg",
+     "label": "Penalties taken per game",
+     "group": "Special teams",
+     "tip": "More penalties means more time shorthanded.",
+     "home": 4.333333333333333,
+     "away": 4.366666666666666,
+     "home_s": "4.3",
+     "away_s": "4.4",
+     "better": "home"
+    },
+    {
+     "key": "pen_drawn_pg",
+     "label": "Penalties drawn per game",
+     "group": "Special teams",
+     "tip": "More penalties drawn means more power plays.",
+     "home": 4.566666666666666,
+     "away": 3.7,
+     "home_s": "4.6",
+     "away_s": "3.7",
+     "better": "home"
+    },
+    {
+     "key": "rest_days",
+     "label": "Days of rest",
+     "group": "Schedule and travel",
+     "tip": "Days since the last game.",
+     "home": 3.0,
+     "away": 3.0,
+     "home_s": "3",
+     "away_s": "3",
      "better": null
     },
     {
@@ -532,11 +874,810 @@
      "label": "Travel since last game (km)",
      "group": "Schedule and travel",
      "tip": "Distance from the previous game's arena.",
-     "home": 529.3070795070424,
-     "away": 15.031033000701688,
-     "home_s": "529",
-     "away_s": "15",
+     "home": 1063.1960522422323,
+     "away": 983.8681737057734,
+     "home_s": "1,063",
+     "away_s": "984",
      "better": "away"
+    },
+    {
+     "key": "tz_shift",
+     "label": "Time-zone change",
+     "group": "Schedule and travel",
+     "tip": "Hours of time-zone shift for the trip.",
+     "home": 1.0,
+     "away": 0.0,
+     "home_s": "+1 h",
+     "away_s": "+0 h",
+     "better": null
+    },
+    {
+     "key": "gp_season",
+     "label": "Games played this season",
+     "group": "Context",
+     "tip": "Early in the season the model leans on last year's ratings.",
+     "home": 13.0,
+     "away": 12.0,
+     "home_s": "13",
+     "away_s": "12",
+     "better": null
+    }
+   ],
+   "drivers": [
+    {
+     "feature": "d_elo",
+     "label": "Elo rating (home minus away)",
+     "value": 0.21275462178531188,
+     "raw": 70.11303273243743
+    },
+    {
+     "feature": "d_cf_pct",
+     "label": "Corsi % (shot attempts) (home minus away)",
+     "value": 0.17751516021773564,
+     "raw": 0.10749053664557012
+    },
+    {
+     "feature": "d_xg_share",
+     "label": "Expected-goals share (home minus away)",
+     "value": 0.17441631665201565,
+     "raw": 0.08391478175930428
+    },
+    {
+     "feature": "a_b2b",
+     "label": "Second game in two nights (away team)",
+     "value": -0.05326439424569758,
+     "raw": 0.0
+    },
+    {
+     "feature": "d_g_sv_l5",
+     "label": "Starting goalie save %, last 5 (home minus away)",
+     "value": 0.04918481025507805,
+     "raw": -0.01628044969663689
+    },
+    {
+     "feature": "d_pen_drawn_pg",
+     "label": "Penalties drawn per game (home minus away)",
+     "value": 0.03969891116076875,
+     "raw": 0.8666666666666663
+    }
+   ],
+   "server_action": "NO_BET",
+   "server_side": null,
+   "server_stake": 0.0
+  },
+  {
+   "game_id": 2026020190,
+   "start_utc": "2026-10-28T00:00:00+00:00",
+   "home": "CHI",
+   "away": "LAK",
+   "home_goalie": "S. Knight",
+   "away_goalie": "A. Forsberg",
+   "goalie_status": "probable",
+   "p_home": 0.5065363501863681,
+   "blocked": null,
+   "notes": [
+    "LAK have the clearly better goal differential this season (gap 0.52 goals/game).",
+    "LAK is on the second night of a back-to-back.",
+    "LAK are creating the better share of expected goals recently.",
+    "Early in the season: team ratings lean on last year's results and are less reliable."
+   ],
+   "model_side": "home",
+   "odds_stale": false,
+   "odds_captured_at": "2026-10-27T12:02:20+00:00",
+   "sides": {
+    "home": {
+     "team": "CHI",
+     "p_model": 0.5065363501863681,
+     "p_market": 0.47530166609776386,
+     "p_adj": 0.4875890959211938,
+     "edge": 0.031234684088604248,
+     "ev": -0.0053182443207645536,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 2.04,
+     "books": {},
+     "fails": [
+      "edge +3.1% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    },
+    "away": {
+     "team": "LAK",
+     "p_model": 0.4934636498136319,
+     "p_market": 0.5246983339022362,
+     "p_adj": 0.5124109040788063,
+     "edge": -0.031234684088604303,
+     "ev": -0.05203982745420832,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 1.85,
+     "books": {},
+     "fails": [
+      "edge -3.1% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    }
+   },
+   "alt": [],
+   "goals": {
+    "lam_home": 2.9138587992985943,
+    "lam_away": 3.1510625077518597,
+    "exp_total": 6.177990702273079
+   },
+   "props": [],
+   "stats": [
+    {
+     "key": "elo",
+     "label": "Elo rating",
+     "group": "Strength",
+     "tip": "Overall team strength from results, goal margin and home ice.",
+     "home": 1401.2848099314326,
+     "away": 1468.9786945067988,
+     "home_s": "1401",
+     "away_s": "1469",
+     "better": "away"
+    },
+    {
+     "key": "gd_season_shrunk",
+     "label": "Goal differential per game (season)",
+     "group": "Strength",
+     "tip": "Goals for minus against, blended with last season early in the year.",
+     "home": -0.9488742964352719,
+     "away": -0.4246511627906977,
+     "home_s": "-0.95",
+     "away_s": "-0.42",
+     "better": "away"
+    },
+    {
+     "key": "gd_l10",
+     "label": "Goal differential, last 10 games",
+     "group": "Strength",
+     "tip": "Recent form.",
+     "home": -1.6,
+     "away": -0.8,
+     "home_s": "-1.60",
+     "away_s": "-0.80",
+     "better": "away"
+    },
+    {
+     "key": "win_pct_l10",
+     "label": "Win % last 10",
+     "group": "Strength",
+     "tip": "Recent results.",
+     "home": 0.3,
+     "away": 0.3,
+     "home_s": "30%",
+     "away_s": "30%",
+     "better": null
+    },
+    {
+     "key": "cf_pct",
+     "label": "Corsi % (shot attempts)",
+     "group": "Puck possession and chances",
+     "tip": "Share of all shot attempts, last 20 games. Above 50% means they control play.",
+     "home": 0.452803738317757,
+     "away": 0.48959200666111574,
+     "home_s": "45.3%",
+     "away_s": "49.0%",
+     "better": "away"
+    },
+    {
+     "key": "ev_cf_pct",
+     "label": "Corsi %, 5-on-5",
+     "group": "Puck possession and chances",
+     "tip": "Same, at even strength only.",
+     "home": 0.4273255813953488,
+     "away": 0.4858757062146893,
+     "home_s": "42.7%",
+     "away_s": "48.6%",
+     "better": "away"
+    },
+    {
+     "key": "xg_share",
+     "label": "Expected-goals share",
+     "group": "Puck possession and chances",
+     "tip": "Share of shot quality (distance, angle, type), last 20 games.",
+     "home": 0.4288857760461535,
+     "away": 0.521352120854629,
+     "home_s": "42.9%",
+     "away_s": "52.1%",
+     "better": "away"
+    },
+    {
+     "key": "hd_share",
+     "label": "High-danger chances share",
+     "group": "Puck possession and chances",
+     "tip": "Share of the best scoring chances.",
+     "home": 0.4274952919020716,
+     "away": 0.5149700598802395,
+     "home_s": "42.7%",
+     "away_s": "51.5%",
+     "better": "away"
+    },
+    {
+     "key": "xgf_pg",
+     "label": "Expected goals for per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they create.",
+     "home": 2.01965807459373,
+     "away": 2.443777825977598,
+     "home_s": "2.02",
+     "away_s": "2.44",
+     "better": "away"
+    },
+    {
+     "key": "xga_pg",
+     "label": "Expected goals against per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they allow.",
+     "home": 2.6894234277417293,
+     "away": 2.243606627300588,
+     "home_s": "2.69",
+     "away_s": "2.24",
+     "better": "away"
+    },
+    {
+     "key": "sh_pct",
+     "label": "Shooting %",
+     "group": "Luck check",
+     "tip": "Very high or low values tend to move back toward the league average.",
+     "home": 0.10195035460992907,
+     "away": 0.09154929577464789,
+     "home_s": "10.2%",
+     "away_s": "9.2%",
+     "better": null
+    },
+    {
+     "key": "sv_pct_team",
+     "label": "Team save %",
+     "group": "Luck check",
+     "tip": "Same idea for goaltending results.",
+     "home": 0.8704245973645681,
+     "away": 0.8947761194029851,
+     "home_s": "87.0%",
+     "away_s": "89.5%",
+     "better": null
+    },
+    {
+     "key": "pdo_dev",
+     "label": "PDO vs league (shooting % + save %)",
+     "group": "Luck check",
+     "tip": "Positive = running hot, which usually fades; negative = running cold.",
+     "home": -0.027625048025502807,
+     "away": -0.013674584822367053,
+     "home_s": "-0.028",
+     "away_s": "-0.014",
+     "better": null
+    },
+    {
+     "key": "g_sv_season",
+     "label": "Starting goalie save % (season)",
+     "group": "Goaltending",
+     "tip": "Shrunk toward the league average so small samples don't mislead.",
+     "home": 0.8978078685722459,
+     "away": 0.9017675074284954,
+     "home_s": "0.898",
+     "away_s": "0.902",
+     "better": "away"
+    },
+    {
+     "key": "g_sv_l5",
+     "label": "Starting goalie save %, last 5",
+     "group": "Goaltending",
+     "tip": "Recent form.",
+     "home": 0.892661023998944,
+     "away": 0.9019526157723505,
+     "home_s": "0.893",
+     "away_s": "0.902",
+     "better": "away"
+    },
+    {
+     "key": "g_gsax100_season",
+     "label": "Goalie goals saved above expected / 100 shots",
+     "group": "Goaltending",
+     "tip": "Saves vs the quality of shots faced; positive is better than average.",
+     "home": -1.5110204432860885,
+     "away": -1.1482711940456434,
+     "home_s": "-1.51",
+     "away_s": "-1.15",
+     "better": "away"
+    },
+    {
+     "key": "g_rest",
+     "label": "Goalie days of rest",
+     "group": "Goaltending",
+     "tip": "Backups usually start on the second night of a back-to-back.",
+     "home": 6.42336670451027,
+     "away": 2.262772215914955,
+     "home_s": "6",
+     "away_s": "2",
+     "better": null
+    },
+    {
+     "key": "pp_pct",
+     "label": "Power play %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.11009174311926606,
+     "away": 0.15625,
+     "home_s": "11.0%",
+     "away_s": "15.6%",
+     "better": "away"
+    },
+    {
+     "key": "pk_pct",
+     "label": "Penalty kill %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.7755102040816326,
+     "away": 0.7173913043478262,
+     "home_s": "77.6%",
+     "away_s": "71.7%",
+     "better": "home"
+    },
+    {
+     "key": "pen_taken_pg",
+     "label": "Penalties taken per game",
+     "group": "Special teams",
+     "tip": "More penalties means more time shorthanded.",
+     "home": 3.2666666666666666,
+     "away": 3.2666666666666666,
+     "home_s": "3.3",
+     "away_s": "3.3",
+     "better": null
+    },
+    {
+     "key": "pen_drawn_pg",
+     "label": "Penalties drawn per game",
+     "group": "Special teams",
+     "tip": "More penalties drawn means more power plays.",
+     "home": 3.566666666666667,
+     "away": 3.466666666666667,
+     "home_s": "3.6",
+     "away_s": "3.5",
+     "better": "home"
+    },
+    {
+     "key": "rest_days",
+     "label": "Days of rest",
+     "group": "Schedule and travel",
+     "tip": "Days since the last game.",
+     "home": 2.0,
+     "away": 1.0,
+     "home_s": "2",
+     "away_s": "1",
+     "better": "home"
+    },
+    {
+     "key": "b2b",
+     "label": "Second game in two nights",
+     "group": "Schedule and travel",
+     "tip": "Back-to-backs lower win chances a little.",
+     "home": 0.0,
+     "away": 1.0,
+     "home_s": "no",
+     "away_s": "yes",
+     "better": "home"
+    },
+    {
+     "key": "games_last_7d",
+     "label": "Games in the last 7 days",
+     "group": "Schedule and travel",
+     "tip": "Schedule congestion.",
+     "home": 2.0,
+     "away": 4.0,
+     "home_s": "2",
+     "away_s": "4",
+     "better": "home"
+    },
+    {
+     "key": "travel_km",
+     "label": "Travel since last game (km)",
+     "group": "Schedule and travel",
+     "tip": "Distance from the previous game's arena.",
+     "home": 0.0,
+     "away": 1148.1507659616734,
+     "home_s": "0",
+     "away_s": "1,148",
+     "better": "home"
+    },
+    {
+     "key": "tz_shift",
+     "label": "Time-zone change",
+     "group": "Schedule and travel",
+     "tip": "Hours of time-zone shift for the trip.",
+     "home": 0.0,
+     "away": -1.0,
+     "home_s": "+0 h",
+     "away_s": "-1 h",
+     "better": null
+    },
+    {
+     "key": "gp_season",
+     "label": "Games played this season",
+     "group": "Context",
+     "tip": "Early in the season the model leans on last year's ratings.",
+     "home": 11.0,
+     "away": 10.0,
+     "home_s": "11",
+     "away_s": "10",
+     "better": null
+    }
+   ],
+   "drivers": [
+    {
+     "feature": "d_elo",
+     "label": "Elo rating (home minus away)",
+     "value": -0.202752628059038,
+     "raw": -67.69388457536616
+    },
+    {
+     "feature": "a_b2b",
+     "label": "Second game in two nights (away team)",
+     "value": 0.2026100548343571,
+     "raw": 1.0
+    },
+    {
+     "feature": "d_xg_share",
+     "label": "Expected-goals share (home minus away)",
+     "value": -0.18705383408405782,
+     "raw": -0.09246634480847549
+    },
+    {
+     "feature": "d_games_last_7d",
+     "label": "Games in the last 7 days (home minus away)",
+     "value": 0.07547746521743613,
+     "raw": -2.0
+    },
+    {
+     "feature": "d_cf_pct",
+     "label": "Corsi % (shot attempts) (home minus away)",
+     "value": -0.05965548933573763,
+     "raw": -0.03678826834335874
+    },
+    {
+     "feature": "d_xga_pg",
+     "label": "Expected goals against per game (home minus away)",
+     "value": -0.04165141971055629,
+     "raw": 0.44581680044114114
+    }
+   ],
+   "server_action": "NO_BET",
+   "server_side": null,
+   "server_stake": 0.0
+  },
+  {
+   "game_id": 2026020191,
+   "start_utc": "2026-10-28T00:00:00+00:00",
+   "home": "STL",
+   "away": "MTL",
+   "home_goalie": "J. Hofer",
+   "away_goalie": "J. Dobes",
+   "goalie_status": "probable",
+   "p_home": 0.5409535963089465,
+   "blocked": null,
+   "notes": [
+    "Early in the season: team ratings lean on last year's results and are less reliable."
+   ],
+   "model_side": "home",
+   "odds_stale": false,
+   "odds_captured_at": "2026-10-27T12:02:20+00:00",
+   "sides": {
+    "home": {
+     "team": "STL",
+     "p_model": 0.5409535963089465,
+     "p_market": 0.5272124333100945,
+     "p_adj": 0.5337406126025048,
+     "edge": 0.013741162998851975,
+     "ev": -0.023254678937416118,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 1.83,
+     "books": {},
+     "fails": [
+      "edge +1.4% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    },
+    "away": {
+     "team": "MTL",
+     "p_model": 0.45904640369105354,
+     "p_market": 0.4727875666899055,
+     "p_adj": 0.46625938739749523,
+     "edge": -0.013741162998851975,
+     "ev": -0.039505661961159844,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 2.06,
+     "books": {},
+     "fails": [
+      "edge -1.4% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    }
+   },
+   "alt": [],
+   "goals": {
+    "lam_home": 3.1473053477308413,
+    "lam_away": 2.9708341176933364,
+    "exp_total": 6.231113721212669
+   },
+   "props": [],
+   "stats": [
+    {
+     "key": "elo",
+     "label": "Elo rating",
+     "group": "Strength",
+     "tip": "Overall team strength from results, goal margin and home ice.",
+     "home": 1509.115112657029,
+     "away": 1532.8656900118146,
+     "home_s": "1509",
+     "away_s": "1533",
+     "better": "away"
+    },
+    {
+     "key": "gd_season_shrunk",
+     "label": "Goal differential per game (season)",
+     "group": "Strength",
+     "tip": "Goals for minus against, blended with last season early in the year.",
+     "home": -0.09498123827392124,
+     "away": 0.07140137090632193,
+     "home_s": "-0.09",
+     "away_s": "+0.07",
+     "better": "away"
+    },
+    {
+     "key": "gd_l10",
+     "label": "Goal differential, last 10 games",
+     "group": "Strength",
+     "tip": "Recent form.",
+     "home": -0.4,
+     "away": -0.1,
+     "home_s": "-0.40",
+     "away_s": "-0.10",
+     "better": "away"
+    },
+    {
+     "key": "win_pct_l10",
+     "label": "Win % last 10",
+     "group": "Strength",
+     "tip": "Recent results.",
+     "home": 0.4,
+     "away": 0.5,
+     "home_s": "40%",
+     "away_s": "50%",
+     "better": "away"
+    },
+    {
+     "key": "cf_pct",
+     "label": "Corsi % (shot attempts)",
+     "group": "Puck possession and chances",
+     "tip": "Share of all shot attempts, last 20 games. Above 50% means they control play.",
+     "home": 0.48455949137148047,
+     "away": 0.4796986186688991,
+     "home_s": "48.5%",
+     "away_s": "48.0%",
+     "better": "home"
+    },
+    {
+     "key": "ev_cf_pct",
+     "label": "Corsi %, 5-on-5",
+     "group": "Puck possession and chances",
+     "tip": "Same, at even strength only.",
+     "home": 0.4838709677419355,
+     "away": 0.48812095032397407,
+     "home_s": "48.4%",
+     "away_s": "48.8%",
+     "better": "away"
+    },
+    {
+     "key": "xg_share",
+     "label": "Expected-goals share",
+     "group": "Puck possession and chances",
+     "tip": "Share of shot quality (distance, angle, type), last 20 games.",
+     "home": 0.49468425281691586,
+     "away": 0.4685410851396035,
+     "home_s": "49.5%",
+     "away_s": "46.9%",
+     "better": "home"
+    },
+    {
+     "key": "hd_share",
+     "label": "High-danger chances share",
+     "group": "Puck possession and chances",
+     "tip": "Share of the best scoring chances.",
+     "home": 0.5038167938931297,
+     "away": 0.48405253283302063,
+     "home_s": "50.4%",
+     "away_s": "48.4%",
+     "better": "home"
+    },
+    {
+     "key": "xgf_pg",
+     "label": "Expected goals for per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they create.",
+     "home": 2.27716467136149,
+     "away": 2.387900378735675,
+     "home_s": "2.28",
+     "away_s": "2.39",
+     "better": "away"
+    },
+    {
+     "key": "xga_pg",
+     "label": "Expected goals against per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they allow.",
+     "home": 2.326104299491066,
+     "away": 2.7085585113618533,
+     "home_s": "2.33",
+     "away_s": "2.71",
+     "better": "home"
+    },
+    {
+     "key": "sh_pct",
+     "label": "Shooting %",
+     "group": "Luck check",
+     "tip": "Very high or low values tend to move back toward the league average.",
+     "home": 0.12900641025641027,
+     "away": 0.11538461538461539,
+     "home_s": "12.9%",
+     "away_s": "11.5%",
+     "better": null
+    },
+    {
+     "key": "sv_pct_team",
+     "label": "Team save %",
+     "group": "Luck check",
+     "tip": "Same idea for goaltending results.",
+     "home": 0.8955555555555555,
+     "away": 0.8852813852813852,
+     "home_s": "89.6%",
+     "away_s": "88.5%",
+     "better": null
+    },
+    {
+     "key": "pdo_dev",
+     "label": "PDO vs league (shooting % + save %)",
+     "group": "Luck check",
+     "tip": "Positive = running hot, which usually fades; negative = running cold.",
+     "home": 0.02456196581196579,
+     "away": 0.0006660006660006434,
+     "home_s": "+0.025",
+     "away_s": "+0.001",
+     "better": null
+    },
+    {
+     "key": "g_sv_season",
+     "label": "Starting goalie save % (season)",
+     "group": "Goaltending",
+     "tip": "Shrunk toward the league average so small samples don't mislead.",
+     "home": 0.9029161233969913,
+     "away": 0.8972810924269674,
+     "home_s": "0.903",
+     "away_s": "0.897",
+     "better": "home"
+    },
+    {
+     "key": "g_sv_l5",
+     "label": "Starting goalie save %, last 5",
+     "group": "Goaltending",
+     "tip": "Recent form.",
+     "home": 0.8956335329397869,
+     "away": 0.8926481515472808,
+     "home_s": "0.896",
+     "away_s": "0.893",
+     "better": "home"
+    },
+    {
+     "key": "g_gsax100_season",
+     "label": "Goalie goals saved above expected / 100 shots",
+     "group": "Goaltending",
+     "tip": "Saves vs the quality of shots faced; positive is better than average.",
+     "home": -1.2716197855640319,
+     "away": -1.4706422430123878,
+     "home_s": "-1.27",
+     "away_s": "-1.47",
+     "better": "home"
+    },
+    {
+     "key": "g_rest",
+     "label": "Goalie days of rest",
+     "group": "Goaltending",
+     "tip": "Backups usually start on the second night of a back-to-back.",
+     "home": 5.5802972442976575,
+     "away": 5.156930539787387,
+     "home_s": "6",
+     "away_s": "5",
+     "better": null
+    },
+    {
+     "key": "pp_pct",
+     "label": "Power play %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.1935483870967742,
+     "away": 0.19469026548672566,
+     "home_s": "19.4%",
+     "away_s": "19.5%",
+     "better": "away"
+    },
+    {
+     "key": "pk_pct",
+     "label": "Penalty kill %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.8279569892473118,
+     "away": 0.7862595419847328,
+     "home_s": "82.8%",
+     "away_s": "78.6%",
+     "better": "home"
+    },
+    {
+     "key": "pen_taken_pg",
+     "label": "Penalties taken per game",
+     "group": "Special teams",
+     "tip": "More penalties means more time shorthanded.",
+     "home": 3.1,
+     "away": 5.3,
+     "home_s": "3.1",
+     "away_s": "5.3",
+     "better": "home"
+    },
+    {
+     "key": "pen_drawn_pg",
+     "label": "Penalties drawn per game",
+     "group": "Special teams",
+     "tip": "More penalties drawn means more power plays.",
+     "home": 3.066666666666667,
+     "away": 4.6,
+     "home_s": "3.1",
+     "away_s": "4.6",
+     "better": "away"
+    },
+    {
+     "key": "rest_days",
+     "label": "Days of rest",
+     "group": "Schedule and travel",
+     "tip": "Days since the last game.",
+     "home": 3.0,
+     "away": 2.0,
+     "home_s": "3",
+     "away_s": "2",
+     "better": "home"
+    },
+    {
+     "key": "b2b",
+     "label": "Second game in two nights",
+     "group": "Schedule and travel",
+     "tip": "Back-to-backs lower win chances a little.",
+     "home": 0.0,
+     "away": 0.0,
+     "home_s": "no",
+     "away_s": "no",
+     "better": null
+    },
+    {
+     "key": "games_last_7d",
+     "label": "Games in the last 7 days",
+     "group": "Schedule and travel",
+     "tip": "Schedule congestion.",
+     "home": 3.0,
+     "away": 3.0,
+     "home_s": "3",
+     "away_s": "3",
+     "better": null
+    },
+    {
+     "key": "travel_km",
+     "label": "Travel since last game (km)",
+     "group": "Schedule and travel",
+     "tip": "Distance from the previous game's arena.",
+     "home": 0.0,
+     "away": 1367.7958713950202,
+     "home_s": "0",
+     "away_s": "1,368",
+     "better": "home"
     },
     {
      "key": "tz_shift",
@@ -554,10 +1695,10 @@
      "label": "Games played this season",
      "group": "Context",
      "tip": "Early in the season the model leans on last year's ratings.",
-     "home": 13.0,
-     "away": 9.0,
-     "home_s": "13",
-     "away_s": "9",
+     "home": 11.0,
+     "away": 11.0,
+     "home_s": "11",
+     "away_s": "11",
      "better": null
     }
    ],
@@ -565,38 +1706,38 @@
     {
      "feature": "d_elo",
      "label": "Elo rating (home minus away)",
-     "value": 0.10607138815381618,
-     "raw": 34.63914548358912
-    },
-    {
-     "feature": "d_xg_share",
-     "label": "Expected-goals share (home minus away)",
-     "value": -0.05729486441405909,
-     "raw": -0.0292093319646608
-    },
-    {
-     "feature": "a_b2b",
-     "label": "Second game in two nights (away team)",
-     "value": -0.053266980495667915,
-     "raw": 0.0
-    },
-    {
-     "feature": "d_ga_season_shrunk",
-     "label": "Goals against per game (season) (home minus away)",
-     "value": 0.032833008937545524,
-     "raw": -0.314913518583837
-    },
-    {
-     "feature": "h_b2b",
-     "label": "Second game in two nights (home team)",
-     "value": 0.027890198818428812,
-     "raw": 0.0
+     "value": -0.07025737245799858,
+     "raw": -23.75057735478572
     },
     {
      "feature": "d_pen_drawn_pg",
      "label": "Penalties drawn per game (home minus away)",
-     "value": 0.023351461061512226,
-     "raw": 0.5
+     "value": -0.06876537687911907,
+     "raw": -1.5333333333333328
+    },
+    {
+     "feature": "d_xg_share",
+     "label": "Expected-goals share (home minus away)",
+     "value": 0.056020916549731584,
+     "raw": 0.02614316767731234
+    },
+    {
+     "feature": "a_b2b",
+     "label": "Second game in two nights (away team)",
+     "value": -0.05326439424569758,
+     "raw": 0.0
+    },
+    {
+     "feature": "d_xga_pg",
+     "label": "Expected goals against per game (home minus away)",
+     "value": 0.036902884960791964,
+     "raw": -0.3824542118707872
+    },
+    {
+     "feature": "h_b2b",
+     "label": "Second game in two nights (home team)",
+     "value": 0.027851446208174344,
+     "raw": 0.0
     }
    ],
    "server_action": "NO_BET",
@@ -604,119 +1745,62 @@
    "server_stake": 0.0
   },
   {
-   "game_id": 2026020186,
-   "start_utc": "2026-10-27T00:30:00+00:00",
-   "home": "CGY",
-   "away": "TOR",
-   "home_goalie": "D. Wolf",
-   "away_goalie": "S. Bobrovsky",
+   "game_id": 2026020192,
+   "start_utc": "2026-10-28T00:00:00+00:00",
+   "home": "NSH",
+   "away": "NYI",
+   "home_goalie": "J. Saros",
+   "away_goalie": "I. Sorokin",
    "goalie_status": "probable",
-   "p_home": 0.5158220728136979,
+   "p_home": 0.49396112610578197,
    "blocked": null,
    "notes": [
-    "TOR have the clearly better goal differential this season (gap 0.98 goals/game).",
-    "Goaltending edge to TOR (goals saved above expected).",
+    "NYI have the clearly better goal differential this season (gap 0.32 goals/game).",
+    "Goaltending edge to NYI (goals saved above expected).",
     "Early in the season: team ratings lean on last year's results and are less reliable."
    ],
-   "model_side": "home",
+   "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-26T20:03:43+00:00",
+   "odds_captured_at": "2026-10-27T12:02:20+00:00",
    "sides": {
     "home": {
-     "team": "CGY",
-     "p_model": 0.5158220728136979,
-     "p_market": 0.4426543789922752,
-     "p_adj": 0.4573638982761777,
-     "edge": 0.07316769382142263,
-     "ev": 0.0016269372248290948,
-     "kelly_full": 0.0013671741385118444,
+     "team": "NSH",
+     "p_model": 0.49396112610578197,
+     "p_market": 0.5276790198907542,
+     "p_adj": 0.5148663670092455,
+     "edge": -0.0337178937849722,
+     "ev": -0.057794548373080734,
+     "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.19,
+     "best_decimal": 1.83,
      "books": {},
      "fails": [
-      "expected value after shrinkage toward the market is only +0.2% (< 1%)"
+      "edge -3.4% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     },
     "away": {
-     "team": "TOR",
-     "p_model": 0.48417792718630215,
-     "p_market": 0.5573456210077248,
-     "p_adj": 0.5426361017238224,
-     "edge": -0.07316769382142263,
-     "ev": -0.05581318300054905,
-     "kelly_full": 0.0,
+     "team": "NYI",
+     "p_model": 0.5060388738942181,
+     "p_market": 0.47232098010924584,
+     "p_adj": 0.4851336329907545,
+     "edge": 0.03371789378497225,
+     "ev": 0.004226620290861738,
+     "kelly_full": 0.003950112421366111,
      "best_book": null,
-     "best_decimal": 1.74,
+     "best_decimal": 2.07,
      "books": {},
      "fails": [
-      "edge -7.3% below the 4% minimum (starting goalie unconfirmed)"
+      "edge +3.4% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     }
    },
-   "alt": [
-    {
-     "market": "totals",
-     "side": "over",
-     "label": "Over 6.5",
-     "point": 6.5,
-     "p_model": 0.4541687622048013,
-     "p_market": 0.5232783207027228,
-     "p_push": 0.0,
-     "edge": -0.06910955849792155,
-     "ev": -0.15978778992111758,
-     "best_decimal": 1.85,
-     "best_book": null,
-     "n_books": 9
-    },
-    {
-     "market": "totals",
-     "side": "under",
-     "label": "Under 6.5",
-     "point": 6.5,
-     "p_model": 0.5458312377951987,
-     "p_market": 0.47672167929727716,
-     "p_push": 0.0,
-     "edge": 0.06910955849792155,
-     "ev": 0.1189540374801572,
-     "best_decimal": 2.05,
-     "best_book": null,
-     "n_books": 9
-    },
-    {
-     "market": "spreads",
-     "side": "home",
-     "label": "CGY +1.5",
-     "point": 1.5,
-     "p_model": 0.6465801921006169,
-     "p_market": 0.6518565206591926,
-     "p_push": 0.0,
-     "edge": -0.005276328558575738,
-     "ev": -0.023663909928068494,
-     "best_decimal": 1.51,
-     "best_book": null,
-     "n_books": 9
-    },
-    {
-     "market": "spreads",
-     "side": "away",
-     "label": "TOR -1.5",
-     "point": -1.5,
-     "p_model": 0.3534198078993831,
-     "p_market": 0.34814347934080736,
-     "p_push": 0.0,
-     "edge": 0.005276328558575738,
-     "ev": -0.01042453788172737,
-     "best_decimal": 2.8,
-     "best_book": null,
-     "n_books": 9
-    }
-   ],
+   "alt": [],
    "goals": {
-    "lam_home": 2.9432454699546677,
-    "lam_away": 3.208378010078986,
-    "exp_total": 6.2638955989321685
+    "lam_home": 3.0272415586542665,
+    "lam_away": 3.0574970290810533,
+    "exp_total": 6.198369515978576
    },
    "props": [],
    "stats": [
@@ -725,10 +1809,10 @@
      "label": "Elo rating",
      "group": "Strength",
      "tip": "Overall team strength from results, goal margin and home ice.",
-     "home": 1449.295613390579,
-     "away": 1481.0424248426557,
-     "home_s": "1449",
-     "away_s": "1481",
+     "home": 1477.081183262136,
+     "away": 1481.816562653669,
+     "home_s": "1477",
+     "away_s": "1482",
      "better": "away"
     },
     {
@@ -736,10 +1820,10 @@
      "label": "Goal differential per game (season)",
      "group": "Strength",
      "tip": "Goals for minus against, blended with last season early in the year.",
-     "home": -0.8119512195121943,
-     "away": 0.17116724738676048,
-     "home_s": "-0.81",
-     "away_s": "+0.17",
+     "home": -0.23123827392120067,
+     "away": 0.08724202626641642,
+     "home_s": "-0.23",
+     "away_s": "+0.09",
      "better": "away"
     },
     {
@@ -747,10 +1831,10 @@
      "label": "Goal differential, last 10 games",
      "group": "Strength",
      "tip": "Recent form.",
-     "home": -1.6,
-     "away": 1.0,
-     "home_s": "-1.60",
-     "away_s": "+1.00",
+     "home": -0.2,
+     "away": 0.4,
+     "home_s": "-0.20",
+     "away_s": "+0.40",
      "better": "away"
     },
     {
@@ -759,9 +1843,9 @@
      "group": "Strength",
      "tip": "Recent results.",
      "home": 0.4,
-     "away": 0.6,
+     "away": 0.5,
      "home_s": "40%",
-     "away_s": "60%",
+     "away_s": "50%",
      "better": "away"
     },
     {
@@ -769,10 +1853,10 @@
      "label": "Corsi % (shot attempts)",
      "group": "Puck possession and chances",
      "tip": "Share of all shot attempts, last 20 games. Above 50% means they control play.",
-     "home": 0.45733222866611434,
-     "away": 0.45808383233532934,
-     "home_s": "45.7%",
-     "away_s": "45.8%",
+     "home": 0.47063758389261745,
+     "away": 0.5073170731707317,
+     "home_s": "47.1%",
+     "away_s": "50.7%",
      "better": "away"
     },
     {
@@ -780,10 +1864,10 @@
      "label": "Corsi %, 5-on-5",
      "group": "Puck possession and chances",
      "tip": "Same, at even strength only.",
-     "home": 0.4644644644644645,
-     "away": 0.468663338879645,
-     "home_s": "46.4%",
-     "away_s": "46.9%",
+     "home": 0.4528301886792453,
+     "away": 0.5087323943661972,
+     "home_s": "45.3%",
+     "away_s": "50.9%",
      "better": "away"
     },
     {
@@ -791,10 +1875,10 @@
      "label": "Expected-goals share",
      "group": "Puck possession and chances",
      "tip": "Share of shot quality (distance, angle, type), last 20 games.",
-     "home": 0.4392721943361387,
-     "away": 0.46714219502043014,
-     "home_s": "43.9%",
-     "away_s": "46.7%",
+     "home": 0.466977322921681,
+     "away": 0.49412094923791244,
+     "home_s": "46.7%",
+     "away_s": "49.4%",
      "better": "away"
     },
     {
@@ -802,10 +1886,10 @@
      "label": "High-danger chances share",
      "group": "Puck possession and chances",
      "tip": "Share of the best scoring chances.",
-     "home": 0.42592592592592593,
-     "away": 0.4724689165186501,
-     "home_s": "42.6%",
-     "away_s": "47.2%",
+     "home": 0.4667931688804554,
+     "away": 0.5115830115830116,
+     "home_s": "46.7%",
+     "away_s": "51.2%",
      "better": "away"
     },
     {
@@ -813,10 +1897,10 @@
      "label": "Expected goals for per game",
      "group": "Puck possession and chances",
      "tip": "How much quality offence they create.",
-     "home": 2.231792204713482,
-     "away": 2.3518198620712782,
-     "home_s": "2.23",
-     "away_s": "2.35",
+     "home": 2.31388233580411,
+     "away": 2.3757782646869883,
+     "home_s": "2.31",
+     "away_s": "2.38",
      "better": "away"
     },
     {
@@ -824,10 +1908,10 @@
      "label": "Expected goals against per game",
      "group": "Puck possession and chances",
      "tip": "How much quality offence they allow.",
-     "home": 2.8488667431772106,
-     "away": 2.6826640427029913,
-     "home_s": "2.85",
-     "away_s": "2.68",
+     "home": 2.6411384376397047,
+     "away": 2.4323122814660825,
+     "home_s": "2.64",
+     "away_s": "2.43",
      "better": "away"
     },
     {
@@ -835,10 +1919,10 @@
      "label": "Shooting %",
      "group": "Luck check",
      "tip": "Very high or low values tend to move back toward the league average.",
-     "home": 0.09904912836767037,
-     "away": 0.12560777957860617,
-     "home_s": "9.9%",
-     "away_s": "12.6%",
+     "home": 0.10876369327073553,
+     "away": 0.09829721362229102,
+     "home_s": "10.9%",
+     "away_s": "9.8%",
      "better": null
     },
     {
@@ -846,10 +1930,10 @@
      "label": "Team save %",
      "group": "Luck check",
      "tip": "Same idea for goaltending results.",
-     "home": 0.8846153846153846,
-     "away": 0.8800841514726507,
-     "home_s": "88.5%",
-     "away_s": "88.0%",
+     "home": 0.8984149855907781,
+     "away": 0.8819218241042346,
+     "home_s": "89.8%",
+     "away_s": "88.2%",
      "better": null
     },
     {
@@ -857,10 +1941,10 @@
      "label": "PDO vs league (shooting % + save %)",
      "group": "Luck check",
      "tip": "Positive = running hot, which usually fades; negative = running cold.",
-     "home": -0.016335487016945094,
-     "away": 0.005691931051256871,
-     "home_s": "-0.016",
-     "away_s": "+0.006",
+     "home": 0.007178678861513577,
+     "away": -0.019780962273474367,
+     "home_s": "+0.007",
+     "away_s": "-0.020",
      "better": null
     },
     {
@@ -868,10 +1952,10 @@
      "label": "Starting goalie save % (season)",
      "group": "Goaltending",
      "tip": "Shrunk toward the league average so small samples don't mislead.",
-     "home": 0.8937568656182977,
-     "away": 0.9027382676648248,
-     "home_s": "0.894",
-     "away_s": "0.903",
+     "home": 0.9033240576794416,
+     "away": 0.9076197670889321,
+     "home_s": "0.903",
+     "away_s": "0.908",
      "better": "away"
     },
     {
@@ -879,21 +1963,21 @@
      "label": "Starting goalie save %, last 5",
      "group": "Goaltending",
      "tip": "Recent form.",
-     "home": 0.8842087349658307,
-     "away": 0.8997624498098118,
-     "home_s": "0.884",
-     "away_s": "0.900",
-     "better": "away"
+     "home": 0.9091208993442652,
+     "away": 0.89435910309427,
+     "home_s": "0.909",
+     "away_s": "0.894",
+     "better": "home"
     },
     {
      "key": "g_gsax100_season",
      "label": "Goalie goals saved above expected / 100 shots",
      "group": "Goaltending",
      "tip": "Saves vs the quality of shots faced; positive is better than average.",
-     "home": -1.9651731483654498,
-     "away": -1.266055445797103,
-     "home_s": "-1.97",
-     "away_s": "-1.27",
+     "home": -1.1459864290216568,
+     "away": -0.5236373299729078,
+     "home_s": "-1.15",
+     "away_s": "-0.52",
      "better": "away"
     },
     {
@@ -901,9 +1985,9 @@
      "label": "Goalie days of rest",
      "group": "Goaltending",
      "tip": "Backups usually start on the second night of a back-to-back.",
-     "home": 7.683770390253975,
-     "away": 3.2630600867231054,
-     "home_s": "8",
+     "home": 2.6313861079574776,
+     "away": 3.105841676127567,
+     "home_s": "3",
      "away_s": "3",
      "better": null
     },
@@ -912,42 +1996,42 @@
      "label": "Power play %",
      "group": "Special teams",
      "tip": "Shrunk toward the league average.",
-     "home": 0.22093023255813954,
-     "away": 0.2871287128712871,
-     "home_s": "22.1%",
-     "away_s": "28.7%",
-     "better": "away"
+     "home": 0.27,
+     "away": 0.1926605504587156,
+     "home_s": "27.0%",
+     "away_s": "19.3%",
+     "better": "home"
     },
     {
      "key": "pk_pct",
      "label": "Penalty kill %",
      "group": "Special teams",
      "tip": "Shrunk toward the league average.",
-     "home": 0.8,
-     "away": 0.8220338983050848,
-     "home_s": "80.0%",
-     "away_s": "82.2%",
-     "better": "away"
+     "home": 0.8454545454545455,
+     "away": 0.8229166666666666,
+     "home_s": "84.5%",
+     "away_s": "82.3%",
+     "better": "home"
     },
     {
      "key": "pen_taken_pg",
      "label": "Penalties taken per game",
      "group": "Special teams",
      "tip": "More penalties means more time shorthanded.",
-     "home": 3.7666666666666666,
-     "away": 4.533333333333333,
-     "home_s": "3.8",
-     "away_s": "4.5",
-     "better": "home"
+     "home": 3.466666666666667,
+     "away": 3.3666666666666667,
+     "home_s": "3.5",
+     "away_s": "3.4",
+     "better": "away"
     },
     {
      "key": "pen_drawn_pg",
      "label": "Penalties drawn per game",
      "group": "Special teams",
      "tip": "More penalties drawn means more power plays.",
-     "home": 2.8666666666666667,
-     "away": 3.8333333333333335,
-     "home_s": "2.9",
+     "home": 3.2333333333333334,
+     "away": 3.7666666666666666,
+     "home_s": "3.2",
      "away_s": "3.8",
      "better": "away"
     },
@@ -978,11 +2062,11 @@
      "label": "Games in the last 7 days",
      "group": "Schedule and travel",
      "tip": "Schedule congestion.",
-     "home": 2.0,
-     "away": 4.0,
-     "home_s": "2",
-     "away_s": "4",
-     "better": "home"
+     "home": 3.0,
+     "away": 3.0,
+     "home_s": "3",
+     "away_s": "3",
+     "better": null
     },
     {
      "key": "travel_km",
@@ -990,9 +2074,9 @@
      "group": "Schedule and travel",
      "tip": "Distance from the previous game's arena.",
      "home": 0.0,
-     "away": 281.6285936781201,
+     "away": 992.2454290314083,
      "home_s": "0",
-     "away_s": "282",
+     "away_s": "992",
      "better": "home"
     },
     {
@@ -1011,49 +2095,49 @@
      "label": "Games played this season",
      "group": "Context",
      "tip": "Early in the season the model leans on last year's ratings.",
-     "home": 10.0,
-     "away": 13.0,
-     "home_s": "10",
-     "away_s": "13",
+     "home": 11.0,
+     "away": 11.0,
+     "home_s": "11",
+     "away_s": "11",
      "better": null
     }
    ],
    "drivers": [
     {
-     "feature": "d_elo",
-     "label": "Elo rating (home minus away)",
-     "value": -0.09457860466547972,
-     "raw": -31.7468114520766
-    },
-    {
-     "feature": "d_games_last_7d",
-     "label": "Games in the last 7 days (home minus away)",
-     "value": 0.07448349409238218,
-     "raw": -2.0
-    },
-    {
-     "feature": "d_xg_share",
-     "label": "Expected-goals share (home minus away)",
-     "value": -0.054556819926692646,
-     "raw": -0.027870000684291463
+     "feature": "d_cf_pct",
+     "label": "Corsi % (shot attempts) (home minus away)",
+     "value": -0.05947667442550994,
+     "raw": -0.03667948927811426
     },
     {
      "feature": "a_b2b",
      "label": "Second game in two nights (away team)",
-     "value": -0.053266980495667915,
+     "value": -0.05326439424569758,
      "raw": 0.0
+    },
+    {
+     "feature": "d_xg_share",
+     "label": "Expected-goals share (home minus away)",
+     "value": -0.0531834287898279,
+     "raw": -0.02714362631623146
     },
     {
      "feature": "d_g_sv_l5",
      "label": "Starting goalie save %, last 5 (home minus away)",
-     "value": 0.04713242165000881,
-     "raw": -0.015553714843981048
+     "value": -0.04401265747339804,
+     "raw": 0.014761796249995185
     },
     {
-     "feature": "d_pen_drawn_pg",
-     "label": "Penalties drawn per game (home minus away)",
-     "value": -0.043585424949554016,
-     "raw": -0.9666666666666668
+     "feature": "d_ga_season_shrunk",
+     "label": "Goals against per game (season) (home minus away)",
+     "value": -0.03371083342812613,
+     "raw": 0.3292682926829267
+    },
+    {
+     "feature": "h_b2b",
+     "label": "Second game in two nights (home team)",
+     "value": 0.027851446208174344,
+     "raw": 0.0
     }
    ],
    "server_action": "NO_BET",
@@ -1061,120 +2145,62 @@
    "server_stake": 0.0
   },
   {
-   "game_id": 2026020187,
-   "start_utc": "2026-10-27T01:30:00+00:00",
-   "home": "EDM",
-   "away": "DET",
-   "home_goalie": "C. Ingram",
-   "away_goalie": "J. Gibson",
+   "game_id": 2026020193,
+   "start_utc": "2026-10-28T00:00:00+00:00",
+   "home": "DAL",
+   "away": "NJD",
+   "home_goalie": "J. Oettinger",
+   "away_goalie": "J. Allen",
    "goalie_status": "probable",
-   "p_home": 0.5402196622877871,
+   "p_home": 0.5670751664510695,
    "blocked": null,
    "notes": [
-    "EDM have the clearly better goal differential this season (gap 0.66 goals/game).",
-    "DET are creating the better share of expected goals recently.",
-    "Goaltending edge to EDM (goals saved above expected).",
+    "DAL have the clearly better goal differential this season (gap 0.54 goals/game).",
+    "Goaltending edge to DAL (goals saved above expected).",
     "Early in the season: team ratings lean on last year's results and are less reliable."
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-10-26T20:03:43+00:00",
+   "odds_captured_at": "2026-10-27T12:02:20+00:00",
    "sides": {
     "home": {
-     "team": "EDM",
-     "p_model": 0.5402196622877871,
-     "p_market": 0.6152975059620316,
-     "p_adj": 0.6006666991769198,
-     "edge": -0.07507784367424453,
-     "ev": -0.04493994830869741,
+     "team": "DAL",
+     "p_model": 0.5670751664510695,
+     "p_market": 0.5343165108932401,
+     "p_adj": 0.5469345176974576,
+     "edge": 0.03275865555782942,
+     "ev": -0.010048522967601725,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.59,
+     "best_decimal": 1.81,
      "books": {},
      "fails": [
-      "edge -7.5% below the 4% minimum (starting goalie unconfirmed)"
+      "edge +3.3% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     },
     "away": {
-     "team": "DET",
-     "p_model": 0.45978033771221294,
-     "p_market": 0.3847024940379684,
-     "p_adj": 0.39933330082308016,
-     "edge": 0.07507784367424453,
-     "ev": -0.0016667479422995957,
+     "team": "NJD",
+     "p_model": 0.4329248335489305,
+     "p_market": 0.46568348910675994,
+     "p_adj": 0.4530654823025424,
+     "edge": -0.03275865555782942,
+     "ev": -0.04856248716466094,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.5,
+     "best_decimal": 2.1,
      "books": {},
      "fails": [
-      "expected value after shrinkage toward the market is only -0.2% (< 1%)"
+      "edge -3.3% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     }
    },
-   "alt": [
-    {
-     "market": "totals",
-     "side": "over",
-     "label": "Over 6.5",
-     "point": 6.5,
-     "p_model": 0.4443413812603456,
-     "p_market": 0.5427030198732592,
-     "p_push": 0.0,
-     "edge": -0.09836163861291358,
-     "ev": -0.20018551373137788,
-     "best_decimal": 1.8,
-     "best_book": null,
-     "n_books": 9
-    },
-    {
-     "market": "totals",
-     "side": "under",
-     "label": "Under 6.5",
-     "point": 6.5,
-     "p_model": 0.5556586187396544,
-     "p_market": 0.4572969801267408,
-     "p_push": 0.0,
-     "edge": 0.09836163861291358,
-     "ev": 0.1779962717280673,
-     "best_decimal": 2.12,
-     "best_book": null,
-     "n_books": 9
-    },
-    {
-     "market": "spreads",
-     "side": "home",
-     "label": "EDM -1.5",
-     "point": -1.5,
-     "p_model": 0.3538066163872352,
-     "p_market": 0.40203268127602976,
-     "p_push": 0.0,
-     "edge": -0.04822606488879455,
-     "ev": -0.15086412067063554,
-     "best_decimal": 2.4,
-     "best_book": null,
-     "n_books": 9
-    },
-    {
-     "market": "spreads",
-     "side": "away",
-     "label": "DET +1.5",
-     "point": 1.5,
-     "p_model": 0.6461933836127648,
-     "p_market": 0.5979673187239702,
-     "p_push": 0.0,
-     "edge": 0.04822606488879455,
-     "ev": 0.059757149124934184,
-     "best_decimal": 1.64,
-     "best_book": null,
-     "n_books": 9
-    }
-   ],
+   "alt": [],
    "goals": {
-    "lam_home": 3.2232993676991484,
-    "lam_away": 2.843050209009579,
-    "exp_total": 6.178313245707977
+    "lam_home": 3.214891108079721,
+    "lam_away": 2.876614973450834,
+    "exp_total": 6.203603960419311
    },
    "props": [],
    "stats": [
@@ -1183,10 +2209,10 @@
      "label": "Elo rating",
      "group": "Strength",
      "tip": "Overall team strength from results, goal margin and home ice.",
-     "home": 1527.0951606681926,
-     "away": 1471.5572554765984,
-     "home_s": "1527",
-     "away_s": "1472",
+     "home": 1554.0663465012726,
+     "away": 1496.045402093642,
+     "home_s": "1554",
+     "away_s": "1496",
      "better": "home"
     },
     {
@@ -1194,10 +2220,10 @@
      "label": "Goal differential per game (season)",
      "group": "Strength",
      "tip": "Goals for minus against, blended with last season early in the year.",
-     "home": 0.4108391608391613,
-     "away": -0.25211069418386467,
-     "home_s": "+0.41",
-     "away_s": "-0.25",
+     "home": 0.6090472027972029,
+     "away": 0.06941838649155718,
+     "home_s": "+0.61",
+     "away_s": "+0.07",
      "better": "home"
     },
     {
@@ -1205,10 +2231,10 @@
      "label": "Goal differential, last 10 games",
      "group": "Strength",
      "tip": "Recent form.",
-     "home": 1.1,
-     "away": -0.3,
-     "home_s": "+1.10",
-     "away_s": "-0.30",
+     "home": 1.6,
+     "away": 0.3,
+     "home_s": "+1.60",
+     "away_s": "+0.30",
      "better": "home"
     },
     {
@@ -1216,10 +2242,10 @@
      "label": "Win % last 10",
      "group": "Strength",
      "tip": "Recent results.",
-     "home": 0.8,
-     "away": 0.4,
-     "home_s": "80%",
-     "away_s": "40%",
+     "home": 0.7,
+     "away": 0.6,
+     "home_s": "70%",
+     "away_s": "60%",
      "better": "home"
     },
     {
@@ -1227,10 +2253,10 @@
      "label": "Corsi % (shot attempts)",
      "group": "Puck possession and chances",
      "tip": "Share of all shot attempts, last 20 games. Above 50% means they control play.",
-     "home": 0.4926086956521739,
-     "away": 0.5192389006342495,
-     "home_s": "49.3%",
-     "away_s": "51.9%",
+     "home": 0.5226972234464522,
+     "away": 0.5570756733646858,
+     "home_s": "52.3%",
+     "away_s": "55.7%",
      "better": "away"
     },
     {
@@ -1238,10 +2264,10 @@
      "label": "Corsi %, 5-on-5",
      "group": "Puck possession and chances",
      "tip": "Same, at even strength only.",
-     "home": 0.4871934604904632,
-     "away": 0.5209903121636168,
-     "home_s": "48.7%",
-     "away_s": "52.1%",
+     "home": 0.5244040862656073,
+     "away": 0.5610647181628392,
+     "home_s": "52.4%",
+     "away_s": "56.1%",
      "better": "away"
     },
     {
@@ -1249,10 +2275,10 @@
      "label": "Expected-goals share",
      "group": "Puck possession and chances",
      "tip": "Share of shot quality (distance, angle, type), last 20 games.",
-     "home": 0.48093515955508687,
-     "away": 0.5183990307442138,
-     "home_s": "48.1%",
-     "away_s": "51.8%",
+     "home": 0.5500695832464076,
+     "away": 0.5657800363281182,
+     "home_s": "55.0%",
+     "away_s": "56.6%",
      "better": "away"
     },
     {
@@ -1260,10 +2286,10 @@
      "label": "High-danger chances share",
      "group": "Puck possession and chances",
      "tip": "Share of the best scoring chances.",
-     "home": 0.49390243902439024,
-     "away": 0.5078431372549019,
-     "home_s": "49.4%",
-     "away_s": "50.8%",
+     "home": 0.5595959595959596,
+     "away": 0.5825602968460112,
+     "home_s": "56.0%",
+     "away_s": "58.3%",
      "better": "away"
     },
     {
@@ -1271,10 +2297,10 @@
      "label": "Expected goals for per game",
      "group": "Puck possession and chances",
      "tip": "How much quality offence they create.",
-     "home": 2.306110789853485,
-     "away": 2.550634217980954,
-     "home_s": "2.31",
-     "away_s": "2.55",
+     "home": 2.477282238239701,
+     "away": 2.7466100656253447,
+     "home_s": "2.48",
+     "away_s": "2.75",
      "better": "away"
     },
     {
@@ -1282,21 +2308,21 @@
      "label": "Expected goals against per game",
      "group": "Puck possession and chances",
      "tip": "How much quality offence they allow.",
-     "home": 2.4889447265426714,
-     "away": 2.369579877171312,
-     "home_s": "2.49",
-     "away_s": "2.37",
-     "better": "away"
+     "home": 2.0262975154693574,
+     "away": 2.1079445126003127,
+     "home_s": "2.03",
+     "away_s": "2.11",
+     "better": "home"
     },
     {
      "key": "sh_pct",
      "label": "Shooting %",
      "group": "Luck check",
      "tip": "Very high or low values tend to move back toward the league average.",
-     "home": 0.13452566096423016,
-     "away": 0.0962686567164179,
-     "home_s": "13.5%",
-     "away_s": "9.6%",
+     "home": 0.10208643815201192,
+     "away": 0.09986033519553073,
+     "home_s": "10.2%",
+     "away_s": "10.0%",
      "better": null
     },
     {
@@ -1304,10 +2330,10 @@
      "label": "Team save %",
      "group": "Luck check",
      "tip": "Same idea for goaltending results.",
-     "home": 0.8803353658536586,
-     "away": 0.867879746835443,
-     "home_s": "88.0%",
-     "away_s": "86.8%",
+     "home": 0.8981481481481481,
+     "away": 0.8791666666666667,
+     "home_s": "89.8%",
+     "away_s": "87.9%",
      "better": null
     },
     {
@@ -1315,10 +2341,10 @@
      "label": "PDO vs league (shooting % + save %)",
      "group": "Luck check",
      "tip": "Positive = running hot, which usually fades; negative = running cold.",
-     "home": 0.014861026817888812,
-     "away": -0.03585159644813907,
-     "home_s": "+0.015",
-     "away_s": "-0.036",
+     "home": 0.00023458630016004456,
+     "away": -0.020972998137802623,
+     "home_s": "+0.000",
+     "away_s": "-0.021",
      "better": null
     },
     {
@@ -1326,10 +2352,10 @@
      "label": "Starting goalie save % (season)",
      "group": "Goaltending",
      "tip": "Shrunk toward the league average so small samples don't mislead.",
-     "home": 0.9027226941128501,
-     "away": 0.8996000995606799,
-     "home_s": "0.903",
-     "away_s": "0.900",
+     "home": 0.9106857071722738,
+     "away": 0.8993344652122723,
+     "home_s": "0.911",
+     "away_s": "0.899",
      "better": "home"
     },
     {
@@ -1337,9 +2363,9 @@
      "label": "Starting goalie save %, last 5",
      "group": "Goaltending",
      "tip": "Recent form.",
-     "home": 0.896116122629637,
-     "away": 0.8947347768215788,
-     "home_s": "0.896",
+     "home": 0.9050471945666009,
+     "away": 0.8952807407180668,
+     "home_s": "0.905",
      "away_s": "0.895",
      "better": "home"
     },
@@ -1348,10 +2374,10 @@
      "label": "Goalie goals saved above expected / 100 shots",
      "group": "Goaltending",
      "tip": "Saves vs the quality of shots faced; positive is better than average.",
-     "home": -0.4978500484212399,
-     "away": -1.4880689662416127,
-     "home_s": "-0.50",
-     "away_s": "-1.49",
+     "home": -0.05799666558346889,
+     "away": -1.4766315608370961,
+     "home_s": "-0.06",
+     "away_s": "-1.48",
      "better": "home"
     },
     {
@@ -1359,10 +2385,10 @@
      "label": "Goalie days of rest",
      "group": "Goaltending",
      "tip": "Backups usually start on the second night of a back-to-back.",
-     "home": 10.315300433615528,
-     "away": 3.473879826553789,
-     "home_s": "10",
-     "away_s": "3",
+     "home": 6.054752812467748,
+     "away": 3.7372277840850447,
+     "home_s": "6",
+     "away_s": "4",
      "better": null
     },
     {
@@ -1370,10 +2396,10 @@
      "label": "Power play %",
      "group": "Special teams",
      "tip": "Shrunk toward the league average.",
-     "home": 0.2727272727272727,
-     "away": 0.2,
-     "home_s": "27.3%",
-     "away_s": "20.0%",
+     "home": 0.2621359223300971,
+     "away": 0.21649484536082475,
+     "home_s": "26.2%",
+     "away_s": "21.6%",
      "better": "home"
     },
     {
@@ -1381,10 +2407,10 @@
      "label": "Penalty kill %",
      "group": "Special teams",
      "tip": "Shrunk toward the league average.",
-     "home": 0.7157894736842105,
-     "away": 0.7010309278350515,
-     "home_s": "71.6%",
-     "away_s": "70.1%",
+     "home": 0.8333333333333334,
+     "away": 0.7441860465116279,
+     "home_s": "83.3%",
+     "away_s": "74.4%",
      "better": "home"
     },
     {
@@ -1392,10 +2418,410 @@
      "label": "Penalties taken per game",
      "group": "Special teams",
      "tip": "More penalties means more time shorthanded.",
-     "home": 3.3,
-     "away": 3.7,
-     "home_s": "3.3",
-     "away_s": "3.7",
+     "home": 4.233333333333333,
+     "away": 2.7333333333333334,
+     "home_s": "4.2",
+     "away_s": "2.7",
+     "better": "away"
+    },
+    {
+     "key": "pen_drawn_pg",
+     "label": "Penalties drawn per game",
+     "group": "Special teams",
+     "tip": "More penalties drawn means more power plays.",
+     "home": 3.6666666666666665,
+     "away": 2.966666666666667,
+     "home_s": "3.7",
+     "away_s": "3.0",
+     "better": "home"
+    },
+    {
+     "key": "rest_days",
+     "label": "Days of rest",
+     "group": "Schedule and travel",
+     "tip": "Days since the last game.",
+     "home": 2.0,
+     "away": 3.0,
+     "home_s": "2",
+     "away_s": "3",
+     "better": "away"
+    },
+    {
+     "key": "b2b",
+     "label": "Second game in two nights",
+     "group": "Schedule and travel",
+     "tip": "Back-to-backs lower win chances a little.",
+     "home": 0.0,
+     "away": 0.0,
+     "home_s": "no",
+     "away_s": "no",
+     "better": null
+    },
+    {
+     "key": "games_last_7d",
+     "label": "Games in the last 7 days",
+     "group": "Schedule and travel",
+     "tip": "Schedule congestion.",
+     "home": 3.0,
+     "away": 3.0,
+     "home_s": "3",
+     "away_s": "3",
+     "better": null
+    },
+    {
+     "key": "travel_km",
+     "label": "Travel since last game (km)",
+     "group": "Schedule and travel",
+     "tip": "Distance from the previous game's arena.",
+     "home": 0.0,
+     "away": 2193.3627891066603,
+     "home_s": "0",
+     "away_s": "2,193",
+     "better": "home"
+    },
+    {
+     "key": "tz_shift",
+     "label": "Time-zone change",
+     "group": "Schedule and travel",
+     "tip": "Hours of time-zone shift for the trip.",
+     "home": 0.0,
+     "away": -1.0,
+     "home_s": "+0 h",
+     "away_s": "-1 h",
+     "better": null
+    },
+    {
+     "key": "gp_season",
+     "label": "Games played this season",
+     "group": "Context",
+     "tip": "Early in the season the model leans on last year's ratings.",
+     "home": 11.0,
+     "away": 11.0,
+     "home_s": "11",
+     "away_s": "11",
+     "better": null
+    }
+   ],
+   "drivers": [
+    {
+     "feature": "d_elo",
+     "label": "Elo rating (home minus away)",
+     "value": 0.1762952737143211,
+     "raw": 58.02094440763062
+    },
+    {
+     "feature": "d_ga_season_shrunk",
+     "label": "Goals against per game (season) (home minus away)",
+     "value": 0.0563503355361286,
+     "raw": -0.5388506310762406
+    },
+    {
+     "feature": "d_cf_pct",
+     "label": "Corsi % (shot attempts) (home minus away)",
+     "value": -0.055694143792040345,
+     "raw": -0.03437844991823358
+    },
+    {
+     "feature": "a_b2b",
+     "label": "Second game in two nights (away team)",
+     "value": -0.05326439424569758,
+     "raw": 0.0
+    },
+    {
+     "feature": "d_pen_drawn_pg",
+     "label": "Penalties drawn per game (home minus away)",
+     "value": 0.03216666893577654,
+     "raw": 0.6999999999999997
+    },
+    {
+     "feature": "d_g_sv_season",
+     "label": "Starting goalie save % (season) (home minus away)",
+     "value": 0.030367526821875126,
+     "raw": 0.011351241960001479
+    }
+   ],
+   "server_action": "NO_BET",
+   "server_side": null,
+   "server_stake": 0.0
+  },
+  {
+   "game_id": 2026020194,
+   "start_utc": "2026-10-28T00:00:00+00:00",
+   "home": "WPG",
+   "away": "FLA",
+   "home_goalie": "S. Skinner",
+   "away_goalie": "J. Markstrom",
+   "goalie_status": "probable",
+   "p_home": 0.4868520870977577,
+   "blocked": null,
+   "notes": [
+    "FLA are creating the better share of expected goals recently.",
+    "Goaltending edge to WPG (goals saved above expected).",
+    "Early in the season: team ratings lean on last year's results and are less reliable."
+   ],
+   "model_side": "away",
+   "odds_stale": false,
+   "odds_captured_at": "2026-10-27T12:02:20+00:00",
+   "sides": {
+    "home": {
+     "team": "WPG",
+     "p_model": 0.4868520870977577,
+     "p_market": 0.4542724373996352,
+     "p_adj": 0.4668529812430621,
+     "edge": 0.03257964969812249,
+     "ev": -0.00560314995227762,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 2.13,
+     "books": {},
+     "fails": [
+      "edge +3.3% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    },
+    "away": {
+     "team": "FLA",
+     "p_model": 0.5131479129022423,
+     "p_market": 0.5457275626003648,
+     "p_adj": 0.5331470187569378,
+     "edge": -0.03257964969812255,
+     "ev": -0.050998306612650646,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 1.78,
+     "books": {},
+     "fails": [
+      "edge -3.3% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    }
+   },
+   "alt": [],
+   "goals": {
+    "lam_home": 3.026730878408193,
+    "lam_away": 3.110846259868422,
+    "exp_total": 6.250708771730371
+   },
+   "props": [],
+   "stats": [
+    {
+     "key": "elo",
+     "label": "Elo rating",
+     "group": "Strength",
+     "tip": "Overall team strength from results, goal margin and home ice.",
+     "home": 1478.4925285076854,
+     "away": 1501.3456731551578,
+     "home_s": "1478",
+     "away_s": "1501",
+     "better": "away"
+    },
+    {
+     "key": "gd_season_shrunk",
+     "label": "Goal differential per game (season)",
+     "group": "Strength",
+     "tip": "Goals for minus against, blended with last season early in the year.",
+     "home": -0.2558630393996246,
+     "away": -0.1587624209575429,
+     "home_s": "-0.26",
+     "away_s": "-0.16",
+     "better": "away"
+    },
+    {
+     "key": "gd_l10",
+     "label": "Goal differential, last 10 games",
+     "group": "Strength",
+     "tip": "Recent form.",
+     "home": -0.3,
+     "away": -0.2,
+     "home_s": "-0.30",
+     "away_s": "-0.20",
+     "better": "away"
+    },
+    {
+     "key": "win_pct_l10",
+     "label": "Win % last 10",
+     "group": "Strength",
+     "tip": "Recent results.",
+     "home": 0.4,
+     "away": 0.5,
+     "home_s": "40%",
+     "away_s": "50%",
+     "better": "away"
+    },
+    {
+     "key": "cf_pct",
+     "label": "Corsi % (shot attempts)",
+     "group": "Puck possession and chances",
+     "tip": "Share of all shot attempts, last 20 games. Above 50% means they control play.",
+     "home": 0.49321068769163384,
+     "away": 0.5270870337477798,
+     "home_s": "49.3%",
+     "away_s": "52.7%",
+     "better": "away"
+    },
+    {
+     "key": "ev_cf_pct",
+     "label": "Corsi %, 5-on-5",
+     "group": "Puck possession and chances",
+     "tip": "Same, at even strength only.",
+     "home": 0.49049429657794674,
+     "away": 0.5323353293413173,
+     "home_s": "49.0%",
+     "away_s": "53.2%",
+     "better": "away"
+    },
+    {
+     "key": "xg_share",
+     "label": "Expected-goals share",
+     "group": "Puck possession and chances",
+     "tip": "Share of shot quality (distance, angle, type), last 20 games.",
+     "home": 0.46506161582567046,
+     "away": 0.518312371914136,
+     "home_s": "46.5%",
+     "away_s": "51.8%",
+     "better": "away"
+    },
+    {
+     "key": "hd_share",
+     "label": "High-danger chances share",
+     "group": "Puck possession and chances",
+     "tip": "Share of the best scoring chances.",
+     "home": 0.4657039711191336,
+     "away": 0.5048169556840078,
+     "home_s": "46.6%",
+     "away_s": "50.5%",
+     "better": "away"
+    },
+    {
+     "key": "xgf_pg",
+     "label": "Expected goals for per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they create.",
+     "home": 2.295323605525829,
+     "away": 2.429978837700086,
+     "home_s": "2.30",
+     "away_s": "2.43",
+     "better": "away"
+    },
+    {
+     "key": "xga_pg",
+     "label": "Expected goals against per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they allow.",
+     "home": 2.6402021988360542,
+     "away": 2.2582728216730716,
+     "home_s": "2.64",
+     "away_s": "2.26",
+     "better": "away"
+    },
+    {
+     "key": "sh_pct",
+     "label": "Shooting %",
+     "group": "Luck check",
+     "tip": "Very high or low values tend to move back toward the league average.",
+     "home": 0.09198113207547169,
+     "away": 0.11275272161741835,
+     "home_s": "9.2%",
+     "away_s": "11.3%",
+     "better": null
+    },
+    {
+     "key": "sv_pct_team",
+     "label": "Team save %",
+     "group": "Luck check",
+     "tip": "Same idea for goaltending results.",
+     "home": 0.8847328244274809,
+     "away": 0.8760399334442596,
+     "home_s": "88.5%",
+     "away_s": "87.6%",
+     "better": null
+    },
+    {
+     "key": "pdo_dev",
+     "label": "PDO vs league (shooting % + save %)",
+     "group": "Luck check",
+     "tip": "Positive = running hot, which usually fades; negative = running cold.",
+     "home": -0.023286043497047437,
+     "away": -0.011207344938322095,
+     "home_s": "-0.023",
+     "away_s": "-0.011",
+     "better": null
+    },
+    {
+     "key": "g_sv_season",
+     "label": "Starting goalie save % (season)",
+     "group": "Goaltending",
+     "tip": "Shrunk toward the league average so small samples don't mislead.",
+     "home": 0.9063174592016436,
+     "away": 0.9007141689876756,
+     "home_s": "0.906",
+     "away_s": "0.901",
+     "better": "home"
+    },
+    {
+     "key": "g_sv_l5",
+     "label": "Starting goalie save %, last 5",
+     "group": "Goaltending",
+     "tip": "Recent form.",
+     "home": 0.8985432999701757,
+     "away": 0.8939569013432678,
+     "home_s": "0.899",
+     "away_s": "0.894",
+     "better": "home"
+    },
+    {
+     "key": "g_gsax100_season",
+     "label": "Goalie goals saved above expected / 100 shots",
+     "group": "Goaltending",
+     "tip": "Saves vs the quality of shots faced; positive is better than average.",
+     "home": -0.5826623199284784,
+     "away": -1.3047036288091025,
+     "home_s": "-0.58",
+     "away_s": "-1.30",
+     "better": "home"
+    },
+    {
+     "key": "g_rest",
+     "label": "Goalie days of rest",
+     "group": "Goaltending",
+     "tip": "Backups usually start on the second night of a back-to-back.",
+     "home": 6.42336670451027,
+     "away": 7.05108886365982,
+     "home_s": "6",
+     "away_s": "7",
+     "better": null
+    },
+    {
+     "key": "pp_pct",
+     "label": "Power play %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.21052631578947367,
+     "away": 0.20754716981132076,
+     "home_s": "21.1%",
+     "away_s": "20.8%",
+     "better": "home"
+    },
+    {
+     "key": "pk_pct",
+     "label": "Penalty kill %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.7582417582417582,
+     "away": 0.788135593220339,
+     "home_s": "75.8%",
+     "away_s": "78.8%",
+     "better": "away"
+    },
+    {
+     "key": "pen_taken_pg",
+     "label": "Penalties taken per game",
+     "group": "Special teams",
+     "tip": "More penalties means more time shorthanded.",
+     "home": 2.966666666666667,
+     "away": 4.166666666666667,
+     "home_s": "3.0",
+     "away_s": "4.2",
      "better": "home"
     },
     {
@@ -1403,10 +2829,10 @@
      "label": "Penalties drawn per game",
      "group": "Special teams",
      "tip": "More penalties drawn means more power plays.",
-     "home": 3.433333333333333,
-     "away": 3.966666666666667,
-     "home_s": "3.4",
-     "away_s": "4.0",
+     "home": 3.2666666666666666,
+     "away": 3.6666666666666665,
+     "home_s": "3.3",
+     "away_s": "3.7",
      "better": "away"
     },
     {
@@ -1448,9 +2874,9 @@
      "group": "Schedule and travel",
      "tip": "Distance from the previous game's arena.",
      "home": 0.0,
-     "away": 281.6285936781201,
+     "away": 1151.8008451530457,
      "home_s": "0",
-     "away_s": "282",
+     "away_s": "1,152",
      "better": "home"
     },
     {
@@ -1470,8 +2896,1611 @@
      "group": "Context",
      "tip": "Early in the season the model leans on last year's ratings.",
      "home": 11.0,
-     "away": 11.0,
+     "away": 12.0,
      "home_s": "11",
+     "away_s": "12",
+     "better": null
+    }
+   ],
+   "drivers": [
+    {
+     "feature": "d_xg_share",
+     "label": "Expected-goals share (home minus away)",
+     "value": -0.10668659161507081,
+     "raw": -0.05325075608846558
+    },
+    {
+     "feature": "d_elo",
+     "label": "Elo rating (home minus away)",
+     "value": -0.0675514865458767,
+     "raw": -22.85314464747239
+    },
+    {
+     "feature": "d_cf_pct",
+     "label": "Corsi % (shot attempts) (home minus away)",
+     "value": -0.054868767541358374,
+     "raw": -0.03387634605614592
+    },
+    {
+     "feature": "a_b2b",
+     "label": "Second game in two nights (away team)",
+     "value": -0.05326439424569758,
+     "raw": 0.0
+    },
+    {
+     "feature": "d_xga_pg",
+     "label": "Expected goals against per game (home minus away)",
+     "value": -0.035592253038947815,
+     "raw": 0.3819293771629826
+    },
+    {
+     "feature": "h_b2b",
+     "label": "Second game in two nights (home team)",
+     "value": 0.027851446208174344,
+     "raw": 0.0
+    }
+   ],
+   "server_action": "NO_BET",
+   "server_side": null,
+   "server_stake": 0.0
+  },
+  {
+   "game_id": 2026020195,
+   "start_utc": "2026-10-28T01:00:00+00:00",
+   "home": "UTA",
+   "away": "MIN",
+   "home_goalie": "K. Vejmelka",
+   "away_goalie": "J. Wallstedt",
+   "goalie_status": "probable",
+   "p_home": 0.5472192846875386,
+   "blocked": null,
+   "notes": [
+    "Goaltending edge to MIN (goals saved above expected).",
+    "Division/rival game.",
+    "Early in the season: team ratings lean on last year's results and are less reliable."
+   ],
+   "model_side": "home",
+   "odds_stale": false,
+   "odds_captured_at": "2026-10-27T12:02:20+00:00",
+   "sides": {
+    "home": {
+     "team": "UTA",
+     "p_model": 0.5472192846875386,
+     "p_market": 0.5377018159909605,
+     "p_adj": 0.5423437512405287,
+     "edge": 0.009517468696578102,
+     "ev": -0.01835781025464306,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 1.81,
+     "books": {},
+     "fails": [
+      "edge +1.0% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    },
+    "away": {
+     "team": "MIN",
+     "p_model": 0.45278071531246145,
+     "p_market": 0.46229818400903955,
+     "p_adj": 0.45765624875947125,
+     "edge": -0.009517468696578102,
+     "ev": -0.04349844009270509,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 2.09,
+     "books": {},
+     "fails": [
+      "edge -1.0% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    }
+   },
+   "alt": [],
+   "goals": {
+    "lam_home": 3.2192316926875972,
+    "lam_away": 2.8754407922033023,
+    "exp_total": 6.2066963025274005
+   },
+   "props": [],
+   "stats": [
+    {
+     "key": "elo",
+     "label": "Elo rating",
+     "group": "Strength",
+     "tip": "Overall team strength from results, goal margin and home ice.",
+     "home": 1519.152156621613,
+     "away": 1548.4365692441452,
+     "home_s": "1519",
+     "away_s": "1548",
+     "better": "away"
+    },
+    {
+     "key": "gd_season_shrunk",
+     "label": "Goal differential per game (season)",
+     "group": "Strength",
+     "tip": "Goals for minus against, blended with last season early in the year.",
+     "home": 0.2948232323232327,
+     "away": 0.4907834101382491,
+     "home_s": "+0.29",
+     "away_s": "+0.49",
+     "better": "away"
+    },
+    {
+     "key": "gd_l10",
+     "label": "Goal differential, last 10 games",
+     "group": "Strength",
+     "tip": "Recent form.",
+     "home": -0.3,
+     "away": 0.7,
+     "home_s": "-0.30",
+     "away_s": "+0.70",
+     "better": "away"
+    },
+    {
+     "key": "win_pct_l10",
+     "label": "Win % last 10",
+     "group": "Strength",
+     "tip": "Recent results.",
+     "home": 0.6,
+     "away": 0.6,
+     "home_s": "60%",
+     "away_s": "60%",
+     "better": null
+    },
+    {
+     "key": "cf_pct",
+     "label": "Corsi % (shot attempts)",
+     "group": "Puck possession and chances",
+     "tip": "Share of all shot attempts, last 20 games. Above 50% means they control play.",
+     "home": 0.5342634386540829,
+     "away": 0.5036093418259023,
+     "home_s": "53.4%",
+     "away_s": "50.4%",
+     "better": "home"
+    },
+    {
+     "key": "ev_cf_pct",
+     "label": "Corsi %, 5-on-5",
+     "group": "Puck possession and chances",
+     "tip": "Same, at even strength only.",
+     "home": 0.5344024831867563,
+     "away": 0.4963788300835655,
+     "home_s": "53.4%",
+     "away_s": "49.6%",
+     "better": "home"
+    },
+    {
+     "key": "xg_share",
+     "label": "Expected-goals share",
+     "group": "Puck possession and chances",
+     "tip": "Share of shot quality (distance, angle, type), last 20 games.",
+     "home": 0.5533769259475942,
+     "away": 0.5339093302790779,
+     "home_s": "55.3%",
+     "away_s": "53.4%",
+     "better": "home"
+    },
+    {
+     "key": "hd_share",
+     "label": "High-danger chances share",
+     "group": "Puck possession and chances",
+     "tip": "Share of the best scoring chances.",
+     "home": 0.5480769230769231,
+     "away": 0.5289855072463768,
+     "home_s": "54.8%",
+     "away_s": "52.9%",
+     "better": "home"
+    },
+    {
+     "key": "xgf_pg",
+     "label": "Expected goals for per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they create.",
+     "home": 2.7146185864103,
+     "away": 2.739252214813622,
+     "home_s": "2.71",
+     "away_s": "2.74",
+     "better": "away"
+    },
+    {
+     "key": "xga_pg",
+     "label": "Expected goals against per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they allow.",
+     "home": 2.1909321496667924,
+     "away": 2.391304715858102,
+     "home_s": "2.19",
+     "away_s": "2.39",
+     "better": "home"
+    },
+    {
+     "key": "sh_pct",
+     "label": "Shooting %",
+     "group": "Luck check",
+     "tip": "Very high or low values tend to move back toward the league average.",
+     "home": 0.11811594202898551,
+     "away": 0.1129737609329446,
+     "home_s": "11.8%",
+     "away_s": "11.3%",
+     "better": null
+    },
+    {
+     "key": "sv_pct_team",
+     "label": "Team save %",
+     "group": "Luck check",
+     "tip": "Same idea for goaltending results.",
+     "home": 0.8695299837925445,
+     "away": 0.8940345368916798,
+     "home_s": "87.0%",
+     "away_s": "89.4%",
+     "better": null
+    },
+    {
+     "key": "pdo_dev",
+     "label": "PDO vs league (shooting % + save %)",
+     "group": "Luck check",
+     "tip": "Positive = running hot, which usually fades; negative = running cold.",
+     "home": -0.01235407417847001,
+     "away": 0.007008297824624421,
+     "home_s": "-0.012",
+     "away_s": "+0.007",
+     "better": null
+    },
+    {
+     "key": "g_sv_season",
+     "label": "Starting goalie save % (season)",
+     "group": "Goaltending",
+     "tip": "Shrunk toward the league average so small samples don't mislead.",
+     "home": 0.8950587166075392,
+     "away": 0.9058323884107975,
+     "home_s": "0.895",
+     "away_s": "0.906",
+     "better": "away"
+    },
+    {
+     "key": "g_sv_l5",
+     "label": "Starting goalie save %, last 5",
+     "group": "Goaltending",
+     "tip": "Recent form.",
+     "home": 0.881165536582283,
+     "away": 0.8991415074744864,
+     "home_s": "0.881",
+     "away_s": "0.899",
+     "better": "away"
+    },
+    {
+     "key": "g_gsax100_season",
+     "label": "Goalie goals saved above expected / 100 shots",
+     "group": "Goaltending",
+     "tip": "Saves vs the quality of shots faced; positive is better than average.",
+     "home": -1.9558991433681276,
+     "away": -0.7812125086162052,
+     "home_s": "-1.96",
+     "away_s": "-0.78",
+     "better": "away"
+    },
+    {
+     "key": "g_rest",
+     "label": "Goalie days of rest",
+     "group": "Goaltending",
+     "tip": "Backups usually start on the second night of a back-to-back.",
+     "home": 4.843069460212613,
+     "away": 2.6313861079574776,
+     "home_s": "5",
+     "away_s": "3",
+     "better": null
+    },
+    {
+     "key": "pp_pct",
+     "label": "Power play %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.32407407407407407,
+     "away": 0.24107142857142858,
+     "home_s": "32.4%",
+     "away_s": "24.1%",
+     "better": "home"
+    },
+    {
+     "key": "pk_pct",
+     "label": "Penalty kill %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.7238095238095238,
+     "away": 0.7567567567567568,
+     "home_s": "72.4%",
+     "away_s": "75.7%",
+     "better": "away"
+    },
+    {
+     "key": "pen_taken_pg",
+     "label": "Penalties taken per game",
+     "group": "Special teams",
+     "tip": "More penalties means more time shorthanded.",
+     "home": 3.8666666666666667,
+     "away": 4.0,
+     "home_s": "3.9",
+     "away_s": "4.0",
+     "better": "home"
+    },
+    {
+     "key": "pen_drawn_pg",
+     "label": "Penalties drawn per game",
+     "group": "Special teams",
+     "tip": "More penalties drawn means more power plays.",
+     "home": 4.033333333333333,
+     "away": 3.966666666666667,
+     "home_s": "4.0",
+     "away_s": "4.0",
+     "better": "home"
+    },
+    {
+     "key": "rest_days",
+     "label": "Days of rest",
+     "group": "Schedule and travel",
+     "tip": "Days since the last game.",
+     "home": 3.0,
+     "away": 2.0,
+     "home_s": "3",
+     "away_s": "2",
+     "better": "home"
+    },
+    {
+     "key": "b2b",
+     "label": "Second game in two nights",
+     "group": "Schedule and travel",
+     "tip": "Back-to-backs lower win chances a little.",
+     "home": 0.0,
+     "away": 0.0,
+     "home_s": "no",
+     "away_s": "no",
+     "better": null
+    },
+    {
+     "key": "games_last_7d",
+     "label": "Games in the last 7 days",
+     "group": "Schedule and travel",
+     "tip": "Schedule congestion.",
+     "home": 2.0,
+     "away": 4.0,
+     "home_s": "2",
+     "away_s": "4",
+     "better": "home"
+    },
+    {
+     "key": "travel_km",
+     "label": "Travel since last game (km)",
+     "group": "Schedule and travel",
+     "tip": "Distance from the previous game's arena.",
+     "home": 0.0,
+     "away": 1290.1316859415365,
+     "home_s": "0",
+     "away_s": "1,290",
+     "better": "home"
+    },
+    {
+     "key": "tz_shift",
+     "label": "Time-zone change",
+     "group": "Schedule and travel",
+     "tip": "Hours of time-zone shift for the trip.",
+     "home": 0.0,
+     "away": 1.0,
+     "home_s": "+0 h",
+     "away_s": "+1 h",
+     "better": null
+    },
+    {
+     "key": "gp_season",
+     "label": "Games played this season",
+     "group": "Context",
+     "tip": "Early in the season the model leans on last year's ratings.",
+     "home": 12.0,
+     "away": 13.0,
+     "home_s": "12",
+     "away_s": "13",
+     "better": null
+    }
+   ],
+   "drivers": [
+    {
+     "feature": "d_elo",
+     "label": "Elo rating (home minus away)",
+     "value": -0.08694266459073856,
+     "raw": -29.284412622532273
+    },
+    {
+     "feature": "d_games_last_7d",
+     "label": "Games in the last 7 days (home minus away)",
+     "value": 0.07547746521743613,
+     "raw": -2.0
+    },
+    {
+     "feature": "d_g_sv_l5",
+     "label": "Starting goalie save %, last 5 (home minus away)",
+     "value": 0.05427523709398721,
+     "raw": -0.017975970892203375
+    },
+    {
+     "feature": "a_b2b",
+     "label": "Second game in two nights (away team)",
+     "value": -0.05326439424569758,
+     "raw": 0.0
+    },
+    {
+     "feature": "d_cf_pct",
+     "label": "Corsi % (shot attempts) (home minus away)",
+     "value": 0.051208677832710346,
+     "raw": 0.030654096828180544
+    },
+    {
+     "feature": "d_ga_season_shrunk",
+     "label": "Goals against per game (season) (home minus away)",
+     "value": -0.04806007700428403,
+     "raw": 0.4675837291063254
+    }
+   ],
+   "server_action": "NO_BET",
+   "server_side": null,
+   "server_stake": 0.0
+  },
+  {
+   "game_id": 2026020196,
+   "start_utc": "2026-10-28T02:00:00+00:00",
+   "home": "VGK",
+   "away": "OTT",
+   "home_goalie": "C. Hart",
+   "away_goalie": "L. Ullmark",
+   "goalie_status": "probable",
+   "p_home": 0.5715629163766459,
+   "blocked": null,
+   "notes": [
+    "OTT travelled 3,425 km across 3 time zone(s) since their last game.",
+    "VGK are creating the better share of expected goals recently.",
+    "Goaltending edge to OTT (goals saved above expected).",
+    "Early in the season: team ratings lean on last year's results and are less reliable."
+   ],
+   "model_side": "home",
+   "odds_stale": false,
+   "odds_captured_at": "2026-10-27T12:02:20+00:00",
+   "sides": {
+    "home": {
+     "team": "VGK",
+     "p_model": 0.5715629163766459,
+     "p_market": 0.5873520365133609,
+     "p_adj": 0.5799687607344569,
+     "edge": -0.015789120136714963,
+     "ev": -0.04305154478814616,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 1.65,
+     "books": {},
+     "fails": [
+      "edge -1.6% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    },
+    "away": {
+     "team": "OTT",
+     "p_model": 0.4284370836233541,
+     "p_market": 0.4126479634866391,
+     "p_adj": 0.4200312392655431,
+     "edge": 0.015789120136714963,
+     "ev": -0.01292658772597366,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 2.35,
+     "books": {},
+     "fails": [
+      "edge +1.6% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    }
+   },
+   "alt": [],
+   "goals": {
+    "lam_home": 3.2771856073733425,
+    "lam_away": 2.8910285778319413,
+    "exp_total": 6.27926854006387
+   },
+   "props": [],
+   "stats": [
+    {
+     "key": "elo",
+     "label": "Elo rating",
+     "group": "Strength",
+     "tip": "Overall team strength from results, goal margin and home ice.",
+     "home": 1542.1314266836403,
+     "away": 1531.0968780248313,
+     "home_s": "1542",
+     "away_s": "1531",
+     "better": "home"
+    },
+    {
+     "key": "gd_season_shrunk",
+     "label": "Goal differential per game (season)",
+     "group": "Strength",
+     "tip": "Goals for minus against, blended with last season early in the year.",
+     "home": 0.3961195054945059,
+     "away": 0.2321274763135226,
+     "home_s": "+0.40",
+     "away_s": "+0.23",
+     "better": "home"
+    },
+    {
+     "key": "gd_l10",
+     "label": "Goal differential, last 10 games",
+     "group": "Strength",
+     "tip": "Recent form.",
+     "home": 0.6,
+     "away": 0.0,
+     "home_s": "+0.60",
+     "away_s": "+0.00",
+     "better": "home"
+    },
+    {
+     "key": "win_pct_l10",
+     "label": "Win % last 10",
+     "group": "Strength",
+     "tip": "Recent results.",
+     "home": 0.6,
+     "away": 0.6,
+     "home_s": "60%",
+     "away_s": "60%",
+     "better": null
+    },
+    {
+     "key": "cf_pct",
+     "label": "Corsi % (shot attempts)",
+     "group": "Puck possession and chances",
+     "tip": "Share of all shot attempts, last 20 games. Above 50% means they control play.",
+     "home": 0.5115569123419101,
+     "away": 0.4790239726027397,
+     "home_s": "51.2%",
+     "away_s": "47.9%",
+     "better": "home"
+    },
+    {
+     "key": "ev_cf_pct",
+     "label": "Corsi %, 5-on-5",
+     "group": "Puck possession and chances",
+     "tip": "Same, at even strength only.",
+     "home": 0.5021574973031284,
+     "away": 0.47371396269078575,
+     "home_s": "50.2%",
+     "away_s": "47.4%",
+     "better": "home"
+    },
+    {
+     "key": "xg_share",
+     "label": "Expected-goals share",
+     "group": "Puck possession and chances",
+     "tip": "Share of shot quality (distance, angle, type), last 20 games.",
+     "home": 0.54724238886482,
+     "away": 0.4856474339328711,
+     "home_s": "54.7%",
+     "away_s": "48.6%",
+     "better": "home"
+    },
+    {
+     "key": "hd_share",
+     "label": "High-danger chances share",
+     "group": "Puck possession and chances",
+     "tip": "Share of the best scoring chances.",
+     "home": 0.5705996131528046,
+     "away": 0.48956356736242884,
+     "home_s": "57.1%",
+     "away_s": "49.0%",
+     "better": "home"
+    },
+    {
+     "key": "xgf_pg",
+     "label": "Expected goals for per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they create.",
+     "home": 2.586891096426126,
+     "away": 2.3003445556672224,
+     "home_s": "2.59",
+     "away_s": "2.30",
+     "better": "home"
+    },
+    {
+     "key": "xga_pg",
+     "label": "Expected goals against per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they allow.",
+     "home": 2.1402483742429497,
+     "away": 2.43631087569904,
+     "home_s": "2.14",
+     "away_s": "2.44",
+     "better": "home"
+    },
+    {
+     "key": "sh_pct",
+     "label": "Shooting %",
+     "group": "Luck check",
+     "tip": "Very high or low values tend to move back toward the league average.",
+     "home": 0.11469265367316342,
+     "away": 0.10674157303370786,
+     "home_s": "11.5%",
+     "away_s": "10.7%",
+     "better": null
+    },
+    {
+     "key": "sv_pct_team",
+     "label": "Team save %",
+     "group": "Luck check",
+     "tip": "Same idea for goaltending results.",
+     "home": 0.8809523809523809,
+     "away": 0.9057632398753894,
+     "home_s": "88.1%",
+     "away_s": "90.6%",
+     "better": null
+    },
+    {
+     "key": "pdo_dev",
+     "label": "PDO vs league (shooting % + save %)",
+     "group": "Luck check",
+     "tip": "Positive = running hot, which usually fades; negative = running cold.",
+     "home": -0.004354965374455677,
+     "away": 0.012504812909097218,
+     "home_s": "-0.004",
+     "away_s": "+0.013",
+     "better": null
+    },
+    {
+     "key": "g_sv_season",
+     "label": "Starting goalie save % (season)",
+     "group": "Goaltending",
+     "tip": "Shrunk toward the league average so small samples don't mislead.",
+     "home": 0.8994377732280419,
+     "away": 0.9078763149669633,
+     "home_s": "0.899",
+     "away_s": "0.908",
+     "better": "away"
+    },
+    {
+     "key": "g_sv_l5",
+     "label": "Starting goalie save %, last 5",
+     "group": "Goaltending",
+     "tip": "Recent form.",
+     "home": 0.8959323131198453,
+     "away": 0.90403419249182,
+     "home_s": "0.896",
+     "away_s": "0.904",
+     "better": "away"
+    },
+    {
+     "key": "g_gsax100_season",
+     "label": "Goalie goals saved above expected / 100 shots",
+     "group": "Goaltending",
+     "tip": "Saves vs the quality of shots faced; positive is better than average.",
+     "home": -1.4989158477413704,
+     "away": -0.5557107795009105,
+     "home_s": "-1.50",
+     "away_s": "-0.56",
+     "better": "away"
+    },
+    {
+     "key": "g_rest",
+     "label": "Goalie days of rest",
+     "group": "Goaltending",
+     "tip": "Backups usually start on the second night of a back-to-back.",
+     "home": 3.7372277840850447,
+     "away": 5.631386107957477,
+     "home_s": "4",
+     "away_s": "6",
+     "better": null
+    },
+    {
+     "key": "pp_pct",
+     "label": "Power play %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.22641509433962265,
+     "away": 0.18604651162790697,
+     "home_s": "22.6%",
+     "away_s": "18.6%",
+     "better": "home"
+    },
+    {
+     "key": "pk_pct",
+     "label": "Penalty kill %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.7745098039215687,
+     "away": 0.8275862068965517,
+     "home_s": "77.5%",
+     "away_s": "82.8%",
+     "better": "away"
+    },
+    {
+     "key": "pen_taken_pg",
+     "label": "Penalties taken per game",
+     "group": "Special teams",
+     "tip": "More penalties means more time shorthanded.",
+     "home": 3.2666666666666666,
+     "away": 4.2,
+     "home_s": "3.3",
+     "away_s": "4.2",
+     "better": "home"
+    },
+    {
+     "key": "pen_drawn_pg",
+     "label": "Penalties drawn per game",
+     "group": "Special teams",
+     "tip": "More penalties drawn means more power plays.",
+     "home": 3.3666666666666667,
+     "away": 4.7,
+     "home_s": "3.4",
+     "away_s": "4.7",
+     "better": "away"
+    },
+    {
+     "key": "rest_days",
+     "label": "Days of rest",
+     "group": "Schedule and travel",
+     "tip": "Days since the last game.",
+     "home": 3.0,
+     "away": 3.0,
+     "home_s": "3",
+     "away_s": "3",
+     "better": null
+    },
+    {
+     "key": "b2b",
+     "label": "Second game in two nights",
+     "group": "Schedule and travel",
+     "tip": "Back-to-backs lower win chances a little.",
+     "home": 0.0,
+     "away": 0.0,
+     "home_s": "no",
+     "away_s": "no",
+     "better": null
+    },
+    {
+     "key": "games_last_7d",
+     "label": "Games in the last 7 days",
+     "group": "Schedule and travel",
+     "tip": "Schedule congestion.",
+     "home": 3.0,
+     "away": 3.0,
+     "home_s": "3",
+     "away_s": "3",
+     "better": null
+    },
+    {
+     "key": "travel_km",
+     "label": "Travel since last game (km)",
+     "group": "Schedule and travel",
+     "tip": "Distance from the previous game's arena.",
+     "home": 2834.5661305280687,
+     "away": 3425.2491100252582,
+     "home_s": "2,835",
+     "away_s": "3,425",
+     "better": "home"
+    },
+    {
+     "key": "tz_shift",
+     "label": "Time-zone change",
+     "group": "Schedule and travel",
+     "tip": "Hours of time-zone shift for the trip.",
+     "home": -3.0,
+     "away": -3.0,
+     "home_s": "-3 h",
+     "away_s": "-3 h",
+     "better": null
+    },
+    {
+     "key": "gp_season",
+     "label": "Games played this season",
+     "group": "Context",
+     "tip": "Early in the season the model leans on last year's ratings.",
+     "home": 13.0,
+     "away": 12.0,
+     "home_s": "13",
+     "away_s": "12",
+     "better": null
+    }
+   ],
+   "drivers": [
+    {
+     "feature": "d_xg_share",
+     "label": "Expected-goals share (home minus away)",
+     "value": 0.12867473803369991,
+     "raw": 0.06159495493194894
+    },
+    {
+     "feature": "d_pen_drawn_pg",
+     "label": "Penalties drawn per game (home minus away)",
+     "value": -0.05972668620912845,
+     "raw": -1.3333333333333335
+    },
+    {
+     "feature": "d_cf_pct",
+     "label": "Corsi % (shot attempts) (home minus away)",
+     "value": 0.05429718687354003,
+     "raw": 0.03253293973917043
+    },
+    {
+     "feature": "a_b2b",
+     "label": "Second game in two nights (away team)",
+     "value": -0.05326439424569758,
+     "raw": 0.0
+    },
+    {
+     "feature": "d_elo",
+     "label": "Elo rating (home minus away)",
+     "value": 0.03462467793367224,
+     "raw": 11.034548658808944
+    },
+    {
+     "feature": "d_xga_pg",
+     "label": "Expected goals against per game (home minus away)",
+     "value": 0.02870938230270402,
+     "raw": -0.2960625014560905
+    }
+   ],
+   "server_action": "NO_BET",
+   "server_side": null,
+   "server_stake": 0.0
+  },
+  {
+   "game_id": 2026020197,
+   "start_utc": "2026-10-28T02:00:00+00:00",
+   "home": "ANA",
+   "away": "VAN",
+   "home_goalie": "L. Dostal",
+   "away_goalie": "K. Lankinen",
+   "goalie_status": "probable",
+   "p_home": 0.6666638394721919,
+   "blocked": null,
+   "notes": [
+    "ANA have the clearly better goal differential this season (gap 0.90 goals/game).",
+    "ANA are creating the better share of expected goals recently.",
+    "Goaltending edge to ANA (goals saved above expected).",
+    "Division/rival game."
+   ],
+   "model_side": "home",
+   "odds_stale": false,
+   "odds_captured_at": "2026-10-27T12:02:20+00:00",
+   "sides": {
+    "home": {
+     "team": "ANA",
+     "p_model": 0.6666638394721919,
+     "p_market": 0.6552944833352247,
+     "p_adj": 0.6607821212714736,
+     "edge": 0.011369356136967212,
+     "ev": -0.015434639305504316,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 1.49,
+     "books": {},
+     "fails": [
+      "edge +1.1% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    },
+    "away": {
+     "team": "VAN",
+     "p_model": 0.3333361605278081,
+     "p_market": 0.34470551666477534,
+     "p_adj": 0.3392178787285263,
+     "edge": -0.011369356136967212,
+     "ev": -0.050189939560126406,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 2.8,
+     "books": {},
+     "fails": [
+      "edge -1.1% below the 4% minimum (starting goalie unconfirmed)",
+      "model win probability 33.3% below the 40% confidence floor"
+     ],
+     "qualifies": false
+    }
+   },
+   "alt": [],
+   "goals": {
+    "lam_home": 3.655974215260878,
+    "lam_away": 2.6003935050786438,
+    "exp_total": 6.353615138611097
+   },
+   "props": [],
+   "stats": [
+    {
+     "key": "elo",
+     "label": "Elo rating",
+     "group": "Strength",
+     "tip": "Overall team strength from results, goal margin and home ice.",
+     "home": 1469.3972935429647,
+     "away": 1385.8808113508178,
+     "home_s": "1469",
+     "away_s": "1386",
+     "better": "home"
+    },
+    {
+     "key": "gd_season_shrunk",
+     "label": "Goal differential per game (season)",
+     "group": "Strength",
+     "tip": "Goals for minus against, blended with last season early in the year.",
+     "home": -0.24754500818330616,
+     "away": -1.1480836236933798,
+     "home_s": "-0.25",
+     "away_s": "-1.15",
+     "better": "home"
+    },
+    {
+     "key": "gd_l10",
+     "label": "Goal differential, last 10 games",
+     "group": "Strength",
+     "tip": "Recent form.",
+     "home": -0.6,
+     "away": -2.5,
+     "home_s": "-0.60",
+     "away_s": "-2.50",
+     "better": "home"
+    },
+    {
+     "key": "win_pct_l10",
+     "label": "Win % last 10",
+     "group": "Strength",
+     "tip": "Recent results.",
+     "home": 0.4,
+     "away": 0.0,
+     "home_s": "40%",
+     "away_s": "0%",
+     "better": "home"
+    },
+    {
+     "key": "cf_pct",
+     "label": "Corsi % (shot attempts)",
+     "group": "Puck possession and chances",
+     "tip": "Share of all shot attempts, last 20 games. Above 50% means they control play.",
+     "home": 0.5202761000862812,
+     "away": 0.43042071197411,
+     "home_s": "52.0%",
+     "away_s": "43.0%",
+     "better": "home"
+    },
+    {
+     "key": "ev_cf_pct",
+     "label": "Corsi %, 5-on-5",
+     "group": "Puck possession and chances",
+     "tip": "Same, at even strength only.",
+     "home": 0.5185387131952017,
+     "away": 0.41661824520627544,
+     "home_s": "51.9%",
+     "away_s": "41.7%",
+     "better": "home"
+    },
+    {
+     "key": "xg_share",
+     "label": "Expected-goals share",
+     "group": "Puck possession and chances",
+     "tip": "Share of shot quality (distance, angle, type), last 20 games.",
+     "home": 0.4764780468812353,
+     "away": 0.3874499815812702,
+     "home_s": "47.6%",
+     "away_s": "38.7%",
+     "better": "home"
+    },
+    {
+     "key": "hd_share",
+     "label": "High-danger chances share",
+     "group": "Puck possession and chances",
+     "tip": "Share of the best scoring chances.",
+     "home": 0.44509803921568625,
+     "away": 0.36174242424242425,
+     "home_s": "44.5%",
+     "away_s": "36.2%",
+     "better": "home"
+    },
+    {
+     "key": "xgf_pg",
+     "label": "Expected goals for per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they create.",
+     "home": 2.3199785415868037,
+     "away": 1.8749218081676116,
+     "home_s": "2.32",
+     "away_s": "1.87",
+     "better": "home"
+    },
+    {
+     "key": "xga_pg",
+     "label": "Expected goals against per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they allow.",
+     "home": 2.549036005404635,
+     "away": 2.9642107180894177,
+     "home_s": "2.55",
+     "away_s": "2.96",
+     "better": "home"
+    },
+    {
+     "key": "sh_pct",
+     "label": "Shooting %",
+     "group": "Luck check",
+     "tip": "Very high or low values tend to move back toward the league average.",
+     "home": 0.1,
+     "away": 0.12596153846153846,
+     "home_s": "10.0%",
+     "away_s": "12.6%",
+     "better": null
+    },
+    {
+     "key": "sv_pct_team",
+     "label": "Team save %",
+     "group": "Luck check",
+     "tip": "Same idea for goaltending results.",
+     "home": 0.8764135702746365,
+     "away": 0.8693029490616622,
+     "home_s": "87.6%",
+     "away_s": "86.9%",
+     "better": null
+    },
+    {
+     "key": "pdo_dev",
+     "label": "PDO vs league (shooting % + save %)",
+     "group": "Luck check",
+     "tip": "Positive = running hot, which usually fades; negative = running cold.",
+     "home": -0.02358642972536351,
+     "away": -0.004735512476799375,
+     "home_s": "-0.024",
+     "away_s": "-0.005",
+     "better": null
+    },
+    {
+     "key": "g_sv_season",
+     "label": "Starting goalie save % (season)",
+     "group": "Goaltending",
+     "tip": "Shrunk toward the league average so small samples don't mislead.",
+     "home": 0.8983938096907795,
+     "away": 0.8866453646865631,
+     "home_s": "0.898",
+     "away_s": "0.887",
+     "better": "home"
+    },
+    {
+     "key": "g_sv_l5",
+     "label": "Starting goalie save %, last 5",
+     "group": "Goaltending",
+     "tip": "Recent form.",
+     "home": 0.8965383808109961,
+     "away": 0.8774711892072555,
+     "home_s": "0.897",
+     "away_s": "0.877",
+     "better": "home"
+    },
+    {
+     "key": "g_gsax100_season",
+     "label": "Goalie goals saved above expected / 100 shots",
+     "group": "Goaltending",
+     "tip": "Saves vs the quality of shots faced; positive is better than average.",
+     "home": -1.2611567345639765,
+     "away": -2.8527804130180687,
+     "home_s": "-1.26",
+     "away_s": "-2.85",
+     "better": "home"
+    },
+    {
+     "key": "g_rest",
+     "label": "Goalie days of rest",
+     "group": "Goaltending",
+     "tip": "Backups usually start on the second night of a back-to-back.",
+     "home": 3.7372277840850447,
+     "away": 3.894158323872433,
+     "home_s": "4",
+     "away_s": "4",
+     "better": null
+    },
+    {
+     "key": "pp_pct",
+     "label": "Power play %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.2542372881355932,
+     "away": 0.2857142857142857,
+     "home_s": "25.4%",
+     "away_s": "28.6%",
+     "better": "away"
+    },
+    {
+     "key": "pk_pct",
+     "label": "Penalty kill %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.7115384615384616,
+     "away": 0.7171717171717171,
+     "home_s": "71.2%",
+     "away_s": "71.7%",
+     "better": "away"
+    },
+    {
+     "key": "pen_taken_pg",
+     "label": "Penalties taken per game",
+     "group": "Special teams",
+     "tip": "More penalties means more time shorthanded.",
+     "home": 3.5,
+     "away": 3.3666666666666667,
+     "home_s": "3.5",
+     "away_s": "3.4",
+     "better": "away"
+    },
+    {
+     "key": "pen_drawn_pg",
+     "label": "Penalties drawn per game",
+     "group": "Special teams",
+     "tip": "More penalties drawn means more power plays.",
+     "home": 3.8666666666666667,
+     "away": 3.3,
+     "home_s": "3.9",
+     "away_s": "3.3",
+     "better": "home"
+    },
+    {
+     "key": "rest_days",
+     "label": "Days of rest",
+     "group": "Schedule and travel",
+     "tip": "Days since the last game.",
+     "home": 3.0,
+     "away": 2.0,
+     "home_s": "3",
+     "away_s": "2",
+     "better": "home"
+    },
+    {
+     "key": "b2b",
+     "label": "Second game in two nights",
+     "group": "Schedule and travel",
+     "tip": "Back-to-backs lower win chances a little.",
+     "home": 0.0,
+     "away": 0.0,
+     "home_s": "no",
+     "away_s": "no",
+     "better": null
+    },
+    {
+     "key": "games_last_7d",
+     "label": "Games in the last 7 days",
+     "group": "Schedule and travel",
+     "tip": "Schedule congestion.",
+     "home": 3.0,
+     "away": 3.0,
+     "home_s": "3",
+     "away_s": "3",
+     "better": null
+    },
+    {
+     "key": "travel_km",
+     "label": "Travel since last game (km)",
+     "group": "Schedule and travel",
+     "tip": "Distance from the previous game's arena.",
+     "home": 3822.5629882918706,
+     "away": 1773.3297578096192,
+     "home_s": "3,823",
+     "away_s": "1,773",
+     "better": "away"
+    },
+    {
+     "key": "tz_shift",
+     "label": "Time-zone change",
+     "group": "Schedule and travel",
+     "tip": "Hours of time-zone shift for the trip.",
+     "home": -3.0,
+     "away": 0.0,
+     "home_s": "-3 h",
+     "away_s": "+0 h",
+     "better": null
+    },
+    {
+     "key": "gp_season",
+     "label": "Games played this season",
+     "group": "Context",
+     "tip": "Early in the season the model leans on last year's ratings.",
+     "home": 11.0,
+     "away": 13.0,
+     "home_s": "11",
+     "away_s": "13",
+     "better": null
+    }
+   ],
+   "drivers": [
+    {
+     "feature": "d_elo",
+     "label": "Elo rating (home minus away)",
+     "value": 0.2531679082315377,
+     "raw": 83.5164821921469
+    },
+    {
+     "feature": "d_xg_share",
+     "label": "Expected-goals share (home minus away)",
+     "value": 0.18489532542220105,
+     "raw": 0.0890280652999651
+    },
+    {
+     "feature": "d_cf_pct",
+     "label": "Corsi % (shot attempts) (home minus away)",
+     "value": 0.14852587358648617,
+     "raw": 0.0898553881121712
+    },
+    {
+     "feature": "d_ga_season_shrunk",
+     "label": "Goals against per game (season) (home minus away)",
+     "value": 0.07048484689289794,
+     "raw": -0.6750962175816797
+    },
+    {
+     "feature": "d_g_sv_l5",
+     "label": "Starting goalie save %, last 5 (home minus away)",
+     "value": -0.05693865339614321,
+     "raw": 0.019067191603740596
+    },
+    {
+     "feature": "a_b2b",
+     "label": "Second game in two nights (away team)",
+     "value": -0.05326439424569758,
+     "raw": 0.0
+    }
+   ],
+   "server_action": "NO_BET",
+   "server_side": null,
+   "server_stake": 0.0
+  },
+  {
+   "game_id": 2026020198,
+   "start_utc": "2026-10-28T02:30:00+00:00",
+   "home": "SJS",
+   "away": "BUF",
+   "home_goalie": "Y. Askarov",
+   "away_goalie": "U. Luukkonen",
+   "goalie_status": "probable",
+   "p_home": 0.41997180765692865,
+   "blocked": null,
+   "notes": [
+    "BUF travelled 3,890 km across 3 time zone(s) since their last game.",
+    "BUF are creating the better share of expected goals recently.",
+    "Early in the season: team ratings lean on last year's results and are less reliable."
+   ],
+   "model_side": "away",
+   "odds_stale": false,
+   "odds_captured_at": "2026-10-27T12:02:20+00:00",
+   "sides": {
+    "home": {
+     "team": "SJS",
+     "p_model": 0.41997180765692865,
+     "p_market": 0.4377798978191974,
+     "p_adj": 0.42959671828651846,
+     "edge": -0.017808090162268753,
+     "ev": -0.04629528540392891,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 2.22,
+     "books": {},
+     "fails": [
+      "edge -1.8% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    },
+    "away": {
+     "team": "BUF",
+     "p_model": 0.5800281923430713,
+     "p_market": 0.5622201021808026,
+     "p_adj": 0.5704032817134815,
+     "edge": 0.017808090162268697,
+     "ev": -0.007498289818542114,
+     "kelly_full": 0.0,
+     "best_book": null,
+     "best_decimal": 1.74,
+     "books": {},
+     "fails": [
+      "edge +1.8% below the 4% minimum (starting goalie unconfirmed)"
+     ],
+     "qualifies": false
+    }
+   },
+   "alt": [],
+   "goals": {
+    "lam_home": 2.927708130466378,
+    "lam_away": 3.2382416097268267,
+    "exp_total": 6.277706674837197
+   },
+   "props": [],
+   "stats": [
+    {
+     "key": "elo",
+     "label": "Elo rating",
+     "group": "Strength",
+     "tip": "Overall team strength from results, goal margin and home ice.",
+     "home": 1441.5378313956921,
+     "away": 1528.1612222623103,
+     "home_s": "1442",
+     "away_s": "1528",
+     "better": "away"
+    },
+    {
+     "key": "gd_season_shrunk",
+     "label": "Goal differential per game (season)",
+     "group": "Strength",
+     "tip": "Goals for minus against, blended with last season early in the year.",
+     "home": -0.36111111111111116,
+     "away": -0.22975708502024217,
+     "home_s": "-0.36",
+     "away_s": "-0.23",
+     "better": "away"
+    },
+    {
+     "key": "gd_l10",
+     "label": "Goal differential, last 10 games",
+     "group": "Strength",
+     "tip": "Recent form.",
+     "home": -0.8,
+     "away": -0.7,
+     "home_s": "-0.80",
+     "away_s": "-0.70",
+     "better": "away"
+    },
+    {
+     "key": "win_pct_l10",
+     "label": "Win % last 10",
+     "group": "Strength",
+     "tip": "Recent results.",
+     "home": 0.4,
+     "away": 0.4,
+     "home_s": "40%",
+     "away_s": "40%",
+     "better": null
+    },
+    {
+     "key": "cf_pct",
+     "label": "Corsi % (shot attempts)",
+     "group": "Puck possession and chances",
+     "tip": "Share of all shot attempts, last 20 games. Above 50% means they control play.",
+     "home": 0.45938977223893424,
+     "away": 0.5161151697464547,
+     "home_s": "45.9%",
+     "away_s": "51.6%",
+     "better": "away"
+    },
+    {
+     "key": "ev_cf_pct",
+     "label": "Corsi %, 5-on-5",
+     "group": "Puck possession and chances",
+     "tip": "Same, at even strength only.",
+     "home": 0.4717920353982301,
+     "away": 0.5294447560291643,
+     "home_s": "47.2%",
+     "away_s": "52.9%",
+     "better": "away"
+    },
+    {
+     "key": "xg_share",
+     "label": "Expected-goals share",
+     "group": "Puck possession and chances",
+     "tip": "Share of shot quality (distance, angle, type), last 20 games.",
+     "home": 0.42389920148812527,
+     "away": 0.5089184954828135,
+     "home_s": "42.4%",
+     "away_s": "50.9%",
+     "better": "away"
+    },
+    {
+     "key": "hd_share",
+     "label": "High-danger chances share",
+     "group": "Puck possession and chances",
+     "tip": "Share of the best scoring chances.",
+     "home": 0.4118773946360153,
+     "away": 0.48148148148148145,
+     "home_s": "41.2%",
+     "away_s": "48.1%",
+     "better": "away"
+    },
+    {
+     "key": "xgf_pg",
+     "label": "Expected goals for per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they create.",
+     "home": 2.0554789770243205,
+     "away": 2.6141698580516417,
+     "home_s": "2.06",
+     "away_s": "2.61",
+     "better": "away"
+    },
+    {
+     "key": "xga_pg",
+     "label": "Expected goals against per game",
+     "group": "Puck possession and chances",
+     "tip": "How much quality offence they allow.",
+     "home": 2.7935015584624887,
+     "away": 2.5225462983764415,
+     "home_s": "2.79",
+     "away_s": "2.52",
+     "better": "away"
+    },
+    {
+     "key": "sh_pct",
+     "label": "Shooting %",
+     "group": "Luck check",
+     "tip": "Very high or low values tend to move back toward the league average.",
+     "home": 0.1112,
+     "away": 0.10570987654320987,
+     "home_s": "11.1%",
+     "away_s": "10.6%",
+     "better": null
+    },
+    {
+     "key": "sv_pct_team",
+     "label": "Team save %",
+     "group": "Luck check",
+     "tip": "Same idea for goaltending results.",
+     "home": 0.8812233285917497,
+     "away": 0.8748055987558321,
+     "home_s": "88.1%",
+     "away_s": "87.5%",
+     "better": null
+    },
+    {
+     "key": "pdo_dev",
+     "label": "PDO vs league (shooting % + save %)",
+     "group": "Luck check",
+     "tip": "Positive = running hot, which usually fades; negative = running cold.",
+     "home": -0.007576671408250357,
+     "away": -0.019484524700958072,
+     "home_s": "-0.008",
+     "away_s": "-0.019",
+     "better": null
+    },
+    {
+     "key": "g_sv_season",
+     "label": "Starting goalie save % (season)",
+     "group": "Goaltending",
+     "tip": "Shrunk toward the league average so small samples don't mislead.",
+     "home": 0.9002017751629693,
+     "away": 0.8959394592590255,
+     "home_s": "0.900",
+     "away_s": "0.896",
+     "better": "home"
+    },
+    {
+     "key": "g_sv_l5",
+     "label": "Starting goalie save %, last 5",
+     "group": "Goaltending",
+     "tip": "Recent form.",
+     "home": 0.8977652018623881,
+     "away": 0.8912609016978913,
+     "home_s": "0.898",
+     "away_s": "0.891",
+     "better": "home"
+    },
+    {
+     "key": "g_gsax100_season",
+     "label": "Goalie goals saved above expected / 100 shots",
+     "group": "Goaltending",
+     "tip": "Saves vs the quality of shots faced; positive is better than average.",
+     "home": -1.345679952555119,
+     "away": -1.3942677391550042,
+     "home_s": "-1.35",
+     "away_s": "-1.39",
+     "better": "home"
+    },
+    {
+     "key": "g_rest",
+     "label": "Goalie days of rest",
+     "group": "Goaltending",
+     "tip": "Backups usually start on the second night of a back-to-back.",
+     "home": 4.262772215914955,
+     "away": 7.054752812467747,
+     "home_s": "4",
+     "away_s": "7",
+     "better": null
+    },
+    {
+     "key": "pp_pct",
+     "label": "Power play %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.25742574257425743,
+     "away": 0.15384615384615385,
+     "home_s": "25.7%",
+     "away_s": "15.4%",
+     "better": "home"
+    },
+    {
+     "key": "pk_pct",
+     "label": "Penalty kill %",
+     "group": "Special teams",
+     "tip": "Shrunk toward the league average.",
+     "home": 0.719626168224299,
+     "away": 0.7521367521367521,
+     "home_s": "72.0%",
+     "away_s": "75.2%",
+     "better": "away"
+    },
+    {
+     "key": "pen_taken_pg",
+     "label": "Penalties taken per game",
+     "group": "Special teams",
+     "tip": "More penalties means more time shorthanded.",
+     "home": 3.7333333333333334,
+     "away": 4.5,
+     "home_s": "3.7",
+     "away_s": "4.5",
+     "better": "home"
+    },
+    {
+     "key": "pen_drawn_pg",
+     "label": "Penalties drawn per game",
+     "group": "Special teams",
+     "tip": "More penalties drawn means more power plays.",
+     "home": 3.566666666666667,
+     "away": 4.566666666666666,
+     "home_s": "3.6",
+     "away_s": "4.6",
+     "better": "away"
+    },
+    {
+     "key": "rest_days",
+     "label": "Days of rest",
+     "group": "Schedule and travel",
+     "tip": "Days since the last game.",
+     "home": 3.0,
+     "away": 3.0,
+     "home_s": "3",
+     "away_s": "3",
+     "better": null
+    },
+    {
+     "key": "b2b",
+     "label": "Second game in two nights",
+     "group": "Schedule and travel",
+     "tip": "Back-to-backs lower win chances a little.",
+     "home": 0.0,
+     "away": 0.0,
+     "home_s": "no",
+     "away_s": "no",
+     "better": null
+    },
+    {
+     "key": "games_last_7d",
+     "label": "Games in the last 7 days",
+     "group": "Schedule and travel",
+     "tip": "Schedule congestion.",
+     "home": 3.0,
+     "away": 2.0,
+     "home_s": "3",
+     "away_s": "2",
+     "better": "away"
+    },
+    {
+     "key": "travel_km",
+     "label": "Travel since last game (km)",
+     "group": "Schedule and travel",
+     "tip": "Distance from the previous game's arena.",
+     "home": 4311.105625641428,
+     "away": 3890.2340077655035,
+     "home_s": "4,311",
+     "away_s": "3,890",
+     "better": "away"
+    },
+    {
+     "key": "tz_shift",
+     "label": "Time-zone change",
+     "group": "Schedule and travel",
+     "tip": "Hours of time-zone shift for the trip.",
+     "home": -3.0,
+     "away": -3.0,
+     "home_s": "-3 h",
+     "away_s": "-3 h",
+     "better": null
+    },
+    {
+     "key": "gp_season",
+     "label": "Games played this season",
+     "group": "Context",
+     "tip": "Early in the season the model leans on last year's ratings.",
+     "home": 12.0,
+     "away": 11.0,
+     "home_s": "12",
      "away_s": "11",
      "better": null
     }
@@ -1480,38 +4509,38 @@
     {
      "feature": "d_elo",
      "label": "Elo rating (home minus away)",
-     "value": 0.16923739763692372,
-     "raw": 55.53790519159429
+     "value": -0.25982775355815574,
+     "raw": -86.62339086661814
     },
     {
      "feature": "d_xg_share",
      "label": "Expected-goals share (home minus away)",
-     "value": -0.07416992434177686,
-     "raw": -0.03746387118912692
-    },
-    {
-     "feature": "a_b2b",
-     "label": "Second game in two nights (away team)",
-     "value": -0.053266980495667915,
-     "raw": 0.0
+     "value": -0.17179207318831696,
+     "raw": -0.08501929399468827
     },
     {
      "feature": "d_cf_pct",
      "label": "Corsi % (shot attempts) (home minus away)",
-     "value": -0.042913232559134505,
-     "raw": -0.026630204982075578
+     "value": -0.09242885389513054,
+     "raw": -0.056725397507520425
     },
     {
-     "feature": "h_b2b",
-     "label": "Second game in two nights (home team)",
-     "value": 0.027890198818428812,
+     "feature": "a_b2b",
+     "label": "Second game in two nights (away team)",
+     "value": -0.05326439424569758,
      "raw": 0.0
     },
     {
-     "feature": "h_early_w",
-     "label": "Early-season weight (home team)",
-     "value": 0.02727996201707797,
-     "raw": 0.3548387096774194
+     "feature": "d_pen_drawn_pg",
+     "label": "Penalties drawn per game (home minus away)",
+     "value": -0.044662201759144,
+     "raw": -0.9999999999999996
+    },
+    {
+     "feature": "d_games_last_7d",
+     "label": "Games in the last 7 days (home minus away)",
+     "value": -0.0396384688807028,
+     "raw": 1.0
     }
    ],
    "server_action": "NO_BET",
@@ -1523,31 +4552,31 @@
   {
    "kind": "moneyline",
    "type": "Moneyline",
-   "game_id": 2026020186,
-   "game": "TOR @ CGY",
-   "start_utc": "2026-10-27T00:30:00+00:00",
-   "pick": "CGY moneyline",
-   "p_model": 0.4573638982761777,
-   "p_market": 0.4426543789922752,
-   "price": 2.19,
-   "ev_raw": 0.0016269372248290948,
-   "score": 0.014709519283902461,
+   "game_id": 2026020192,
+   "game": "NYI @ NSH",
+   "start_utc": "2026-10-28T00:00:00+00:00",
+   "pick": "NYI moneyline",
+   "p_model": 0.4851336329907545,
+   "p_market": 0.47232098010924584,
+   "price": 2.07,
+   "ev_raw": 0.004226620290861738,
+   "score": 0.01281265288150868,
    "weight": 1.0,
    "experimental": false,
    "p_push": 0.0,
-   "captured_at": "2026-10-26T20:03:43+00:00",
+   "captured_at": "2026-10-27T12:02:20+00:00",
    "leg": {
-    "game_id": 2026020186,
-    "decimal": 2.19,
-    "p_model": 0.4573638982761777,
-    "p_market": 0.4426543789922752,
+    "game_id": 2026020192,
+    "decimal": 2.07,
+    "p_model": 0.4851336329907545,
+    "p_market": 0.47232098010924584,
     "market": "h2h",
-    "side": "home",
+    "side": "away",
     "point": null,
     "player_id": 0
    },
    "recommended": false,
-   "note": "expected value after shrinkage toward the market is only +0.2% (< 1%)",
+   "note": "edge +3.4% below the 4% minimum (starting goalie unconfirmed)",
    "line": null,
    "rank": 1,
    "has_edge": true
@@ -1555,31 +4584,31 @@
   {
    "kind": "moneyline",
    "type": "Moneyline",
-   "game_id": 2026020187,
-   "game": "DET @ EDM",
-   "start_utc": "2026-10-27T01:30:00+00:00",
-   "pick": "DET moneyline",
-   "p_model": 0.39933330082308016,
-   "p_market": 0.3847024940379684,
-   "price": 2.5,
-   "ev_raw": -0.0016667479422995957,
-   "score": 0.01463080678511175,
+   "game_id": 2026020193,
+   "game": "NJD @ DAL",
+   "start_utc": "2026-10-28T00:00:00+00:00",
+   "pick": "DAL moneyline",
+   "p_model": 0.5469345176974576,
+   "p_market": 0.5343165108932401,
+   "price": 1.81,
+   "ev_raw": -0.010048522967601725,
+   "score": 0.01261800680421754,
    "weight": 1.0,
    "experimental": false,
    "p_push": 0.0,
-   "captured_at": "2026-10-26T20:03:43+00:00",
+   "captured_at": "2026-10-27T12:02:20+00:00",
    "leg": {
-    "game_id": 2026020187,
-    "decimal": 2.5,
-    "p_model": 0.39933330082308016,
-    "p_market": 0.3847024940379684,
+    "game_id": 2026020193,
+    "decimal": 1.81,
+    "p_model": 0.5469345176974576,
+    "p_market": 0.5343165108932401,
     "market": "h2h",
-    "side": "away",
+    "side": "home",
     "point": null,
     "player_id": 0
    },
    "recommended": false,
-   "note": "expected value after shrinkage toward the market is only -0.2% (< 1%)",
+   "note": "edge +3.3% below the 4% minimum (starting goalie unconfirmed)",
    "line": null,
    "rank": 2,
    "has_edge": true
@@ -1587,24 +4616,280 @@
   {
    "kind": "moneyline",
    "type": "Moneyline",
-   "game_id": 2026020185,
-   "game": "LAK @ NYR",
-   "start_utc": "2026-10-26T23:00:00+00:00",
-   "pick": "NYR moneyline",
-   "p_model": 0.5558045703277057,
-   "p_market": 0.5508291391460701,
-   "price": 1.77,
-   "ev_raw": -0.016225910519960918,
-   "score": 0.00497543118163557,
+   "game_id": 2026020194,
+   "game": "FLA @ WPG",
+   "start_utc": "2026-10-28T00:00:00+00:00",
+   "pick": "WPG moneyline",
+   "p_model": 0.4668529812430621,
+   "p_market": 0.4542724373996352,
+   "price": 2.13,
+   "ev_raw": -0.00560314995227762,
+   "score": 0.012580543843426939,
    "weight": 1.0,
    "experimental": false,
    "p_push": 0.0,
-   "captured_at": "2026-10-26T20:03:43+00:00",
+   "captured_at": "2026-10-27T12:02:20+00:00",
    "leg": {
-    "game_id": 2026020185,
-    "decimal": 1.77,
-    "p_model": 0.5558045703277057,
-    "p_market": 0.5508291391460701,
+    "game_id": 2026020194,
+    "decimal": 2.13,
+    "p_model": 0.4668529812430621,
+    "p_market": 0.4542724373996352,
+    "market": "h2h",
+    "side": "home",
+    "point": null,
+    "player_id": 0
+   },
+   "recommended": false,
+   "note": "edge +3.3% below the 4% minimum (starting goalie unconfirmed)",
+   "line": null,
+   "rank": 3,
+   "has_edge": true
+  },
+  {
+   "kind": "moneyline",
+   "type": "Moneyline",
+   "game_id": 2026020190,
+   "game": "LAK @ CHI",
+   "start_utc": "2026-10-28T00:00:00+00:00",
+   "pick": "CHI moneyline",
+   "p_model": 0.4875890959211938,
+   "p_market": 0.47530166609776386,
+   "price": 2.04,
+   "ev_raw": -0.0053182443207645536,
+   "score": 0.012287429823429952,
+   "weight": 1.0,
+   "experimental": false,
+   "p_push": 0.0,
+   "captured_at": "2026-10-27T12:02:20+00:00",
+   "leg": {
+    "game_id": 2026020190,
+    "decimal": 2.04,
+    "p_model": 0.4875890959211938,
+    "p_market": 0.47530166609776386,
+    "market": "h2h",
+    "side": "home",
+    "point": null,
+    "player_id": 0
+   },
+   "recommended": false,
+   "note": "edge +3.1% below the 4% minimum (starting goalie unconfirmed)",
+   "line": null,
+   "rank": 4,
+   "has_edge": true
+  },
+  {
+   "kind": "moneyline",
+   "type": "Moneyline",
+   "game_id": 2026020189,
+   "game": "BOS @ CAR",
+   "start_utc": "2026-10-28T00:00:00+00:00",
+   "pick": "CAR moneyline",
+   "p_model": 0.6478175194283063,
+   "p_market": 0.6361307891295209,
+   "price": 1.54,
+   "ev_raw": -0.002361020080408227,
+   "score": 0.01168673029878542,
+   "weight": 1.0,
+   "experimental": false,
+   "p_push": 0.0,
+   "captured_at": "2026-10-27T12:02:20+00:00",
+   "leg": {
+    "game_id": 2026020189,
+    "decimal": 1.54,
+    "p_model": 0.6478175194283063,
+    "p_market": 0.6361307891295209,
+    "market": "h2h",
+    "side": "home",
+    "point": null,
+    "player_id": 0
+   },
+   "recommended": false,
+   "note": "edge +2.9% below the 4% minimum (starting goalie unconfirmed)",
+   "line": null,
+   "rank": 5,
+   "has_edge": true
+  },
+  {
+   "kind": "moneyline",
+   "type": "Moneyline",
+   "game_id": 2026020188,
+   "game": "CBJ @ PHI",
+   "start_utc": "2026-10-27T23:00:00+00:00",
+   "pick": "PHI moneyline",
+   "p_model": 0.4786793543015873,
+   "p_market": 0.4698357015689713,
+   "price": 2.08,
+   "ev_raw": -0.004346943052698449,
+   "score": 0.008843652732616003,
+   "weight": 1.0,
+   "experimental": false,
+   "p_push": 0.0,
+   "captured_at": "2026-10-27T12:02:20+00:00",
+   "leg": {
+    "game_id": 2026020188,
+    "decimal": 2.08,
+    "p_model": 0.4786793543015873,
+    "p_market": 0.4698357015689713,
+    "market": "h2h",
+    "side": "home",
+    "point": null,
+    "player_id": 0
+   },
+   "recommended": false,
+   "note": "edge +2.0% below the 4% minimum (starting goalie unconfirmed)",
+   "line": null,
+   "rank": 6,
+   "has_edge": true
+  },
+  {
+   "kind": "moneyline",
+   "type": "Moneyline",
+   "game_id": 2026020198,
+   "game": "BUF @ SJS",
+   "start_utc": "2026-10-28T02:30:00+00:00",
+   "pick": "BUF moneyline",
+   "p_model": 0.5704032817134815,
+   "p_market": 0.5622201021808026,
+   "price": 1.74,
+   "ev_raw": -0.007498289818542114,
+   "score": 0.008183179532678886,
+   "weight": 1.0,
+   "experimental": false,
+   "p_push": 0.0,
+   "captured_at": "2026-10-27T12:02:20+00:00",
+   "leg": {
+    "game_id": 2026020198,
+    "decimal": 1.74,
+    "p_model": 0.5704032817134815,
+    "p_market": 0.5622201021808026,
+    "market": "h2h",
+    "side": "away",
+    "point": null,
+    "player_id": 0
+   },
+   "recommended": false,
+   "note": "edge +1.8% below the 4% minimum (starting goalie unconfirmed)",
+   "line": null,
+   "rank": 7,
+   "has_edge": true
+  },
+  {
+   "kind": "moneyline",
+   "type": "Moneyline",
+   "game_id": 2026020196,
+   "game": "OTT @ VGK",
+   "start_utc": "2026-10-28T02:00:00+00:00",
+   "pick": "OTT moneyline",
+   "p_model": 0.4200312392655431,
+   "p_market": 0.4126479634866391,
+   "price": 2.35,
+   "ev_raw": -0.01292658772597366,
+   "score": 0.007383275778903964,
+   "weight": 1.0,
+   "experimental": false,
+   "p_push": 0.0,
+   "captured_at": "2026-10-27T12:02:20+00:00",
+   "leg": {
+    "game_id": 2026020196,
+    "decimal": 2.35,
+    "p_model": 0.4200312392655431,
+    "p_market": 0.4126479634866391,
+    "market": "h2h",
+    "side": "away",
+    "point": null,
+    "player_id": 0
+   },
+   "recommended": false,
+   "note": "edge +1.6% below the 4% minimum (starting goalie unconfirmed)",
+   "line": null,
+   "rank": 8,
+   "has_edge": true
+  },
+  {
+   "kind": "moneyline",
+   "type": "Moneyline",
+   "game_id": 2026020191,
+   "game": "MTL @ STL",
+   "start_utc": "2026-10-28T00:00:00+00:00",
+   "pick": "STL moneyline",
+   "p_model": 0.5337406126025048,
+   "p_market": 0.5272124333100945,
+   "price": 1.83,
+   "ev_raw": -0.023254678937416118,
+   "score": 0.006528179292410341,
+   "weight": 1.0,
+   "experimental": false,
+   "p_push": 0.0,
+   "captured_at": "2026-10-27T12:02:20+00:00",
+   "leg": {
+    "game_id": 2026020191,
+    "decimal": 1.83,
+    "p_model": 0.5337406126025048,
+    "p_market": 0.5272124333100945,
+    "market": "h2h",
+    "side": "home",
+    "point": null,
+    "player_id": 0
+   },
+   "recommended": false,
+   "note": "edge +1.4% below the 4% minimum (starting goalie unconfirmed)",
+   "line": null,
+   "rank": 9,
+   "has_edge": true
+  },
+  {
+   "kind": "moneyline",
+   "type": "Moneyline",
+   "game_id": 2026020197,
+   "game": "VAN @ ANA",
+   "start_utc": "2026-10-28T02:00:00+00:00",
+   "pick": "ANA moneyline",
+   "p_model": 0.6607821212714736,
+   "p_market": 0.6552944833352247,
+   "price": 1.49,
+   "ev_raw": -0.015434639305504316,
+   "score": 0.005487637936248957,
+   "weight": 1.0,
+   "experimental": false,
+   "p_push": 0.0,
+   "captured_at": "2026-10-27T12:02:20+00:00",
+   "leg": {
+    "game_id": 2026020197,
+    "decimal": 1.49,
+    "p_model": 0.6607821212714736,
+    "p_market": 0.6552944833352247,
+    "market": "h2h",
+    "side": "home",
+    "point": null,
+    "player_id": 0
+   },
+   "recommended": false,
+   "note": "edge +1.1% below the 4% minimum (starting goalie unconfirmed)",
+   "line": null,
+   "rank": 10,
+   "has_edge": true
+  },
+  {
+   "kind": "moneyline",
+   "type": "Moneyline",
+   "game_id": 2026020195,
+   "game": "MIN @ UTA",
+   "start_utc": "2026-10-28T01:00:00+00:00",
+   "pick": "UTA moneyline",
+   "p_model": 0.5423437512405287,
+   "p_market": 0.5377018159909605,
+   "price": 1.81,
+   "ev_raw": -0.01835781025464306,
+   "score": 0.004641935249568241,
+   "weight": 1.0,
+   "experimental": false,
+   "p_push": 0.0,
+   "captured_at": "2026-10-27T12:02:20+00:00",
+   "leg": {
+    "game_id": 2026020195,
+    "decimal": 1.81,
+    "p_model": 0.5423437512405287,
+    "p_market": 0.5377018159909605,
     "market": "h2h",
     "side": "home",
     "point": null,
@@ -1613,199 +4898,7 @@
    "recommended": false,
    "note": "edge +1.0% below the 4% minimum (starting goalie unconfirmed)",
    "line": null,
-   "rank": 3,
-   "has_edge": true
-  },
-  {
-   "kind": "totals",
-   "type": "Total",
-   "game_id": 2026020187,
-   "game": "DET @ EDM",
-   "start_utc": "2026-10-27T01:30:00+00:00",
-   "pick": "Under 6.5",
-   "p_model": 0.5556586187396544,
-   "p_market": 0.4572969801267408,
-   "price": 2.12,
-   "ev_raw": 0.1779962717280673,
-   "score": 0.00491808193064568,
-   "weight": 0.05,
-   "experimental": true,
-   "p_push": 0.0,
-   "captured_at": "2026-10-26T20:03:43+00:00",
-   "leg": {
-    "game_id": 2026020187,
-    "decimal": 2.12,
-    "p_model": 0.5556586187396544,
-    "p_market": 0.4572969801267408,
-    "market": "totals",
-    "side": "under",
-    "point": 6.5,
-    "player_id": 0
-   },
-   "recommended": false,
-   "note": "experimental goals model, paper-traded only",
-   "line": 6.5,
-   "rank": 4,
-   "has_edge": true
-  },
-  {
-   "kind": "totals",
-   "type": "Total",
-   "game_id": 2026020186,
-   "game": "TOR @ CGY",
-   "start_utc": "2026-10-27T00:30:00+00:00",
-   "pick": "Under 6.5",
-   "p_model": 0.5458312377951987,
-   "p_market": 0.47672167929727716,
-   "price": 2.05,
-   "ev_raw": 0.1189540374801572,
-   "score": 0.003455477924896078,
-   "weight": 0.05,
-   "experimental": true,
-   "p_push": 0.0,
-   "captured_at": "2026-10-26T20:03:43+00:00",
-   "leg": {
-    "game_id": 2026020186,
-    "decimal": 2.05,
-    "p_model": 0.5458312377951987,
-    "p_market": 0.47672167929727716,
-    "market": "totals",
-    "side": "under",
-    "point": 6.5,
-    "player_id": 0
-   },
-   "recommended": false,
-   "note": "experimental goals model, paper-traded only",
-   "line": 6.5,
-   "rank": 5,
-   "has_edge": true
-  },
-  {
-   "kind": "spreads",
-   "type": "Puck line",
-   "game_id": 2026020187,
-   "game": "DET @ EDM",
-   "start_utc": "2026-10-27T01:30:00+00:00",
-   "pick": "DET +1.5",
-   "p_model": 0.6461933836127648,
-   "p_market": 0.5979673187239702,
-   "price": 1.64,
-   "ev_raw": 0.059757149124934184,
-   "score": 0.0027401173232269632,
-   "weight": 0.056818181818181816,
-   "experimental": true,
-   "p_push": 0.0,
-   "captured_at": "2026-10-26T20:03:43+00:00",
-   "leg": {
-    "game_id": 2026020187,
-    "decimal": 1.64,
-    "p_model": 0.6461933836127648,
-    "p_market": 0.5979673187239702,
-    "market": "spreads",
-    "side": "away",
-    "point": 1.5,
-    "player_id": 0
-   },
-   "recommended": false,
-   "note": "experimental goals model, paper-traded only",
-   "line": 1.5,
-   "rank": 6,
-   "has_edge": true
-  },
-  {
-   "kind": "spreads",
-   "type": "Puck line",
-   "game_id": 2026020185,
-   "game": "LAK @ NYR",
-   "start_utc": "2026-10-26T23:00:00+00:00",
-   "pick": "NYR -1.5",
-   "p_model": 0.3686753828545111,
-   "p_market": 0.3262951505847035,
-   "price": 2.92,
-   "ev_raw": 0.07653211793517245,
-   "score": 0.0024079677426027068,
-   "weight": 0.056818181818181816,
-   "experimental": true,
-   "p_push": 0.0,
-   "captured_at": "2026-10-26T20:03:43+00:00",
-   "leg": {
-    "game_id": 2026020185,
-    "decimal": 2.92,
-    "p_model": 0.3686753828545111,
-    "p_market": 0.3262951505847035,
-    "market": "spreads",
-    "side": "home",
-    "point": -1.5,
-    "player_id": 0
-   },
-   "recommended": false,
-   "note": "experimental goals model, paper-traded only",
-   "line": -1.5,
-   "rank": 7,
-   "has_edge": true
-  },
-  {
-   "kind": "totals",
-   "type": "Total",
-   "game_id": 2026020185,
-   "game": "LAK @ NYR",
-   "start_utc": "2026-10-26T23:00:00+00:00",
-   "pick": "Over 5.5",
-   "p_model": 0.5776562077839564,
-   "p_market": 0.5356555483692512,
-   "price": 1.82,
-   "ev_raw": 0.05133429816680074,
-   "score": 0.0021000329707352608,
-   "weight": 0.05,
-   "experimental": true,
-   "p_push": 0.0,
-   "captured_at": "2026-10-26T20:03:43+00:00",
-   "leg": {
-    "game_id": 2026020185,
-    "decimal": 1.82,
-    "p_model": 0.5776562077839564,
-    "p_market": 0.5356555483692512,
-    "market": "totals",
-    "side": "over",
-    "point": 5.5,
-    "player_id": 0
-   },
-   "recommended": false,
-   "note": "experimental goals model, paper-traded only",
-   "line": 5.5,
-   "rank": 8,
-   "has_edge": true
-  },
-  {
-   "kind": "spreads",
-   "type": "Puck line",
-   "game_id": 2026020186,
-   "game": "TOR @ CGY",
-   "start_utc": "2026-10-27T00:30:00+00:00",
-   "pick": "TOR -1.5",
-   "p_model": 0.3534198078993831,
-   "p_market": 0.34814347934080736,
-   "price": 2.8,
-   "ev_raw": -0.01042453788172737,
-   "score": 0.0002997913953736215,
-   "weight": 0.056818181818181816,
-   "experimental": true,
-   "p_push": 0.0,
-   "captured_at": "2026-10-26T20:03:43+00:00",
-   "leg": {
-    "game_id": 2026020186,
-    "decimal": 2.8,
-    "p_model": 0.3534198078993831,
-    "p_market": 0.34814347934080736,
-    "market": "spreads",
-    "side": "away",
-    "point": -1.5,
-    "player_id": 0
-   },
-   "recommended": false,
-   "note": "experimental goals model, paper-traded only",
-   "line": -1.5,
-   "rank": 9,
+   "rank": 11,
    "has_edge": true
   }
  ],
@@ -1834,7 +4927,7 @@
  "ranking_weights": {
   "moneyline": 1.0,
   "totals": 0.05,
-  "spreads": 0.056818181818181816,
+  "spreads": 0.055970149253731345,
   "player_sog": 0.07017543859649122,
   "player_points": 0.06976744186046512,
   "player_assists": 0.08823529411764706,
@@ -1845,25 +4938,25 @@
    "strategy": "parlay_top2",
    "description": "The model's 2 best-ranked picks from different games combined into one ticket",
    "n_legs": 2,
-   "decimal": 5.475,
-   "p_model": 0.1826406351759375,
-   "p_market": 0.17029024359515638,
+   "decimal": 3.7466999999999997,
+   "p_model": 0.26533632957861375,
+   "p_market": 0.25236889811364766,
    "stake": 10.0,
-   "ev": -4.2522411742185184e-05,
+   "ev": -0.005864373967807923,
    "legs": [
     {
-     "label": "CGY moneyline",
-     "game": "TOR @ CGY",
-     "decimal": 2.19,
-     "p_model": 0.4573638982761777,
-     "p_market": 0.4426543789922752
+     "label": "NYI moneyline",
+     "game": "NYI @ NSH",
+     "decimal": 2.07,
+     "p_model": 0.4851336329907545,
+     "p_market": 0.47232098010924584
     },
     {
-     "label": "DET moneyline",
-     "game": "DET @ EDM",
-     "decimal": 2.5,
-     "p_model": 0.39933330082308016,
-     "p_market": 0.3847024940379684
+     "label": "DAL moneyline",
+     "game": "NJD @ DAL",
+     "decimal": 1.81,
+     "p_model": 0.5469345176974576,
+     "p_market": 0.5343165108932401
     }
    ]
   },
@@ -1871,32 +4964,32 @@
    "strategy": "parlay_top3",
    "description": "The model's 3 best-ranked picks from different games combined into one ticket",
    "n_legs": 3,
-   "decimal": 9.69075,
-   "p_model": 0.1015124997583412,
-   "p_market": 0.09380082828449457,
+   "decimal": 7.980470999999999,
+   "p_model": 0.12387305649586751,
+   "p_market": 0.11464423446994691,
    "stake": 10.0,
-   "ev": -0.01626774296685507,
+   "ev": -0.011434664953367868,
    "legs": [
     {
-     "label": "CGY moneyline",
-     "game": "TOR @ CGY",
-     "decimal": 2.19,
-     "p_model": 0.4573638982761777,
-     "p_market": 0.4426543789922752
+     "label": "NYI moneyline",
+     "game": "NYI @ NSH",
+     "decimal": 2.07,
+     "p_model": 0.4851336329907545,
+     "p_market": 0.47232098010924584
     },
     {
-     "label": "DET moneyline",
-     "game": "DET @ EDM",
-     "decimal": 2.5,
-     "p_model": 0.39933330082308016,
-     "p_market": 0.3847024940379684
+     "label": "DAL moneyline",
+     "game": "NJD @ DAL",
+     "decimal": 1.81,
+     "p_model": 0.5469345176974576,
+     "p_market": 0.5343165108932401
     },
     {
-     "label": "NYR moneyline",
-     "game": "LAK @ NYR",
-     "decimal": 1.77,
-     "p_model": 0.5558045703277057,
-     "p_market": 0.5508291391460701
+     "label": "WPG moneyline",
+     "game": "FLA @ WPG",
+     "decimal": 2.13,
+     "p_model": 0.4668529812430621,
+     "p_market": 0.4542724373996352
     }
    ]
   },
@@ -1904,38 +4997,38 @@
    "strategy": "parlay_favorites_control",
    "description": "CONTROL: flat $10 on the market favourites of 3 different games (no model; shows what parlay margin costs)",
    "n_legs": 3,
-   "decimal": 4.896882000000001,
-   "p_model": 0.14675480567552113,
-   "p_market": 0.18889769329273115,
+   "decimal": 5.2136700000000005,
+   "p_model": 0.16751959177563536,
+   "p_market": 0.1769565245549286,
    "stake": 10.0,
-   "ev": -0.2813590336740427,
+   "ev": -0.12660812994712312,
    "legs": [
     {
-     "label": "NYR moneyline",
-     "game": "LAK @ NYR",
-     "decimal": 1.77,
-     "p_model": 0.5610698835232901,
-     "p_market": 0.5508291391460701
+     "label": "CBJ moneyline",
+     "game": "CBJ @ PHI",
+     "decimal": 1.83,
+     "p_model": 0.5105955810107319,
+     "p_market": 0.5301642984310286
     },
     {
-     "label": "TOR moneyline",
-     "game": "TOR @ CGY",
-     "decimal": 1.74,
-     "p_model": 0.48417792718630215,
-     "p_market": 0.5573456210077248
+     "label": "CAR moneyline",
+     "game": "BOS @ CAR",
+     "decimal": 1.54,
+     "p_model": 0.6648648718034855,
+     "p_market": 0.6361307891295209
     },
     {
-     "label": "EDM moneyline",
-     "game": "DET @ EDM",
-     "decimal": 1.59,
-     "p_model": 0.5402196622877871,
-     "p_market": 0.6152975059620316
+     "label": "LAK moneyline",
+     "game": "LAK @ CHI",
+     "decimal": 1.85,
+     "p_model": 0.4934636498136319,
+     "p_market": 0.5246983339022362
     }
    ]
   }
  ],
  "track": {
-  "resolved_games": 179,
+  "resolved_games": 182,
   "bets": {
    "n": 1,
    "staked": 2.34,
@@ -1945,16 +5038,16 @@
    "avg_decimal": 2.71
   },
   "model": {
-   "brier": 0.23333066203981012,
-   "log_loss": 0.659049137483458,
-   "accuracy": 0.5921787709497207
+   "brier": 0.23410578828582201,
+   "log_loss": 0.6606165412057956,
+   "accuracy": 0.5879120879120879
   },
   "vs_market": {
-   "n": 179,
-   "model_log_loss": 0.659049137483458,
-   "market_close_log_loss": 0.6451812686893391,
-   "model_brier": 0.23333066203981012,
-   "market_close_brier": 0.2269093532131807
+   "n": 182,
+   "model_log_loss": 0.6606165412057956,
+   "market_close_log_loss": 0.6487626426199665,
+   "model_brier": 0.23410578828582201,
+   "market_close_brier": 0.22866727807495194
   },
   "clv": {
    "n": 1,
@@ -1971,30 +5064,30 @@
    "current_drawdown": 0.0023400000000000317,
    "longest_underwater_bets": 1
   },
-  "no_bet_rate": 0.994413407821229
+  "no_bet_rate": 0.9945054945054945
  },
  "paper": [
   {
    "strategy": "always_over",
-   "bets": 171.0,
-   "staked": 1710.0,
-   "profit": -99.00000000000003,
-   "roi": -0.05789473684210528,
-   "roi_lo": -0.20473976608187133,
-   "roi_hi": 0.08807602339181284,
-   "win_rate": 0.49122807017543857,
+   "bets": 174.0,
+   "staked": 1740.0,
+   "profit": -92.30000000000001,
+   "roi": -0.05304597701149426,
+   "roi_lo": -0.19873994252873567,
+   "roi_hi": 0.085104885057471,
+   "win_rate": 0.4942528735632184,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "always_under",
-   "bets": 126.0,
-   "staked": 1260.0,
-   "profit": 15.399999999999995,
-   "roi": 0.012222222222222218,
-   "roi_lo": -0.15675595238095236,
-   "roi_hi": 0.1772380952380952,
-   "win_rate": 0.5158730158730159,
+   "bets": 129.0,
+   "staked": 1290.0,
+   "profit": 6.59999999999998,
+   "roi": 0.005116279069767427,
+   "roi_lo": -0.16202519379844962,
+   "roi_hi": 0.17720930232558138,
+   "win_rate": 0.5116279069767442,
    "avg_clv": null,
    "n_clv": 0.0
   },
@@ -2004,8 +5097,8 @@
    "staked": 400.0,
    "profit": -25.89999999999999,
    "roi": -0.06474999999999997,
-   "roi_lo": -0.3490125,
-   "roi_hi": 0.24800624999999993,
+   "roi_lo": -0.33854375000000003,
+   "roi_hi": 0.24825624999999998,
    "win_rate": 0.55,
    "avg_clv": null,
    "n_clv": 0.0
@@ -2016,8 +5109,8 @@
    "staked": 390.0,
    "profit": 18.800000000000004,
    "roi": 0.04820512820512821,
-   "roi_lo": -0.23667307692307696,
-   "roi_hi": 0.3464294871794871,
+   "roi_lo": -0.24209615384615385,
+   "roi_hi": 0.34231410256410255,
    "win_rate": 0.5641025641025641,
    "avg_clv": null,
    "n_clv": 0.0
@@ -2028,8 +5121,8 @@
    "staked": 360.0,
    "profit": -45.5,
    "roi": -0.12638888888888888,
-   "roi_lo": -0.6944444444444444,
-   "roi_hi": 0.5336805555555536,
+   "roi_lo": -0.6861458333333333,
+   "roi_hi": 0.5292361111111107,
    "win_rate": 0.19444444444444445,
    "avg_clv": null,
    "n_clv": 0.0
@@ -2040,8 +5133,8 @@
    "staked": 400.0,
    "profit": 10.600000000000005,
    "roi": 0.026500000000000013,
-   "roi_lo": -0.22203124999999996,
-   "roi_hi": 0.27154374999999986,
+   "roi_lo": -0.21350625,
+   "roi_hi": 0.2695249999999999,
    "win_rate": 0.65,
    "avg_clv": null,
    "n_clv": 0.0
@@ -2060,51 +5153,51 @@
   },
   {
    "strategy": "every_game",
-   "bets": 179.0,
-   "staked": 1790.0,
-   "profit": -10.599999999999984,
-   "roi": -0.0059217877094971975,
-   "roi_lo": -0.1291717877094972,
-   "roi_hi": 0.11296229050279331,
-   "win_rate": 0.5921787709497207,
-   "avg_clv": -0.020948744584178575,
-   "n_clv": 179.0
+   "bets": 182.0,
+   "staked": 1820.0,
+   "profit": -18.699999999999957,
+   "roi": -0.010274725274725251,
+   "roi_lo": -0.13033104395604395,
+   "roi_hi": 0.10770192307692303,
+   "win_rate": 0.5879120879120879,
+   "avg_clv": -0.020998584615416656,
+   "n_clv": 182.0
   },
   {
    "strategy": "every_puckline",
-   "bets": 178.0,
-   "staked": 1780.0,
-   "profit": -135.20000000000002,
-   "roi": -0.07595505617977528,
-   "roi_lo": -0.18944101123595508,
-   "roi_hi": 0.0365210674157303,
-   "win_rate": 0.601123595505618,
+   "bets": 181.0,
+   "staked": 1810.0,
+   "profit": -119.20000000000003,
+   "roi": -0.06585635359116024,
+   "roi_lo": -0.1763342541436464,
+   "roi_hi": 0.04071823204419888,
+   "win_rate": 0.6077348066298343,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "every_total",
-   "bets": 171.0,
-   "staked": 1710.0,
-   "profit": -279.1,
-   "roi": -0.16321637426900587,
-   "roi_lo": -0.29843128654970763,
-   "roi_hi": -0.017710526315789517,
-   "win_rate": 0.43859649122807015,
+   "bets": 174.0,
+   "staked": 1740.0,
+   "profit": -269.70000000000005,
+   "roi": -0.15500000000000003,
+   "roi_lo": -0.29994396551724134,
+   "roi_hi": -0.013864942528735881,
+   "win_rate": 0.4425287356321839,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "flat_model_side",
-   "bets": 179.0,
-   "staked": 1790.0,
-   "profit": -342.79999999999995,
-   "roi": -0.19150837988826813,
-   "roi_lo": -0.34236592178770947,
-   "roi_hi": -0.05351396648044696,
-   "win_rate": 0.39106145251396646,
-   "avg_clv": -0.02547918489431292,
-   "n_clv": 179.0
+   "bets": 182.0,
+   "staked": 1820.0,
+   "profit": -325.9,
+   "roi": -0.17906593406593405,
+   "roi_lo": -0.3374203296703296,
+   "roi_hi": -0.03300137362637374,
+   "win_rate": 0.3956043956043956,
+   "avg_clv": -0.025641603286289488,
+   "n_clv": 182.0
   },
   {
    "strategy": "goal_control",
@@ -2112,8 +5205,8 @@
    "staked": 400.0,
    "profit": -41.1,
    "roi": -0.10275000000000001,
-   "roi_lo": -0.5100375,
-   "roi_hi": 0.32975625,
+   "roi_lo": -0.5127750000000001,
+   "roi_hi": 0.30975625,
    "win_rate": 0.325,
    "avg_clv": null,
    "n_clv": 0.0
@@ -2125,34 +5218,34 @@
    "profit": -20.0,
    "roi": -0.05128205128205128,
    "roi_lo": -0.8205128205128205,
-   "roi_hi": 0.8717948717948718,
+   "roi_hi": 0.8974358974358975,
    "win_rate": 0.10256410256410256,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "home_ml_control",
-   "bets": 132.0,
-   "staked": 1320.0,
-   "profit": 131.0,
-   "roi": 0.09924242424242424,
-   "roi_lo": -0.06539204545454545,
-   "roi_hi": 0.2584356060606059,
-   "win_rate": 0.5984848484848485,
-   "avg_clv": -0.02669868369191995,
-   "n_clv": 132.0
+   "bets": 135.0,
+   "staked": 1350.0,
+   "profit": 122.89999999999999,
+   "roi": 0.09103703703703703,
+   "roi_lo": -0.06416111111111113,
+   "roi_hi": 0.25860740740740734,
+   "win_rate": 0.5925925925925926,
+   "avg_clv": -0.02663809901312074,
+   "n_clv": 135.0
   },
   {
    "strategy": "market_favorite",
-   "bets": 179.0,
-   "staked": 1790.0,
-   "profit": 54.499999999999986,
-   "roi": 0.030446927374301668,
-   "roi_lo": -0.09230027932960895,
-   "roi_hi": 0.15083798882681562,
-   "win_rate": 0.6201117318435754,
-   "avg_clv": -0.02103262226045383,
-   "n_clv": 179.0
+   "bets": 182.0,
+   "staked": 1820.0,
+   "profit": 24.499999999999993,
+   "roi": 0.013461538461538457,
+   "roi_lo": -0.10659615384615384,
+   "roi_hi": 0.12852060439560437,
+   "win_rate": 0.6098901098901099,
+   "avg_clv": -0.02104741150210891,
+   "n_clv": 182.0
   },
   {
    "strategy": "no_guard",
@@ -2168,37 +5261,37 @@
   },
   {
    "strategy": "no_shrink",
-   "bets": 3.0,
-   "staked": 30.0,
-   "profit": -10.9,
-   "roi": -0.36333333333333334,
+   "bets": 5.0,
+   "staked": 50.0,
+   "profit": 15.999999999999998,
+   "roi": 0.31999999999999995,
    "roi_lo": null,
    "roi_hi": null,
-   "win_rate": 0.3333333333333333,
-   "avg_clv": -0.04238232329516548,
-   "n_clv": 3.0
+   "win_rate": 0.6,
+   "avg_clv": -0.04197845667548603,
+   "n_clv": 5.0
   },
   {
    "strategy": "over_edge",
-   "bets": 28.0,
-   "staked": 280.0,
-   "profit": -108.7,
-   "roi": -0.38821428571428573,
-   "roi_lo": -0.7192857142857143,
-   "roi_hi": -0.05141071428571438,
-   "win_rate": 0.32142857142857145,
+   "bets": 29.0,
+   "staked": 290.0,
+   "profit": -100.5,
+   "roi": -0.34655172413793106,
+   "roi_lo": -0.6707068965517241,
+   "roi_hi": -0.02338793103448309,
+   "win_rate": 0.3448275862068966,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "parlay_favorites_control",
-   "bets": 18.0,
-   "staked": 180.0,
-   "profit": -0.9129999999999967,
-   "roi": -0.005072222222222204,
+   "bets": 19.0,
+   "staked": 190.0,
+   "profit": -10.912999999999997,
+   "roi": -0.05743684210526314,
    "roi_lo": null,
    "roi_hi": null,
-   "win_rate": 0.2777777777777778,
+   "win_rate": 0.2631578947368421,
    "avg_clv": null,
    "n_clv": 0.0
   },
@@ -2216,21 +5309,21 @@
   },
   {
    "strategy": "parlay_top2",
-   "bets": 18.0,
-   "staked": 180.0,
-   "profit": -180.0,
-   "roi": -1.0,
+   "bets": 19.0,
+   "staked": 190.0,
+   "profit": -135.25,
+   "roi": -0.7118421052631579,
    "roi_lo": null,
    "roi_hi": null,
-   "win_rate": 0.0,
+   "win_rate": 0.05263157894736842,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "parlay_top3",
-   "bets": 18.0,
-   "staked": 180.0,
-   "profit": -180.0,
+   "bets": 19.0,
+   "staked": 190.0,
+   "profit": -190.0,
    "roi": -1.0,
    "roi_lo": null,
    "roi_hi": null,
@@ -2244,8 +5337,8 @@
    "staked": 870.0,
    "profit": -143.8,
    "roi": -0.1652873563218391,
-   "roi_lo": -0.36947701149425277,
-   "roi_hi": 0.04670977011494229,
+   "roi_lo": -0.3685201149425287,
+   "roi_hi": 0.034617816091953926,
    "win_rate": 0.4367816091954023,
    "avg_clv": null,
    "n_clv": 0.0
@@ -2254,10 +5347,10 @@
    "strategy": "pts_over_control",
    "bets": 91.0,
    "staked": 910.0,
-   "profit": -59.199999999999974,
-   "roi": -0.06505494505494502,
-   "roi_lo": -0.24300824175824176,
-   "roi_hi": 0.10344505494505477,
+   "profit": -59.19999999999999,
+   "roi": -0.06505494505494504,
+   "roi_lo": -0.23659615384615387,
+   "roi_hi": 0.09868406593406594,
    "win_rate": 0.5604395604395604,
    "avg_clv": null,
    "n_clv": 0.0
@@ -2268,8 +5361,8 @@
    "staked": 640.0,
    "profit": -234.6,
    "roi": -0.3665625,
-   "roi_lo": -0.6547109375,
-   "roi_hi": -0.06357812500000007,
+   "roi_lo": -0.6425546875,
+   "roi_hi": -0.06577734375000001,
    "win_rate": 0.234375,
    "avg_clv": null,
    "n_clv": 0.0
@@ -2280,57 +5373,57 @@
    "staked": 870.0,
    "profit": -120.6,
    "roi": -0.1386206896551724,
-   "roi_lo": -0.33451436781609195,
-   "roi_hi": 0.0657471264367816,
+   "roi_lo": -0.34118103448275855,
+   "roi_hi": 0.055525862068965454,
    "win_rate": 0.47126436781609193,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "puckline_dog_control",
-   "bets": 131.0,
-   "staked": 1310.0,
-   "profit": -86.5,
-   "roi": -0.06603053435114503,
-   "roi_lo": -0.19488740458015266,
-   "roi_hi": 0.06940267175572509,
-   "win_rate": 0.6030534351145038,
+   "bets": 134.0,
+   "staked": 1340.0,
+   "profit": -70.50000000000003,
+   "roi": -0.052611940298507485,
+   "roi_lo": -0.185339552238806,
+   "roi_hi": 0.07396082089552236,
+   "win_rate": 0.6119402985074627,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "puckline_dog_edge",
-   "bets": 61.0,
-   "staked": 610.0,
-   "profit": -27.100000000000005,
-   "roi": -0.04442622950819673,
-   "roi_lo": -0.2454139344262295,
-   "roi_hi": 0.15198360655737694,
-   "win_rate": 0.6065573770491803,
+   "bets": 62.0,
+   "staked": 620.0,
+   "profit": -20.70000000000001,
+   "roi": -0.03338709677419356,
+   "roi_lo": -0.2244072580645161,
+   "roi_hi": 0.1608145161290322,
+   "win_rate": 0.6129032258064516,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "puckline_edge",
-   "bets": 92.0,
-   "staked": 920.0,
-   "profit": -121.3,
-   "roi": -0.13184782608695653,
-   "roi_lo": -0.31805163043478263,
-   "roi_hi": 0.06326902173913039,
+   "bets": 94.0,
+   "staked": 940.0,
+   "profit": -124.9,
+   "roi": -0.13287234042553192,
+   "roi_lo": -0.3147101063829787,
+   "roi_hi": 0.06067021276595727,
    "win_rate": 0.5,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "puckline_fav_edge",
-   "bets": 24.0,
-   "staked": 240.0,
-   "profit": -28.999999999999996,
-   "roi": -0.12083333333333332,
-   "roi_lo": -0.6020833333333333,
-   "roi_hi": 0.41508333333333286,
-   "win_rate": 0.3333333333333333,
+   "bets": 25.0,
+   "staked": 250.0,
+   "profit": -39.0,
+   "roi": -0.156,
+   "roi_lo": -0.614,
+   "roi_hi": 0.3585299999999994,
+   "win_rate": 0.32,
    "avg_clv": null,
    "n_clv": 0.0
   },
@@ -2338,10 +5431,10 @@
    "strategy": "sog_edge",
    "bets": 142.0,
    "staked": 1420.0,
-   "profit": 23.700000000000003,
-   "roi": 0.016690140845070426,
-   "roi_lo": -0.1347904929577465,
-   "roi_hi": 0.17186091549295757,
+   "profit": 23.699999999999996,
+   "roi": 0.01669014084507042,
+   "roi_lo": -0.1457200704225352,
+   "roi_hi": 0.1656461267605633,
    "win_rate": 0.5563380281690141,
    "avg_clv": null,
    "n_clv": 0.0
@@ -2350,10 +5443,10 @@
    "strategy": "sog_over_control",
    "bets": 146.0,
    "staked": 1460.0,
-   "profit": -66.1,
-   "roi": -0.04527397260273972,
-   "roi_lo": -0.21575342465753425,
-   "roi_hi": 0.12473801369863005,
+   "profit": -66.10000000000002,
+   "roi": -0.04527397260273974,
+   "roi_lo": -0.2161712328767123,
+   "roi_hi": 0.11986815068493147,
    "win_rate": 0.4657534246575342,
    "avg_clv": null,
    "n_clv": 0.0
@@ -2362,10 +5455,10 @@
    "strategy": "sog_over_edge",
    "bets": 72.0,
    "staked": 720.0,
-   "profit": -90.79999999999998,
-   "roi": -0.1261111111111111,
-   "roi_lo": -0.3605555555555555,
-   "roi_hi": 0.09879513888888866,
+   "profit": -90.8,
+   "roi": -0.12611111111111112,
+   "roi_lo": -0.3415625,
+   "roi_hi": 0.08668749999999988,
    "win_rate": 0.4583333333333333,
    "avg_clv": null,
    "n_clv": 0.0
@@ -2374,61 +5467,61 @@
    "strategy": "sog_under_edge",
    "bets": 103.0,
    "staked": 1030.0,
-   "profit": 40.2,
-   "roi": 0.03902912621359224,
-   "roi_lo": -0.14427427184466018,
-   "roi_hi": 0.22360922330097077,
+   "profit": 40.19999999999999,
+   "roi": 0.039029126213592225,
+   "roi_lo": -0.14106796116504855,
+   "roi_hi": 0.2156359223300971,
    "win_rate": 0.5631067961165048,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "totals_edge",
-   "bets": 102.0,
-   "staked": 1020.0,
-   "profit": -232.90000000000003,
-   "roi": -0.22833333333333336,
-   "roi_lo": -0.4144264705882353,
-   "roi_hi": -0.04460539215686276,
-   "win_rate": 0.4019607843137255,
+   "bets": 105.0,
+   "staked": 1050.0,
+   "profit": -223.5,
+   "roi": -0.21285714285714286,
+   "roi_lo": -0.393347619047619,
+   "roi_hi": -0.04085000000000004,
+   "win_rate": 0.4095238095238095,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "under_edge",
-   "bets": 59.0,
-   "staked": 590.0,
-   "profit": -104.3,
-   "roi": -0.17677966101694914,
-   "roi_lo": -0.41475423728813554,
-   "roi_hi": 0.08324999999999982,
-   "win_rate": 0.423728813559322,
+   "bets": 61.0,
+   "staked": 610.0,
+   "profit": -103.1,
+   "roi": -0.16901639344262295,
+   "roi_lo": -0.4016434426229508,
+   "roi_hi": 0.06576229508196707,
+   "win_rate": 0.4262295081967213,
    "avg_clv": null,
    "n_clv": 0.0
   },
   {
    "strategy": "underdog_ml",
-   "bets": 69.0,
-   "staked": 690.0,
-   "profit": -181.5,
-   "roi": -0.26304347826086955,
-   "roi_lo": -0.5204855072463769,
-   "roi_hi": 0.011749999999999964,
-   "win_rate": 0.30434782608695654,
-   "avg_clv": -0.027184146221307295,
-   "n_clv": 69.0
+   "bets": 71.0,
+   "staked": 710.0,
+   "profit": -154.6,
+   "roi": -0.21774647887323942,
+   "roi_lo": -0.4635915492957747,
+   "roi_hi": 0.05901760563380281,
+   "win_rate": 0.323943661971831,
+   "avg_clv": -0.02758382257411461,
+   "n_clv": 71.0
   },
   {
    "strategy": "underdog_ml_control",
-   "bets": 132.0,
-   "staked": 1320.0,
-   "profit": -204.5,
-   "roi": -0.15492424242424244,
-   "roi_lo": -0.34871590909090905,
-   "roi_hi": 0.044651515151514984,
-   "win_rate": 0.36363636363636365,
-   "avg_clv": -0.028050784707581194,
-   "n_clv": 132.0
+   "bets": 135.0,
+   "staked": 1350.0,
+   "profit": -166.0,
+   "roi": -0.12296296296296297,
+   "roi_lo": -0.3171537037037037,
+   "roi_hi": 0.07467407407407403,
+   "win_rate": 0.37777777777777777,
+   "avg_clv": -0.02827712653163253,
+   "n_clv": 135.0
   }
  ],
  "disclaimer": "Disclaimer. This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice."
