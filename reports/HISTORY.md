@@ -6,15 +6,16 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 ## Overall
 
-- Games with a logged recommendation and a result: **182** (bet on 1; passed on 99%)
-- Bets: staked $2.34 · profit $-2.34 · **ROI -100.0%** · win rate 0.0%
+- Games with a logged recommendation and a result: **193** (bet on 2; passed on 99%)
+- Bets: staked $7.09 · profit $-7.09 · **ROI -100.0%** · win rate 0.0%
 - ⚠️ Far too few bets to separate skill from luck (about 6,900 would be needed to detect a true 3% ROI). Closing-line value converges much faster.
 
 ## By day
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
-| 2026-10-27 | 11 | 1 | - | - | - | 1 | [report](daily/2026-10-27-late.md) · [page](../site/archive/2026-10-27.html) |
+| 2026-10-28 | 4 | 0 | - | - | - | - | [report](daily/2026-10-28-morning.md) · [page](../site/archive/2026-10-28.html) |
+| 2026-10-27 | 11 | 1 | $4.75 | $-4.75 | -100.0% | - | [report](daily/2026-10-27-late.md) · [page](../site/archive/2026-10-27.html) |
 | 2026-10-26 | 3 | 0 | - | - | - | - | [report](daily/2026-10-26-late.md) · [page](../site/archive/2026-10-26.html) |
 | 2026-10-25 | 5 | 1 | $2.34 | $-2.34 | -100.0% | - | [report](daily/2026-10-25-late.md) · [page](../site/archive/2026-10-25.html) |
 | 2026-10-24 | 12 | 0 | - | - | - | - | [report](daily/2026-10-24-late.md) · [page](../site/archive/2026-10-24.html) |
@@ -47,7 +48,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Game | Pick | Price | Stake | Edge | Result | Profit | CLV |
 |---|---|---|---|---|---|---|---|---|
-| 2026-10-27 | MTL @ STL | STL | 2.03 | $4.75 | +5.4% | pending | - | - |
+| 2026-10-27 | MTL @ STL | STL | 2.03 | $4.75 | +5.4% | lost | $-4.75 | -1.8% |
 | 2026-10-25 | MIN @ VAN | VAN | 2.71 | $2.34 | +5.1% | lost | $-2.34 | -4.4% |
 
 ---
