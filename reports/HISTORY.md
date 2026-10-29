@@ -6,7 +6,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 ## Overall
 
-- Games with a logged recommendation and a result: **193** (bet on 2; passed on 99%)
+- Games with a logged recommendation and a result: **197** (bet on 2; passed on 99%)
 - Bets: staked $7.09 · profit $-7.09 · **ROI -100.0%** · win rate 0.0%
 - ⚠️ Far too few bets to separate skill from luck (about 6,900 would be needed to detect a true 3% ROI). Closing-line value converges much faster.
 
@@ -14,6 +14,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
+| 2026-10-29 | 11 | 1 | - | - | - | 1 | [report](daily/2026-10-29-morning.md) · [page](../site/archive/2026-10-29.html) |
 | 2026-10-28 | 4 | 0 | - | - | - | - | [report](daily/2026-10-28-late.md) · [page](../site/archive/2026-10-28.html) |
 | 2026-10-27 | 11 | 1 | $4.75 | $-4.75 | -100.0% | - | [report](daily/2026-10-27-late.md) · [page](../site/archive/2026-10-27.html) |
 | 2026-10-26 | 3 | 0 | - | - | - | - | [report](daily/2026-10-26-late.md) · [page](../site/archive/2026-10-26.html) |
@@ -48,6 +49,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Game | Pick | Price | Stake | Edge | Result | Profit | CLV |
 |---|---|---|---|---|---|---|---|---|
+| 2026-10-29 | VAN @ SJS | VAN | 2.65 | $2.24 | +4.6% | pending | - | - |
 | 2026-10-27 | MTL @ STL | STL | 2.03 | $4.75 | +5.4% | lost | $-4.75 | -1.8% |
 | 2026-10-25 | MIN @ VAN | VAN | 2.71 | $2.34 | +5.1% | lost | $-2.34 | -4.4% |
 
