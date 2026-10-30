@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-10-30
 
-**3 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-10-30 12:06 UTC
+**3 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-10-30 19:04 UTC
 
 | | |
 |---|---|
@@ -23,9 +23,9 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| NJD @ VGK | 55.0% | 51.5% | no bet |
-| WPG @ FLA | 66.7% | 67.2% | no bet |
-| SEA @ CGY | 53.3% | 48.5% | no bet |
+| NJD @ VGK | 55.0% | 50.6% | no bet |
+| WPG @ FLA | 66.7% | 67.4% | no bet |
+| SEA @ CGY | 53.3% | 48.6% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
