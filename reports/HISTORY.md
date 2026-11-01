@@ -15,7 +15,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
-| 2026-11-01 | 5 | 1 | - | - | - | 1 | [report](daily/2026-11-01-morning.md) · [page](../site/archive/2026-11-01.html) |
+| 2026-11-01 | 5 | 0 | - | - | - | - | [report](daily/2026-11-01-late.md) · [page](../site/archive/2026-11-01.html) |
 | 2026-10-31 | 10 | 2 | $5.01 | $-5.01 | -100.0% | - | [report](daily/2026-10-31-late.md) · [page](../site/archive/2026-10-31.html) |
 | 2026-10-30 | 3 | 0 | - | - | - | - | [report](daily/2026-10-30-late.md) · [page](../site/archive/2026-10-30.html) |
 | 2026-10-29 | 11 | 1 | $1.82 | $+3.06 | +168.0% | - | [report](daily/2026-10-29-late.md) · [page](../site/archive/2026-10-29.html) |
@@ -53,7 +53,6 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Game | Pick | Price | Stake | Edge | Result | Profit | CLV |
 |---|---|---|---|---|---|---|---|---|
-| 2026-11-01 | EDM @ NYR | NYR | 1.83 | $3.52 | +5.5% | pending | - | - |
 | 2026-10-31 | TOR @ VAN | VAN | 2.60 | $1.76 | +7.6% | lost | $-1.76 | -4.8% |
 | 2026-10-31 | STL @ DET | DET | 2.04 | $3.25 | +7.2% | lost | $-3.25 | +4.5% |
 | 2026-10-29 | NYI @ MIN | NYI | 2.68 | $1.82 | +4.3% | won | $+3.06 | -3.2% |
