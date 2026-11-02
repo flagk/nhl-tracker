@@ -1,33 +1,33 @@
 {
- "version": "20261031-0854bc",
+ "version": "20261101-3fd79c",
  "performance": {
   "status": "OK",
-  "n": 2850,
-  "recent_logloss": 0.6520346394170962,
-  "reference_logloss": 0.6757610545952251,
-  "z": -1.1517093099324873,
-  "calibration_slope": 1.1575115887568534,
+  "n": 2855,
+  "recent_logloss": 0.655335964649909,
+  "reference_logloss": 0.6757258742160613,
+  "z": -0.9920206319521978,
+  "calibration_slope": 1.0990725012806724,
   "reasons": []
  },
  "features": {
   "psi": {
-   "d_elo": 0.061,
-   "d_xg_share": 0.074,
-   "d_cf_pct": 0.033,
+   "d_elo": 0.058,
+   "d_xg_share": 0.075,
+   "d_cf_pct": 0.035,
    "h_b2b": null,
    "d_xga_pg": 0.035,
-   "h_early_w": 6.483,
+   "h_early_w": 6.336,
    "d_g_sv_l5": 0.014,
    "h_stakes": null,
-   "d_pen_drawn_pg": 0.148,
-   "d_games_last_7d": 0.002,
-   "d_ga_season_shrunk": 0.058,
+   "d_pen_drawn_pg": 0.141,
+   "d_games_last_7d": 0.007,
+   "d_ga_season_shrunk": 0.052,
    "a_b2b": null,
    "h_homestand_n": 0.016,
-   "d_g_sv_season": 0.128
+   "d_g_sv_season": 0.123
   },
   "flagged": {
-   "h_early_w": 6.483
+   "h_early_w": 6.336
   },
   "status": "WARN"
  },
