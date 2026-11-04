@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-11-04
 
-**4 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-11-04 13:04 UTC
+**4 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-11-04 21:35 UTC
 
 | | |
 |---|---|
@@ -23,10 +23,10 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| OTT @ BUF | 57.2% | 54.0% | no bet |
-| CHI @ FLA | 68.3% | 69.7% | no bet |
-| SJS @ LAK | 64.3% | 59.1% | no bet |
-| CGY @ SEA | 54.3% | 55.4% | no bet |
+| OTT @ BUF | 57.2% | 53.6% | no bet |
+| CHI @ FLA | 68.3% | 70.3% | no bet |
+| SJS @ LAK | 64.3% | 59.7% | no bet |
+| CGY @ SEA | 54.3% | 55.0% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
