@@ -1,106 +1,87 @@
-# NHL model report: 2026-11-04 (late run)
+# NHL model report: 2026-11-05 (morning run)
 
 > **Disclaimer.** This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.
 
-*Generated 2026-11-04 21:35 UTC · model `20261103-5af87d` · probability source `online_platt` · bankroll $990.96 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
+*Generated 2026-11-05 13:03 UTC · model `20261104-28aedf` · probability source `online_platt` · bankroll $990.96 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
 
 > **Model health: WARN.** feature drift: h_early_w. Treat picks with extra scepticism.
 
-*Odds snapshot: 2026-11-04T21:33:30+00:00 · API credits left: 441*
-
-*Player props: 3 game(s) priced*
+*Odds snapshot: 2026-11-05T13:02:26+00:00 · API credits left: 427*
 
 ## Summary
 
-- 4 games · **0 recommended bet(s)** · total stake $0.00 (0.00% of bankroll)
-- **No bets today.** Passing is the normal, expected outcome: the model only bets when it sees a sizeable, not-too-good-to-be-true edge over the market's no-vig price.
+- 11 games · **2 recommended bet(s)** · total stake $6.22 (0.63% of bankroll)
 
 ## Games
 
 | Game | Goalies (away / home) | Model home win | Market no-vig home | Best price | Edge | EV per $1 | Stake | Decision |
 |---|---|---|---|---|---|---|---|---|
-| OTT @ BUF (19:30 ET) | L. Ullmark / U. Luukkonen (probable) | 57.2% | 53.6% | BUF 1.81 | +3.6% | - | - | no bet |
-| CHI @ FLA (19:30 ET) | S. Knight / J. Markstrom (probable) | 68.3% | 70.3% | CHI 3.25 | +2.0% | - | - | no bet |
-| SJS @ LAK (22:00 ET) | Y. Askarov / A. Forsberg (probable) | 64.3% | 59.7% | LAK 1.64 | +4.5% | - | - | no bet |
-| CGY @ SEA (22:00 ET) | D. Wolf / P. Grubauer (probable) | 54.3% | 55.0% | CGY 2.15 | +0.7% | - | - | no bet |
+| UTA @ MTL (19:00 ET) | K. Vejmelka / J. Dobes (probable) | 48.7% | 47.6% | MTL 2.04 | +1.1% | - | - | no bet |
+| VGK @ DET (19:00 ET) | C. Hart / J. Gibson (probable) | 49.6% | 42.3% | DET 2.32 | +7.3% | +15.0% | $2.77 | **BET DET** |
+| CHI @ TBL (19:00 ET) | S. Knight / A. Vasilevskiy (probable) | 76.8% | 78.5% | CHI 4.40 | +1.7% | - | - | no bet |
+| STL @ NJD (19:00 ET) | J. Hofer / J. Allen (probable) | 60.0% | 64.2% | STL 2.75 | +4.2% | +10.1% | $3.45 | **BET STL** |
+| CAR @ NYI (19:00 ET) | P. Kochetkov / I. Sorokin (probable) | 42.6% | 38.3% | NYI 2.54 | +4.4% | - | - | no bet |
+| PHI @ NYR (19:00 ET) | D. Vladar / D. Garand (probable) | 61.4% | 58.0% | NYR 1.69 | +3.5% | - | - | no bet |
+| BOS @ PIT (19:00 ET) | J. Swayman / A. Silovs (probable) | 53.7% | 50.1% | PIT 1.95 | +3.6% | - | - | no bet |
+| DAL @ CBJ (19:00 ET) | J. Oettinger / J. Greaves (probable) | 47.1% | 45.6% | CBJ 2.13 | +1.6% | - | - | no bet |
+| VAN @ WPG (19:00 ET) | K. Lankinen / S. Skinner (probable) | 62.2% | 65.9% | VAN 2.85 | +3.7% | - | - | no bet |
+| ANA @ EDM (20:00 ET) | L. Dostal / T. Jarry (probable) | 57.6% | 62.4% | ANA 2.55 | +4.7% | - | - | no bet |
+| NSH @ COL (21:30 ET) | J. Saros / M. Blackwood (probable) | 64.6% | 66.3% | NSH 2.85 | +1.7% | - | - | no bet |
 
 ## Why
 
-**OTT @ BUF (19:30 ET)**: No bet: edge +3.6% below the 4% minimum (starting goalie unconfirmed)
-  - Context: OTT travelled 3,513 km across 3 time zone(s) since their last game. Goaltending edge to OTT (goals saved above expected). Division/rival game. Early in the season: team ratings lean on last year's results and are less reliable.
+**UTA @ MTL (19:00 ET)**: No bet: edge +1.1% below the 4% minimum (starting goalie unconfirmed)
+  - Context: UTA are creating the better share of expected goals recently. Goaltending edge to MTL (goals saved above expected).
 
-**CHI @ FLA (19:30 ET)**: No bet: edge +2.0% below the 4% minimum (starting goalie unconfirmed); model win probability 31.7% below the 40% confidence floor
-  - Context: FLA have the clearly better goal differential this season (gap 1.05 goals/game). FLA are creating the better share of expected goals recently.
+**VGK @ DET (19:00 ET)**: Bet $2.77 (0.28% of bankroll) on DET at 2.32. The model gives DET 49.6% vs the market's no-vig 42.3% (edge +7.3%); after shrinking toward the market the working probability is 43.7%, worth +1.5% per $1 at that price.
+  - Context: VGK have the clearly better goal differential this season (gap 0.46 goals/game).
 
-**SJS @ LAK (22:00 ET)**: No bet: expected value after shrinkage toward the market is only +0.3% (< 1%)
-  - Context: LAK are creating the better share of expected goals recently. Division/rival game. Early in the season: team ratings lean on last year's results and are less reliable.
+**CHI @ TBL (19:00 ET)**: No bet: edge +1.7% below the 4% minimum (starting goalie unconfirmed); model win probability 23.2% below the 40% confidence floor; price 4.40 above the 4.0 long-shot cap
+  - Context: TBL have the clearly better goal differential this season (gap 1.46 goals/game). CHI is on the second night of a back-to-back. TBL are creating the better share of expected goals recently. Early in the season: team ratings lean on last year's results and are less reliable.
 
-**CGY @ SEA (22:00 ET)**: No bet: edge +0.7% below the 4% minimum (starting goalie unconfirmed)
-  - Context: SEA have the clearly better goal differential this season (gap 0.53 goals/game). CGY are creating the better share of expected goals recently. Division/rival game. Early in the season: team ratings lean on last year's results and are less reliable.
+**STL @ NJD (19:00 ET)**: Bet $3.45 (0.35% of bankroll) on STL at 2.75. The model gives STL 40.0% vs the market's no-vig 35.8% (edge +4.2%); after shrinking toward the market the working probability is 37.3%, worth +2.4% per $1 at that price.
+  - Context: NJD have the clearly better goal differential this season (gap 0.31 goals/game). NJD are creating the better share of expected goals recently.
+
+**CAR @ NYI (19:00 ET)**: No bet: expected value after shrinkage toward the market is only +0.8% (< 1%)
+  - Context: CAR have the clearly better goal differential this season (gap 0.93 goals/game). CAR are creating the better share of expected goals recently. Division/rival game. Early in the season: team ratings lean on last year's results and are less reliable.
+
+**PHI @ NYR (19:00 ET)**: No bet: edge +3.5% below the 4% minimum (starting goalie unconfirmed)
+  - Context: NYR have the clearly better goal differential this season (gap 0.64 goals/game). NYR are creating the better share of expected goals recently. Goaltending edge to NYR (goals saved above expected). Division/rival game.
+
+**BOS @ PIT (19:00 ET)**: No bet: edge +3.6% below the 4% minimum (starting goalie unconfirmed)
+  - Context: BOS have the clearly better goal differential this season (gap 0.73 goals/game). PIT are creating the better share of expected goals recently. Goaltending edge to BOS (goals saved above expected).
+
+**DAL @ CBJ (19:00 ET)**: No bet: edge +1.6% below the 4% minimum (starting goalie unconfirmed)
+  - Context: DAL have the clearly better goal differential this season (gap 0.57 goals/game). DAL are creating the better share of expected goals recently. Goaltending edge to DAL (goals saved above expected). Early in the season: team ratings lean on last year's results and are less reliable.
+
+**VAN @ WPG (19:00 ET)**: No bet: edge +3.7% below the 4% minimum (starting goalie unconfirmed); model win probability 37.8% below the 40% confidence floor
+  - Context: WPG have the clearly better goal differential this season (gap 0.40 goals/game). WPG are creating the better share of expected goals recently. Goaltending edge to WPG (goals saved above expected).
+
+**ANA @ EDM (20:00 ET)**: No bet: expected value after shrinkage toward the market is only -0.3% (< 1%)
+  - Context: EDM have the clearly better goal differential this season (gap 0.78 goals/game). Division/rival game.
+
+**NSH @ COL (21:30 ET)**: No bet: edge +1.7% below the 4% minimum (starting goalie unconfirmed); model win probability 35.4% below the 40% confidence floor
+  - Context: COL have the clearly better goal differential this season (gap 0.82 goals/game). COL are creating the better share of expected goals recently. Division/rival game.
 
 ## Track record (all logged recommendations that have resolved)
 
-- Resolved games: **241** (bet on 5, passed on 98%); model log loss 0.6584, Brier 0.2331 (coin flip: 0.6931 / 0.2500)
-- **Model vs market close** (241 games with odds): model log loss 0.6584 vs market 0.6462 (market better)
+- Resolved games: **245** (bet on 5, passed on 98%); model log loss 0.6570, Brier 0.2324 (coin flip: 0.6931 / 0.2500)
+- **Model vs market close** (245 games with odds): model log loss 0.6570 vs market 0.6448 (market better)
 - Bets: 5 · staked $13.92 · profit $-9.04 · **ROI -65.0%** · win rate 20.0% · avg price 2.41
 - Bankroll $990.96 · max drawdown 0.9% · current drawdown 0.9%
-- **CLV**: mean -1.94% per $1 (95% CI -4.33% to +1.45%), beat the close on 20% of 5 bets
+- **CLV**: mean -1.94% per $1 (95% CI -4.33% to +1.39%), beat the close on 20% of 5 bets
 - ⚠️ 5 bets is far too few to tell skill from luck (detecting a true 3% ROI takes ~6,900 bets). Watch CLV.
 
 | Predicted | Observed | Games |
 |---|---|---|
 | 38.9% | 41.9% | 31 |
-| 46.3% | 43.3% | 30 |
-| 50.1% | 43.3% | 30 |
-| 52.8% | 66.7% | 30 |
-| 55.5% | 46.7% | 30 |
-| 58.6% | 66.7% | 30 |
-| 61.9% | 70.0% | 30 |
-| 67.7% | 73.3% | 30 |
-
-## Other markets: totals and puck line (experimental, paper-trading only)
-
-The goals model prices the over/under and the puck line. **No real stakes are suggested here**: this model has no track record against the market yet, so it is only paper-traded (see below) until results, not backtests, say otherwise.
-
-| Game | Market | Side | Model | Market (no-vig) | Edge | EV per $1 | Best price |
-|---|---|---|---|---|---|---|---|
-| OTT @ BUF (19:30 ET) | Total | Under 6.5 | 54.5% | 47.4% | +7.2 pts | +12.9% | 2.07 |
-| OTT @ BUF (19:30 ET) | Puck line | BUF -1.5 | 36.7% | 32.8% | +3.9 pts | +6.0% | 2.89 |
-| CHI @ FLA (19:30 ET) | Puck line | FLA -1.5 | 50.6% | 47.0% | +3.6 pts | +4.8% | 2.07 |
-| CHI @ FLA (19:30 ET) | Total | Over 6 | 53.5% | 49.9% | +3.6 pts | +2.8% | 1.93 |
-| SJS @ LAK (22:00 ET) | Puck line | LAK -1.5 | 40.2% | 37.5% | +2.7 pts | +4.5% | 2.60 |
-| SJS @ LAK (22:00 ET) | Total | Over 6 | 53.2% | 51.7% | +1.5 pts | -0.5% | 1.87 |
-| CGY @ SEA (22:00 ET) | Puck line | SEA -1.5 | 33.7% | 33.2% | +0.5 pts | -2.9% | 2.88 |
-| CGY @ SEA (22:00 ET) | Total | Over 6 | 52.9% | 52.6% | +0.3 pts | -2.3% | 1.84 |
-| CGY @ SEA (22:00 ET) | Total | Under 6 | 47.1% | 47.4% | -0.3 pts | -3.0% | 2.05 |
-| CGY @ SEA (22:00 ET) | Puck line | CGY +1.5 | 66.3% | 66.8% | -0.5 pts | -3.2% | 1.46 |
-| SJS @ LAK (22:00 ET) | Total | Under 6 | 46.8% | 48.3% | -1.5 pts | -5.6% | 2.00 |
-| SJS @ LAK (22:00 ET) | Puck line | SJS +1.5 | 59.8% | 62.5% | -2.7 pts | -6.7% | 1.56 |
-| CHI @ FLA (19:30 ET) | Total | Under 6 | 46.5% | 50.1% | -3.6 pts | -8.9% | 1.93 |
-| CHI @ FLA (19:30 ET) | Puck line | CHI +1.5 | 49.4% | 53.0% | -3.6 pts | -8.7% | 1.85 |
-| OTT @ BUF (19:30 ET) | Puck line | OTT +1.5 | 63.3% | 67.2% | -3.9 pts | -7.6% | 1.46 |
-| OTT @ BUF (19:30 ET) | Total | Over 6.5 | 45.5% | 52.6% | -7.2 pts | -15.9% | 1.85 |
-
-
-## Player props: shots, points, assists, anytime goals (experimental, paper-trading only)
-
-A player-level model (own recent shot rate, opponent, home ice, ice time, rest) against the market's over/under. **Experimental, no real stakes suggested.** "Take" is a lean to check against your own app's price.
-
-| Player | Game | Stat / line | Take | Model expects | Model P(over) | Market P(over) | Edge on take | EV per $1 | Last 10 | Season avg |
-|---|---|---|---|---|---|---|---|---|---|---|
-| N. Mikkola | CHI @ FLA (19:30 ET) | goal 0.5 | Over | 0.10 | 9.8% | 7.8% | +2.0 pts | +77.0% | 0 0 0 1 0 0 0 1 0 0 | 0.1 |
-| W. Kaiser | CHI @ FLA (19:30 ET) | goal 0.5 | Over | 0.09 | 8.5% | 6.8% | +1.7 pts | +62.1% | 0 0 0 0 0 0 1 0 0 1 | 0.1 |
-| C. Smith | CHI @ FLA (19:30 ET) | goal 0.5 | Over | 0.12 | 11.5% | 10.2% | +1.3 pts | +49.9% | 0 0 0 0 0 0 0 0 0 0 | 0.1 |
-| J. Greenway | CHI @ FLA (19:30 ET) | goal 0.5 | Over | 0.12 | 11.4% | 9.0% | +2.4 pts | +48.1% | 0 0 0 0 0 0 0 0 0 0 | 0.0 |
-| R. Greene | CHI @ FLA (19:30 ET) | goal 0.5 | Over | 0.17 | 16.0% | 12.1% | +3.8 pts | +43.8% | 0 0 0 0 0 1 0 0 1 0 | 0.1 |
-| S. Bennett | CHI @ FLA (19:30 ET) | pts 0.5 | Under | 0.58 | 43.7% | 61.0% | +17.3 pts | +35.0% | 0 0 0 3 0 0 0 0 0 1 | 0.5 |
-| M. Samuelsson | OTT @ BUF (19:30 ET) | ast 0.5 | Over | 0.48 | 37.9% | 25.0% | +12.9 pts | +34.5% | 0 0 2 1 1 0 0 0 1 1 | 0.5 |
-| I. Cole | CHI @ FLA (19:30 ET) | goal 0.5 | Over | 0.05 | 4.7% | 5.9% | -1.2 pts | +32.5% | 0 0 0 0 0 0 0 0 0 0 | 0.0 |
-| M. Samuelsson | OTT @ BUF (19:30 ET) | pts 0.5 | Over | 0.60 | 45.2% | 32.9% | +12.2 pts | +27.3% | 0 0 2 2 1 0 0 0 1 1 | 0.6 |
-| S. Bennett | CHI @ FLA (19:30 ET) | ast 0.5 | Under | 0.30 | 25.6% | 43.0% | +17.3 pts | +25.7% | 0 0 0 0 0 0 0 0 0 0 | 0.2 |
-| Z. Parekh | CGY @ SEA (22:00 ET) | sog 1.5 | Under | 1.38 | 39.5% | 53.8% | +14.3 pts | +24.1% | 0 4 1 2 2 3 1 3 0 0 | 1.7 |
-| L. Eller | CHI @ FLA (19:30 ET) | goal 0.5 | Over | 0.21 | 18.8% | 15.7% | +3.1 pts | +21.9% | 0 0 0 0 0 0 1 0 0 0 | 0.1 |
-
+| 46.3% | 41.9% | 31 |
+| 50.2% | 43.3% | 30 |
+| 52.9% | 67.7% | 31 |
+| 55.6% | 46.7% | 30 |
+| 58.7% | 67.7% | 31 |
+| 62.0% | 70.0% | 30 |
+| 67.7% | 74.2% | 31 |
 
 ## Paper trading (fake money, for measurement)
 
@@ -108,63 +89,62 @@ Every slate is also run through several alternative strategies with pretend stak
 
 | Strategy | Bets | ROI | 95% CI | Win rate | Avg CLV/$1 | What it tests |
 |---|---|---|---|---|---|---|
-| `always_over` | 229 | -1.8% | -14% to +11% | 52% | - | CONTROL: flat $10 on the Over of every game (no skill; shows what totals vig plus base rate cost) |
-| `always_under` | 184 | -4.9% | -19% to +10% | 48% | - | CONTROL: flat $10 on the Under of every game (no skill; the mirror of always_over) |
-| `ast_edge` | 64 | -12.6% | -35% to +10% | 53% | - |  |
-| `ast_over_control` | 63 | +6.8% | -17% to +30% | 57% | - |  |
-| `ast_over_edge` | 56 | -11.6% | -54% to +37% | 23% | - |  |
-| `ast_under_edge` | 64 | -6.9% | -26% to +12% | 59% | - |  |
-| `edge_1pct` | 17 | -34.2% | - | 29% | -1.08% | Live policy at a 1% raw-edge threshold instead of 3% |
-| `every_game` | 241 | +1.6% | -9% to +12% | 60% | -1.96% | $10 on the model's preferred side of EVERY game with fresh odds, no edge filter, even at a negative edge |
-| `every_puckline` | 240 | -4.8% | -14% to +5% | 62% | - | Goals model: $10 on its puck-line side of EVERY game with fresh spread odds, no edge filter |
-| `every_total` | 229 | -7.3% | -20% to +6% | 48% | - | Goals model: $10 on its over/under side of EVERY game with fresh totals odds, no edge filter |
-| `flat_model_side` | 241 | -19.1% | -33% to -6% | 39% | -2.49% | $10 on every game where the model sees any positive edge |
-| `goal_control` | 64 | -8.9% | -40% to +25% | 33% | - |  |
-| `goal_edge` | 51 | -6.2% | -71% to +71% | 12% | - |  |
-| `home_ml_control` | 194 | +2.5% | -11% to +16% | 56% | -2.59% | CONTROL: flat $10 on the HOME team's moneyline in every game (no skill; is there a home-ice price bias?) |
-| `market_favorite` | 241 | +2.1% | -8% to +13% | 61% | -2.04% | CONTROL: flat $10 on the market favourite (no skill; shows what the bookmaker margin costs) |
-| `no_guard` | 20 | -15.0% | -64% to +39% | 35% | -1.51% | Live policy without the early-season guard (does the guard help?) |
-| `no_shrink` | 20 | -1.3% | -47% to +48% | 45% | -2.15% | Live policy trusting the raw model fully (no shrinkage toward the market) |
-| `over_edge` | 49 | -11.7% | -35% to +15% | 47% | - | Goals model: $10 on the Over only, when it has a 2%+ edge |
-| `parlay_favorites_control` | 27 | +15.9% | -50% to +90% | 30% | - |  |
-| `parlay_players3` | 9 | -100.0% | - | 0% | - |  |
-| `parlay_top2` | 27 | -65.8% | -100% to -11% | 7% | - |  |
-| `parlay_top3` | 27 | -100.0% | -100% to -100% | 0% | - |  |
-| `pts_edge` | 111 | -21.7% | -39% to -4% | 41% | - |  |
-| `pts_over_control` | 115 | -3.5% | -19% to +11% | 58% | - |  |
-| `pts_over_edge` | 86 | -37.4% | -61% to -13% | 24% | - |  |
-| `pts_under_edge` | 111 | -20.1% | -37% to -3% | 43% | - |  |
-| `puckline_dog_control` | 193 | -4.4% | -15% to +6% | 62% | - | CONTROL: flat $10 on the +1.5 underdog of every game (no skill; what the puck-line vig costs) |
+| `always_over` | 233 | -1.9% | -14% to +10% | 52% | - | CONTROL: flat $10 on the Over of every game (no skill; shows what totals vig plus base rate cost) |
+| `always_under` | 188 | -4.7% | -19% to +10% | 48% | - | CONTROL: flat $10 on the Under of every game (no skill; the mirror of always_over) |
+| `ast_edge` | 72 | -10.8% | -32% to +11% | 54% | - |  |
+| `ast_over_control` | 71 | +8.6% | -14% to +32% | 58% | - |  |
+| `ast_over_edge` | 63 | -17.9% | -56% to +24% | 22% | - |  |
+| `ast_under_edge` | 72 | -6.7% | -24% to +12% | 60% | - |  |
+| `edge_1pct` | 18 | -28.7% | - | 33% | -1.04% | Live policy at a 1% raw-edge threshold instead of 3% |
+| `every_game` | 245 | +1.9% | -9% to +13% | 60% | -1.96% | $10 on the model's preferred side of EVERY game with fresh odds, no edge filter, even at a negative edge |
+| `every_puckline` | 244 | -4.3% | -14% to +5% | 62% | - | Goals model: $10 on its puck-line side of EVERY game with fresh spread odds, no edge filter |
+| `every_total` | 233 | -6.4% | -19% to +6% | 49% | - | Goals model: $10 on its over/under side of EVERY game with fresh totals odds, no edge filter |
+| `flat_model_side` | 245 | -19.8% | -33% to -7% | 39% | -2.49% | $10 on every game where the model sees any positive edge |
+| `goal_control` | 72 | -11.5% | -42% to +19% | 32% | - |  |
+| `goal_edge` | 54 | -4.4% | -69% to +71% | 13% | - |  |
+| `home_ml_control` | 198 | +2.9% | -10% to +16% | 57% | -2.57% | CONTROL: flat $10 on the HOME team's moneyline in every game (no skill; is there a home-ice price bias?) |
+| `market_favorite` | 245 | +2.4% | -8% to +12% | 62% | -2.03% | CONTROL: flat $10 on the market favourite (no skill; shows what the bookmaker margin costs) |
+| `no_guard` | 20 | -15.0% | -63% to +37% | 35% | -1.51% | Live policy without the early-season guard (does the guard help?) |
+| `no_shrink` | 21 | +1.9% | -44% to +49% | 48% | -2.06% | Live policy trusting the raw model fully (no shrinkage toward the market) |
+| `over_edge` | 50 | -9.6% | -36% to +16% | 48% | - | Goals model: $10 on the Over only, when it has a 2%+ edge |
+| `parlay_favorites_control` | 28 | +11.7% | -50% to +81% | 29% | - |  |
+| `parlay_players3` | 10 | -100.0% | - | 0% | - |  |
+| `parlay_top2` | 28 | -67.0% | -100% to -13% | 7% | - |  |
+| `parlay_top3` | 28 | -100.0% | -100% to -100% | 0% | - |  |
+| `pts_edge` | 119 | -17.7% | -36% to -0% | 43% | - |  |
+| `pts_over_control` | 123 | -5.0% | -20% to +10% | 57% | - |  |
+| `pts_over_edge` | 93 | -35.9% | -58% to -10% | 26% | - |  |
+| `pts_under_edge` | 119 | -14.4% | -31% to +2% | 46% | - |  |
+| `puckline_dog_control` | 197 | -4.9% | -16% to +6% | 62% | - | CONTROL: flat $10 on the +1.5 underdog of every game (no skill; what the puck-line vig costs) |
 | `puckline_dog_edge` | 77 | -3.0% | -20% to +13% | 62% | - | Goals model: $10 on the +1.5 underdog side of the puck line, when it has a 2%+ edge |
-| `puckline_edge` | 114 | -15.9% | -33% to -0% | 48% | - | Goals model: $10 on the puck-line side with a 3%+ raw edge vs the market (experimental market) |
-| `puckline_fav_edge` | 44 | -24.0% | -58% to +12% | 30% | - | Goals model: $10 on the -1.5 favourite side of the puck line, when it has a 2%+ edge |
-| `sog_edge` | 166 | +3.2% | -11% to +17% | 56% | - |  |
-| `sog_over_control` | 170 | -6.2% | -21% to +9% | 46% | - |  |
-| `sog_over_edge` | 96 | -14.1% | -34% to +5% | 45% | - |  |
-| `sog_under_edge` | 127 | +4.6% | -12% to +20% | 57% | - |  |
-| `totals_edge` | 140 | -13.2% | -28% to +3% | 45% | - | Goals model: $10 on the over/under side with a 3%+ raw edge vs the market (experimental market) |
-| `under_edge` | 83 | -12.2% | -34% to +9% | 45% | - | Goals model: $10 on the Under only, when it has a 2%+ edge (are we better at low-scoring games?) |
-| `underdog_ml` | 100 | -24.4% | -45% to -2% | 32% | -2.62% | $10 on the moneyline UNDERDOG, only when the model rates it 2%+ better than the market does |
-| `underdog_ml_control` | 194 | -13.6% | -30% to +3% | 38% | -2.84% | CONTROL: flat $10 on the moneyline underdog of every game (no skill) |
+| `puckline_edge` | 116 | -15.6% | -32% to +2% | 48% | - | Goals model: $10 on the puck-line side with a 3%+ raw edge vs the market (experimental market) |
+| `puckline_fav_edge` | 47 | -18.9% | -53% to +15% | 32% | - | Goals model: $10 on the -1.5 favourite side of the puck line, when it has a 2%+ edge |
+| `sog_edge` | 174 | +1.8% | -12% to +16% | 55% | - |  |
+| `sog_over_control` | 178 | -4.0% | -19% to +11% | 48% | - |  |
+| `sog_over_edge` | 104 | -12.6% | -30% to +7% | 45% | - |  |
+| `sog_under_edge` | 135 | +2.7% | -13% to +19% | 56% | - |  |
+| `totals_edge` | 142 | -11.6% | -27% to +5% | 46% | - | Goals model: $10 on the over/under side with a 3%+ raw edge vs the market (experimental market) |
+| `under_edge` | 84 | -10.8% | -32% to +10% | 45% | - | Goals model: $10 on the Under only, when it has a 2%+ edge (are we better at low-scoring games?) |
+| `underdog_ml` | 101 | -25.2% | -46% to -4% | 32% | -2.62% | $10 on the moneyline UNDERDOG, only when the model rates it 2%+ better than the market does |
+| `underdog_ml_control` | 198 | -14.3% | -31% to +2% | 37% | -2.87% | CONTROL: flat $10 on the moneyline underdog of every game (no skill) |
 
 ### Today's fake bets on every game (pretend money, NOT recommendations)
 
 | Game | Type | Pretend pick | Pretend stake | Price | Model | Market |
 |---|---|---|---|---|---|---|
-| OTT @ BUF | Moneyline | BUF moneyline | $10.00 | 1.81 | 57.2% | 53.6% |
-| CHI @ FLA | Moneyline | FLA moneyline | $10.00 | 1.39 | 68.3% | 70.3% |
-| SJS @ LAK | Moneyline | LAK moneyline | $10.00 | 1.64 | 64.3% | 59.7% |
-| CGY @ SEA | Moneyline | SEA moneyline | $10.00 | 1.77 | 54.3% | 55.0% |
-| OTT @ BUF | Total | Under 6.5 | $10.00 | 2.07 | 54.5% | 47.4% |
-| CHI @ FLA | Total | Over 6 | $10.00 | 1.93 | 53.5% | 49.9% |
-| SJS @ LAK | Total | Over 6 | $10.00 | 1.87 | 53.2% | 51.7% |
-| CGY @ SEA | Total | Over 6 | $10.00 | 1.84 | 52.9% | 52.6% |
-| OTT @ BUF | Puck line | OTT +1.5 | $10.00 | 1.46 | 63.3% | 67.2% |
-| CHI @ FLA | Puck line | FLA -1.5 | $10.00 | 2.07 | 50.6% | 47.0% |
-| SJS @ LAK | Puck line | SJS +1.5 | $10.00 | 1.56 | 59.8% | 62.5% |
-| CGY @ SEA | Puck line | CGY +1.5 | $10.00 | 1.46 | 66.3% | 66.8% |
+| UTA @ MTL | Moneyline | UTA moneyline | $10.00 | 1.87 | 51.3% | 52.4% |
+| VGK @ DET | Moneyline | VGK moneyline | $10.00 | 1.69 | 50.4% | 57.7% |
+| CHI @ TBL | Moneyline | TBL moneyline | $10.00 | 1.25 | 76.8% | 78.5% |
+| STL @ NJD | Moneyline | NJD moneyline | $10.00 | 1.53 | 60.0% | 64.2% |
+| CAR @ NYI | Moneyline | CAR moneyline | $10.00 | 1.58 | 57.4% | 61.7% |
+| PHI @ NYR | Moneyline | NYR moneyline | $10.00 | 1.69 | 61.4% | 58.0% |
+| BOS @ PIT | Moneyline | PIT moneyline | $10.00 | 1.95 | 53.7% | 50.1% |
+| DAL @ CBJ | Moneyline | DAL moneyline | $10.00 | 1.78 | 52.9% | 54.4% |
+| VAN @ WPG | Moneyline | WPG moneyline | $10.00 | 1.49 | 62.2% | 65.9% |
+| ANA @ EDM | Moneyline | EDM moneyline | $10.00 | 1.57 | 57.6% | 62.4% |
+| NSH @ COL | Moneyline | COL moneyline | $10.00 | 1.48 | 64.6% | 66.3% |
 
-Total pretend stake $120.00. Settled results feed the `every_*` rows above; real bets follow the normal policy only.
+Total pretend stake $110.00. Settled results feed the `every_*` rows above; real bets follow the normal policy only.
 
 ---
 > **Disclaimer.** This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.
