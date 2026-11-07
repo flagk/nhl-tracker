@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-11-07
 
-**12 game(s) · 1 recommended bet(s)** · morning run · model health **WARN** · updated 2026-11-07 13:04 UTC
+**12 game(s) · 1 recommended bet(s)** · late run · model health **WARN** · updated 2026-11-07 14:35 UTC
 
 | | |
 |---|---|
@@ -25,16 +25,16 @@ Updated automatically every day. Most days the honest answer is "no bet".
 |---|---|---|---|
 | FLA @ WSH | 49.8% | 52.7% | no bet |
 | STL @ NSH | 50.5% | 49.5% | no bet |
-| NYR @ SEA | 48.0% | 45.6% | no bet |
-| MTL @ TOR | 49.2% | 47.5% | no bet |
-| UTA @ OTT | 49.2% | 49.1% | no bet |
+| NYR @ SEA | 48.0% | 45.4% | no bet |
+| MTL @ TOR | 49.2% | 47.4% | no bet |
+| UTA @ OTT | 49.2% | 48.0% | no bet |
 | NJD @ NYI | 48.7% | 41.9% | no bet |
-| CHI @ CAR | 76.4% | 80.2% | no bet |
+| CHI @ CAR | 76.4% | 80.4% | no bet |
 | SJS @ DAL | 74.3% | 73.0% | no bet |
-| TBL @ MIN | 45.6% | 43.5% | no bet |
-| DET @ COL | 59.5% | 67.0% | **BET DET** $4.08 |
-| PIT @ LAK | 53.7% | 53.9% | no bet |
-| VAN @ EDM | 67.2% | 75.9% | no bet |
+| TBL @ MIN | 45.6% | 43.6% | no bet |
+| DET @ COL | 59.5% | 66.9% | **BET DET** $2.58 |
+| PIT @ LAK | 53.7% | 53.2% | no bet |
+| VAN @ EDM | 67.2% | 75.6% | no bet |
 
 *Research and educational project; no guarantee of profit. The numbers above are not betting advice.*
 
