@@ -6,16 +6,17 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 ## Overall
 
-- Games with a logged recommendation and a result: **259** (bet on 6; passed on 98%)
-- Bets: staked $15.54 · profit $-10.66 · **ROI -68.6%** · win rate 16.7%
-- **Closing-line value**: -2.36% per $1 (95% CI -4.35% to +0.63%), beat the close on 17% of 6 bets
+- Games with a logged recommendation and a result: **271** (bet on 7; passed on 97%)
+- Bets: staked $18.12 · profit $-13.24 · **ROI -73.1%** · win rate 14.3%
+- **Closing-line value**: -2.38% per $1 (95% CI -4.18% to +0.14%), beat the close on 14% of 7 bets
 - ⚠️ Far too few bets to separate skill from luck (about 6,900 would be needed to detect a true 3% ROI). Closing-line value converges much faster.
 
 ## By day
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
-| 2026-11-07 | 12 | 1 | - | - | - | 1 | [report](daily/2026-11-07-late.md) · [page](../site/archive/2026-11-07.html) |
+| 2026-11-08 | 6 | 0 | - | - | - | - | [report](daily/2026-11-08-morning.md) · [page](../site/archive/2026-11-08.html) |
+| 2026-11-07 | 12 | 1 | $2.58 | $-2.58 | -100.0% | - | [report](daily/2026-11-07-late.md) · [page](../site/archive/2026-11-07.html) |
 | 2026-11-06 | 3 | 0 | - | - | - | - | [report](daily/2026-11-06-late.md) · [page](../site/archive/2026-11-06.html) |
 | 2026-11-05 | 11 | 1 | $1.62 | $-1.62 | -100.0% | - | [report](daily/2026-11-05-late.md) · [page](../site/archive/2026-11-05.html) |
 | 2026-11-04 | 4 | 0 | - | - | - | - | [report](daily/2026-11-04-late.md) · [page](../site/archive/2026-11-04.html) |
@@ -59,7 +60,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Game | Pick | Price | Stake | Edge | Result | Profit | CLV |
 |---|---|---|---|---|---|---|---|---|
-| 2026-11-07 | DET @ COL | DET | 2.95 | $2.58 | +7.4% | pending | - | - |
+| 2026-11-07 | DET @ COL | DET | 2.95 | $2.58 | +7.4% | lost | $-2.58 | -2.5% |
 | 2026-11-05 | CAR @ NYI | NYI | 2.71 | $1.62 | +6.8% | lost | $-1.62 | -4.5% |
 | 2026-10-31 | STL @ DET | DET | 2.04 | $3.25 | +7.2% | lost | $-3.25 | +4.5% |
 | 2026-10-31 | TOR @ VAN | VAN | 2.60 | $1.76 | +7.6% | lost | $-1.76 | -4.8% |
