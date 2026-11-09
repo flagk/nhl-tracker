@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-11-09
 
-**3 game(s) · 1 recommended bet(s)** · morning run · model health **WARN** · updated 2026-11-09 13:06 UTC
+**3 game(s) · 1 recommended bet(s)** · late run · model health **WARN** · updated 2026-11-09 22:05 UTC
 
 | | |
 |---|---|
@@ -23,9 +23,9 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| NYR @ EDM | 55.2% | 59.0% | no bet |
-| PHI @ VAN | 50.4% | 44.6% | **BET VAN** $2.96 |
-| NYI @ SJS | 42.3% | 44.4% | no bet |
+| NYR @ EDM | 55.2% | 60.3% | **BET NYR** $2.94 |
+| PHI @ VAN | 50.4% | 44.5% | no bet |
+| NYI @ SJS | 42.3% | 43.6% | no bet |
 
 *Research and educational project; no guarantee of profit. The numbers above are not betting advice.*
 

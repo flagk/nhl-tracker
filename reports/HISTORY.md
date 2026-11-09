@@ -15,7 +15,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
-| 2026-11-09 | 3 | 1 | - | - | - | 1 | [report](daily/2026-11-09-morning.md) · [page](../site/archive/2026-11-09.html) |
+| 2026-11-09 | 3 | 1 | - | - | - | 1 | [report](daily/2026-11-09-late.md) · [page](../site/archive/2026-11-09.html) |
 | 2026-11-08 | 6 | 0 | - | - | - | - | [report](daily/2026-11-08-late.md) · [page](../site/archive/2026-11-08.html) |
 | 2026-11-07 | 12 | 1 | $2.58 | $-2.58 | -100.0% | - | [report](daily/2026-11-07-late.md) · [page](../site/archive/2026-11-07.html) |
 | 2026-11-06 | 3 | 0 | - | - | - | - | [report](daily/2026-11-06-late.md) · [page](../site/archive/2026-11-06.html) |
@@ -61,7 +61,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Game | Pick | Price | Stake | Edge | Result | Profit | CLV |
 |---|---|---|---|---|---|---|---|---|
-| 2026-11-09 | PHI @ VAN | VAN | 2.20 | $2.96 | +5.8% | pending | - | - |
+| 2026-11-09 | NYR @ EDM | NYR | 2.47 | $2.94 | +5.0% | pending | - | - |
 | 2026-11-07 | DET @ COL | DET | 2.95 | $2.58 | +7.4% | lost | $-2.58 | -2.5% |
 | 2026-11-05 | CAR @ NYI | NYI | 2.71 | $1.62 | +6.8% | lost | $-1.62 | -4.5% |
 | 2026-10-31 | TOR @ VAN | VAN | 2.60 | $1.76 | +7.6% | lost | $-1.76 | -4.8% |
