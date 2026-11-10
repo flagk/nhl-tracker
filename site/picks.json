@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-11-10T13:02:58+00:00",
+ "generated_at": "2026-11-10T21:04:55+00:00",
  "public_safe": true,
  "date": "2026-11-10",
- "run_type": "morning",
+ "run_type": "late",
  "notes": [],
  "model": {
   "version": "20261109-720fd7",
@@ -127,10 +127,22 @@
  },
  "odds": {
   "enabled": true,
-  "captured_at": "2026-11-10T13:02:10+00:00",
+  "captured_at": "2026-11-10T21:02:12+00:00",
   "stale": false,
-  "remaining": 339,
-  "source": "live"
+  "remaining": 336,
+  "source": "live",
+  "props": {
+   "games": 3,
+   "markets": [
+    "player_assists",
+    "player_goal_scorer_anytime",
+    "player_points",
+    "player_shots_on_goal"
+   ],
+   "credits": 10,
+   "skipped_for_budget": 2,
+   "note": "Some player prices were skipped to make the monthly odds credits last."
+  }
  },
  "policy": {
   "bankroll": 983.8176,
@@ -158,48 +170,1424 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-11-10T13:02:10+00:00",
+   "odds_captured_at": "2026-11-10T21:02:12+00:00",
    "sides": {
     "home": {
      "team": "TOR",
      "p_model": 0.4391580118723178,
-     "p_market": 0.4089467049812665,
-     "p_adj": 0.42099715692167516,
-     "edge": 0.03021130689105128,
-     "ev": 0.0019732334735867996,
-     "kelly_full": 0.0014298793286860868,
+     "p_market": 0.39177671932847624,
+     "p_adj": 0.40636808254011025,
+     "edge": 0.04738129254384155,
+     "ev": 0.01592020635027558,
+     "kelly_full": 0.010613470900183719,
      "best_book": null,
-     "best_decimal": 2.38,
+     "best_decimal": 2.5,
      "books": {},
-     "fails": [
-      "edge +3.0% below the 4% minimum (starting goalie unconfirmed)"
-     ],
-     "qualifies": false
+     "fails": [],
+     "qualifies": true
     },
     "away": {
      "team": "COL",
      "p_model": 0.5608419881276823,
-     "p_market": 0.5910532950187335,
-     "p_adj": 0.5790028430783248,
-     "edge": -0.030211306891051226,
-     "ev": -0.04464530892076407,
+     "p_market": 0.6082232806715238,
+     "p_adj": 0.5936319174598897,
+     "edge": -0.04738129254384149,
+     "ev": -0.032379974540379775,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.65,
+     "best_decimal": 1.63,
      "books": {},
      "fails": [
-      "edge -3.0% below the 4% minimum (starting goalie unconfirmed)"
+      "edge -4.7% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6.5",
+     "point": 6.5,
+     "p_model": 0.4429444310968964,
+     "p_market": 0.530838031267052,
+     "p_push": 0.0,
+     "edge": -0.08789360017015557,
+     "ev": -0.18941169109267952,
+     "best_decimal": 1.83,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6.5",
+     "point": 6.5,
+     "p_model": 0.5570555689031036,
+     "p_market": 0.469161968732948,
+     "p_push": 0.0,
+     "edge": 0.08789360017015557,
+     "ev": 0.1642461390074864,
+     "best_decimal": 2.09,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "TOR +1.5",
+     "point": 1.5,
+     "p_model": 0.6374221918836454,
+     "p_market": 0.6054337549200047,
+     "p_push": 0.0,
+     "edge": 0.03198843696364062,
+     "ev": 0.032623950851505545,
+     "best_decimal": 1.62,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "COL -1.5",
+     "point": -1.5,
+     "p_model": 0.36257780811635465,
+     "p_market": 0.39456624507999527,
+     "p_push": 0.0,
+     "edge": -0.03198843696364062,
+     "ev": -0.10080703587144046,
+     "best_decimal": 2.48,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 2.865090076957903,
     "lam_away": 3.188244402702535,
     "exp_total": 6.165913266706432
    },
-   "props": [],
+   "props": [
+    {
+     "player_id": 8479520,
+     "name": "B. Duhaime",
+     "team": "TOR",
+     "opp": "COL",
+     "point": 0.5,
+     "lam": 0.1274152032982765,
+     "p_over": 0.11948924127317473,
+     "p_over_market": 0.08888271340167987,
+     "over_price": 13.0,
+     "under_price": 0.0,
+     "ev_over": 0.5533601365512715,
+     "ev_under": -1.0,
+     "edge_over": 0.030606527871494857,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 252,
+     "history": [
+      {
+       "date": "2026-10-19",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "CBJ",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "NYR",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "EDM",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-26",
+       "opp": "CGY",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "SEA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "VAN",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "MTL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "NJD",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.058823529411764705,
+     "avg_l10": 0.1,
+     "hit_l10": 0.1,
+     "hit_l20": 0.05,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:02:41+00:00"
+    },
+    {
+     "player_id": 8479442,
+     "name": "T. Stecher",
+     "team": "TOR",
+     "opp": "COL",
+     "point": 0.5,
+     "lam": 0.08819514037774205,
+     "p_over": 0.084346671150758,
+     "p_over_market": 0.06673385865249526,
+     "over_price": 18.0,
+     "under_price": 0.0,
+     "ev_over": 0.5182400807136441,
+     "ev_under": -1.0,
+     "edge_over": 0.017612812498262742,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 194,
+     "history": [
+      {
+       "date": "2026-10-19",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "CBJ",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "NYR",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "EDM",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-26",
+       "opp": "CGY",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "SEA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "VAN",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "MTL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "NJD",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.11764705882352941,
+     "avg_l10": 0.2,
+     "hit_l10": 0.2,
+     "hit_l20": 0.1,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:02:41+00:00"
+    },
+    {
+     "player_id": 8476927,
+     "name": "T. Blueger",
+     "team": "TOR",
+     "opp": "COL",
+     "point": 0.5,
+     "lam": 0.17873791123457605,
+     "p_over": 0.1634083476984941,
+     "p_over_market": 0.10918261385551105,
+     "over_price": 9.0,
+     "under_price": 0.0,
+     "ev_over": 0.47067512928644695,
+     "ev_under": -1.0,
+     "edge_over": 0.05422573384298306,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 204,
+     "history": [
+      {
+       "date": "2026-10-19",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "CBJ",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "NYR",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "EDM",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-26",
+       "opp": "CGY",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "SEA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "VAN",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "MTL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "NJD",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.11764705882352941,
+     "avg_l10": 0.2,
+     "hit_l10": 0.2,
+     "hit_l20": 0.1,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:02:41+00:00"
+    },
+    {
+     "player_id": 8484258,
+     "name": "S. Malinski",
+     "team": "COL",
+     "opp": "TOR",
+     "point": 1.5,
+     "lam": 1.4054913352054161,
+     "p_over": 0.40253376741024804,
+     "p_over_market": 0.5771667828450371,
+     "over_price": 1.68,
+     "under_price": 2.25,
+     "ev_over": -0.3237432707507833,
+     "ev_under": 0.34429902332694184,
+     "edge_over": -0.17463301543478904,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 4,
+     "n_prev": 198,
+     "history": [
+      {
+       "date": "2026-10-19",
+       "opp": "PHI",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "NJD",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "TBL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "NSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "NJD",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "CGY",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-11-02",
+       "opp": "CHI",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "CBJ",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "NSH",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "DET",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 1.3125,
+     "avg_l10": 1.5,
+     "hit_l10": 0.5,
+     "hit_l20": 0.5,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:02:19+00:00"
+    },
+    {
+     "player_id": 8480069,
+     "name": "C. Makar",
+     "team": "COL",
+     "opp": "TOR",
+     "point": 2.5,
+     "lam": 2.356025918509365,
+     "p_over": 0.4104170466853899,
+     "p_over_market": 0.5495607713271389,
+     "over_price": 1.76,
+     "under_price": 2.15,
+     "ev_over": -0.27766599783371376,
+     "ev_under": 0.26760334962641164,
+     "edge_over": -0.13914372464174896,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 5,
+     "n_prev": 239,
+     "history": [
+      {
+       "date": "2026-10-19",
+       "opp": "PHI",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "NJD",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "TBL",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "NSH",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "NJD",
+       "sog": 6,
+       "val": 6
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "CGY",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-11-02",
+       "opp": "CHI",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "CBJ",
+       "sog": 5,
+       "val": 5
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "NSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "DET",
+       "sog": 2,
+       "val": 2
+      }
+     ],
+     "avg_season": 2.8125,
+     "avg_l10": 2.9,
+     "hit_l10": 0.6,
+     "hit_l20": 0.55,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:02:19+00:00"
+    },
+    {
+     "player_id": 8477492,
+     "name": "N. MacKinnon",
+     "team": "COL",
+     "opp": "TOR",
+     "point": 3.5,
+     "lam": 3.2830475506180257,
+     "p_over": 0.4080750184583952,
+     "p_over_market": 0.5449089092890851,
+     "over_price": 1.74,
+     "under_price": 2.1,
+     "ev_over": -0.28994946788239234,
+     "ev_under": 0.24304246123737006,
+     "edge_over": -0.13683389083068986,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 4,
+     "n_prev": 249,
+     "history": [
+      {
+       "date": "2026-10-19",
+       "opp": "PHI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "NJD",
+       "sog": 5,
+       "val": 5
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "TBL",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "NSH",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "NJD",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "CGY",
+       "sog": 5,
+       "val": 5
+      },
+      {
+       "date": "2026-11-02",
+       "opp": "CHI",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "CBJ",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "NSH",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "DET",
+       "sog": 4,
+       "val": 4
+      }
+     ],
+     "avg_season": 3.3529411764705883,
+     "avg_l10": 2.7,
+     "hit_l10": 0.4,
+     "hit_l20": 0.5,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:02:19+00:00"
+    },
+    {
+     "player_id": 8470613,
+     "name": "B. Burns",
+     "team": "COL",
+     "opp": "TOR",
+     "point": 1.5,
+     "lam": 1.333345311785496,
+     "p_over": 0.3789023860615004,
+     "p_over_market": 0.5195985831286394,
+     "over_price": 1.87,
+     "under_price": 2.0,
+     "ev_over": -0.2914525380649942,
+     "ev_under": 0.2421952278769992,
+     "edge_over": -0.14069619706713898,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 4,
+     "n_prev": 252,
+     "history": [
+      {
+       "date": "2026-10-19",
+       "opp": "PHI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "NJD",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "TBL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "NSH",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "NJD",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "CGY",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-02",
+       "opp": "CHI",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "CBJ",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "NSH",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "DET",
+       "sog": 2,
+       "val": 2
+      }
+     ],
+     "avg_season": 1.588235294117647,
+     "avg_l10": 1.7,
+     "hit_l10": 0.5,
+     "hit_l20": 0.45,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:02:19+00:00"
+    },
+    {
+     "player_id": 8477426,
+     "name": "N. Paul",
+     "team": "TOR",
+     "opp": "COL",
+     "point": 0.5,
+     "lam": 0.2045943623741995,
+     "p_over": 0.18468188131741903,
+     "p_over_market": 0.16284812302691215,
+     "over_price": 6.5,
+     "under_price": 0.0,
+     "ev_over": 0.20043222856322374,
+     "ev_under": -1.0,
+     "edge_over": 0.021833758290506877,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 217,
+     "history": [
+      {
+       "date": "2026-10-19",
+       "opp": "SJS",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "CBJ",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "NYR",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "EDM",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-26",
+       "opp": "CGY",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "SEA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "VAN",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "MTL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "NJD",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.11764705882352941,
+     "avg_l10": 0.1,
+     "hit_l10": 0.1,
+     "hit_l20": 0.1,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:02:41+00:00"
+    },
+    {
+     "player_id": 8480069,
+     "name": "C. Makar",
+     "team": "COL",
+     "opp": "TOR",
+     "point": 0.5,
+     "lam": 0.8809204488003668,
+     "p_over": 0.5855986990983538,
+     "p_over_market": 0.6596398948615648,
+     "over_price": 1.47,
+     "under_price": 2.8,
+     "ev_over": -0.13916991232541992,
+     "ev_under": 0.16032364252460918,
+     "edge_over": -0.074041195763211,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 239,
+     "history": [
+      {
+       "date": "2026-10-19",
+       "opp": "PHI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "NJD",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "TBL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "NSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "NJD",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "CGY",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-11-02",
+       "opp": "CHI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "CBJ",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "NSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "DET",
+       "sog": 3,
+       "val": 3
+      }
+     ],
+     "avg_season": 1.1875,
+     "avg_l10": 1.2,
+     "hit_l10": 0.5,
+     "hit_l20": 0.65,
+     "stat": "points",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:02:26+00:00"
+    },
+    {
+     "player_id": 8476455,
+     "name": "G. Landeskog",
+     "team": "COL",
+     "opp": "TOR",
+     "point": 1.5,
+     "lam": 1.436214842162709,
+     "p_over": 0.41243020395034247,
+     "p_over_market": 0.509341298608312,
+     "over_price": 1.88,
+     "under_price": 1.95,
+     "ev_over": -0.22463121657335622,
+     "ev_under": 0.14576110229683215,
+     "edge_over": -0.09691109465796954,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 4,
+     "n_prev": 78,
+     "history": [
+      {
+       "date": "2026-10-19",
+       "opp": "PHI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "NJD",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "TBL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "NSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "NJD",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "CGY",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-02",
+       "opp": "CHI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "CBJ",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "NSH",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "DET",
+       "sog": 1,
+       "val": 1
+      }
+     ],
+     "avg_season": 1.2352941176470589,
+     "avg_l10": 1.1,
+     "hit_l10": 0.2,
+     "hit_l20": 0.35,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:02:19+00:00"
+    },
+    {
+     "player_id": 8478458,
+     "name": "J. Roslovic",
+     "team": "TOR",
+     "opp": "COL",
+     "point": 0.5,
+     "lam": 0.44125121115323535,
+     "p_over": 0.3555226266999749,
+     "p_over_market": 0.2774621212121552,
+     "over_price": 3.2,
+     "under_price": 1.32,
+     "ev_over": 0.13767240543991976,
+     "ev_under": -0.14928986724396687,
+     "edge_over": 0.07806050548781973,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 1,
+     "n_prev": 217,
+     "history": [
+      {
+       "date": "2026-10-17",
+       "opp": "NYI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-19",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "CBJ",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "NYR",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "EDM",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-26",
+       "opp": "CGY",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "SEA",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "VAN",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "MTL",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.5625,
+     "avg_l10": 0.7,
+     "hit_l10": 0.6,
+     "hit_l20": 0.45,
+     "stat": "assists",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:02:34+00:00"
+    },
+    {
+     "player_id": 8480039,
+     "name": "M. Necas",
+     "team": "COL",
+     "opp": "TOR",
+     "point": 2.5,
+     "lam": 2.2961672720721005,
+     "p_over": 0.3960155914055741,
+     "p_over_market": 0.49009572849487626,
+     "over_price": 1.96,
+     "under_price": 1.87,
+     "ev_over": -0.22380944084507481,
+     "ev_under": 0.1294508440715766,
+     "edge_over": -0.09408013708930218,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 5,
+     "n_prev": 240,
+     "history": [
+      {
+       "date": "2026-10-19",
+       "opp": "PHI",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "NJD",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "TBL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "NSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "NJD",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "CGY",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-02",
+       "opp": "CHI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "CBJ",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "NSH",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "DET",
+       "sog": 2,
+       "val": 2
+      }
+     ],
+     "avg_season": 2.0,
+     "avg_l10": 2.0,
+     "hit_l10": 0.3,
+     "hit_l20": 0.4,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:02:19+00:00"
+    },
+    {
+     "player_id": 8478057,
+     "name": "D. Joshua",
+     "team": "TOR",
+     "opp": "COL",
+     "point": 0.5,
+     "lam": 0.1416950153638495,
+     "p_over": 0.13194015348687838,
+     "p_over_market": 0.13576439005665195,
+     "over_price": 8.5,
+     "under_price": 0.0,
+     "ev_over": 0.12149130463846614,
+     "ev_under": -1.0,
+     "edge_over": -0.0038242365697735703,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 169,
+     "history": [
+      {
+       "date": "2026-03-25",
+       "opp": "NYR",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-03-28",
+       "opp": "STL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-03-30",
+       "opp": "ANA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-02",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-04",
+       "opp": "LAK",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-08",
+       "opp": "WSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "VAN",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "MTL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "NJD",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": 0.1,
+     "hit_l10": 0.1,
+     "hit_l20": 0.15,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:02:41+00:00"
+    },
+    {
+     "player_id": 8475172,
+     "name": "N. Kadri",
+     "team": "COL",
+     "opp": "TOR",
+     "point": 2.5,
+     "lam": 2.3286128904748407,
+     "p_over": 0.40384160091945764,
+     "p_over_market": 0.48811923257009926,
+     "over_price": 2.02,
+     "under_price": 1.87,
+     "ev_over": -0.18423996614269555,
+     "ev_under": 0.11481620628061429,
+     "edge_over": -0.08427763165064162,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 5,
+     "n_prev": 248,
+     "history": [
+      {
+       "date": "2026-10-19",
+       "opp": "PHI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "NJD",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "TBL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "NSH",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "NJD",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "CGY",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-02",
+       "opp": "CHI",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "CBJ",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "NSH",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "DET",
+       "sog": 3,
+       "val": 3
+      }
+     ],
+     "avg_season": 2.588235294117647,
+     "avg_l10": 2.2,
+     "hit_l10": 0.4,
+     "hit_l20": 0.5,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:02:19+00:00"
+    },
+    {
+     "player_id": 8478458,
+     "name": "J. Roslovic",
+     "team": "TOR",
+     "opp": "COL",
+     "point": 0.5,
+     "lam": 0.811086682572458,
+     "p_over": 0.555625090718181,
+     "p_over_market": 0.4639798720919107,
+     "over_price": 2.0,
+     "under_price": 1.78,
+     "ev_over": 0.111250181436362,
+     "ev_under": -0.20901266147836217,
+     "edge_over": 0.09164521862627029,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 2,
+     "n_prev": 217,
+     "history": [
+      {
+       "date": "2026-10-17",
+       "opp": "NYI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-19",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "CBJ",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "NYR",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "EDM",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-26",
+       "opp": "CGY",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "SEA",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "VAN",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "UTA",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "MTL",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 1.0625,
+     "avg_l10": 1.2,
+     "hit_l10": 0.7,
+     "hit_l20": 0.6,
+     "stat": "points",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:02:26+00:00"
+    }
+   ],
    "stats": [
     {
      "key": "elo",
@@ -537,9 +1925,9 @@
      "raw": -0.008188123981769602
     }
    ],
-   "server_action": "NO_BET",
-   "server_side": null,
-   "server_stake": 0.0
+   "server_action": "BET",
+   "server_side": "home",
+   "server_stake": 2.61
   },
   {
    "game_id": 2026020287,
@@ -557,48 +1945,1426 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-11-10T13:02:10+00:00",
+   "odds_captured_at": "2026-11-10T21:02:12+00:00",
    "sides": {
     "home": {
      "team": "MTL",
      "p_model": 0.4896309759240898,
-     "p_market": 0.4666455784889987,
-     "p_adj": 0.4766674833424465,
-     "edge": 0.022985397435091093,
-     "ev": 0.0010017150191377056,
-     "kelly_full": 0.0009106500173979141,
+     "p_market": 0.46141621942520267,
+     "p_adj": 0.47296893196110207,
+     "edge": 0.028214756498887106,
+     "ev": -0.0067652428816855625,
+     "kelly_full": 0.0,
      "best_book": null,
      "best_decimal": 2.1,
      "books": {},
      "fails": [
-      "edge +2.3% below the 4% minimum (starting goalie unconfirmed)"
+      "edge +2.8% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     },
     "away": {
      "team": "MIN",
      "p_model": 0.5103690240759102,
-     "p_market": 0.5333544215110013,
-     "p_adj": 0.5233325166575534,
-     "edge": -0.022985397435091093,
-     "ev": -0.03183484418352611,
+     "p_market": 0.5385837805747973,
+     "p_adj": 0.5270310680388979,
+     "edge": -0.02821475649888705,
+     "ev": -0.05134407752998382,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.85,
+     "best_decimal": 1.8,
      "books": {},
      "fails": [
-      "edge -2.3% below the 4% minimum (starting goalie unconfirmed)"
+      "edge -2.8% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6.5",
+     "point": 6.5,
+     "p_model": 0.44899819086999354,
+     "p_market": 0.463926832013606,
+     "p_push": 0.0,
+     "edge": -0.014928641143612476,
+     "ev": -0.06159378108171348,
+     "best_decimal": 2.09,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6.5",
+     "point": 6.5,
+     "p_model": 0.5510018091300064,
+     "p_market": 0.5360731679863939,
+     "p_push": 0.0,
+     "edge": 0.014928641143612476,
+     "ev": -0.008196743565988429,
+     "best_decimal": 1.8,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "MTL +1.5",
+     "point": 1.5,
+     "p_model": 0.6740877870810446,
+     "p_market": 0.6819639309085367,
+     "p_push": 0.0,
+     "edge": -0.007876143827492132,
+     "ev": -0.03605446447410632,
+     "best_decimal": 1.43,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "MIN -1.5",
+     "point": -1.5,
+     "p_model": 0.32591221291895545,
+     "p_market": 0.3180360690914633,
+     "p_push": 0.0,
+     "edge": 0.007876143827492132,
+     "ev": -0.02226336124313366,
+     "best_decimal": 3.0,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 2.9958173726822026,
     "lam_away": 3.109045025374266,
     "exp_total": 6.2182263836531915
    },
-   "props": [],
+   "props": [
+    {
+     "player_id": 8474567,
+     "name": "Z. Bogosian",
+     "team": "MIN",
+     "opp": "MTL",
+     "point": 0.5,
+     "lam": 0.05998634502352689,
+     "p_over": 0.058188744470979326,
+     "p_over_market": 0.04977059958914825,
+     "over_price": 29.0,
+     "under_price": 0.0,
+     "ev_over": 0.6874735896584004,
+     "ev_under": -1.0,
+     "edge_over": 0.008418144881831076,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 202,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "EDM",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "CGY",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "SEA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "VAN",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "NYI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-01",
+       "opp": "WSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "PHI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-06",
+       "opp": "SJS",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TBL",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.05555555555555555,
+     "avg_l10": 0.1,
+     "hit_l10": 0.1,
+     "hit_l20": 0.05,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:03:09+00:00"
+    },
+    {
+     "player_id": 8482087,
+     "name": "K. Guhle",
+     "team": "MTL",
+     "opp": "MIN",
+     "point": 0.5,
+     "lam": 0.1082729619274125,
+     "p_over": 0.10251233329638387,
+     "p_over_market": 0.07583968166705934,
+     "over_price": 15.0,
+     "under_price": 0.0,
+     "ev_over": 0.5376849994457581,
+     "ev_under": -1.0,
+     "edge_over": 0.02667265162932453,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 170,
+     "history": [
+      {
+       "date": "2026-10-17",
+       "opp": "BUF",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "CHI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "WPG",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "STL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "DAL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "PIT",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TOR",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.15384615384615385,
+     "avg_l10": 0.2,
+     "hit_l10": 0.2,
+     "hit_l20": 0.1,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:03:09+00:00"
+    },
+    {
+     "player_id": 8478851,
+     "name": "A. Carrier",
+     "team": "MTL",
+     "opp": "MIN",
+     "point": 0.5,
+     "lam": 0.07513197551105606,
+     "p_over": 0.07232663345285573,
+     "p_over_market": 0.0603767986945557,
+     "over_price": 21.0,
+     "under_price": 0.0,
+     "ev_over": 0.5188593025099703,
+     "ev_under": -1.0,
+     "edge_over": 0.011949834758300026,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 231,
+     "history": [
+      {
+       "date": "2026-10-17",
+       "opp": "BUF",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "CHI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "STL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "DAL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "PIT",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TOR",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.0,
+     "avg_l10": 0.0,
+     "hit_l10": 0.0,
+     "hit_l20": 0.05,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:03:09+00:00"
+    },
+    {
+     "player_id": 8478133,
+     "name": "J. Evans",
+     "team": "MTL",
+     "opp": "MIN",
+     "point": 0.5,
+     "lam": 0.20618290674425668,
+     "p_over": 0.18597073205071057,
+     "p_over_market": 0.13038604965772221,
+     "over_price": 8.0,
+     "under_price": 0.0,
+     "ev_over": 0.4877658564056847,
+     "ev_under": -1.0,
+     "edge_over": 0.05558468239298836,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 238,
+     "history": [
+      {
+       "date": "2026-10-17",
+       "opp": "BUF",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "CHI",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "STL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "DAL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "PIT",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TOR",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.125,
+     "avg_l10": 0.2,
+     "hit_l10": 0.1,
+     "hit_l20": 0.1,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:03:09+00:00"
+    },
+    {
+     "player_id": 8476874,
+     "name": "O. Maatta",
+     "team": "MIN",
+     "opp": "MTL",
+     "point": 0.5,
+     "lam": 0.06706474643168621,
+     "p_over": 0.06482332451638906,
+     "p_over_market": 0.05769876404406654,
+     "over_price": 21.0,
+     "under_price": 0.0,
+     "ev_over": 0.3612898148441702,
+     "ev_under": -1.0,
+     "edge_over": 0.0071245604723225164,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 197,
+     "history": [
+      {
+       "date": "2026-10-13",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "CGY",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "SEA",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "VAN",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "NYI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-01",
+       "opp": "WSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "PHI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-06",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TBL",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.06666666666666667,
+     "avg_l10": 0.1,
+     "hit_l10": 0.1,
+     "hit_l20": 0.05,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:03:09+00:00"
+    },
+    {
+     "player_id": 8476479,
+     "name": "P. Danault",
+     "team": "MTL",
+     "opp": "MIN",
+     "point": 0.5,
+     "lam": 0.21127424513747414,
+     "p_over": 0.1900875556180498,
+     "p_over_market": 0.1387696415733799,
+     "over_price": 7.0,
+     "under_price": 0.0,
+     "ev_over": 0.3306128893263486,
+     "ev_under": -1.0,
+     "edge_over": 0.0513179140446699,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 239,
+     "history": [
+      {
+       "date": "2026-10-17",
+       "opp": "BUF",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "CHI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "STL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "DAL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "PIT",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TOR",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.0625,
+     "avg_l10": 0.1,
+     "hit_l10": 0.1,
+     "hit_l20": 0.05,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:03:09+00:00"
+    },
+    {
+     "player_id": 8476981,
+     "name": "J. Anderson",
+     "team": "MTL",
+     "opp": "MIN",
+     "point": 0.5,
+     "lam": 0.24495304189443196,
+     "p_over": 0.2167904344993672,
+     "p_over_market": 0.1785524548483133,
+     "over_price": 5.9,
+     "under_price": 0.0,
+     "ev_over": 0.2790635635462666,
+     "ev_under": -1.0,
+     "edge_over": 0.03823797965105388,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 236,
+     "history": [
+      {
+       "date": "2026-10-14",
+       "opp": "WSH",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-17",
+       "opp": "BUF",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "CHI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "STL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "DAL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "PIT",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "WPG",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.4,
+     "avg_l10": 0.5,
+     "hit_l10": 0.3,
+     "hit_l20": 0.3,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:03:09+00:00"
+    },
+    {
+     "player_id": 8476479,
+     "name": "P. Danault",
+     "team": "MTL",
+     "opp": "MIN",
+     "point": 0.5,
+     "lam": 0.48369583681097816,
+     "p_over": 0.3834993097867062,
+     "p_over_market": 0.2729664410246565,
+     "over_price": 3.33,
+     "under_price": 1.32,
+     "ev_over": 0.2770527015897317,
+     "ev_under": -0.18621908891845215,
+     "edge_over": 0.11053286876204971,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 2,
+     "n_prev": 239,
+     "history": [
+      {
+       "date": "2026-10-17",
+       "opp": "BUF",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "SJS",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "CHI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "STL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "DAL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "PIT",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TOR",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.375,
+     "avg_l10": 0.5,
+     "hit_l10": 0.4,
+     "hit_l20": 0.25,
+     "stat": "points",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:02:55+00:00"
+    },
+    {
+     "player_id": 8477446,
+     "name": "M. McCarron",
+     "team": "MIN",
+     "opp": "MTL",
+     "point": 0.5,
+     "lam": 0.17336189965067228,
+     "p_over": 0.15891457534334108,
+     "p_over_market": 0.1194184839044652,
+     "over_price": 8.0,
+     "under_price": 0.0,
+     "ev_over": 0.27131660274672853,
+     "ev_under": -1.0,
+     "edge_over": 0.03949609143887588,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 3,
+     "n_prev": 238,
+     "history": [
+      {
+       "date": "2026-10-18",
+       "opp": "CBJ",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "EDM",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "CGY",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "SEA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "VAN",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "NYI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-01",
+       "opp": "WSH",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "PHI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-06",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.16666666666666666,
+     "avg_l10": 0.3,
+     "hit_l10": 0.3,
+     "hit_l20": 0.2,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:03:09+00:00"
+    },
+    {
+     "player_id": 8476479,
+     "name": "P. Danault",
+     "team": "MTL",
+     "opp": "MIN",
+     "point": 0.5,
+     "lam": 0.3145076161835716,
+     "p_over": 0.26913213459026986,
+     "p_over_market": 0.18852758494708258,
+     "over_price": 4.6,
+     "under_price": 1.19,
+     "ev_over": 0.23800781911524127,
+     "ev_under": -0.13026724016242117,
+     "edge_over": 0.08060454964318728,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 1,
+     "n_prev": 239,
+     "history": [
+      {
+       "date": "2026-10-17",
+       "opp": "BUF",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "SJS",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "CHI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "STL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "DAL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "PIT",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TOR",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.3125,
+     "avg_l10": 0.4,
+     "hit_l10": 0.4,
+     "hit_l20": 0.25,
+     "stat": "assists",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:02+00:00"
+    },
+    {
+     "player_id": 8476463,
+     "name": "J. Brodin",
+     "team": "MIN",
+     "opp": "MTL",
+     "point": 0.5,
+     "lam": 0.0694987173899793,
+     "p_over": 0.06709365287086011,
+     "p_over_market": 0.07509795195336702,
+     "over_price": 18.0,
+     "under_price": 0.0,
+     "ev_over": 0.20768575167548198,
+     "ev_under": -1.0,
+     "edge_over": -0.00800429908250691,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 182,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "EDM",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "CGY",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "SEA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "VAN",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "NYI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-01",
+       "opp": "WSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "PHI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-06",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TBL",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.0,
+     "avg_l10": 0.0,
+     "hit_l10": 0.0,
+     "hit_l20": 0.0,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:03:09+00:00"
+    },
+    {
+     "player_id": 8482737,
+     "name": "Z. Bolduc",
+     "team": "MTL",
+     "opp": "MIN",
+     "point": 1.5,
+     "lam": 1.536290839188335,
+     "p_over": 0.44393139474272947,
+     "p_over_market": 0.5545313565547765,
+     "over_price": 1.74,
+     "under_price": 2.15,
+     "ev_over": -0.22755937314765073,
+     "ev_under": 0.1955475013031316,
+     "edge_over": -0.11059996181204701,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 4,
+     "n_prev": 192,
+     "history": [
+      {
+       "date": "2026-10-17",
+       "opp": "BUF",
+       "sog": 5,
+       "val": 5
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "CHI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "WPG",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "STL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "DAL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "PIT",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "UTA",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TOR",
+       "sog": 3,
+       "val": 3
+      }
+     ],
+     "avg_season": 1.8125,
+     "avg_l10": 2.0,
+     "hit_l10": 0.6,
+     "hit_l20": 0.5,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:02:48+00:00"
+    },
+    {
+     "player_id": 8475220,
+     "name": "M. Foligno",
+     "team": "MIN",
+     "opp": "MTL",
+     "point": 0.5,
+     "lam": 0.12682043997530545,
+     "p_over": 0.118966718833454,
+     "p_over_market": 0.10881313153307996,
+     "over_price": 10.0,
+     "under_price": 0.0,
+     "ev_over": 0.18966718833454,
+     "ev_under": -1.0,
+     "edge_over": 0.010153587300374037,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 182,
+     "history": [
+      {
+       "date": "2026-04-04",
+       "opp": "OTT",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "DET",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-07",
+       "opp": "SEA",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "DAL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "NSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "NSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-03",
+       "opp": "BOS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-06",
+       "opp": "BUF",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-08",
+       "opp": "TBL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TBL",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.0,
+     "avg_l10": 0.1,
+     "hit_l10": 0.1,
+     "hit_l20": 0.1,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:03:09+00:00"
+    },
+    {
+     "player_id": 8473422,
+     "name": "N. Foligno",
+     "team": "MIN",
+     "opp": "MTL",
+     "point": 0.5,
+     "lam": 0.12653333780647466,
+     "p_over": 0.11871437536687701,
+     "p_over_market": 0.1157419101344335,
+     "over_price": 10.0,
+     "under_price": 0.0,
+     "ev_over": 0.18714375366877,
+     "ev_under": -1.0,
+     "edge_over": 0.0029724652324435163,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 199,
+     "history": [
+      {
+       "date": "2026-04-04",
+       "opp": "OTT",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-05",
+       "opp": "DET",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "DAL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "NSH",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "STL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "ANA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-01",
+       "opp": "NSH",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-03",
+       "opp": "BOS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-06",
+       "opp": "BUF",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TBL",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": 0.2,
+     "hit_l10": 0.2,
+     "hit_l20": 0.1,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:03:09+00:00"
+    },
+    {
+     "player_id": 8481618,
+     "name": "A. Newhook",
+     "team": "MTL",
+     "opp": "MIN",
+     "point": 0.5,
+     "lam": 0.2704567441805174,
+     "p_over": 0.23641276394962718,
+     "p_over_market": 0.20649876625219635,
+     "over_price": 5.0,
+     "under_price": 0.0,
+     "ev_over": 0.1820638197481359,
+     "ev_under": -1.0,
+     "edge_over": 0.029913997697430833,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 185,
+     "history": [
+      {
+       "date": "2026-10-17",
+       "opp": "BUF",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-20",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-23",
+       "opp": "CHI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "STL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "DAL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-31",
+       "opp": "PIT",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "WPG",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "TOR",
+       "sog": 2,
+       "val": 2
+      }
+     ],
+     "avg_season": 0.3125,
+     "avg_l10": 0.4,
+     "hit_l10": 0.2,
+     "hit_l20": 0.2,
+     "stat": "goals",
+     "one_sided": true,
+     "captured_at": "2026-11-10T21:03:09+00:00"
+    }
+   ],
    "stats": [
     {
      "key": "elo",
@@ -955,42 +3721,99 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-11-10T13:02:10+00:00",
+   "odds_captured_at": "2026-11-10T21:02:12+00:00",
    "sides": {
     "home": {
      "team": "OTT",
      "p_model": 0.5457680090279609,
-     "p_market": 0.5343231218842891,
-     "p_adj": 0.5398446649673008,
-     "edge": 0.011444887143671756,
-     "ev": -0.01748270975951255,
-     "kelly_full": 0.0,
+     "p_market": 0.4983628980204192,
+     "p_adj": 0.5129559596051048,
+     "edge": 0.047405111007541634,
+     "ev": 0.0053936808260053315,
+     "kelly_full": 0.005618417527088887,
      "best_book": null,
-     "best_decimal": 1.82,
+     "best_decimal": 1.96,
      "books": {},
      "fails": [
-      "edge +1.1% below the 4% minimum (starting goalie unconfirmed)"
+      "expected value after shrinkage toward the market is only +0.5% (< 1%)"
      ],
      "qualifies": false
     },
     "away": {
      "team": "WSH",
      "p_model": 0.45423199097203915,
-     "p_market": 0.4656768781157109,
-     "p_adj": 0.46015533503269923,
-     "edge": -0.011444887143671756,
-     "ev": -0.033673796431331615,
+     "p_market": 0.5016371019795808,
+     "p_adj": 0.4870440403948952,
+     "edge": -0.047405111007541634,
+     "ev": -0.06000500203785225,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.1,
+     "best_decimal": 1.93,
      "books": {},
      "fails": [
-      "edge -1.1% below the 4% minimum (starting goalie unconfirmed)"
+      "edge -4.7% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6.5",
+     "point": 6.5,
+     "p_model": 0.4551814259067614,
+     "p_market": 0.48539620535077405,
+     "p_push": 0.0,
+     "edge": -0.03021477944401263,
+     "ev": -0.08053351966834188,
+     "best_decimal": 2.02,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6.5",
+     "point": 6.5,
+     "p_model": 0.5448185740932385,
+     "p_market": 0.5146037946492259,
+     "p_push": 0.0,
+     "edge": 0.03021477944401263,
+     "ev": 0.02970710503622076,
+     "best_decimal": 1.89,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "OTT -1.5",
+     "point": -1.5,
+     "p_model": 0.3267996293053327,
+     "p_market": 0.29068070063707735,
+     "p_push": 0.0,
+     "edge": 0.036118928668255335,
+     "ev": 0.0784387767075978,
+     "best_decimal": 3.3,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "WSH +1.5",
+     "point": 1.5,
+     "p_model": 0.6732003706946673,
+     "p_market": 0.7093192993629227,
+     "p_push": 0.0,
+     "edge": -0.03611892866825539,
+     "ev": -0.05751948102746579,
+     "best_decimal": 1.4,
+     "best_book": null,
+     "n_books": 6
+    }
+   ],
    "goals": {
     "lam_home": 3.1891585264678226,
     "lam_away": 2.9710496472469035,
@@ -1354,48 +4177,1426 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-11-10T13:02:10+00:00",
+   "odds_captured_at": "2026-11-10T21:02:12+00:00",
    "sides": {
     "home": {
      "team": "WPG",
      "p_model": 0.43674336635126293,
-     "p_market": 0.41903109173006425,
-     "p_adj": 0.42717731993670344,
-     "edge": 0.017712274621198676,
-     "ev": -0.004676844547480852,
+     "p_market": 0.4290969694686454,
+     "p_adj": 0.4328590678938125,
+     "edge": 0.007646396882617534,
+     "ev": -0.01740991588104568,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.33,
+     "best_decimal": 2.27,
      "books": {},
      "fails": [
-      "edge +1.8% below the 4% minimum (starting goalie unconfirmed)"
+      "edge +0.8% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     },
     "away": {
      "team": "NJD",
      "p_model": 0.563256633648737,
-     "p_market": 0.5809689082699357,
-     "p_adj": 0.5728226800632965,
-     "edge": -0.01771227462119873,
-     "ev": -0.037657897493661885,
+     "p_market": 0.5709030305313546,
+     "p_adj": 0.5671409321061874,
+     "edge": -0.00764639688261759,
+     "ev": -0.030189006098419513,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.68,
+     "best_decimal": 1.71,
      "books": {},
      "fails": [
-      "edge -1.8% below the 4% minimum (starting goalie unconfirmed)"
+      "edge -0.8% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6.5",
+     "point": 6.5,
+     "p_model": 0.45030329271212954,
+     "p_market": 0.49918248122901354,
+     "p_push": 0.0,
+     "edge": -0.048879188516884,
+     "ev": -0.1219085792113474,
+     "best_decimal": 1.95,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6.5",
+     "point": 6.5,
+     "p_model": 0.5496967072878705,
+     "p_market": 0.5008175187709865,
+     "p_push": 0.0,
+     "edge": 0.048879188516884,
+     "ev": 0.08290251335710475,
+     "best_decimal": 1.97,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "WPG +1.5",
+     "point": 1.5,
+     "p_model": 0.5913856341122605,
+     "p_market": 0.6448273968563982,
+     "p_push": 0.0,
+     "edge": -0.0534417627441377,
+     "ev": -0.10109383614936401,
+     "best_decimal": 1.52,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "NJD -1.5",
+     "point": -1.5,
+     "p_model": 0.4086143658877395,
+     "p_market": 0.3551726031436018,
+     "p_push": 0.0,
+     "edge": 0.0534417627441377,
+     "ev": 0.10325878789689669,
+     "best_decimal": 2.7,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 2.7740020832287238,
     "lam_away": 3.3485230262540844,
     "exp_total": 6.2315781849580825
    },
-   "props": [],
+   "props": [
+    {
+     "player_id": 8477504,
+     "name": "J. Morrissey",
+     "team": "WPG",
+     "opp": "NJD",
+     "point": 0.5,
+     "lam": 0.5128016455509221,
+     "p_over": 0.40118444244351925,
+     "p_over_market": 0.5216003432052683,
+     "over_price": 1.83,
+     "under_price": 2.0,
+     "ev_over": -0.2658324703283597,
+     "ev_under": 0.1976311151129615,
+     "edge_over": -0.12041590076174902,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 2,
+     "n_prev": 231,
+     "history": [
+      {
+       "date": "2026-04-06",
+       "opp": "SEA",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-04-09",
+       "opp": "STL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-04-11",
+       "opp": "PHI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-13",
+       "opp": "VGK",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-14",
+       "opp": "UTA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-04-16",
+       "opp": "SJS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-02",
+       "opp": "BOS",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-04",
+       "opp": "DET",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-05",
+       "opp": "PIT",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-07",
+       "opp": "COL",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": null,
+     "avg_l10": 0.6,
+     "hit_l10": 0.4,
+     "hit_l20": 0.5,
+     "stat": "points",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:24+00:00"
+    },
+    {
+     "player_id": 8482146,
+     "name": "L. Evangelista",
+     "team": "NJD",
+     "opp": "WPG",
+     "point": 2.5,
+     "lam": 2.544983390689922,
+     "p_over": 0.4547296516294589,
+     "p_over_market": 0.3777345582968406,
+     "over_price": 2.5,
+     "under_price": 1.54,
+     "ev_over": 0.13682412907364727,
+     "ev_under": -0.16028366350936668,
+     "edge_over": 0.07699509333261828,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 3,
+     "n_prev": 233,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "COL",
+       "sog": 6,
+       "val": 6
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "ANA",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "LAK",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "DAL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "COL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "VGK",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "EDM",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "STL",
+       "sog": 5,
+       "val": 5
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "NYI",
+       "sog": 5,
+       "val": 5
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TOR",
+       "sog": 3,
+       "val": 3
+      }
+     ],
+     "avg_season": 2.8666666666666667,
+     "avg_l10": 3.1,
+     "hit_l10": 0.6,
+     "hit_l20": 0.55,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:16+00:00"
+    },
+    {
+     "player_id": 8482149,
+     "name": "C. Perfetti",
+     "team": "WPG",
+     "opp": "NJD",
+     "point": 2.5,
+     "lam": 2.746717294484273,
+     "p_over": 0.499832766357553,
+     "p_over_market": 0.4382521759783272,
+     "over_price": 2.25,
+     "under_price": 1.77,
+     "ev_over": 0.12462372430449431,
+     "ev_under": -0.11470399645286883,
+     "edge_over": 0.06158059037922581,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 228,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "STL",
+       "sog": 5,
+       "val": 5
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "DAL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "MTL",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "FLA",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "TBL",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "FLA",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-01",
+       "opp": "CAR",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "MTL",
+       "sog": 6,
+       "val": 6
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "VAN",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TBL",
+       "sog": 6,
+       "val": 6
+      }
+     ],
+     "avg_season": 3.1666666666666665,
+     "avg_l10": 3.6,
+     "hit_l10": 0.7,
+     "hit_l20": 0.55,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:16+00:00"
+    },
+    {
+     "player_id": 8479407,
+     "name": "J. Bratt",
+     "team": "NJD",
+     "opp": "WPG",
+     "point": 0.5,
+     "lam": 0.7983014487779359,
+     "p_over": 0.5499071790803645,
+     "p_over_market": 0.6230920591177107,
+     "over_price": 1.54,
+     "under_price": 2.49,
+     "ev_over": -0.1531429442162387,
+     "ev_under": 0.12073112408989262,
+     "edge_over": -0.07318488003734624,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 252,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "COL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "ANA",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "LAK",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "DAL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "COL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "VGK",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "EDM",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "STL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "NYI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TOR",
+       "sog": 2,
+       "val": 2
+      }
+     ],
+     "avg_season": 1.0,
+     "avg_l10": 1.1,
+     "hit_l10": 0.8,
+     "hit_l20": 0.6,
+     "stat": "points",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:24+00:00"
+    },
+    {
+     "player_id": 8476462,
+     "name": "D. Hamilton",
+     "team": "NJD",
+     "opp": "WPG",
+     "point": 0.5,
+     "lam": 0.4199464295506671,
+     "p_over": 0.3429179809487619,
+     "p_over_market": 0.42027128932392926,
+     "over_price": 2.24,
+     "under_price": 1.65,
+     "ev_over": -0.23186372267477323,
+     "ev_under": 0.08418533143454277,
+     "edge_over": -0.07735330837516735,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 168,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "COL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "ANA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "LAK",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "DAL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "COL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "VGK",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "EDM",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "STL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "NYI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TOR",
+       "sog": 0,
+       "val": 0
+      }
+     ],
+     "avg_season": 0.5,
+     "avg_l10": 0.5,
+     "hit_l10": 0.5,
+     "hit_l20": 0.45,
+     "stat": "points",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:24+00:00"
+    },
+    {
+     "player_id": 8478414,
+     "name": "T. Meier",
+     "team": "NJD",
+     "opp": "WPG",
+     "point": 0.5,
+     "lam": 0.5142138569462105,
+     "p_over": 0.40202949975734803,
+     "p_over_market": 0.46823666672592107,
+     "over_price": 2.02,
+     "under_price": 1.8,
+     "ev_over": -0.187900410490157,
+     "ev_under": 0.07634690043677356,
+     "edge_over": -0.06620716696857304,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 233,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "COL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "ANA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "LAK",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "DAL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "COL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "VGK",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "EDM",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "STL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "NYI",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TOR",
+       "sog": 2,
+       "val": 2
+      }
+     ],
+     "avg_season": 0.3888888888888889,
+     "avg_l10": 0.3,
+     "hit_l10": 0.2,
+     "hit_l20": 0.3,
+     "stat": "points",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:24+00:00"
+    },
+    {
+     "player_id": 8476460,
+     "name": "M. Scheifele",
+     "team": "WPG",
+     "opp": "NJD",
+     "point": 1.5,
+     "lam": 2.5382658005353482,
+     "p_over": 0.6915809920247522,
+     "p_over_market": 0.6232707340459653,
+     "over_price": 1.53,
+     "under_price": 2.46,
+     "ev_over": 0.05811891779787082,
+     "ev_under": -0.24128924038089034,
+     "edge_over": 0.06831025797878687,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 4,
+     "n_prev": 245,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "STL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "DAL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "MTL",
+       "sog": 7,
+       "val": 7
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "FLA",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "TBL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "FLA",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-01",
+       "opp": "CAR",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "MTL",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "VAN",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TBL",
+       "sog": 2,
+       "val": 2
+      }
+     ],
+     "avg_season": 2.2777777777777777,
+     "avg_l10": 2.7,
+     "hit_l10": 0.8,
+     "hit_l20": 0.65,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:16+00:00"
+    },
+    {
+     "player_id": 8480002,
+     "name": "N. Hischier",
+     "team": "NJD",
+     "opp": "WPG",
+     "point": 0.5,
+     "lam": 0.7320278730504649,
+     "p_over": 0.519067269963298,
+     "p_over_market": 0.5742104947548905,
+     "over_price": 1.66,
+     "under_price": 2.2,
+     "ev_over": -0.13834833186092538,
+     "ev_under": 0.058052006080744456,
+     "edge_over": -0.055143224791592504,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 239,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "COL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "ANA",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "LAK",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "DAL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "COL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "VGK",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "EDM",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "STL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "NYI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TOR",
+       "sog": 2,
+       "val": 2
+      }
+     ],
+     "avg_season": 0.7222222222222222,
+     "avg_l10": 0.8,
+     "hit_l10": 0.6,
+     "hit_l20": 0.5,
+     "stat": "points",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:24+00:00"
+    },
+    {
+     "player_id": 8476462,
+     "name": "D. Hamilton",
+     "team": "NJD",
+     "opp": "WPG",
+     "point": 2.5,
+     "lam": 2.046476491175898,
+     "p_over": 0.3344756070454894,
+     "p_over_market": 0.38637239710364957,
+     "over_price": 2.48,
+     "under_price": 1.57,
+     "ev_over": -0.1705004945271863,
+     "ev_under": 0.044873296938581664,
+     "edge_over": -0.05189679005816017,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 5,
+     "n_prev": 168,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "COL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "ANA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "LAK",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "DAL",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "COL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "VGK",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "EDM",
+       "sog": 6,
+       "val": 6
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "STL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "NYI",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TOR",
+       "sog": 1,
+       "val": 1
+      }
+     ],
+     "avg_season": 2.611111111111111,
+     "avg_l10": 2.3,
+     "hit_l10": 0.3,
+     "hit_l20": 0.5,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:16+00:00"
+    },
+    {
+     "player_id": 8480145,
+     "name": "N. Pionk",
+     "team": "WPG",
+     "opp": "NJD",
+     "point": 0.5,
+     "lam": 0.5856045827135148,
+     "p_over": 0.4432308529652521,
+     "p_over_market": 0.4025767497919424,
+     "over_price": 2.35,
+     "under_price": 1.61,
+     "ev_over": 0.041592504468342506,
+     "ev_under": -0.10360167327405584,
+     "edge_over": 0.0406541031733097,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 3,
+     "n_prev": 209,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "STL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "DAL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "MTL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "FLA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "TBL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "FLA",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-01",
+       "opp": "CAR",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "MTL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "VAN",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TBL",
+       "sog": 1,
+       "val": 1
+      }
+     ],
+     "avg_season": 0.6666666666666666,
+     "avg_l10": 0.6,
+     "hit_l10": 0.5,
+     "hit_l20": 0.4,
+     "stat": "points",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:24+00:00"
+    },
+    {
+     "player_id": 8480014,
+     "name": "G. Vilardi",
+     "team": "WPG",
+     "opp": "NJD",
+     "point": 0.5,
+     "lam": 0.6777271363145131,
+     "p_over": 0.4922302267093246,
+     "p_over_market": 0.5438567178679207,
+     "over_price": 1.74,
+     "under_price": 2.05,
+     "ev_over": -0.1435194055257752,
+     "ev_under": 0.04092803524588451,
+     "edge_over": -0.05162649115859608,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 215,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "STL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "DAL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "MTL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "FLA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "TBL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "FLA",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-01",
+       "opp": "CAR",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "MTL",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "VAN",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TBL",
+       "sog": 1,
+       "val": 1
+      }
+     ],
+     "avg_season": 0.5,
+     "avg_l10": 0.6,
+     "hit_l10": 0.6,
+     "hit_l20": 0.5,
+     "stat": "points",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:24+00:00"
+    },
+    {
+     "player_id": 8478398,
+     "name": "K. Connor",
+     "team": "WPG",
+     "opp": "NJD",
+     "point": 3.5,
+     "lam": 3.6657584358826223,
+     "p_over": 0.4806455299988577,
+     "p_over_market": 0.43891109825286784,
+     "over_price": 2.15,
+     "under_price": 1.69,
+     "ev_over": 0.03338788949754401,
+     "ev_under": -0.12229094569806953,
+     "edge_over": 0.04173443174598984,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 236,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "STL",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "DAL",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "MTL",
+       "sog": 5,
+       "val": 5
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "FLA",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "TBL",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "FLA",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-01",
+       "opp": "CAR",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "MTL",
+       "sog": 8,
+       "val": 8
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "VAN",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TBL",
+       "sog": 4,
+       "val": 4
+      }
+     ],
+     "avg_season": 4.055555555555555,
+     "avg_l10": 3.6,
+     "hit_l10": 0.4,
+     "hit_l20": 0.55,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:16+00:00"
+    },
+    {
+     "player_id": 8482684,
+     "name": "L. Hughes",
+     "team": "NJD",
+     "opp": "WPG",
+     "point": 2.5,
+     "lam": 2.064385272296317,
+     "p_over": 0.3389521002774267,
+     "p_over_market": 0.3857924795991011,
+     "over_price": 2.4,
+     "under_price": 1.56,
+     "ev_over": -0.1865149593341759,
+     "ev_under": 0.03123472356721435,
+     "edge_over": -0.0468403793216744,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 4,
+     "n_prev": 228,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "COL",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "ANA",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "LAK",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "DAL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "COL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "VGK",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "EDM",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "STL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "NYI",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TOR",
+       "sog": 3,
+       "val": 3
+      }
+     ],
+     "avg_season": 2.388888888888889,
+     "avg_l10": 1.9,
+     "hit_l10": 0.2,
+     "hit_l20": 0.35,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:16+00:00"
+    },
+    {
+     "player_id": 8479407,
+     "name": "J. Bratt",
+     "team": "NJD",
+     "opp": "WPG",
+     "point": 2.5,
+     "lam": 2.1760531493512665,
+     "p_over": 0.36667129219287586,
+     "p_over_market": 0.4068433820946402,
+     "over_price": 2.35,
+     "under_price": 1.62,
+     "ev_over": -0.1383224633467417,
+     "ev_under": 0.025992506647541158,
+     "edge_over": -0.04017208990176435,
+     "take": "under",
+     "best_side": "under",
+     "n_books": 3,
+     "n_prev": 252,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "COL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "ANA",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-24",
+       "opp": "LAK",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "DAL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-28",
+       "opp": "COL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "VGK",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "EDM",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "STL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-07",
+       "opp": "NYI",
+       "sog": 4,
+       "val": 4
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TOR",
+       "sog": 4,
+       "val": 4
+      }
+     ],
+     "avg_season": 2.3333333333333335,
+     "avg_l10": 2.0,
+     "hit_l10": 0.3,
+     "hit_l20": 0.35,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:16+00:00"
+    },
+    {
+     "player_id": 8480014,
+     "name": "G. Vilardi",
+     "team": "WPG",
+     "opp": "NJD",
+     "point": 1.5,
+     "lam": 1.970637606958381,
+     "p_over": 0.5664806579528529,
+     "p_over_market": 0.5595712374991205,
+     "over_price": 1.8,
+     "under_price": 2.2,
+     "ev_over": 0.019665184315135142,
+     "ev_under": -0.04625744749627625,
+     "edge_over": 0.006909420453732329,
+     "take": "over",
+     "best_side": "over",
+     "n_books": 5,
+     "n_prev": 215,
+     "history": [
+      {
+       "date": "2026-10-20",
+       "opp": "STL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-22",
+       "opp": "DAL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-25",
+       "opp": "MTL",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-10-27",
+       "opp": "FLA",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-10-29",
+       "opp": "TBL",
+       "sog": 0,
+       "val": 0
+      },
+      {
+       "date": "2026-10-30",
+       "opp": "FLA",
+       "sog": 1,
+       "val": 1
+      },
+      {
+       "date": "2026-11-01",
+       "opp": "CAR",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-03",
+       "opp": "MTL",
+       "sog": 3,
+       "val": 3
+      },
+      {
+       "date": "2026-11-05",
+       "opp": "VAN",
+       "sog": 2,
+       "val": 2
+      },
+      {
+       "date": "2026-11-08",
+       "opp": "TBL",
+       "sog": 3,
+       "val": 3
+      }
+     ],
+     "avg_season": 1.8888888888888888,
+     "avg_l10": 2.0,
+     "hit_l10": 0.8,
+     "hit_l20": 0.7,
+     "stat": "sog",
+     "one_sided": false,
+     "captured_at": "2026-11-10T21:03:16+00:00"
+    }
+   ],
    "stats": [
     {
      "key": "elo",
@@ -1752,46 +5953,103 @@
    ],
    "model_side": "away",
    "odds_stale": false,
-   "odds_captured_at": "2026-11-10T13:02:10+00:00",
+   "odds_captured_at": "2026-11-10T21:02:12+00:00",
    "sides": {
     "home": {
      "team": "CBJ",
      "p_model": 0.4949782221235901,
-     "p_market": 0.48178559562240686,
-     "p_adj": 0.4880777106403884,
-     "edge": 0.013192626501183247,
-     "ev": -0.009202247400011632,
+     "p_market": 0.4693263255244066,
+     "p_adj": 0.4801701956933307,
+     "edge": 0.025651896599183488,
+     "ev": -0.0060476949148056125,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.03,
+     "best_decimal": 2.07,
      "books": {},
      "fails": [
-      "edge +1.3% below the 4% minimum (starting goalie unconfirmed)"
+      "edge +2.6% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     },
     "away": {
      "team": "FLA",
      "p_model": 0.5050217778764099,
-     "p_market": 0.5182144043775931,
-     "p_adj": 0.5119222893596116,
-     "edge": -0.013192626501183247,
-     "ev": -0.04270531889752627,
+     "p_market": 0.5306736744755933,
+     "p_adj": 0.5198298043066693,
+     "edge": -0.025651896599183432,
+     "ev": -0.04871145811879524,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.87,
+     "best_decimal": 1.83,
      "books": {},
      "fails": [
-      "edge -1.3% below the 4% minimum (starting goalie unconfirmed)"
+      "edge -2.6% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6",
+     "point": 6.0,
+     "p_model": 0.523564633205966,
+     "p_market": 0.49385472545364756,
+     "p_push": 0.1247645745295077,
+     "edge": 0.029709907752318465,
+     "ev": 0.018337087814893127,
+     "best_decimal": 1.95,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6",
+     "point": 6.0,
+     "p_model": 0.476435366794034,
+     "p_market": 0.5061452745463524,
+     "p_push": 0.1247645745295077,
+     "edge": -0.02970990775231841,
+     "ev": -0.07877858352702455,
+     "best_decimal": 1.91,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "CBJ +1.5",
+     "point": 1.5,
+     "p_model": 0.6826738315180534,
+     "p_market": 0.6966746999609779,
+     "p_push": 0.0,
+     "edge": -0.014000868442924475,
+     "ev": -0.023776420929183695,
+     "best_decimal": 1.43,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "FLA -1.5",
+     "point": -1.5,
+     "p_model": 0.3173261684819466,
+     "p_market": 0.30332530003902214,
+     "p_push": 0.0,
+     "edge": 0.014000868442924475,
+     "ev": 0.002750692402951338,
+     "best_decimal": 3.16,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 3.0480768302786703,
     "lam_away": 3.107664445370235,
-    "exp_total": 6.268822839801968
+    "exp_total": 6.2688228398019685
    },
    "props": [],
    "stats": [
@@ -2150,18 +6408,18 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-11-10T13:02:10+00:00",
+   "odds_captured_at": "2026-11-10T21:02:12+00:00",
    "sides": {
     "home": {
      "team": "STL",
      "p_model": 0.5332565428849474,
-     "p_market": 0.5657713577853669,
-     "p_adj": 0.5532044718692465,
-     "edge": -0.03251481490041952,
-     "ev": -0.037424218947511134,
+     "p_market": 0.5666790247101546,
+     "p_adj": 0.5539252250845671,
+     "edge": -0.03342248182520724,
+     "ev": -0.0527878651053903,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.74,
+     "best_decimal": 1.71,
      "books": {},
      "fails": [
       "edge -3.3% below the 4% minimum (starting goalie unconfirmed)"
@@ -2171,13 +6429,13 @@
     "away": {
      "team": "DET",
      "p_model": 0.4667434571150526,
-     "p_market": 0.4342286422146331,
-     "p_adj": 0.44679552813075357,
-     "edge": 0.03251481490041952,
-     "ev": 0.018693804138118164,
-     "kelly_full": 0.014604534482904817,
+     "p_market": 0.43332097528984537,
+     "p_adj": 0.44607477491543285,
+     "edge": 0.03342248182520724,
+     "ev": -0.005253251938584835,
+     "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.28,
+     "best_decimal": 2.23,
      "books": {},
      "fails": [
       "edge +3.3% below the 4% minimum (starting goalie unconfirmed)"
@@ -2185,7 +6443,64 @@
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 5.5",
+     "point": 5.5,
+     "p_model": 0.5819230639653125,
+     "p_market": 0.5361369473096852,
+     "p_push": 0.0,
+     "edge": 0.04578611665562726,
+     "ev": 0.05328074577721559,
+     "best_decimal": 1.81,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 5.5",
+     "point": 5.5,
+     "p_model": 0.41807693603468754,
+     "p_market": 0.4638630526903148,
+     "p_push": 0.0,
+     "edge": -0.04578611665562726,
+     "ev": -0.11367689560646238,
+     "best_decimal": 2.12,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "STL -1.5",
+     "point": -1.5,
+     "p_model": 0.3231035484354879,
+     "p_market": 0.3435184116940714,
+     "p_push": 0.0,
+     "edge": -0.020414863258583493,
+     "ev": -0.09207902889627906,
+     "best_decimal": 2.81,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "DET +1.5",
+     "point": 1.5,
+     "p_model": 0.6768964515645122,
+     "p_market": 0.6564815883059286,
+     "p_push": 0.0,
+     "edge": 0.02041486325858355,
+     "ev": 0.028882606378058506,
+     "best_decimal": 1.52,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 3.1485964423102115,
     "lam_away": 2.9466709751067754,
@@ -2551,42 +6866,99 @@
    ],
    "model_side": "home",
    "odds_stale": false,
-   "odds_captured_at": "2026-11-10T13:02:10+00:00",
+   "odds_captured_at": "2026-11-10T21:02:12+00:00",
    "sides": {
     "home": {
      "team": "LAK",
      "p_model": 0.5787109104517077,
-     "p_market": 0.5604149088373133,
-     "p_adj": 0.5687846542706778,
-     "edge": 0.018296001614394486,
-     "ev": -0.01031470156902059,
+     "p_market": 0.5468913136142501,
+     "p_adj": 0.5593087529479476,
+     "edge": 0.03181959683745761,
+     "ev": -0.004430419752653292,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 1.74,
+     "best_decimal": 1.78,
      "books": {},
      "fails": [
-      "edge +1.8% below the 4% minimum (starting goalie unconfirmed)"
+      "edge +3.2% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     },
     "away": {
      "team": "NSH",
      "p_model": 0.42128908954829225,
-     "p_market": 0.43958509116268674,
-     "p_adj": 0.4312153457293222,
-     "edge": -0.018296001614394486,
-     "ev": -0.047014085938198,
+     "p_market": 0.45310868638574986,
+     "p_adj": 0.4406912470520525,
+     "edge": -0.03181959683745761,
+     "ev": -0.039293081426525434,
      "kelly_full": 0.0,
      "best_book": null,
-     "best_decimal": 2.21,
+     "best_decimal": 2.18,
      "books": {},
      "fails": [
-      "edge -1.8% below the 4% minimum (starting goalie unconfirmed)"
+      "edge -3.2% below the 4% minimum (starting goalie unconfirmed)"
      ],
      "qualifies": false
     }
    },
-   "alt": [],
+   "alt": [
+    {
+     "market": "totals",
+     "side": "over",
+     "label": "Over 6",
+     "point": 6.0,
+     "p_model": 0.5227977904798866,
+     "p_market": 0.5196794625349694,
+     "p_push": 0.1248594499834848,
+     "edge": 0.0031183279449171764,
+     "ev": -0.019575259168579662,
+     "best_decimal": 1.87,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "totals",
+     "side": "under",
+     "label": "Under 6",
+     "point": 6.0,
+     "p_model": 0.4772022095201134,
+     "p_market": 0.48032053746503056,
+     "p_push": 0.1248594499834848,
+     "edge": -0.0031183279449171764,
+     "ev": -0.03155016171728786,
+     "best_decimal": 2.02,
+     "best_book": null,
+     "n_books": 6
+    },
+    {
+     "market": "spreads",
+     "side": "home",
+     "label": "LAK -1.5",
+     "point": -1.5,
+     "p_model": 0.32409772836217954,
+     "p_market": 0.327122632363325,
+     "p_push": 0.0,
+     "edge": -0.0030249040011454675,
+     "ev": -0.053634633182435776,
+     "best_decimal": 2.92,
+     "best_book": null,
+     "n_books": 9
+    },
+    {
+     "market": "spreads",
+     "side": "away",
+     "label": "NSH +1.5",
+     "point": 1.5,
+     "p_model": 0.6759022716378205,
+     "p_market": 0.672877367636675,
+     "p_push": 0.0,
+     "edge": 0.003024904001145412,
+     "ev": -0.019941706125160386,
+     "best_decimal": 1.45,
+     "best_book": null,
+     "n_books": 9
+    }
+   ],
    "goals": {
     "lam_home": 3.1767168120585496,
     "lam_away": 2.973484375945325,
@@ -2939,31 +7311,31 @@
   {
    "kind": "moneyline",
    "type": "Moneyline",
-   "game_id": 2026020290,
-   "game": "DET @ STL",
-   "start_utc": "2026-11-11T01:00:00+00:00",
-   "pick": "DET moneyline",
-   "p_model": 0.44679552813075357,
-   "p_market": 0.4342286422146331,
-   "price": 2.28,
-   "ev_raw": 0.018693804138118164,
-   "score": 0.012566885916120485,
+   "game_id": 2026020288,
+   "game": "WSH @ OTT",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "OTT moneyline",
+   "p_model": 0.5129559596051048,
+   "p_market": 0.4983628980204192,
+   "price": 1.96,
+   "ev_raw": 0.0053936808260053315,
+   "score": 0.01459306158468554,
    "weight": 1.0,
    "experimental": false,
    "p_push": 0.0,
-   "captured_at": "2026-11-10T13:02:10+00:00",
+   "captured_at": "2026-11-10T21:02:12+00:00",
    "leg": {
-    "game_id": 2026020290,
-    "decimal": 2.28,
-    "p_model": 0.44679552813075357,
-    "p_market": 0.4342286422146331,
+    "game_id": 2026020288,
+    "decimal": 1.96,
+    "p_model": 0.5129559596051048,
+    "p_market": 0.4983628980204192,
     "market": "h2h",
-    "side": "away",
+    "side": "home",
     "point": null,
     "player_id": 0
    },
    "recommended": false,
-   "note": "edge +3.3% below the 4% minimum (starting goalie unconfirmed)",
+   "note": "expected value after shrinkage toward the market is only +0.5% (< 1%)",
    "line": null,
    "rank": 1,
    "has_edge": true
@@ -2975,61 +7347,163 @@
    "game": "COL @ TOR",
    "start_utc": "2026-11-11T00:00:00+00:00",
    "pick": "TOR moneyline",
-   "p_model": 0.42099715692167516,
-   "p_market": 0.4089467049812665,
-   "price": 2.38,
-   "ev_raw": 0.0019732334735867996,
-   "score": 0.012050451940408657,
+   "p_model": 0.40636808254011025,
+   "p_market": 0.39177671932847624,
+   "price": 2.5,
+   "ev_raw": 0.01592020635027558,
+   "score": 0.014591363211634012,
    "weight": 1.0,
    "experimental": false,
    "p_push": 0.0,
-   "captured_at": "2026-11-10T13:02:10+00:00",
+   "captured_at": "2026-11-10T21:02:12+00:00",
    "leg": {
     "game_id": 2026020286,
-    "decimal": 2.38,
-    "p_model": 0.42099715692167516,
-    "p_market": 0.4089467049812665,
+    "decimal": 2.5,
+    "p_model": 0.40636808254011025,
+    "p_market": 0.39177671932847624,
     "market": "h2h",
     "side": "home",
     "point": null,
     "player_id": 0
    },
-   "recommended": false,
-   "note": "edge +3.0% below the 4% minimum (starting goalie unconfirmed)",
+   "recommended": true,
+   "note": "clears the policy checks",
    "line": null,
    "rank": 2,
    "has_edge": true
   },
   {
-   "kind": "moneyline",
-   "type": "Moneyline",
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
    "game_id": 2026020287,
    "game": "MIN @ MTL",
    "start_utc": "2026-11-11T00:00:00+00:00",
-   "pick": "MTL moneyline",
-   "p_model": 0.4766674833424465,
-   "p_market": 0.4666455784889987,
-   "price": 2.1,
-   "ev_raw": 0.0010017150191377056,
-   "score": 0.010021904853447838,
+   "pick": "J. Evans to score (anytime)",
+   "p_model": 0.18597073205071057,
+   "p_market": 0.13038604965772221,
+   "price": 8.0,
+   "ev_raw": 0.4877658564056847,
+   "score": 0.014109957838220121,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:09+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 8.0,
+    "p_model": 0.18597073205071057,
+    "p_market": 0.13038604965772221,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8478133
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8478133,
+   "line": 0.5,
+   "rank": 3,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "T. Blueger to score (anytime)",
+   "p_model": 0.1634083476984941,
+   "p_market": 0.10918261385551105,
+   "price": 9.0,
+   "ev_raw": 0.47067512928644695,
+   "score": 0.013764993975526468,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:41+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 9.0,
+    "p_model": 0.1634083476984941,
+    "p_market": 0.10918261385551105,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8476927
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8476927,
+   "line": 0.5,
+   "rank": 4,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "P. Danault to score (anytime)",
+   "p_model": 0.1900875556180498,
+   "p_market": 0.1387696415733799,
+   "price": 7.0,
+   "ev_raw": 0.3306128893263486,
+   "score": 0.013026855103646973,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:09+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 7.0,
+    "p_model": 0.1900875556180498,
+    "p_market": 0.1387696415733799,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8476479
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8476479,
+   "line": 0.5,
+   "rank": 5,
+   "has_edge": true
+  },
+  {
+   "kind": "moneyline",
+   "type": "Moneyline",
+   "game_id": 2026020290,
+   "game": "DET @ STL",
+   "start_utc": "2026-11-11T01:00:00+00:00",
+   "pick": "DET moneyline",
+   "p_model": 0.44607477491543285,
+   "p_market": 0.43332097528984537,
+   "price": 2.23,
+   "ev_raw": -0.005253251938584835,
+   "score": 0.01275379962558748,
    "weight": 1.0,
    "experimental": false,
    "p_push": 0.0,
-   "captured_at": "2026-11-10T13:02:10+00:00",
+   "captured_at": "2026-11-10T21:02:12+00:00",
    "leg": {
-    "game_id": 2026020287,
-    "decimal": 2.1,
-    "p_model": 0.4766674833424465,
-    "p_market": 0.4666455784889987,
+    "game_id": 2026020290,
+    "decimal": 2.23,
+    "p_model": 0.44607477491543285,
+    "p_market": 0.43332097528984537,
     "market": "h2h",
-    "side": "home",
+    "side": "away",
     "point": null,
     "player_id": 0
    },
    "recommended": false,
-   "note": "edge +2.3% below the 4% minimum (starting goalie unconfirmed)",
+   "note": "edge +3.3% below the 4% minimum (starting goalie unconfirmed)",
    "line": null,
-   "rank": 3,
+   "rank": 6,
    "has_edge": true
   },
   {
@@ -3039,61 +7513,95 @@
    "game": "NSH @ LAK",
    "start_utc": "2026-11-11T03:00:00+00:00",
    "pick": "LAK moneyline",
-   "p_model": 0.5687846542706778,
-   "p_market": 0.5604149088373133,
-   "price": 1.74,
-   "ev_raw": -0.01031470156902059,
-   "score": 0.00836974543336455,
+   "p_model": 0.5593087529479476,
+   "p_market": 0.5468913136142501,
+   "price": 1.78,
+   "ev_raw": -0.004430419752653292,
+   "score": 0.012417439333697433,
    "weight": 1.0,
    "experimental": false,
    "p_push": 0.0,
-   "captured_at": "2026-11-10T13:02:10+00:00",
+   "captured_at": "2026-11-10T21:02:12+00:00",
    "leg": {
     "game_id": 2026020292,
-    "decimal": 1.74,
-    "p_model": 0.5687846542706778,
-    "p_market": 0.5604149088373133,
+    "decimal": 1.78,
+    "p_model": 0.5593087529479476,
+    "p_market": 0.5468913136142501,
     "market": "h2h",
     "side": "home",
     "point": null,
     "player_id": 0
    },
    "recommended": false,
-   "note": "edge +1.8% below the 4% minimum (starting goalie unconfirmed)",
+   "note": "edge +3.2% below the 4% minimum (starting goalie unconfirmed)",
    "line": null,
-   "rank": 4,
+   "rank": 7,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "N. Suzuki to score (anytime)",
+   "p_model": 0.3544456633828994,
+   "p_market": 0.30654971263955283,
+   "price": 3.15,
+   "ev_raw": 0.11650383965613309,
+   "score": 0.01215820288100336,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:09+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 3.15,
+    "p_model": 0.3544456633828994,
+    "p_market": 0.30654971263955283,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8480018
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8480018,
+   "line": 0.5,
+   "rank": 8,
    "has_edge": true
   },
   {
    "kind": "moneyline",
    "type": "Moneyline",
-   "game_id": 2026020291,
-   "game": "NJD @ WPG",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
    "start_utc": "2026-11-11T00:00:00+00:00",
-   "pick": "WPG moneyline",
-   "p_model": 0.42717731993670344,
-   "p_market": 0.41903109173006425,
-   "price": 2.33,
-   "ev_raw": -0.004676844547480852,
-   "score": 0.008146228206639183,
+   "pick": "MTL moneyline",
+   "p_model": 0.47296893196110207,
+   "p_market": 0.46141621942520267,
+   "price": 2.1,
+   "ev_raw": -0.0067652428816855625,
+   "score": 0.011552712535899401,
    "weight": 1.0,
    "experimental": false,
    "p_push": 0.0,
-   "captured_at": "2026-11-10T13:02:10+00:00",
+   "captured_at": "2026-11-10T21:02:12+00:00",
    "leg": {
-    "game_id": 2026020291,
-    "decimal": 2.33,
-    "p_model": 0.42717731993670344,
-    "p_market": 0.41903109173006425,
+    "game_id": 2026020287,
+    "decimal": 2.1,
+    "p_model": 0.47296893196110207,
+    "p_market": 0.46141621942520267,
     "market": "h2h",
     "side": "home",
     "point": null,
     "player_id": 0
    },
    "recommended": false,
-   "note": "edge +1.8% below the 4% minimum (starting goalie unconfirmed)",
+   "note": "edge +2.8% below the 4% minimum (starting goalie unconfirmed)",
    "line": null,
-   "rank": 5,
+   "rank": 9,
    "has_edge": true
   },
   {
@@ -3103,84 +7611,2426 @@
    "game": "FLA @ CBJ",
    "start_utc": "2026-11-11T00:30:00+00:00",
    "pick": "CBJ moneyline",
-   "p_model": 0.4880777106403884,
-   "p_market": 0.48178559562240686,
-   "price": 2.03,
-   "ev_raw": -0.009202247400011632,
-   "score": 0.006292115017981548,
+   "p_model": 0.4801701956933307,
+   "p_market": 0.4693263255244066,
+   "price": 2.07,
+   "ev_raw": -0.0060476949148056125,
+   "score": 0.010843870168924075,
    "weight": 1.0,
    "experimental": false,
    "p_push": 0.0,
-   "captured_at": "2026-11-10T13:02:10+00:00",
+   "captured_at": "2026-11-10T21:02:12+00:00",
    "leg": {
     "game_id": 2026020289,
-    "decimal": 2.03,
-    "p_model": 0.4880777106403884,
-    "p_market": 0.48178559562240686,
+    "decimal": 2.07,
+    "p_model": 0.4801701956933307,
+    "p_market": 0.4693263255244066,
     "market": "h2h",
     "side": "home",
     "point": null,
     "player_id": 0
    },
    "recommended": false,
-   "note": "edge +1.3% below the 4% minimum (starting goalie unconfirmed)",
+   "note": "edge +2.6% below the 4% minimum (starting goalie unconfirmed)",
    "line": null,
-   "rank": 6,
+   "rank": 10,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "M. McCarron to score (anytime)",
+   "p_model": 0.15891457534334108,
+   "p_market": 0.1194184839044652,
+   "price": 8.0,
+   "ev_raw": 0.27131660274672853,
+   "score": 0.010025930903714645,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:09+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 8.0,
+    "p_model": 0.15891457534334108,
+    "p_market": 0.1194184839044652,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8477446
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8477446,
+   "line": 0.5,
+   "rank": 11,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "J. Anderson to score (anytime)",
+   "p_model": 0.2167904344993672,
+   "p_market": 0.1785524548483133,
+   "price": 5.9,
+   "ev_raw": 0.2790635635462666,
+   "score": 0.009706564065267523,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:09+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 5.9,
+    "p_model": 0.2167904344993672,
+    "p_market": 0.1785524548483133,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8476981
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8476981,
+   "line": 0.5,
+   "rank": 12,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "S. Malinski Under 1.5 shots",
+   "p_model": 0.597466232589752,
+   "p_market": 0.4228332171549629,
+   "price": 2.25,
+   "ev_raw": 0.34429902332694184,
+   "score": 0.008731650771739452,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:19+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 2.25,
+    "p_model": 0.597466232589752,
+    "p_market": 0.4228332171549629,
+    "market": "player_sog",
+    "side": "under",
+    "point": 1.5,
+    "player_id": 8484258
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8484258,
+   "line": 1.5,
+   "rank": 13,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "Q. Hughes to score (anytime)",
+   "p_model": 0.21370576475984493,
+   "p_market": 0.18015072589101927,
+   "price": 5.3,
+   "ev_raw": 0.13264055322717805,
+   "score": 0.00851781755900959,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:09+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 5.3,
+    "p_model": 0.21370576475984493,
+    "p_market": 0.18015072589101927,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8480800
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8480800,
+   "line": 0.5,
+   "rank": 14,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "B. Duhaime to score (anytime)",
+   "p_model": 0.11948924127317473,
+   "p_market": 0.08888271340167987,
+   "price": 13.0,
+   "ev_raw": 0.5533601365512715,
+   "score": 0.007769349382764078,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:41+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 13.0,
+    "p_model": 0.11948924127317473,
+    "p_market": 0.08888271340167987,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8479520
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8479520,
+   "line": 0.5,
+   "rank": 15,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "A. Newhook to score (anytime)",
+   "p_model": 0.23641276394962718,
+   "p_market": 0.20649876625219635,
+   "price": 5.0,
+   "ev_raw": 0.1820638197481359,
+   "score": 0.007593553261655519,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:09+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 5.0,
+    "p_model": 0.23641276394962718,
+    "p_market": 0.20649876625219635,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8481618
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8481618,
+   "line": 0.5,
+   "rank": 16,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "B. Burns Under 1.5 shots",
+   "p_model": 0.6210976139384996,
+   "p_market": 0.4804014168713606,
+   "price": 2.0,
+   "ev_raw": 0.2421952278769992,
+   "score": 0.00703480985335695,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:19+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 2.0,
+    "p_model": 0.6210976139384996,
+    "p_market": 0.4804014168713606,
+    "market": "player_sog",
+    "side": "under",
+    "point": 1.5,
+    "player_id": 8470613
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8470613,
+   "line": 1.5,
+   "rank": 17,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "C. Makar Under 2.5 shots",
+   "p_model": 0.5895829533146101,
+   "p_market": 0.4504392286728611,
+   "price": 2.15,
+   "ev_raw": 0.26760334962641164,
+   "score": 0.006957186232087448,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:19+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 2.15,
+    "p_model": 0.5895829533146101,
+    "p_market": 0.4504392286728611,
+    "market": "player_sog",
+    "side": "under",
+    "point": 2.5,
+    "player_id": 8480069
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8480069,
+   "line": 2.5,
+   "rank": 18,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "N. MacKinnon Under 3.5 shots",
+   "p_model": 0.5919249815416048,
+   "p_market": 0.4550910907109149,
+   "price": 2.1,
+   "ev_raw": 0.24304246123737006,
+   "score": 0.006841694541534493,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:19+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 2.1,
+    "p_model": 0.5919249815416048,
+    "p_market": 0.4550910907109149,
+    "market": "player_sog",
+    "side": "under",
+    "point": 3.5,
+    "player_id": 8477492
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8477492,
+   "line": 3.5,
+   "rank": 19,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "K. Guhle to score (anytime)",
+   "p_model": 0.10251233329638387,
+   "p_market": 0.07583968166705934,
+   "price": 15.0,
+   "ev_raw": 0.5376849994457581,
+   "score": 0.00677075002898238,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:09+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 15.0,
+    "p_model": 0.10251233329638387,
+    "p_market": 0.07583968166705934,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8482087
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8482087,
+   "line": 0.5,
+   "rank": 20,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "D. Yurov to score (anytime)",
+   "p_model": 0.21187428301375077,
+   "p_market": 0.18568105851860076,
+   "price": 5.5,
+   "ev_raw": 0.16530855657562926,
+   "score": 0.006649049294922697,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:09+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 5.5,
+    "p_model": 0.21187428301375077,
+    "p_market": 0.18568105851860076,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8483525
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8483525,
+   "line": 0.5,
+   "rank": 21,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020291,
+   "game": "NJD @ WPG",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "J. Morrissey Under 0.5 points",
+   "p_model": 0.5988155575564807,
+   "p_market": 0.47839965679473173,
+   "price": 2.0,
+   "ev_raw": 0.1976311151129615,
+   "score": 0.006020795038087451,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:24+00:00",
+   "leg": {
+    "game_id": 2026020291,
+    "decimal": 2.0,
+    "p_model": 0.5988155575564807,
+    "p_market": 0.47839965679473173,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8477504
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8477504,
+   "line": 0.5,
+   "rank": 22,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "N. Dobson Under 2.5 shots",
+   "p_model": 0.7415668438822138,
+   "p_market": 0.6284063978269618,
+   "price": 1.53,
+   "ev_raw": 0.1345972711397872,
+   "score": 0.0056580223027626,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:48+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 1.53,
+    "p_model": 0.7415668438822138,
+    "p_market": 0.6284063978269618,
+    "market": "player_sog",
+    "side": "under",
+    "point": 2.5,
+    "player_id": 8480865
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8480865,
+   "line": 2.5,
+   "rank": 23,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "N. Paul to score (anytime)",
+   "p_model": 0.18468188131741903,
+   "p_market": 0.16284812302691215,
+   "price": 6.5,
+   "ev_raw": 0.20043222856322374,
+   "score": 0.005542415566051746,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:41+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 6.5,
+    "p_model": 0.18468188131741903,
+    "p_market": 0.16284812302691215,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8477426
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8477426,
+   "line": 0.5,
+   "rank": 24,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "Z. Bolduc Under 1.5 shots",
+   "p_model": 0.5560686052572705,
+   "p_market": 0.4454686434452235,
+   "price": 2.15,
+   "ev_raw": 0.1955475013031316,
+   "score": 0.005529998090602351,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:48+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 2.15,
+    "p_model": 0.5560686052572705,
+    "p_market": 0.4454686434452235,
+    "market": "player_sog",
+    "side": "under",
+    "point": 1.5,
+    "player_id": 8482737
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8482737,
+   "line": 1.5,
+   "rank": 25,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "P. Danault Over 0.5 points",
+   "p_model": 0.3834993097867062,
+   "p_market": 0.2729664410246565,
+   "price": 3.33,
+   "ev_raw": 0.2770527015897317,
+   "score": 0.005526643438102486,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:55+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 3.33,
+    "p_model": 0.3834993097867062,
+    "p_market": 0.2729664410246565,
+    "market": "player_points",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8476479
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8476479,
+   "line": 0.5,
+   "rank": 26,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "J. Roslovic to score (anytime)",
+   "p_model": 0.28037519187648663,
+   "p_market": 0.25941762011796315,
+   "price": 3.95,
+   "ev_raw": 0.10748200791212226,
+   "score": 0.005319998984855958,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:41+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 3.95,
+    "p_model": 0.28037519187648663,
+    "p_market": 0.25941762011796315,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8478458
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8478458,
+   "line": 0.5,
+   "rank": 27,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "G. Landeskog Under 1.5 shots",
+   "p_model": 0.5875697960496575,
+   "p_market": 0.490658701391688,
+   "price": 1.95,
+   "ev_raw": 0.14576110229683215,
+   "score": 0.004845554732898477,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:19+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.95,
+    "p_model": 0.5875697960496575,
+    "p_market": 0.490658701391688,
+    "market": "player_sog",
+    "side": "under",
+    "point": 1.5,
+    "player_id": 8476455
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8476455,
+   "line": 1.5,
+   "rank": 28,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "Z. Bolduc Under 0.5 points",
+   "p_model": 0.6800680814297522,
+   "p_market": 0.5836108489637051,
+   "price": 1.65,
+   "ev_raw": 0.12211233435909102,
+   "score": 0.004822861623302355,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:55+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 1.65,
+    "p_model": 0.6800680814297522,
+    "p_market": 0.5836108489637051,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8482737
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8482737,
+   "line": 0.5,
+   "rank": 29,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "M. Necas Under 2.5 shots",
+   "p_model": 0.6039844085944259,
+   "p_market": 0.5099042715051237,
+   "price": 1.87,
+   "ev_raw": 0.1294508440715766,
+   "score": 0.00470400685446511,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:19+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.87,
+    "p_model": 0.6039844085944259,
+    "p_market": 0.5099042715051237,
+    "market": "player_sog",
+    "side": "under",
+    "point": 2.5,
+    "player_id": 8480039
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8480039,
+   "line": 2.5,
+   "rank": 30,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "J. Roslovic Over 0.5 points",
+   "p_model": 0.555625090718181,
+   "p_market": 0.4639798720919107,
+   "price": 2.0,
+   "ev_raw": 0.111250181436362,
+   "score": 0.0045822609313135145,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:26+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 2.0,
+    "p_model": 0.555625090718181,
+    "p_market": 0.4639798720919107,
+    "market": "player_points",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8478458
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8478458,
+   "line": 0.5,
+   "rank": 31,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "T. Stecher to score (anytime)",
+   "p_model": 0.084346671150758,
+   "p_market": 0.06673385865249526,
+   "price": 18.0,
+   "ev_raw": 0.5182400807136441,
+   "score": 0.004470944711097465,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:41+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 18.0,
+    "p_model": 0.084346671150758,
+    "p_market": 0.06673385865249526,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8479442
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8479442,
+   "line": 0.5,
+   "rank": 32,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "O. Ekman-Larsson Under 0.5 points",
+   "p_model": 0.7951348398592767,
+   "p_market": 0.7061353526148845,
+   "price": 1.36,
+   "ev_raw": 0.08138338220861635,
+   "score": 0.004449974362219611,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:26+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.36,
+    "p_model": 0.7951348398592767,
+    "p_market": 0.7061353526148845,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8475171
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8475171,
+   "line": 0.5,
+   "rank": 33,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "C. Makar Under 0.5 assists",
+   "p_model": 0.5230455153868815,
+   "p_market": 0.43869404049044725,
+   "price": 2.1,
+   "ev_raw": 0.09839558231245116,
+   "score": 0.0044395513103386445,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:34+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 2.1,
+    "p_model": 0.5230455153868815,
+    "p_market": 0.43869404049044725,
+    "market": "player_assists",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8480069
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8480069,
+   "line": 0.5,
+   "rank": 34,
+   "has_edge": true
+  },
+  {
+   "kind": "totals",
+   "type": "Total",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "Under 6.5",
+   "p_model": 0.5570555689031036,
+   "p_market": 0.469161968732948,
+   "price": 2.09,
+   "ev_raw": 0.1642461390074864,
+   "score": 0.0043946800085077785,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:12+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 2.09,
+    "p_model": 0.5570555689031036,
+    "p_market": 0.469161968732948,
+    "market": "totals",
+    "side": "under",
+    "point": 6.5,
+    "player_id": 0
+   },
+   "recommended": false,
+   "note": "experimental goals model, paper-traded only",
+   "line": 6.5,
+   "rank": 35,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "P. Danault Over 0.5 assists",
+   "p_model": 0.26913213459026986,
+   "p_market": 0.18852758494708258,
+   "price": 4.6,
+   "ev_raw": 0.23800781911524127,
+   "score": 0.004242344718062488,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:02+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 4.6,
+    "p_model": 0.26913213459026986,
+    "p_market": 0.18852758494708258,
+    "market": "player_assists",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8476479
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8476479,
+   "line": 0.5,
+   "rank": 36,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "N. Kadri Under 2.5 shots",
+   "p_model": 0.5961583990805424,
+   "p_market": 0.5118807674299007,
+   "price": 1.87,
+   "ev_raw": 0.11481620628061429,
+   "score": 0.004213881582532081,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:19+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.87,
+    "p_model": 0.5961583990805424,
+    "p_market": 0.5118807674299007,
+    "market": "player_sog",
+    "side": "under",
+    "point": 2.5,
+    "player_id": 8475172
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8475172,
+   "line": 2.5,
+   "rank": 37,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "J. Roslovic Over 0.5 assists",
+   "p_model": 0.3555226266999749,
+   "p_market": 0.2774621212121552,
+   "price": 3.2,
+   "ev_raw": 0.13767240543991976,
+   "score": 0.00410844765725367,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:34+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 3.2,
+    "p_model": 0.3555226266999749,
+    "p_market": 0.2774621212121552,
+    "market": "player_assists",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8478458
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8478458,
+   "line": 0.5,
+   "rank": 38,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "Z. Bolduc Under 0.5 assists",
+   "p_model": 0.8273534273711018,
+   "p_market": 0.7501470539638528,
+   "price": 1.31,
+   "ev_raw": 0.08383298985614346,
+   "score": 0.0040634933372236315,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:02+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 1.31,
+    "p_model": 0.8273534273711018,
+    "p_market": 0.7501470539638528,
+    "market": "player_assists",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8482737
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8482737,
+   "line": 0.5,
+   "rank": 39,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "C. Sissons to score (anytime)",
+   "p_model": 0.1491313938452311,
+   "p_market": 0.13351134846461948,
+   "price": 7.0,
+   "ev_raw": 0.04391975691661776,
+   "score": 0.003965088442770643,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:41+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 7.0,
+    "p_model": 0.1491313938452311,
+    "p_market": 0.13351134846461948,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8476925
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8476925,
+   "line": 0.5,
+   "rank": 40,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "W. Nylander Under 0.5 assists",
+   "p_model": 0.5916777290944317,
+   "p_market": 0.51640573018566,
+   "price": 1.83,
+   "ev_raw": 0.0827702442428101,
+   "score": 0.003961684153093246,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:34+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.83,
+    "p_model": 0.5916777290944317,
+    "p_market": 0.51640573018566,
+    "market": "player_assists",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8477939
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8477939,
+   "line": 0.5,
+   "rank": 41,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "D. Raddysh Under 0.5 points",
+   "p_model": 0.5460049229095937,
+   "p_market": 0.4680273943862575,
+   "price": 2.0,
+   "ev_raw": 0.09200984581918736,
+   "score": 0.0038988764261668088,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:26+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 2.0,
+    "p_model": 0.5460049229095937,
+    "p_market": 0.4680273943862575,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8478178
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8478178,
+   "line": 0.5,
+   "rank": 42,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020291,
+   "game": "NJD @ WPG",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "D. Hamilton Under 0.5 points",
+   "p_model": 0.6570820190512381,
+   "p_market": 0.5797287106760707,
+   "price": 1.65,
+   "ev_raw": 0.08418533143454277,
+   "score": 0.0038676654187583706,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:24+00:00",
+   "leg": {
+    "game_id": 2026020291,
+    "decimal": 1.65,
+    "p_model": 0.6570820190512381,
+    "p_market": 0.5797287106760707,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8476462
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8476462,
+   "line": 0.5,
+   "rank": 43,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020291,
+   "game": "NJD @ WPG",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "L. Evangelista Over 2.5 shots",
+   "p_model": 0.4547296516294589,
+   "p_market": 0.3777345582968406,
+   "price": 2.5,
+   "ev_raw": 0.13682412907364727,
+   "score": 0.003849754666630914,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:16+00:00",
+   "leg": {
+    "game_id": 2026020291,
+    "decimal": 2.5,
+    "p_model": 0.4547296516294589,
+    "p_market": 0.3777345582968406,
+    "market": "player_sog",
+    "side": "over",
+    "point": 2.5,
+    "player_id": 8482146
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8482146,
+   "line": 2.5,
+   "rank": 44,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "O. Ekman-Larsson Under 0.5 assists",
+   "p_model": 0.8244517815381311,
+   "p_market": 0.7517361111111917,
+   "price": 1.28,
+   "ev_raw": 0.05529828036880788,
+   "score": 0.003827140548786289,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:34+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.28,
+    "p_model": 0.8244517815381311,
+    "p_market": 0.7517361111111917,
+    "market": "player_assists",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8475171
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8475171,
+   "line": 0.5,
+   "rank": 45,
    "has_edge": true
   },
   {
    "kind": "moneyline",
    "type": "Moneyline",
-   "game_id": 2026020288,
-   "game": "WSH @ OTT",
+   "game_id": 2026020291,
+   "game": "NJD @ WPG",
    "start_utc": "2026-11-11T00:00:00+00:00",
-   "pick": "OTT moneyline",
-   "p_model": 0.5398446649673008,
-   "p_market": 0.5343231218842891,
-   "price": 1.82,
-   "ev_raw": -0.01748270975951255,
-   "score": 0.005521543083011671,
+   "pick": "WPG moneyline",
+   "p_model": 0.4328590678938125,
+   "p_market": 0.4290969694686454,
+   "price": 2.27,
+   "ev_raw": -0.01740991588104568,
+   "score": 0.0037620984251671152,
    "weight": 1.0,
    "experimental": false,
    "p_push": 0.0,
-   "captured_at": "2026-11-10T13:02:10+00:00",
+   "captured_at": "2026-11-10T21:02:12+00:00",
    "leg": {
-    "game_id": 2026020288,
-    "decimal": 1.82,
-    "p_model": 0.5398446649673008,
-    "p_market": 0.5343231218842891,
+    "game_id": 2026020291,
+    "decimal": 2.27,
+    "p_model": 0.4328590678938125,
+    "p_market": 0.4290969694686454,
     "market": "h2h",
     "side": "home",
     "point": null,
     "player_id": 0
    },
    "recommended": false,
-   "note": "edge +1.1% below the 4% minimum (starting goalie unconfirmed)",
+   "note": "edge +0.8% below the 4% minimum (starting goalie unconfirmed)",
    "line": null,
-   "rank": 7,
+   "rank": 46,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "J. Tavares Under 2.5 shots",
+   "p_model": 0.6460077185689856,
+   "p_market": 0.571026478958218,
+   "price": 1.67,
+   "ev_raw": 0.07883289001020599,
+   "score": 0.003749061980538382,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:19+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.67,
+    "p_model": 0.6460077185689856,
+    "p_market": 0.571026478958218,
+    "market": "player_sog",
+    "side": "under",
+    "point": 2.5,
+    "player_id": 8475166
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8475166,
+   "line": 2.5,
+   "rank": 47,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "C. Caufield Under 0.5 assists",
+   "p_model": 0.7018194125951868,
+   "p_market": 0.631292517006812,
+   "price": 1.5,
+   "ev_raw": 0.05272911889278015,
+   "score": 0.003711941873072356,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:02+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 1.5,
+    "p_model": 0.7018194125951868,
+    "p_market": 0.631292517006812,
+    "market": "player_assists",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8481540
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8481540,
+   "line": 0.5,
+   "rank": 48,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "N. Suzuki Over 0.5 points",
+   "p_model": 0.7074099683679722,
+   "p_market": 0.6332476017998782,
+   "price": 1.5,
+   "ev_raw": 0.06111495255195826,
+   "score": 0.0037081183284047026,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:55+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 1.5,
+    "p_model": 0.7074099683679722,
+    "p_market": 0.6332476017998782,
+    "market": "player_points",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8480018
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8480018,
+   "line": 0.5,
+   "rank": 49,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "N. Suzuki Over 2.5 shots",
+   "p_model": 0.48101468150784754,
+   "p_market": 0.406969818183872,
+   "price": 2.3,
+   "ev_raw": 0.10633376746804923,
+   "score": 0.0037022431661987766,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:48+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 2.3,
+    "p_model": 0.48101468150784754,
+    "p_market": 0.406969818183872,
+    "market": "player_sog",
+    "side": "over",
+    "point": 2.5,
+    "player_id": 8480018
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8480018,
+   "line": 2.5,
+   "rank": 50,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "C. Makar Under 0.5 points",
+   "p_model": 0.4144013009016462,
+   "p_market": 0.3403601051384352,
+   "price": 2.8,
+   "ev_raw": 0.16032364252460918,
+   "score": 0.00370205978816055,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:26+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 2.8,
+    "p_model": 0.4144013009016462,
+    "p_market": 0.3403601051384352,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8480069
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8480069,
+   "line": 0.5,
+   "rank": 51,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "G. McKenna Under 0.5 assists",
+   "p_model": 0.776732456177949,
+   "p_market": 0.7064121989672594,
+   "price": 1.36,
+   "ev_raw": 0.056356140402010646,
+   "score": 0.0037010661689836615,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:34+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.36,
+    "p_model": 0.776732456177949,
+    "p_market": 0.7064121989672594,
+    "market": "player_assists",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8486067
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8486067,
+   "line": 0.5,
+   "rank": 52,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020291,
+   "game": "NJD @ WPG",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "J. Bratt Under 0.5 points",
+   "p_model": 0.45009282091963554,
+   "p_market": 0.3769079408822893,
+   "price": 2.49,
+   "ev_raw": 0.12073112408989262,
+   "score": 0.0036592440018673126,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:24+00:00",
+   "leg": {
+    "game_id": 2026020291,
+    "decimal": 2.49,
+    "p_model": 0.45009282091963554,
+    "p_market": 0.3769079408822893,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8479407
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8479407,
+   "line": 0.5,
+   "rank": 53,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "G. Landeskog Under 0.5 points",
+   "p_model": 0.6533049390896046,
+   "p_market": 0.5830074934551268,
+   "price": 1.69,
+   "ev_raw": 0.1040853470614318,
+   "score": 0.0035148722817238912,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:26+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.69,
+    "p_model": 0.6533049390896046,
+    "p_market": 0.5830074934551268,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8476455
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8476455,
+   "line": 0.5,
+   "rank": 54,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "W. Nylander to score (anytime)",
+   "p_model": 0.35512635538787773,
+   "p_market": 0.34138585540454697,
+   "price": 2.8,
+   "ev_raw": -0.00564620491394241,
+   "score": 0.003487973072691656,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:41+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 2.8,
+    "p_model": 0.35512635538787773,
+    "p_market": 0.34138585540454697,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8477939
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8477939,
+   "line": 0.5,
+   "rank": 55,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020291,
+   "game": "NJD @ WPG",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "M. Scheifele Over 1.5 shots",
+   "p_model": 0.6915809920247522,
+   "p_market": 0.6232707340459653,
+   "price": 1.53,
+   "ev_raw": 0.05811891779787082,
+   "score": 0.003415512898939344,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:16+00:00",
+   "leg": {
+    "game_id": 2026020291,
+    "decimal": 1.53,
+    "p_model": 0.6915809920247522,
+    "p_market": 0.6232707340459653,
+    "market": "player_sog",
+    "side": "over",
+    "point": 1.5,
+    "player_id": 8476460
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8476460,
+   "line": 1.5,
+   "rank": 56,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020291,
+   "game": "NJD @ WPG",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "T. Meier Under 0.5 points",
+   "p_model": 0.597970500242652,
+   "p_market": 0.531763333274079,
+   "price": 1.8,
+   "ev_raw": 0.07634690043677356,
+   "score": 0.0033103583484286494,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:24+00:00",
+   "leg": {
+    "game_id": 2026020291,
+    "decimal": 1.8,
+    "p_model": 0.597970500242652,
+    "p_market": 0.531763333274079,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8478414
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8478414,
+   "line": 0.5,
+   "rank": 57,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "J. Brodin Over 0.5 points",
+   "p_model": 0.3579216348441394,
+   "p_market": 0.29386464738511553,
+   "price": 3.09,
+   "ev_raw": 0.10597785166839069,
+   "score": 0.0032028493729511945,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:55+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 3.09,
+    "p_model": 0.3579216348441394,
+    "p_market": 0.29386464738511553,
+    "market": "player_points",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8476463
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8476463,
+   "line": 0.5,
+   "rank": 58,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "A. Matthews Under 3.5 shots",
+   "p_model": 0.6132069227317124,
+   "p_market": 0.5494191307489382,
+   "price": 1.74,
+   "ev_raw": 0.06698004555317955,
+   "score": 0.003189389599138709,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:19+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.74,
+    "p_model": 0.6132069227317124,
+    "p_market": 0.5494191307489382,
+    "market": "player_sog",
+    "side": "under",
+    "point": 3.5,
+    "player_id": 8479318
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8479318,
+   "line": 3.5,
+   "rank": 59,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020291,
+   "game": "NJD @ WPG",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "C. Perfetti Over 2.5 shots",
+   "p_model": 0.499832766357553,
+   "p_market": 0.4382521759783272,
+   "price": 2.25,
+   "ev_raw": 0.12462372430449431,
+   "score": 0.0030790295189612907,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:16+00:00",
+   "leg": {
+    "game_id": 2026020291,
+    "decimal": 2.25,
+    "p_model": 0.499832766357553,
+    "p_market": 0.4382521759783272,
+    "market": "player_sog",
+    "side": "over",
+    "point": 2.5,
+    "player_id": 8482149
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8482149,
+   "line": 2.5,
+   "rank": 60,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "A. Carrier to score (anytime)",
+   "p_model": 0.07232663345285573,
+   "p_market": 0.0603767986945557,
+   "price": 21.0,
+   "ev_raw": 0.5188593025099703,
+   "score": 0.003033419592491545,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:09+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 21.0,
+    "p_model": 0.07232663345285573,
+    "p_market": 0.0603767986945557,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8478851
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8478851,
+   "line": 0.5,
+   "rank": 61,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "G. McKenna Under 0.5 points",
+   "p_model": 0.6211946433842572,
+   "p_market": 0.5612199656824859,
+   "price": 1.71,
+   "ev_raw": 0.06224284018707982,
+   "score": 0.002998733885088567,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:26+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.71,
+    "p_model": 0.6211946433842572,
+    "p_market": 0.5612199656824859,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8486067
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8486067,
+   "line": 0.5,
+   "rank": 62,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "C. Caufield Under 0.5 points",
+   "p_model": 0.4497451338453332,
+   "p_market": 0.3902228693992612,
+   "price": 2.4,
+   "ev_raw": 0.07938832122879969,
+   "score": 0.0029761132223036003,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:55+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 2.4,
+    "p_model": 0.4497451338453332,
+    "p_market": 0.3902228693992612,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8481540
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8481540,
+   "line": 0.5,
+   "rank": 63,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "D. Raddysh Under 2.5 shots",
+   "p_model": 0.5824301250021233,
+   "p_market": 0.5239872838675239,
+   "price": 1.87,
+   "ev_raw": 0.08914433375397068,
+   "score": 0.0029221420567299705,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:19+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.87,
+    "p_model": 0.5824301250021233,
+    "p_market": 0.5239872838675239,
+    "market": "player_sog",
+    "side": "under",
+    "point": 2.5,
+    "player_id": 8478178
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8478178,
+   "line": 2.5,
+   "rank": 64,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "A. Matthews Over 0.5 assists",
+   "p_model": 0.48462515496623193,
+   "p_market": 0.4295278365045802,
+   "price": 2.15,
+   "ev_raw": 0.04194408317739862,
+   "score": 0.002899858866402722,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:34+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 2.15,
+    "p_model": 0.48462515496623193,
+    "p_market": 0.4295278365045802,
+    "market": "player_assists",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8479318
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8479318,
+   "line": 0.5,
+   "rank": 65,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "N. MacKinnon Under 1.5 points",
+   "p_model": 0.6352194362586736,
+   "p_market": 0.5778428562683955,
+   "price": 1.66,
+   "ev_raw": 0.05446426418939815,
+   "score": 0.002868828999513906,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:26+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.66,
+    "p_model": 0.6352194362586736,
+    "p_market": 0.5778428562683955,
+    "market": "player_points",
+    "side": "under",
+    "point": 1.5,
+    "player_id": 8477492
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8477492,
+   "line": 1.5,
+   "rank": 66,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "C. Caufield Under 2.5 shots",
+   "p_model": 0.4663439751470848,
+   "p_market": 0.4097711536413454,
+   "price": 2.3,
+   "ev_raw": 0.07259114283829493,
+   "score": 0.0028286410752869696,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:48+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 2.3,
+    "p_model": 0.4663439751470848,
+    "p_market": 0.4097711536413454,
+    "market": "player_sog",
+    "side": "under",
+    "point": 2.5,
+    "player_id": 8481540
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8481540,
+   "line": 2.5,
+   "rank": 67,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "J. Schwartz Under 0.5 assists",
+   "p_model": 0.7983835303383175,
+   "p_market": 0.744739756367593,
+   "price": 1.29,
+   "ev_raw": 0.02991475413642966,
+   "score": 0.002823356524774974,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:34+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.29,
+    "p_model": 0.7983835303383175,
+    "p_market": 0.744739756367593,
+    "market": "player_assists",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8475768
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8475768,
+   "line": 0.5,
+   "rank": 68,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "J. Brodin Over 0.5 assists",
+   "p_model": 0.3181768894421889,
+   "p_market": 0.264638346727849,
+   "price": 3.35,
+   "ev_raw": 0.06589257963133288,
+   "score": 0.002817818037596836,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:02+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 3.35,
+    "p_model": 0.3181768894421889,
+    "p_market": 0.264638346727849,
+    "market": "player_assists",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8476463
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8476463,
+   "line": 0.5,
+   "rank": 69,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "L. Hutson Under 0.5 assists",
+   "p_model": 0.5560333878822896,
+   "p_market": 0.5027997872161704,
+   "price": 1.87,
+   "ev_raw": 0.03978243533988163,
+   "score": 0.00280176845611154,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:02+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 1.87,
+    "p_model": 0.5560333878822896,
+    "p_market": 0.5027997872161704,
+    "market": "player_assists",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8483457
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8483457,
+   "line": 0.5,
+   "rank": 70,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020291,
+   "game": "NJD @ WPG",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "N. Hischier Under 0.5 points",
+   "p_model": 0.480932730036702,
+   "p_market": 0.4257895052451095,
+   "price": 2.2,
+   "ev_raw": 0.058052006080744456,
+   "score": 0.0027571612395796254,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:24+00:00",
+   "leg": {
+    "game_id": 2026020291,
+    "decimal": 2.2,
+    "p_model": 0.480932730036702,
+    "p_market": 0.4257895052451095,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8480002
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8480002,
+   "line": 0.5,
+   "rank": 71,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "D. Raddysh Under 0.5 assists",
+   "p_model": 0.6024444147322192,
+   "p_market": 0.5502253854677958,
+   "price": 1.71,
+   "ev_raw": 0.030179949192094824,
+   "score": 0.002748369961285445,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:34+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.71,
+    "p_model": 0.6024444147322192,
+    "p_market": 0.5502253854677958,
+    "market": "player_assists",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8478178
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8478178,
+   "line": 0.5,
+   "rank": 72,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "J. Slafkovsk\u00fd Under 2.5 shots",
+   "p_model": 0.6423523767247297,
+   "p_market": 0.5881200929362966,
+   "price": 1.64,
+   "ev_raw": 0.05345789782855659,
+   "score": 0.0027116141894216518,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:48+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 1.64,
+    "p_model": 0.6423523767247297,
+    "p_market": 0.5881200929362966,
+    "market": "player_sog",
+    "side": "under",
+    "point": 2.5,
+    "player_id": 8483515
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8483515,
+   "line": 2.5,
+   "rank": 73,
+   "has_edge": true
+  },
+  {
+   "kind": "spreads",
+   "type": "Puck line",
+   "game_id": 2026020291,
+   "game": "NJD @ WPG",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "NJD -1.5",
+   "p_model": 0.4086143658877395,
+   "p_market": 0.3551726031436018,
+   "price": 2.7,
+   "ev_raw": 0.10325878789689669,
+   "score": 0.002672088137206885,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:12+00:00",
+   "leg": {
+    "game_id": 2026020291,
+    "decimal": 2.7,
+    "p_model": 0.4086143658877395,
+    "p_market": 0.3551726031436018,
+    "market": "spreads",
+    "side": "away",
+    "point": -1.5,
+    "player_id": 0
+   },
+   "recommended": false,
+   "note": "experimental goals model, paper-traded only",
+   "line": -1.5,
+   "rank": 74,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "M. Necas Under 0.5 assists",
+   "p_model": 0.5452202819823054,
+   "p_market": 0.4950382088181431,
+   "price": 1.95,
+   "ev_raw": 0.06317954986549557,
+   "score": 0.0026411617454822284,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:34+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.95,
+    "p_model": 0.5452202819823054,
+    "p_market": 0.4950382088181431,
+    "market": "player_assists",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8480039
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8480039,
+   "line": 0.5,
+   "rank": 75,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "J. Slafkovsk\u00fd Under 0.5 points",
+   "p_model": 0.5049234696053582,
+   "p_market": 0.4528606778839791,
+   "price": 2.1,
+   "ev_raw": 0.06033928617125217,
+   "score": 0.0026031395860689533,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:55+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 2.1,
+    "p_model": 0.5049234696053582,
+    "p_market": 0.4528606778839791,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8483515
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8483515,
+   "line": 0.5,
+   "rank": 76,
+   "has_edge": true
+  },
+  {
+   "kind": "player_sog",
+   "type": "Player shots",
+   "game_id": 2026020291,
+   "game": "NJD @ WPG",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "D. Hamilton Under 2.5 shots",
+   "p_model": 0.6655243929545106,
+   "p_market": 0.6136276028963504,
+   "price": 1.57,
+   "ev_raw": 0.044873296938581664,
+   "score": 0.0025948395029080085,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:16+00:00",
+   "leg": {
+    "game_id": 2026020291,
+    "decimal": 1.57,
+    "p_model": 0.6655243929545106,
+    "p_market": 0.6136276028963504,
+    "market": "player_sog",
+    "side": "under",
+    "point": 2.5,
+    "player_id": 8476462
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "sog",
+   "player_id": 8476462,
+   "line": 2.5,
+   "rank": 77,
+   "has_edge": true
+  },
+  {
+   "kind": "player_points",
+   "type": "Player points",
+   "game_id": 2026020291,
+   "game": "NJD @ WPG",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "G. Vilardi Under 0.5 points",
+   "p_model": 0.5077697732906754,
+   "p_market": 0.45614328213207933,
+   "price": 2.05,
+   "ev_raw": 0.04092803524588451,
+   "score": 0.002581324557929804,
+   "weight": 0.05,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:24+00:00",
+   "leg": {
+    "game_id": 2026020291,
+    "decimal": 2.05,
+    "p_model": 0.5077697732906754,
+    "p_market": 0.45614328213207933,
+    "market": "player_points",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8480014
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "points",
+   "player_id": 8480014,
+   "line": 0.5,
+   "rank": 78,
+   "has_edge": true
+  },
+  {
+   "kind": "player_goals",
+   "type": "Anytime goalscorer",
+   "game_id": 2026020287,
+   "game": "MIN @ MTL",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "M. Foligno to score (anytime)",
+   "p_model": 0.118966718833454,
+   "p_market": 0.10881313153307996,
+   "price": 10.0,
+   "ev_raw": 0.18966718833454,
+   "score": 0.0025774490839411014,
+   "weight": 0.25384615384615383,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:03:09+00:00",
+   "leg": {
+    "game_id": 2026020287,
+    "decimal": 10.0,
+    "p_model": 0.118966718833454,
+    "p_market": 0.10881313153307996,
+    "market": "player_goals",
+    "side": "over",
+    "point": 0.5,
+    "player_id": 8475220
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "goals",
+   "player_id": 8475220,
+   "line": 0.5,
+   "rank": 79,
+   "has_edge": true
+  },
+  {
+   "kind": "player_assists",
+   "type": "Player assists",
+   "game_id": 2026020286,
+   "game": "COL @ TOR",
+   "start_utc": "2026-11-11T00:00:00+00:00",
+   "pick": "N. Kadri Under 0.5 assists",
+   "p_model": 0.6984342941615813,
+   "p_market": 0.6501511917022619,
+   "price": 1.48,
+   "ev_raw": 0.03368275535914034,
+   "score": 0.002541215918911549,
+   "weight": 0.05263157894736842,
+   "experimental": true,
+   "p_push": 0.0,
+   "captured_at": "2026-11-10T21:02:34+00:00",
+   "leg": {
+    "game_id": 2026020286,
+    "decimal": 1.48,
+    "p_model": 0.6984342941615813,
+    "p_market": 0.6501511917022619,
+    "market": "player_assists",
+    "side": "under",
+    "point": 0.5,
+    "player_id": 8475172
+   },
+   "recommended": false,
+   "note": "experimental player model, paper-traded only",
+   "stat": "assists",
+   "player_id": 8475172,
+   "line": 0.5,
+   "rank": 80,
    "has_edge": true
   }
  ],
  "evidence": [
   [
-   "Model vs market, 277 games",
-   "log loss +0.0133 (95% interval +0.0041 to +0.0213). The model's probabilities are WORSE than the market's closing probabilities (the interval is above zero)."
+   "Model vs market, 280 games",
+   "log loss +0.0140 (95% interval +0.0047 to +0.0220). The model's probabilities are WORSE than the market's closing probabilities (the interval is above zero)."
   ],
   [
    "Moneyline picks, one per game",
-   "277 picks, ROI +2.3% (95% interval -6.5% to +10.8%), win rate 61.0% against a break-even 59.0%. Random sides at the same margin match or beat this 9% of the time. Line movement toward the pick after it was made: +0.15 probability points on average (zero means no closing-line value)."
+   "280 picks, ROI +1.8% (95% interval -7.2% to +10.2%), win rate 60.7% against a break-even 59.0%. Random sides at the same margin match or beat this 10% of the time. Line movement toward the pick after it was made: +0.14 probability points on average (zero means no closing-line value)."
   ],
   [
    "How many bets before ROI can be trusted",
-   "At the observed spread of results, detecting a true 3% ROI takes about 4,821 bets and a 5% ROI about 1,736; a 1% edge takes 43,386. Closing-line value converges much faster, which is why it is the primary measure."
+   "At the observed spread of results, detecting a true 3% ROI takes about 4,829 bets and a 5% ROI about 1,739; a 1% edge takes 43,461. Closing-line value converges much faster, which is why it is the primary measure."
   ],
   [
    "moneyline",
-   "418 picks, ROI -8.5% (-13.2% to -3.4%): credibly LOSING."
+   "422 picks, ROI -9.0% (-13.5% to -4.1%): credibly LOSING."
   ],
   [
    "parlay",
-   "67 picks, ROI -86.2% (-100.0% to -64.8%): credibly LOSING."
+   "70 picks, ROI -86.8% (-100.0% to -65.8%): credibly LOSING."
   ]
  ],
  "ranking_weights": {
@@ -3197,25 +10047,25 @@
    "strategy": "parlay_top2",
    "description": "The model's 2 best-ranked picks from different games combined into one ticket",
    "n_legs": 2,
-   "decimal": 5.426399999999999,
-   "p_model": 0.1880996470683656,
-   "p_market": 0.17757637244216348,
+   "decimal": 4.9,
+   "p_model": 0.20844892973224868,
+   "p_market": 0.1952469812214718,
    "stake": 10.0,
-   "ev": 0.020703924851778965,
+   "ev": 0.021399755688018662,
    "legs": [
     {
-     "label": "DET moneyline",
-     "game": "DET @ STL",
-     "decimal": 2.28,
-     "p_model": 0.44679552813075357,
-     "p_market": 0.4342286422146331
+     "label": "OTT moneyline",
+     "game": "WSH @ OTT",
+     "decimal": 1.96,
+     "p_model": 0.5129559596051048,
+     "p_market": 0.4983628980204192
     },
     {
      "label": "TOR moneyline",
      "game": "COL @ TOR",
-     "decimal": 2.38,
-     "p_model": 0.42099715692167516,
-     "p_market": 0.4089467049812665
+     "decimal": 2.5,
+     "p_model": 0.40636808254011025,
+     "p_market": 0.39177671932847624
     }
    ]
   },
@@ -3223,32 +10073,65 @@
    "strategy": "parlay_top3",
    "description": "The model's 3 best-ranked picks from different games combined into one ticket",
    "n_legs": 3,
-   "decimal": 11.395439999999999,
-   "p_model": 0.08966098538568022,
-   "p_market": 0.08286522904425127,
+   "decimal": 39.2,
+   "p_model": 0.03876540005749342,
+   "p_market": 0.02545748258906318,
    "stake": 10.0,
-   "ev": 0.021726379303395715,
+   "ev": 0.5196036822537421,
    "legs": [
     {
-     "label": "DET moneyline",
-     "game": "DET @ STL",
-     "decimal": 2.28,
-     "p_model": 0.44679552813075357,
-     "p_market": 0.4342286422146331
+     "label": "OTT moneyline",
+     "game": "WSH @ OTT",
+     "decimal": 1.96,
+     "p_model": 0.5129559596051048,
+     "p_market": 0.4983628980204192
     },
     {
      "label": "TOR moneyline",
      "game": "COL @ TOR",
-     "decimal": 2.38,
-     "p_model": 0.42099715692167516,
-     "p_market": 0.4089467049812665
+     "decimal": 2.5,
+     "p_model": 0.40636808254011025,
+     "p_market": 0.39177671932847624
     },
     {
-     "label": "MTL moneyline",
+     "label": "J. Evans to score (anytime)",
      "game": "MIN @ MTL",
-     "decimal": 2.1,
-     "p_model": 0.4766674833424465,
-     "p_market": 0.4666455784889987
+     "decimal": 8.0,
+     "p_model": 0.18597073205071057,
+     "p_market": 0.13038604965772221
+    }
+   ]
+  },
+  {
+   "strategy": "parlay_players3",
+   "description": "The 3 best-ranked PLAYER props (shots, points, assists, anytime goals) from different games in one ticket",
+   "n_legs": 3,
+   "decimal": 144.0,
+   "p_model": 0.018197507803987347,
+   "p_market": 0.0068104447523523685,
+   "stake": 10.0,
+   "ev": 1.6204411237741778,
+   "legs": [
+    {
+     "label": "J. Evans to score (anytime)",
+     "game": "MIN @ MTL",
+     "decimal": 8.0,
+     "p_model": 0.18597073205071057,
+     "p_market": 0.13038604965772221
+    },
+    {
+     "label": "T. Blueger to score (anytime)",
+     "game": "COL @ TOR",
+     "decimal": 9.0,
+     "p_model": 0.1634083476984941,
+     "p_market": 0.10918261385551105
+    },
+    {
+     "label": "J. Morrissey Under 0.5 points",
+     "game": "NJD @ WPG",
+     "decimal": 2.0,
+     "p_model": 0.5988155575564807,
+     "p_market": 0.47839965679473173
     }
    ]
   },
@@ -3256,32 +10139,32 @@
    "strategy": "parlay_favorites_control",
    "description": "CONTROL: flat $10 on the market favourites of 3 different games (no model; shows what parlay margin costs)",
    "n_legs": 3,
-   "decimal": 5.55555,
-   "p_model": 0.15621865820967104,
-   "p_market": 0.16844049555365337,
+   "decimal": 5.6626199999999995,
+   "p_model": 0.13001771993184738,
+   "p_market": 0.1643258775157025,
    "stake": 10.0,
-   "ev": -0.13211943338326204,
+   "ev": -0.26375905875952244,
    "legs": [
     {
      "label": "COL moneyline",
      "game": "COL @ TOR",
-     "decimal": 1.65,
+     "decimal": 1.63,
      "p_model": 0.5608419881276823,
-     "p_market": 0.5910532950187335
+     "p_market": 0.6082232806715238
     },
     {
      "label": "MIN moneyline",
      "game": "MIN @ MTL",
-     "decimal": 1.85,
+     "decimal": 1.8,
      "p_model": 0.5103690240759102,
-     "p_market": 0.5333544215110013
+     "p_market": 0.5385837805747973
     },
     {
-     "label": "OTT moneyline",
+     "label": "WSH moneyline",
      "game": "WSH @ OTT",
-     "decimal": 1.82,
-     "p_model": 0.5457680090279609,
-     "p_market": 0.5343231218842891
+     "decimal": 1.93,
+     "p_model": 0.45423199097203915,
+     "p_market": 0.5016371019795808
     }
    ]
   }
@@ -3330,10 +10213,10 @@
    "strategy": "always_over",
    "bets": 267.0,
    "staked": 2670.0,
-   "profit": -45.70000000000002,
-   "roi": -0.017116104868913865,
-   "roi_lo": -0.134123595505618,
-   "roi_hi": 0.09811235955056166,
+   "profit": -45.70000000000003,
+   "roi": -0.017116104868913868,
+   "roi_lo": -0.13554494382022472,
+   "roi_hi": 0.09624812734082382,
    "win_rate": 0.5131086142322098,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3342,10 +10225,10 @@
    "strategy": "always_under",
    "bets": 222.0,
    "staked": 2220.0,
-   "profit": -99.10000000000002,
-   "roi": -0.04463963963963965,
-   "roi_lo": -0.18784909909909908,
-   "roi_hi": 0.08245157657657648,
+   "profit": -99.10000000000005,
+   "roi": -0.04463963963963966,
+   "roi_lo": -0.18640202702702707,
+   "roi_hi": 0.08414752252252251,
    "win_rate": 0.4864864864864865,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3354,10 +10237,10 @@
    "strategy": "ast_edge",
    "bets": 112.0,
    "staked": 1120.0,
-   "profit": -50.999999999999986,
-   "roi": -0.04553571428571427,
-   "roi_lo": -0.20654910714285712,
-   "roi_hi": 0.11000446428571428,
+   "profit": -50.99999999999997,
+   "roi": -0.04553571428571426,
+   "roi_lo": -0.20027232142857143,
+   "roi_hi": 0.11456026785714288,
    "win_rate": 0.5982142857142857,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3366,10 +10249,10 @@
    "strategy": "ast_over_control",
    "bets": 111.0,
    "staked": 1110.0,
-   "profit": 83.80000000000001,
-   "roi": 0.0754954954954955,
-   "roi_lo": -0.10272972972972973,
-   "roi_hi": 0.2509684684684681,
+   "profit": 83.79999999999998,
+   "roi": 0.07549549549549547,
+   "roi_lo": -0.10887612612612614,
+   "roi_hi": 0.25327702702702687,
    "win_rate": 0.5585585585585585,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3378,10 +10261,10 @@
    "strategy": "ast_over_edge",
    "bets": 94.0,
    "staked": 940.0,
-   "profit": -108.69999999999999,
-   "roi": -0.11563829787234041,
-   "roi_lo": -0.38968882978723407,
-   "roi_hi": 0.20203989361702115,
+   "profit": -108.7,
+   "roi": -0.11563829787234042,
+   "roi_lo": -0.40023138297872346,
+   "roi_hi": 0.19703457446808503,
    "win_rate": 0.2872340425531915,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3390,10 +10273,10 @@
    "strategy": "ast_under_edge",
    "bets": 112.0,
    "staked": 1120.0,
-   "profit": -3.099999999999966,
-   "roi": -0.0027678571428571123,
-   "roi_lo": -0.14288839285714286,
-   "roi_hi": 0.12580803571428573,
+   "profit": -3.099999999999959,
+   "roi": -0.0027678571428571062,
+   "roi_lo": -0.14841964285714282,
+   "roi_hi": 0.13286160714285716,
    "win_rate": 0.6607142857142857,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3404,8 +10287,8 @@
    "staked": 220.0,
    "profit": -71.19999999999999,
    "roi": -0.3236363636363636,
-   "roi_lo": -0.7318181818181818,
-   "roi_hi": 0.08864772727272724,
+   "roi_lo": -0.7286363636363635,
+   "roi_hi": 0.09593181818181803,
    "win_rate": 0.3181818181818182,
    "avg_clv": -0.013041486673756608,
    "n_clv": 22.0
@@ -3414,10 +10297,10 @@
    "strategy": "every_game",
    "bets": 280.0,
    "staked": 2800.0,
-   "profit": 50.2,
-   "roi": 0.01792857142857143,
-   "roi_lo": -0.08325267857142858,
-   "roi_hi": 0.11939999999999996,
+   "profit": 50.20000000000002,
+   "roi": 0.017928571428571436,
+   "roi_lo": -0.08315178571428572,
+   "roi_hi": 0.11618482142857138,
    "win_rate": 0.6071428571428571,
    "avg_clv": -0.01944497574211445,
    "n_clv": 280.0
@@ -3428,8 +10311,8 @@
    "staked": 2790.0,
    "profit": -119.00000000000004,
    "roi": -0.042652329749103955,
-   "roi_lo": -0.13420161290322583,
-   "roi_hi": 0.046454301075268795,
+   "roi_lo": -0.1303763440860215,
+   "roi_hi": 0.050475806451612815,
    "win_rate": 0.6236559139784946,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3438,10 +10321,10 @@
    "strategy": "every_total",
    "bets": 267.0,
    "staked": 2670.0,
-   "profit": -182.99999999999997,
-   "roi": -0.06853932584269662,
-   "roi_lo": -0.1833820224719101,
-   "roi_hi": 0.04929494382022467,
+   "profit": -183.00000000000003,
+   "roi": -0.06853932584269665,
+   "roi_lo": -0.18339232209737827,
+   "roi_hi": 0.04638857677902609,
    "win_rate": 0.4868913857677903,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3452,8 +10335,8 @@
    "staked": 2800.0,
    "profit": -549.0999999999999,
    "roi": -0.1961071428571428,
-   "roi_lo": -0.31790625,
-   "roi_hi": -0.0741044642857143,
+   "roi_lo": -0.314,
+   "roi_hi": -0.07556607142857147,
    "win_rate": 0.39285714285714285,
    "avg_clv": -0.026139691683968045,
    "n_clv": 280.0
@@ -3464,8 +10347,8 @@
    "staked": 1120.0,
    "profit": -78.0,
    "roi": -0.06964285714285715,
-   "roi_lo": -0.31968080357142853,
-   "roi_hi": 0.18048214285714265,
+   "roi_lo": -0.32333258928571434,
+   "roi_hi": 0.19259151785714287,
    "win_rate": 0.33035714285714285,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3476,8 +10359,8 @@
    "staked": 700.0,
    "profit": -150.5,
    "roi": -0.215,
-   "roi_lo": -0.7085892857142857,
-   "roi_hi": 0.38146428571428553,
+   "roi_lo": -0.7043392857142857,
+   "roi_hi": 0.4044107142857136,
    "win_rate": 0.11428571428571428,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3488,10 +10371,10 @@
    "staked": 2330.0,
    "profit": 67.30000000000001,
    "roi": 0.028884120171673824,
-   "roi_lo": -0.08893240343347639,
-   "roi_hi": 0.14929506437768225,
+   "roi_lo": -0.09305257510729611,
+   "roi_hi": 0.14415879828326156,
    "win_rate": 0.5708154506437768,
-   "avg_clv": -0.025242356449735208,
+   "avg_clv": -0.02524235644973521,
    "n_clv": 233.0
   },
   {
@@ -3500,8 +10383,8 @@
    "staked": 2800.0,
    "profit": 96.40000000000002,
    "roi": 0.03442857142857143,
-   "roi_lo": -0.06334375,
-   "roi_hi": 0.12557767857142854,
+   "roi_lo": -0.06699553571428572,
+   "roi_hi": 0.12928928571428572,
    "win_rate": 0.625,
    "avg_clv": -0.020148950928350062,
    "n_clv": 280.0
@@ -3524,8 +10407,8 @@
    "staked": 310.0,
    "profit": -32.1,
    "roi": -0.10354838709677419,
-   "roi_lo": -0.49549193548387105,
-   "roi_hi": 0.29874999999999985,
+   "roi_lo": -0.4845483870967742,
+   "roi_hi": 0.27166935483870935,
    "win_rate": 0.41935483870967744,
    "avg_clv": -0.02434712607466202,
    "n_clv": 31.0
@@ -3536,8 +10419,8 @@
    "staked": 570.0,
    "profit": -40.7,
    "roi": -0.07140350877192983,
-   "roi_lo": -0.32923684210526316,
-   "roi_hi": 0.16281140350877188,
+   "roi_lo": -0.30439035087719296,
+   "roi_hi": 0.16457017543859642,
    "win_rate": 0.49122807017543857,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3596,8 +10479,8 @@
    "staked": 1590.0,
    "profit": -182.8,
    "roi": -0.11496855345911951,
-   "roi_lo": -0.26428616352201256,
-   "roi_hi": 0.029080188679245163,
+   "roi_lo": -0.2645471698113208,
+   "roi_hi": 0.03799999999999993,
    "win_rate": 0.4716981132075472,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3608,8 +10491,8 @@
    "staked": 1630.0,
    "profit": -37.300000000000026,
    "roi": -0.0228834355828221,
-   "roi_lo": -0.15571472392638036,
-   "roi_hi": 0.11504907975460113,
+   "roi_lo": -0.15503987730061347,
+   "roi_hi": 0.10478834355828222,
    "win_rate": 0.5828220858895705,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3620,8 +10503,8 @@
    "staked": 1330.0,
    "profit": -379.5,
    "roi": -0.28533834586466167,
-   "roi_lo": -0.472781954887218,
-   "roi_hi": -0.07044360902255642,
+   "roi_lo": -0.47685150375939855,
+   "roi_hi": -0.08167481203007547,
    "win_rate": 0.3082706766917293,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3632,8 +10515,8 @@
    "staked": 1590.0,
    "profit": -62.59999999999998,
    "roi": -0.039371069182389924,
-   "roi_lo": -0.1796446540880503,
-   "roi_hi": 0.10176886792452827,
+   "roi_lo": -0.17840408805031446,
+   "roi_hi": 0.10736163522012576,
    "win_rate": 0.5283018867924528,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3644,8 +10527,8 @@
    "staked": 2320.0,
    "profit": -140.00000000000006,
    "roi": -0.06034482758620692,
-   "roi_lo": -0.15815301724137934,
-   "roi_hi": 0.039009698275861815,
+   "roi_lo": -0.15513038793103448,
+   "roi_hi": 0.03579633620689643,
    "win_rate": 0.6120689655172413,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3656,8 +10539,8 @@
    "staked": 870.0,
    "profit": -32.4,
    "roi": -0.037241379310344824,
-   "roi_lo": -0.20031321839080457,
-   "roi_hi": 0.1267902298850574,
+   "roi_lo": -0.20323563218390803,
+   "roi_hi": 0.12552298850574709,
    "win_rate": 0.6206896551724138,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3668,8 +10551,8 @@
    "staked": 1270.0,
    "profit": -215.8,
    "roi": -0.16992125984251968,
-   "roi_lo": -0.3355196850393701,
-   "roi_hi": -0.006446850393700838,
+   "roi_lo": -0.32956102362204726,
+   "roi_hi": -0.010468503937007902,
    "win_rate": 0.48031496062992124,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3680,8 +10563,8 @@
    "staked": 530.0,
    "profit": -149.0,
    "roi": -0.2811320754716981,
-   "roi_lo": -0.5762594339622641,
-   "roi_hi": 0.047014150943396095,
+   "roi_lo": -0.5696415094339622,
+   "roi_hi": 0.032471698113207444,
    "win_rate": 0.2830188679245283,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3690,10 +10573,10 @@
    "strategy": "sog_edge",
    "bets": 214.0,
    "staked": 2140.0,
-   "profit": -40.29999999999998,
-   "roi": -0.018831775700934573,
-   "roi_lo": -0.13996845794392523,
-   "roi_hi": 0.10968107476635511,
+   "profit": -40.29999999999997,
+   "roi": -0.018831775700934566,
+   "roi_lo": -0.14388200934579437,
+   "roi_hi": 0.11237266355140166,
    "win_rate": 0.5280373831775701,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3702,10 +10585,10 @@
    "strategy": "sog_over_control",
    "bets": 218.0,
    "staked": 2180.0,
-   "profit": 2.0,
-   "roi": 0.0009174311926605505,
-   "roi_lo": -0.1302545871559633,
-   "roi_hi": 0.13193119266055042,
+   "profit": 2.000000000000014,
+   "roi": 0.000917431192660557,
+   "roi_lo": -0.12940596330275228,
+   "roi_hi": 0.13529587155963294,
    "win_rate": 0.5,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3714,10 +10597,10 @@
    "strategy": "sog_over_edge",
    "bets": 143.0,
    "staked": 1430.0,
-   "profit": -142.0,
-   "roi": -0.0993006993006993,
-   "roi_lo": -0.2593916083916084,
-   "roi_hi": 0.06588111888111885,
+   "profit": -141.99999999999997,
+   "roi": -0.09930069930069928,
+   "roi_lo": -0.2607062937062937,
+   "roi_hi": 0.06161188811188806,
    "win_rate": 0.45454545454545453,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3726,10 +10609,10 @@
    "strategy": "sog_under_edge",
    "bets": 175.0,
    "staked": 1750.0,
-   "profit": -58.40000000000001,
-   "roi": -0.03337142857142858,
-   "roi_lo": -0.17931428571428568,
-   "roi_hi": 0.10881428571428563,
+   "profit": -58.400000000000006,
+   "roi": -0.03337142857142857,
+   "roi_lo": -0.1766442857142857,
+   "roi_hi": 0.10298285714285678,
    "win_rate": 0.52,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3740,8 +10623,8 @@
    "staked": 1580.0,
    "profit": -150.5,
    "roi": -0.09525316455696202,
-   "roi_lo": -0.24671360759493674,
-   "roi_hi": 0.05349683544303789,
+   "roi_lo": -0.24374841772151898,
+   "roi_hi": 0.05684968354430373,
    "win_rate": 0.46835443037974683,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3750,10 +10633,10 @@
    "strategy": "under_edge",
    "bets": 103.0,
    "staked": 1030.0,
-   "profit": -70.20000000000003,
-   "roi": -0.06815533980582528,
-   "roi_lo": -0.26262621359223304,
-   "roi_hi": 0.12006067961165016,
+   "profit": -70.2,
+   "roi": -0.06815533980582525,
+   "roi_lo": -0.2592305825242718,
+   "roi_hi": 0.12883737864077668,
    "win_rate": 0.47572815533980584,
    "avg_clv": null,
    "n_clv": 0.0
@@ -3764,10 +10647,10 @@
    "staked": 1210.0,
    "profit": -407.4,
    "roi": -0.336694214876033,
-   "roi_lo": -0.5243925619834711,
-   "roi_hi": -0.14478719008264468,
+   "roi_lo": -0.5217706611570248,
+   "roi_hi": -0.14510537190082654,
    "win_rate": 0.2809917355371901,
-   "avg_clv": -0.028722064456050002,
+   "avg_clv": -0.028722064456050005,
    "n_clv": 121.0
   },
   {
@@ -3776,10 +10659,10 @@
    "staked": 2330.0,
    "profit": -386.30000000000007,
    "roi": -0.16579399141630904,
-   "roi_lo": -0.30468884120171674,
-   "roi_hi": -0.024539699570815508,
+   "roi_lo": -0.3113326180257511,
+   "roi_hi": -0.023898068669527945,
    "win_rate": 0.3648068669527897,
-   "avg_clv": -0.030026127589383417,
+   "avg_clv": -0.03002612758938342,
    "n_clv": 233.0
   }
  ],
