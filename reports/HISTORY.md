@@ -6,16 +6,17 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 ## Overall
 
-- Games with a logged recommendation and a result: **280** (bet on 8; passed on 97%)
-- Bets: staked $21.06 · profit $-16.18 · **ROI -76.8%** · win rate 12.5%
-- **Closing-line value**: -2.25% per $1 (95% CI -3.89% to -0.05%), beat the close on 12% of 8 bets
+- Games with a logged recommendation and a result: **287** (bet on 9; passed on 97%)
+- Bets: staked $23.67 · profit $-18.79 · **ROI -79.4%** · win rate 11.1%
+- **Closing-line value**: -2.39% per $1 (95% CI -3.87% to -0.37%), beat the close on 11% of 9 bets
 - ⚠️ Far too few bets to separate skill from luck (about 6,900 would be needed to detect a true 3% ROI). Closing-line value converges much faster.
 
 ## By day
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
-| 2026-11-10 | 7 | 1 | - | - | - | 1 | [report](daily/2026-11-10-late.md) · [page](../site/archive/2026-11-10.html) |
+| 2026-11-11 | 6 | 0 | - | - | - | - | [report](daily/2026-11-11-morning.md) · [page](../site/archive/2026-11-11.html) |
+| 2026-11-10 | 7 | 1 | $2.61 | $-2.61 | -100.0% | - | [report](daily/2026-11-10-late.md) · [page](../site/archive/2026-11-10.html) |
 | 2026-11-09 | 3 | 1 | $2.94 | $-2.94 | -100.0% | - | [report](daily/2026-11-09-late.md) · [page](../site/archive/2026-11-09.html) |
 | 2026-11-08 | 6 | 0 | - | - | - | - | [report](daily/2026-11-08-late.md) · [page](../site/archive/2026-11-08.html) |
 | 2026-11-07 | 12 | 1 | $2.58 | $-2.58 | -100.0% | - | [report](daily/2026-11-07-late.md) · [page](../site/archive/2026-11-07.html) |
@@ -62,7 +63,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Game | Pick | Price | Stake | Edge | Result | Profit | CLV |
 |---|---|---|---|---|---|---|---|---|
-| 2026-11-10 | COL @ TOR | TOR | 2.50 | $2.61 | +4.7% | pending | - | - |
+| 2026-11-10 | COL @ TOR | TOR | 2.50 | $2.61 | +4.7% | lost | $-2.61 | -3.5% |
 | 2026-11-09 | NYR @ EDM | NYR | 2.47 | $2.94 | +5.0% | lost | $-2.94 | -1.3% |
 | 2026-11-07 | DET @ COL | DET | 2.95 | $2.58 | +7.4% | lost | $-2.58 | -2.5% |
 | 2026-11-05 | CAR @ NYI | NYI | 2.71 | $1.62 | +6.8% | lost | $-1.62 | -4.5% |
