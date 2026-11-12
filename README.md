@@ -9,9 +9,9 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 <!-- PICKS:START -->
 
-### Today's picks: 2026-11-11
+### Today's picks: 2026-11-12
 
-**6 game(s) · 1 recommended bet(s)** · late run · model health **WARN** · updated 2026-11-11 21:06 UTC
+**11 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-11-12 13:05 UTC
 
 | | |
 |---|---|
@@ -23,12 +23,19 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| TBL @ BUF | 47.6% | 45.6% | no bet |
-| NYR @ CGY | 47.2% | 42.9% | **BET CGY** $2.90 |
-| PHI @ EDM | 60.2% | 63.0% | no bet |
-| UTA @ VGK | 53.4% | 53.7% | no bet |
-| NSH @ ANA | 58.3% | 56.5% | no bet |
-| PIT @ SJS | 42.6% | 43.3% | no bet |
+| CAR @ SEA | 33.0% | 26.9% | no bet |
+| MTL @ BOS | 54.5% | 53.1% | no bet |
+| MIN @ TOR | 43.2% | 39.1% | no bet |
+| COL @ OTT | 50.5% | 47.7% | no bet |
+| WSH @ NJD | 58.8% | 58.1% | no bet |
+| TBL @ CBJ | 49.6% | 49.1% | no bet |
+| DET @ FLA | 59.1% | 61.0% | no bet |
+| BUF @ CHI | 43.7% | 41.0% | no bet |
+| WPG @ DAL | 63.3% | 61.8% | no bet |
+| STL @ UTA | 52.9% | 52.6% | no bet |
+| NYI @ LAK | 54.0% | 53.2% | no bet |
+
+*No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
 *Research and educational project; no guarantee of profit. The numbers above are not betting advice.*
 
