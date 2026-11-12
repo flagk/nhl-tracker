@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-11-12
 
-**11 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-11-12 13:05 UTC
+**11 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-11-12 14:06 UTC
 
 | | |
 |---|---|
@@ -23,17 +23,17 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| CAR @ SEA | 33.0% | 26.9% | no bet |
-| MTL @ BOS | 54.5% | 53.1% | no bet |
+| CAR @ SEA | 33.0% | 26.7% | no bet |
+| MTL @ BOS | 54.5% | 53.2% | no bet |
 | MIN @ TOR | 43.2% | 39.1% | no bet |
-| COL @ OTT | 50.5% | 47.7% | no bet |
-| WSH @ NJD | 58.8% | 58.1% | no bet |
+| COL @ OTT | 50.5% | 48.1% | no bet |
+| WSH @ NJD | 58.8% | 58.2% | no bet |
 | TBL @ CBJ | 49.6% | 49.1% | no bet |
-| DET @ FLA | 59.1% | 61.0% | no bet |
-| BUF @ CHI | 43.7% | 41.0% | no bet |
-| WPG @ DAL | 63.3% | 61.8% | no bet |
-| STL @ UTA | 52.9% | 52.6% | no bet |
-| NYI @ LAK | 54.0% | 53.2% | no bet |
+| DET @ FLA | 59.1% | 61.1% | no bet |
+| BUF @ CHI | 43.7% | 41.1% | no bet |
+| WPG @ DAL | 63.3% | 61.5% | no bet |
+| STL @ UTA | 52.9% | 52.2% | no bet |
+| NYI @ LAK | 54.0% | 53.1% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 

@@ -8,14 +8,14 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 - Games with a logged recommendation and a result: **293** (bet on 10; passed on 97%)
 - Bets: staked $26.57 · profit $-21.69 · **ROI -81.6%** · win rate 10.0%
-- **Closing-line value**: -2.33% per $1 (95% CI -3.68% to -0.59%), beat the close on 10% of 10 bets
+- **Closing-line value**: -2.33% per $1 (95% CI -3.67% to -0.60%), beat the close on 10% of 10 bets
 - ⚠️ Far too few bets to separate skill from luck (about 6,900 would be needed to detect a true 3% ROI). Closing-line value converges much faster.
 
 ## By day
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
-| 2026-11-12 | 11 | 0 | - | - | - | - | [report](daily/2026-11-12-morning.md) · [page](../site/archive/2026-11-12.html) |
+| 2026-11-12 | 11 | 0 | - | - | - | - | [report](daily/2026-11-12-late.md) · [page](../site/archive/2026-11-12.html) |
 | 2026-11-11 | 6 | 1 | $2.90 | $-2.90 | -100.0% | - | [report](daily/2026-11-11-late.md) · [page](../site/archive/2026-11-11.html) |
 | 2026-11-10 | 7 | 1 | $2.61 | $-2.61 | -100.0% | - | [report](daily/2026-11-10-late.md) · [page](../site/archive/2026-11-10.html) |
 | 2026-11-09 | 3 | 1 | $2.94 | $-2.94 | -100.0% | - | [report](daily/2026-11-09-late.md) · [page](../site/archive/2026-11-09.html) |
@@ -69,8 +69,8 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 | 2026-11-09 | NYR @ EDM | NYR | 2.47 | $2.94 | +5.0% | lost | $-2.94 | -1.3% |
 | 2026-11-07 | DET @ COL | DET | 2.95 | $2.58 | +7.4% | lost | $-2.58 | -2.5% |
 | 2026-11-05 | CAR @ NYI | NYI | 2.71 | $1.62 | +6.8% | lost | $-1.62 | -4.5% |
-| 2026-10-31 | STL @ DET | DET | 2.04 | $3.25 | +7.2% | lost | $-3.25 | +4.5% |
 | 2026-10-31 | TOR @ VAN | VAN | 2.60 | $1.76 | +7.6% | lost | $-1.76 | -4.8% |
+| 2026-10-31 | STL @ DET | DET | 2.04 | $3.25 | +7.2% | lost | $-3.25 | +4.5% |
 | 2026-10-29 | NYI @ MIN | NYI | 2.68 | $1.82 | +4.3% | won | $+3.06 | -3.2% |
 | 2026-10-27 | MTL @ STL | STL | 2.03 | $4.75 | +5.4% | lost | $-4.75 | -1.8% |
 | 2026-10-25 | MIN @ VAN | VAN | 2.71 | $2.34 | +5.1% | lost | $-2.34 | -4.4% |
