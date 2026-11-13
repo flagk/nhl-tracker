@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-11-13
 
-**2 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-11-13 13:06 UTC
+**2 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-11-13 23:05 UTC
 
 | | |
 |---|---|
@@ -23,8 +23,8 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| NYR @ VAN | 39.0% | 33.1% | no bet |
-| NSH @ VGK | 61.9% | 62.6% | no bet |
+| NYR @ VAN | 39.0% | 33.8% | no bet |
+| NSH @ VGK | 61.9% | 59.4% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
