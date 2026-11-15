@@ -93,3 +93,21 @@ team away,WSH,72,0.516836,0.513889,-0.00294676,-0.0506013,0.959643,35,-0.0609998
 team away,PIT,71,0.561973,0.56338,0.00140683,0.0242102,0.980685,37,0.0165731,0.207508,34,-0.0150976,-0.178294,0.998361,no reliable tendency,"Model vs outcomes (walk-forward, out of sample)"
 team away,OTT,72,0.514713,0.513889,-0.000823718,-0.0141345,0.988723,36,0.0191244,0.232442,36,-0.0207719,-0.25161,0.998361,no reliable tendency,"Model vs outcomes (walk-forward, out of sample)"
 team at home,SJS,70,0.399882,0.4,0.000118027,0.00205381,0.998361,35,-0.122332,-1.532,35,0.122568,1.4827,0.998361,no reliable tendency,"Model vs outcomes (walk-forward, out of sample)"
+season stage,games 15 to 60,74,0.523464,0.391892,-0.131572,-2.32072,0.020302,0,,,74,-0.131572,-2.32072,0.365436,no reliable tendency,Betting market vs outcomes (live odds)
+month,November,99,0.526676,0.434343,-0.092333,-1.88475,0.0594633,0,,,99,-0.092333,-1.88475,0.427731,no reliable tendency,Betting market vs outcomes (live odds)
+home win probability,0.50 to 0.55,57,0.522776,0.421053,-0.101723,-1.53821,0.123996,31,-0.0377451,-0.420929,26,-0.178005,-1.81789,0.427731,no reliable tendency,Betting market vs outcomes (live odds)
+home win probability,0.55 to 0.60,55,0.572854,0.672727,0.099873,1.49812,0.134103,36,0.0656226,0.796492,19,0.164769,1.45228,0.427731,no reliable tendency,Betting market vs outcomes (live odds)
+home win probability,0.60 to 1.00,81,0.664145,0.740741,0.0765959,1.46788,0.142136,39,0.133289,1.76657,42,0.0239525,0.331561,0.427731,no reliable tendency,Betting market vs outcomes (live odds)
+home win probability,0.45 to 0.50,60,0.477335,0.383333,-0.0940017,-1.45842,0.144725,26,-0.0157402,-0.160765,34,-0.153849,-1.79674,0.427731,no reliable tendency,Betting market vs outcomes (live odds)
+weekday,Tue,65,0.513571,0.430769,-0.0828018,-1.35423,0.175662,36,-0.0198141,-0.241115,29,-0.160994,-1.75924,0.427731,no reliable tendency,Betting market vs outcomes (live odds)
+season stage,first 15 games (ratings lean on last year),246,0.533377,0.573171,0.0397937,1.27783,0.201308,160,0.0591127,1.53095,86,0.0038514,0.0731153,0.427731,no reliable tendency,Betting market vs outcomes (live odds)
+month,October,218,0.532259,0.573394,0.0411352,1.24301,0.213865,157,0.0588002,1.50861,61,-0.00433044,-0.0691304,0.427731,no reliable tendency,Betting market vs outcomes (live odds)
+rest,away on a back-to-back,58,0.552483,0.62069,0.0682066,1.07006,0.284594,33,0.056861,0.67019,25,0.0831829,0.861364,0.470027,no reliable tendency,Betting market vs outcomes (live odds)
+favourite,away team favoured,127,0.431859,0.385827,-0.0460326,-1.05388,0.291937,54,0.0568048,0.851319,73,-0.122104,-2.11339,0.470027,no reliable tendency,Betting market vs outcomes (live odds)
+weekday,Thu,74,0.537575,0.594595,0.0570195,1.00821,0.313352,41,0.147376,1.93836,33,-0.0552415,-0.652839,0.470027,no reliable tendency,Betting market vs outcomes (live odds)
+favourite,home team favoured,193,0.596378,0.626943,0.030565,0.874364,0.38192,106,0.0602884,1.27346,87,-0.0056497,-0.109001,0.528812,no reliable tendency,Betting market vs outcomes (live odds)
+rest,home has 1+ more days of rest,111,0.537386,0.558559,0.021173,0.457564,0.647266,49,0.108268,1.55502,62,-0.0476599,-0.769577,0.800054,no reliable tendency,Betting market vs outcomes (live odds)
+rest,away has 1+ more days of rest,52,0.490285,0.461538,-0.0287466,-0.422947,0.672334,31,0.116448,1.32926,21,-0.243082,-2.25681,0.800054,no reliable tendency,Betting market vs outcomes (live odds)
+matchup,division / rival game,93,0.534886,0.516129,-0.0187572,-0.3703,0.711159,55,0.0756871,1.14544,38,-0.155453,-1.97078,0.800054,no reliable tendency,Betting market vs outcomes (live odds)
+home win probability,0.00 to 0.45,67,0.391135,0.38806,-0.00307517,-0.0518077,0.958682,28,0.124168,1.36338,39,-0.0944293,-1.20676,0.996583,no reliable tendency,Betting market vs outcomes (live odds)
+weekday,Sat,89,0.539546,0.539326,-0.000220552,-0.00428313,0.996583,41,0.0960245,1.26518,48,-0.0824299,-1.17601,0.996583,no reliable tendency,Betting market vs outcomes (live odds)
