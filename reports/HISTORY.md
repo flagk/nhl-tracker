@@ -8,14 +8,14 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 - Games with a logged recommendation and a result: **320** (bet on 11; passed on 97%)
 - Bets: staked $30.23 · profit $-25.35 · **ROI -83.9%** · win rate 9.1%
-- **Closing-line value**: -2.15% per $1 (95% CI -3.48% to -0.52%), beat the close on 9% of 11 bets
+- **Closing-line value**: -2.15% per $1 (95% CI -3.47% to -0.58%), beat the close on 9% of 11 bets
 - ⚠️ Far too few bets to separate skill from luck (about 6,900 would be needed to detect a true 3% ROI). Closing-line value converges much faster.
 
 ## By day
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
-| 2026-11-15 | 5 | 1 | - | - | - | 1 | [report](daily/2026-11-15-morning.md) · [page](../site/archive/2026-11-15.html) |
+| 2026-11-15 | 5 | 0 | - | - | - | - | [report](daily/2026-11-15-late.md) · [page](../site/archive/2026-11-15.html) |
 | 2026-11-14 | 14 | 1 | $3.66 | $-3.66 | -100.0% | - | [report](daily/2026-11-14-late.md) · [page](../site/archive/2026-11-14.html) |
 | 2026-11-13 | 2 | 0 | - | - | - | - | [report](daily/2026-11-13-late.md) · [page](../site/archive/2026-11-13.html) |
 | 2026-11-12 | 11 | 0 | - | - | - | - | [report](daily/2026-11-12-late.md) · [page](../site/archive/2026-11-12.html) |
@@ -67,7 +67,6 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Game | Pick | Price | Stake | Edge | Result | Profit | CLV |
 |---|---|---|---|---|---|---|---|---|
-| 2026-11-15 | EDM @ PHI | PHI | 2.32 | $2.18 | +7.3% | pending | - | - |
 | 2026-11-14 | WPG @ CHI | CHI | 2.45 | $3.66 | +4.8% | lost | $-3.66 | -0.4% |
 | 2026-11-11 | NYR @ CGY | CGY | 2.29 | $2.90 | +4.3% | lost | $-2.90 | -1.8% |
 | 2026-11-10 | COL @ TOR | TOR | 2.50 | $2.61 | +4.7% | lost | $-2.61 | -3.5% |
