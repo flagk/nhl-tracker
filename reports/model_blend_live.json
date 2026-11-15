@@ -1,0 +1,47 @@
+[
+ {
+  "model_weight": 0.0,
+  "n": 122,
+  "log_loss": 0.6296516745997806,
+  "gain_over_market": 0.0,
+  "ci_low": 0.0,
+  "ci_high": 0.0,
+  "p_not_better_than_market": 1.0
+ },
+ {
+  "model_weight": 0.25,
+  "n": 122,
+  "log_loss": 0.6319860975621221,
+  "gain_over_market": -0.0023344229623416275,
+  "ci_low": -0.00554390571711859,
+  "ci_high": 0.0016998813672911488,
+  "p_not_better_than_market": 0.8887778055486129
+ },
+ {
+  "model_weight": 0.5,
+  "n": 122,
+  "log_loss": 0.6349202239814454,
+  "gain_over_market": -0.005268549381664836,
+  "ci_low": -0.011723644164013305,
+  "ci_high": 0.0027547948544628417,
+  "p_not_better_than_market": 0.9135216195951013
+ },
+ {
+  "model_weight": 0.75,
+  "n": 122,
+  "log_loss": 0.6384484279077798,
+  "gain_over_market": -0.008796753307999288,
+  "ci_low": -0.018497622130155992,
+  "ci_high": 0.003172260844610622,
+  "p_not_better_than_market": 0.9315171207198201
+ },
+ {
+  "model_weight": 1.0,
+  "n": 122,
+  "log_loss": 0.6425707359767422,
+  "gain_over_market": -0.012919061376961511,
+  "ci_low": -0.02598673685840005,
+  "ci_high": 0.0030510200114818326,
+  "p_not_better_than_market": 0.9477630592351912
+ }
+]

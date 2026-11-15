@@ -37,21 +37,30 @@ def load_confirmations(store: Store, path: str | Path = MANUAL_PATH) -> int:
         raise ValueError(f"{p} must have columns {sorted(need)} (optional: player_id); found {list(df.columns)}")
     ids = store.df("SELECT player_id, name FROM goalie_game GROUP BY player_id").drop_duplicates("name").set_index("name").player_id.to_dict()
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    old = {(r.game_date, r.team): (r.player_id, r.captured_at) for r in store.df("SELECT game_date, team, player_id, captured_at FROM goalie_confirmations").itertuples()}
     rows = []
     for r in df.itertuples(index=False):
         pid = getattr(r, "player_id", None)
         pid = int(pid) if pid is not None and pd.notna(pid) else ids.get(r.name)
         if pid is None:
             log.warning("confirmed goalie %r (%s) not found in goalie history; report will show the name only", r.name, r.team)
-        rows.append({"game_date": str(r.date)[:10], "team": canon(r.team), "player_id": pid, "name": r.name, "source": "manual", "captured_at": now})
+        key = (str(r.date)[:10], canon(r.team))
+        seen = old.get(key)
+        stamp = seen[1] if seen and seen[0] == pid and seen[1] else now            # an unchanged confirmation keeps the time it was FIRST seen, so reloading the file never makes it look earlier
+        rows.append({"game_date": key[0], "team": key[1], "player_id": pid, "name": r.name, "source": "manual", "captured_at": stamp})
     return store.upsert("goalie_confirmations", rows, ["game_date", "team"])
 
 
-def starter_overrides(store: Store, games: pd.DataFrame) -> dict:
-    """{(game_id, team): player_id} for confirmed starters on the given upcoming games."""
+def starter_overrides(store: Store, games: pd.DataFrame, as_of=None) -> dict:
+    """{(game_id, team): player_id} for confirmed starters on the given upcoming games. With ``as_of`` only confirmations captured at or before that time
+    count: a confirmation that arrived after the decision time must not shape the pick."""
     conf = store.df("SELECT * FROM goalie_confirmations WHERE player_id IS NOT NULL")
     if conf.empty:
         return {}
+    if as_of is not None:
+        conf = conf[pd.to_datetime(conf.captured_at, utc=True, errors="coerce") <= pd.Timestamp(as_of).tz_convert("UTC")]
+        if conf.empty:
+            return {}
     key = {(r.game_date, r.team): int(r.player_id) for r in conf.itertuples()}
     out = {}
     for g in games.itertuples():
@@ -62,9 +71,11 @@ def starter_overrides(store: Store, games: pd.DataFrame) -> dict:
     return out
 
 
-def goalie_display(store: Store, team: str, date: str) -> tuple[str, str]:
-    """(name, 'confirmed' | 'probable' | 'unknown') for the report."""
-    c = store.df("SELECT name FROM goalie_confirmations WHERE game_date=? AND team=?", [date, team])
+def goalie_display(store: Store, team: str, date: str, as_of=None) -> tuple[str, str]:
+    """(name, 'confirmed' | 'probable' | 'unknown') for the report; with ``as_of`` a confirmation captured later than that does not count."""
+    c = store.df("SELECT name, captured_at FROM goalie_confirmations WHERE game_date=? AND team=?", [date, team])
+    if as_of is not None and len(c):
+        c = c[pd.to_datetime(c.captured_at, utc=True, errors="coerce") <= pd.Timestamp(as_of).tz_convert("UTC")]
     if len(c):
         return str(c.name.iloc[0]), "confirmed"
     recent = store.df("SELECT gg.player_id, gg.name FROM goalie_game gg JOIN games g ON g.game_id=gg.game_id "

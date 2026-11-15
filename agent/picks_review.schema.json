@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/flagk/nhl-tracker/agent/picks_review.schema.json",
+  "title": "picks_review.json",
+  "description": "What the pre-game review agent may write: one KEEP / FLAG / VETO decision per candidate pick, with a one-sentence reason and sourced checks. There is deliberately no field for a probability, a price, a stake or a new pick.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["candidate_id", "reviewed_at", "reviews"],
+  "properties": {
+    "candidate_id": {"type": "string", "pattern": "^[0-9a-f]{12}$", "description": "Copied from review_input.json; ties this file to the exact batch of picks it reviews."},
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "reviews": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/review"}
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "retrieved_at"],
+      "properties": {
+        "url": {"type": "string", "pattern": "^https://[^\\s]+$", "maxLength": 500},
+        "retrieved_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "check": {
+      "description": "Either the literal string \"unconfirmed\" or what was found, with the URLs (all of which must also be listed under the review's sources) that show it.",
+      "oneOf": [
+        {"const": "unconfirmed"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["found", "source_urls"],
+          "properties": {
+            "found": {"type": "string", "minLength": 1, "maxLength": 400},
+            "source_urls": {"type": "array", "items": {"type": "string", "pattern": "^https://[^\\s]+$", "maxLength": 500}}
+          }
+        }
+      ]
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pick_id", "decision", "reason", "confidence", "sources", "checks"],
+      "properties": {
+        "pick_id": {"type": "string", "pattern": "^pk_[0-9a-f]{12}$"},
+        "decision": {"enum": ["keep", "flag", "veto"]},
+        "reason": {"type": "string", "minLength": 5, "maxLength": 300, "pattern": "^[^\\n\\r]+$", "description": "One sentence."},
+        "confidence": {"enum": ["high", "medium", "low"]},
+        "sources": {"type": "array", "maxItems": 12, "items": {"$ref": "#/$defs/source"}},
+        "checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["confirmed_goalie", "lineup_changes", "injuries", "odds_movement"],
+          "properties": {
+            "confirmed_goalie": {"$ref": "#/$defs/check"},
+            "lineup_changes": {"$ref": "#/$defs/check"},
+            "injuries": {"$ref": "#/$defs/check"},
+            "odds_movement": {"$ref": "#/$defs/check"}
+          }
+        }
+      }
+    }
+  }
+}

@@ -36,3 +36,17 @@ def stake(bankroll: float, p: float, decimal: float, fraction: float = 0.25, max
         raise ValueError("kelly fraction must be in (0, 1]")
     f = min(fraction * kelly_fraction(p, decimal), max_pct)
     return bankroll * f
+
+
+def stake_push(bankroll: float, p_win: float, p_lose: float, decimal: float, fraction: float = 0.25, max_pct: float = 0.02) -> float:
+    """Fractional-Kelly stake in currency for a bet that can push (whole-number or quarter lines): fraction * f*, capped at ``max_pct`` of bankroll, never negative."""
+    if bankroll < 0:
+        raise ValueError("bankroll must be >= 0")
+    if not 0 < fraction <= 1:
+        raise ValueError("kelly fraction must be in (0, 1]")
+    return bankroll * min(fraction * kelly_fraction_push(p_win, p_lose, decimal), max_pct)
+
+
+def ev_per_unit(p_win: float, p_lose: float, decimal: float) -> float:
+    """Expected profit per unit staked when a push refunds the stake: b * p_win - p_lose with b = decimal - 1."""
+    return (decimal - 1.0) * p_win - p_lose

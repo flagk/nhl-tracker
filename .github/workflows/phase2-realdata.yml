@@ -1,0 +1,77 @@
+name: Phase 2 real-data backtests
+# Re-runs the goals (totals / puck line) and player-count backtests on the real database under the current settlement rule, writing reports/GOALS.md,
+# reports/goals_calibration.json (tagged with the shootout rule it was fitted under), reports/PROPS.md and reports/props_shrink.json (with a grid-edge audit).
+# Push-triggered by ci/phase2_trigger.txt on the hardening branch (a workflow file that exists only on a branch cannot be dispatched by name).
+on:
+  push:
+    branches: [hardening]
+    paths: ["ci/phase2_trigger.txt"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  goals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e .
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/nhl.db
+            data/cache
+          key: nhl-data-${{ github.run_id }}
+          restore-keys: nhl-data-
+      - run: python scripts/goals_backtest.py --eval-start 2021-10-01
+      - name: Commit
+        run: |
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add reports/GOALS.md reports/goals_model.json reports/goals_calibration.json reports/goals_walkforward.csv
+          if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+          git commit -m "Phase 2: goals model backtest under the current shootout rule"
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push && exit 0
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 4))
+          done
+          exit 1
+  props:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e .
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/nhl.db
+            data/cache
+          key: nhl-data-${{ github.run_id }}
+          restore-keys: nhl-data-
+      - run: python -m nhlbet.data.ingest --reparse-skaters
+      - run: python scripts/props_backtest.py --eval-start 2022-10-01
+      - name: Commit
+        run: |
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add reports/PROPS.md reports/props_shrink.json
+          if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+          git commit -m "Phase 2: player count backtest with family comparison and grid audit"
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push && exit 0
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 4))
+          done
+          exit 1

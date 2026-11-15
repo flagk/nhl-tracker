@@ -67,16 +67,29 @@ def retrain(db: str = "data/nhl.db", force: bool = False, model_dir: str = "data
     fp = data_fingerprint(done.index, done.game_date.max())
     reg = ModelRegistry(Path(model_dir) / "registry.json")
     last = reg.latest()
-    if last and last.get("data_fingerprint") == fp and last.get("has_goals") and not force:      # a bundle without the goals model is retrained once
+    from nhlbet.settle import rules_for as _rules
+    if last and last.get("data_fingerprint") == fp and last.get("has_goals") and last.get("goals_rule") == _rules()["ruleset"] and not force:      # a bundle without the goals model is retrained once
         log.info("no new completed games since %s - model unchanged", last["version"])
         return {"retrained": False, "version": last["version"], "drift": last.get("drift", {})}
 
     features = load_selected_features()
     done = add_goal_targets(done, store.df("SELECT game_id, home_score, away_score, last_period FROM games"))
     gpath = Path(report_dir) / "goals_model.json"
-    galpha = json.loads(gpath.read_text()).get("alpha", 50.0) if gpath.exists() else 50.0
+    gj = json.loads(gpath.read_text()) if gpath.exists() else {}
+    galpha = gj.get("alpha", 50.0)
+    if gj.get("pinned_to_grid_edge"):
+        log.warning("the goals regularisation (%s) sits on the edge of its tuning grid: using the default 50.0 until the grid brackets the optimum", galpha)
+        galpha = 50.0
     cpath = Path(report_dir) / "goals_calibration.json"
     gcal = json.loads(cpath.read_text()) if cpath.exists() else None
+    from nhlbet.settle import rules_for
+    rule = rules_for()["ruleset"]
+    if gcal is not None and gcal.get("_rule") != rule:
+        log.warning("goals calibration was fitted under shootout rule %r, current rule is %r: totals and puck-line probabilities go out UNCALIBRATED until the goals backtest is re-run",
+                    gcal.get("_rule"), rule)
+        gcal = None
+    elif gcal is not None:
+        gcal = {k: v for k, v in gcal.items() if not k.startswith("_")}
     zoo = make_zoo(features, candidate_columns(done.drop(columns=["hr", "ar", "ot", "so", "tot", "mar"])))
     hist = resolved_history(live_log=Path(live_log) if live_log else None, live=live_predictions(store, F, after=None))
     version = f"{pd.Timestamp(done.game_date.max()).strftime('%Y%m%d')}-{fp.split('@')[0][:6]}"
@@ -116,7 +129,7 @@ def retrain(db: str = "data/nhl.db", force: bool = False, model_dir: str = "data
     entry = reg.register({"version": version, "artifact": str(art), "data_fingerprint": fp, **bundle.meta,
                           "features": features, "hyperparameters": {m: load_params(m) for m in ("logistic", "rf", "lgbm", "xgb")},
                           "builder_config": cfg.__dict__, "p_source": "online_platt" if bundle.online_cal is not None else "inner_oof_platt",
-                          "walk_forward_metrics": metrics, "drift": drift, "has_goals": bundle.goals is not None})
+                          "walk_forward_metrics": metrics, "drift": drift, "has_goals": bundle.goals is not None, "goals_rule": rule})
     reg.prune_artifacts(keep=3)
     Path(report_dir).mkdir(exist_ok=True)
     Path(report_dir, "drift.json").write_text(json.dumps({"version": version, **drift}, indent=1, default=str))

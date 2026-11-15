@@ -69,9 +69,32 @@ def devig_shin(decimals: Sequence[float], tol: float = 1e-12) -> np.ndarray:
     return p / p.sum()
 
 
+def devig_power(decimals: Sequence[float], tol: float = 1e-13) -> np.ndarray:
+    """Power method: raise every implied probability to one exponent c >= 1 so that they sum to one (shrinks long shots more than favourites). Works for any number of outcomes."""
+    q = 1.0 / np.asarray(decimals, float)
+    if q.sum() <= 1.0 + 1e-12:
+        return q / q.sum()
+    lo, hi = 1.0, 1.0
+    while (q ** hi).sum() > 1.0 and hi < 1e3:
+        hi *= 2.0
+    for _ in range(200):
+        mid = (lo + hi) / 2
+        if (q ** mid).sum() > 1.0:
+            lo = mid
+        else:
+            hi = mid
+        if hi - lo < tol:
+            break
+    p = q ** ((lo + hi) / 2)
+    return p / p.sum()
+
+
 def devig(decimals: Sequence[float], method: str = "shin") -> np.ndarray:
+    """No-vig probabilities for a two-way or three-way (or larger) market. Methods: ``proportional`` (the evaluation's primary), ``power``, ``shin`` (production)."""
     if method == "proportional":
         return devig_proportional(decimals)
+    if method == "power":
+        return devig_power(decimals)
     if method == "shin":
         return devig_shin(decimals)
     raise ValueError(f"unknown devig method {method!r}")

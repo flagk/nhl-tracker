@@ -48,10 +48,53 @@ def walk_forward_goals(F: pd.DataFrame, features: list[str], first_test: str, st
             phs = ph if ph is not None else [None] * len(Fte)
             out["ll_cell_" + name.replace(" ", "_")] = [np.log(max(mk(a, b, None if p is None or p != p else float(p)).grid[i, j], 1e-12))
                                                        for a, b, p, i, j in zip(lam.lam_home, lam.lam_away, phs, hr_i, ar_i)]
+        # the whole totals PMF, scored against the observed total under the CURRENT shootout rule: the production model, the previous model (shootout goal excluded) and
+        # the training base rate. Log score, ranked probability score and a randomised PIT (a discrete distribution needs the randomisation to be uniform when calibrated).
+        K = 20
+        obs = np.clip(Fte.tot.astype(int).to_numpy(), 0, K - 1)
+        base = np.bincount(np.clip(Ftr.tot.astype(int).to_numpy(), 0, K - 1), minlength=K) + 0.5
+        base = base / base.sum()
+        rng = np.random.default_rng(0)
+        for tag, pm in (("", [d.total_pmf(K) for d in ds]), ("_old", [d.total_pmf(K, so_in_total=False) for d in ds]), ("_base", [base] * len(ds))):
+            out["ll_total" + tag] = [float(np.log(max(q[k], 1e-12))) for q, k in zip(pm, obs)]
+            out["rps_total" + tag] = [_rps(q, k) for q, k in zip(pm, obs)]
+            if tag == "":
+                cdf = [np.cumsum(q) for q in pm]
+                out["pit_total"] = [float((c[k - 1] if k > 0 else 0.0) + rng.random() * (c[k] - (c[k - 1] if k > 0 else 0.0))) for c, k in zip(cdf, obs)]
         out["p_total_mean"] = [d.expected_total() for d in ds]
         out["p_tie"] = [d.p_tie for d in ds]
         rows.append(out)
     return pd.concat(rows) if rows else pd.DataFrame()
+
+
+def _rps(pmf, k: int) -> float:
+    """Ranked probability score of a discrete forecast for the observed category ``k`` (0 = perfect), normalised by the number of categories minus one."""
+    cdf = np.cumsum(np.asarray(pmf, float))
+    obs = (np.arange(len(cdf)) >= k).astype(float)
+    return float(np.sum((cdf - obs) ** 2) / (len(cdf) - 1))
+
+
+def totals_pmf_table(P: pd.DataFrame, B: int = 2000) -> pd.DataFrame:
+    """Whole-distribution scores of the totals forecast (higher log score and lower RPS are better) with a date-clustered interval for the paired difference to the
+    training base rate: production model, previous model (shootout goal excluded), base rate."""
+    from nhlbet.report.validation import cluster_bootstrap
+    rows = []
+    d = pd.to_datetime(P.game_date).to_numpy()
+    for name, tag in (("production (current shootout rule)", ""), ("previous model (shootout goal excluded)", "_old"), ("training base rate", "_base")):
+        ll, rp = P["ll_total" + tag].to_numpy(float), P["rps_total" + tag].to_numpy(float)
+        dll, drp = ll - P["ll_total_base"].to_numpy(float), rp - P["rps_total_base"].to_numpy(float)
+        lo, hi = cluster_bootstrap(drp, d, np.mean, B) if tag != "_base" else (0.0, 0.0)
+        rows.append({"forecast": name, "n": int(len(P)), "log_score": float(ll.mean()), "rps": float(rp.mean()), "rps_minus_base": float(drp.mean()), "rps_diff_ci_low": lo, "rps_diff_ci_high": hi})
+    return pd.DataFrame(rows)
+
+
+def pit_table(P: pd.DataFrame, bins: int = 10) -> pd.DataFrame:
+    """Histogram of the randomised PIT values of the totals forecast: a calibrated forecast gives equal counts. Includes a chi-square test against uniform."""
+    from scipy.stats import chisquare
+    u = P["pit_total"].dropna().to_numpy(float)
+    h, _ = np.histogram(u, bins=bins, range=(0, 1))
+    p = float(chisquare(h).pvalue)
+    return pd.DataFrame({"pit_bin": [f"{i / bins:.1f}-{(i + 1) / bins:.1f}" for i in range(bins)], "count": h, "expected": len(u) / bins, "chi2_p_uniform": p})
 
 
 def _logit(p):

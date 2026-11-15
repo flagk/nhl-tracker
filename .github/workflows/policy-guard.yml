@@ -1,0 +1,47 @@
+name: Policy guard
+# config/policy.yaml may be changed only by the repository owner. This check fails a push that changed it in a commit authored by anyone else (a bot, a workflow, an agent).
+# It cannot replace branch protection: set CODEOWNERS for config/policy.yaml and .github/** and require review (see OPERATIONS.md). Owner identity comes from the repository
+# variables POLICY_OWNER_LOGINS and POLICY_OWNER_EMAILS (comma separated), never from files in the repository.
+on:
+  push:
+    paths:
+      - "config/policy.yaml"
+      - ".github/workflows/policy-guard.yml"
+  pull_request:
+    paths:
+      - "config/policy.yaml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Check who changed the policy file
+        env:
+          OWNER_LOGINS: ${{ vars.POLICY_OWNER_LOGINS }}
+          OWNER_EMAILS: ${{ vars.POLICY_OWNER_EMAILS }}
+          EVENT: ${{ github.event_name }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          set -u
+          if [ -z "${OWNER_LOGINS}${OWNER_EMAILS}" ]; then
+            echo "::warning::POLICY_OWNER_LOGINS / POLICY_OWNER_EMAILS are not set: the policy owner is unknown, so every policy change is treated as unauthorised"
+            [ "$EVENT" = "pull_request" ] && exit 0
+            exit 1
+          fi
+          author_email=$(git log -1 --format=%ae -- config/policy.yaml | tr 'A-Z' 'a-z')
+          actor=$(echo "$ACTOR" | tr 'A-Z' 'a-z')
+          ok=0
+          for l in $(echo "$OWNER_LOGINS" | tr 'A-Z,' 'a-z '); do [ "$l" = "$actor" ] && ok=1; done
+          for m in $(echo "$OWNER_EMAILS" | tr 'A-Z,' 'a-z '); do [ "$m" = "$author_email" ] && ok=1; done
+          if [ "$ok" = 1 ]; then echo "policy change by an owner: ok"; exit 0; fi
+          echo "::error::config/policy.yaml was changed by ${actor} (${author_email}), who is not a listed owner"
+          [ "$EVENT" = "pull_request" ] && { echo "informational on a pull request: the owner must review and merge it"; exit 0; }
+          exit 1

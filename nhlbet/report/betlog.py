@@ -107,11 +107,13 @@ def _flat_stakes(r: pd.DataFrame) -> pd.DataFrame:
     return r
 
 
-def alt_value(market, side, point, home_score, away_score, last_period, sog=None) -> np.ndarray:
-    """>0 the bet won, <0 lost, 0 pushed, for totals / puck-line bets (arrays). Totals exclude the shootout goal; the puck line uses the official margin."""
+def alt_value(market, side, point, home_score, away_score, last_period, sog=None, book: str | None = None) -> np.ndarray:
+    """>0 the bet won, <0 lost, 0 pushed, for totals / puck-line bets (arrays). Whether the shootout goal counts toward a total is the book's rule
+    (config/policy.yaml via nhlbet.settle); the puck line uses the official margin."""
     hs, as_ = np.asarray(home_score, float), np.asarray(away_score, float)
     side, market, point = np.asarray(side), np.asarray(market), np.asarray(point, float)
-    total = hs + as_ - (np.asarray(last_period) == "SO").astype(float)
+    from nhlbet.settle import game_total
+    total = game_total(hs, as_, last_period, book)
     margin = np.where(side == "away", as_ - hs, hs - as_)
     val = np.where(market == "totals", np.where(side == "over", total - point, point - total), margin + point)
     if sog is not None:                                   # player shots: over wins when shots exceed the line; a player who did not dress voids the bet (value 0)
@@ -191,10 +193,11 @@ def _shadow_resolved_games(store: Store, cons: pd.DataFrame | None = None) -> pd
         return r
     r["player_id"] = r["player_id"].fillna(0)               # game-level bets have no player; props are one row per (game, strategy, player, side)
     final = r.sort_values("run_at").groupby(["game_id", "strategy", "player_id"], as_index=False).tail(1)     # latest run per (game, strategy, player); a re-run may flip the side
-    g = store.df("SELECT game_id, start_utc, home_win, home_score, away_score, last_period FROM games WHERE home_win IS NOT NULL")
+    g = store.df("SELECT game_id, start_utc, home_win, home_score, away_score, last_period, game_date AS actual_date, status AS game_status FROM games WHERE home_win IS NOT NULL")
     d = final.merge(g, on="game_id", how="inner")
     if d.empty:
         return d
+    from nhlbet.settle import is_void_game
     sog = np.full(len(d), np.nan)
     is_prop = d["market"].astype(str).str.startswith("player_") if "market" in d else pd.Series(False, index=d.index)
     if is_prop.any():
@@ -211,10 +214,17 @@ def _shadow_resolved_games(store: Store, cons: pd.DataFrame | None = None) -> pd
     d["is_bet"] = (d.action == "BET") & (d.stake > 0)
     won_ml = ((d.side == "home") == (d.home_win == 1)).astype(float).to_numpy()
     point = d["point"].astype(float).to_numpy() if "point" in d else np.full(len(d), np.nan)
-    val = alt_value(mk.to_numpy(), d.side.to_numpy(), point, d.home_score, d.away_score, d.last_period, sog)
-    push = (~ml) & d.is_bet.to_numpy() & (val == 0)
+    void = np.array([is_void_game(st, pd_, ad) for st, pd_, ad in zip(d.game_status, d.game_date, d.actual_date)])      # moved to another date: the bet made for the original date is void
+    books = (d["book"].fillna("") if "book" in d else pd.Series("", index=d.index)).astype(str).str.lower().to_numpy()
+    val = np.zeros(len(d))
+    for b in np.unique(books):                            # settlement rules are per book (config/policy.yaml); blank book = the default rule set
+        m = books == b
+        val[m] = alt_value(mk.to_numpy()[m], d.side.to_numpy()[m], point[m], d.home_score.to_numpy()[m], d.away_score.to_numpy()[m], d.last_period.to_numpy()[m],
+                           None if sog is None else sog[m], book=b or None)
+    push = ((~ml) & d.is_bet.to_numpy() & (val == 0)) | (void & d.is_bet.to_numpy())
     d["push"] = push
-    d["is_bet"] = d.is_bet & ~push                        # a push refunds the stake: not a settled bet
+    d["void_game"] = void
+    d["is_bet"] = d.is_bet & ~push                        # a push (or a void game) refunds the stake: not a settled bet
     d["won"] = np.where(d.is_bet, np.where(ml, won_ml, (val > 0).astype(float)), np.nan)
     d["profit"] = np.where(d.is_bet, np.where(d.won == 1, d.stake * (d.decimal - 1), -d.stake), 0.0)
     d["clv_ev"] = [bet_clv(s, dec, c)["clv_ev"] if (b and m and c is not None and not pd.isna(c)) else np.nan

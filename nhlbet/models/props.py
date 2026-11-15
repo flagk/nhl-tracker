@@ -26,7 +26,9 @@ def load_shrink(path: str = SHRINK_PATH) -> dict:
     from pathlib import Path
     p = Path(path)
     try:
-        return {k: float(v) for k, v in json.loads(p.read_text()).get("shrink_k", {}).items()} if p.exists() else {}
+        j = json.loads(p.read_text()) if p.exists() else {}
+        pinned = {st for st, a in (j.get("grid_audit") or {}).items() if a.get("pinned_to_grid_edge")}
+        return {k: float(v) for k, v in (j.get("shrink_k") or {}).items() if k not in pinned}       # a value on the edge of its tuning grid is not a result: use the default instead
     except (ValueError, OSError):
         return {}
 
@@ -72,7 +74,12 @@ class ShotsModel:
 
 
 def over_push_under(model_or_k, lam, line: float) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """(P(over), P(push), P(under)) of a count from the full PMF. Half-point lines cannot push; on a whole-number line the stake is returned when the count equals it."""
+    """(P(over), P(push), P(under)) of a count from the full PMF. Half-point lines cannot push; on a whole-number line the stake is returned when the count equals it;
+    a quarter line (x.25 / x.75) is half the stake on each adjacent line, so its probabilities are the average of the two legs'."""
+    frac = round((float(line) * 4) % 4)
+    if frac in (1, 3):                                   # quarter line: two bets of half the stake on the adjacent lines, so average their outcome probabilities
+        a, b = over_push_under(model_or_k, lam, line - 0.25), over_push_under(model_or_k, lam, line + 0.25)
+        return tuple((x + y) / 2.0 for x, y in zip(a, b))             # type: ignore[return-value]
     k = model_or_k.dispersion_ if hasattr(model_or_k, "dispersion_") else float(model_or_k)
     lam = np.asarray(lam, float)
     over = 1.0 - _cdf(np.floor(line), lam, k)

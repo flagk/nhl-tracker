@@ -1,0 +1,98 @@
+{
+ "run_at": "2026-10-20T20:05:03+00:00",
+ "completed_games": 10655,
+ "selected_features": [
+  "d_elo",
+  "d_xg_share",
+  "d_cf_pct",
+  "h_b2b",
+  "d_xga_pg",
+  "h_early_w",
+  "d_g_sv_l5",
+  "h_stakes",
+  "d_pen_drawn_pg",
+  "d_games_last_7d",
+  "d_ga_season_shrunk",
+  "a_b2b",
+  "h_homestand_n",
+  "d_g_sv_season"
+ ],
+ "truncation_invariance": {
+  "truncated_at": "2025-03-01",
+  "games_compared": 959,
+  "same_games": true,
+  "max_abs_diff_models_stack_calibrators": 1.0891287871572786e-13,
+  "max_abs_diff_weighted_average": 1.0891287871572786e-13,
+  "note": "weighted-average differences are SLSQP solver noise from tie order within a date",
+  "pass": true,
+  "features_used": [
+   "d_elo",
+   "d_xg_share",
+   "d_cf_pct",
+   "h_b2b",
+   "d_xga_pg",
+   "h_early_w",
+   "d_g_sv_l5",
+   "h_stakes",
+   "d_pen_drawn_pg",
+   "d_games_last_7d",
+   "d_ga_season_shrunk",
+   "a_b2b",
+   "h_homestand_n",
+   "d_g_sv_season"
+  ]
+ },
+ "availability_and_sentinel": {
+  "features_checked": 14,
+  "clean": true,
+  "sentinel_caught": {
+   "outcome_copy": true,
+   "outcome_complement": true,
+   "noisy_outcome": true
+  },
+  "pass": true
+ },
+ "shuffle_null": {
+  "real": {
+   "n": 2764,
+   "auc_elo": 0.5855032083755488,
+   "auc_logistic": 0.5991915737926377
+  },
+  "shuffled": [
+   {
+    "seed": 1,
+    "n": 2764,
+    "auc_elo": 0.49572336762057445,
+    "auc_logistic": 0.47928184006729124,
+    "logloss_gain_vs_base_rate": -0.0017928089817198511,
+    "roi_vs_fair_market_with_4.5pct_margin": -0.042261319058290336
+   },
+   {
+    "seed": 2,
+    "n": 2764,
+    "auc_elo": 0.49704796638564885,
+    "auc_logistic": 0.4919147299477008,
+    "logloss_gain_vs_base_rate": -0.0016292117832111819,
+    "roi_vs_fair_market_with_4.5pct_margin": -0.048178136543441004
+   },
+   {
+    "seed": 3,
+    "n": 2764,
+    "auc_elo": 0.4982953764861295,
+    "auc_logistic": 0.4844586525759577,
+    "logloss_gain_vs_base_rate": -0.0015289448977210407,
+    "roi_vs_fair_market_with_4.5pct_margin": -0.03446417171787394
+   }
+  ],
+  "pass": true
+ },
+ "settlement_sensitivity": {
+  "totals_bets_so_adds_goal": 465,
+  "totals_bets_so_excluded": 465,
+  "bets_whose_result_changes": 15,
+  "bets_that_become_pushes_or_leave": 0,
+  "profit_so_adds_goal": -518.0,
+  "profit_so_excluded": -348.90000000000003
+ },
+ "pass": true
+}

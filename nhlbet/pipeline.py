@@ -60,16 +60,14 @@ def refresh_data(store: Store, days_back: int = 7, days_ahead: int = 2) -> str |
 
 DEFAULT_MARKETS = ("h2h", "spreads", "totals")      # 3 credits per fetch
 MORNING_MARKETS = ("h2h",)                          # the morning run only needs moneylines: spreads, totals and props are priced closer to game time (late run)
-PROPS_MAX_GAMES = 3                                 # props cost 1 credit per market (shots, points, assists, anytime goals) per game: 3 games a day is ~12 credits/day on top of ~12 for game odds
+from nhlbet.policy import policy_get as _odds_pol                  # credit limits live in config/policy.yaml (``odds:``)
 
-
-EXTRA_PROPS_MIN_CREDITS = 250       # assists / anytime-goalscorer prices are only fetched while at least this many odds credits remain
-PROPS_MIN_CREDITS = 100             # below this no player prices are fetched at all: game moneylines come first
-
-
-CREDIT_RESERVE = 25                 # never plan to spend the last credits: they keep the moneylines alive
-CORE_AFTER_LATE = 4                 # credits the closing-line snapshots still need after the late run (about one per start wave)
-PROP_REFETCH_MIN = 60               # a game's player market fetched less than this long ago is not fetched again
+PROPS_MAX_GAMES = int(_odds_pol("odds", "props_max_games", default=3))                           # props cost 1 credit per market per game
+EXTRA_PROPS_MIN_CREDITS = int(_odds_pol("odds", "extra_props_min_credits", default=250))         # assists / anytime-goalscorer prices only while at least this many credits remain
+PROPS_MIN_CREDITS = int(_odds_pol("odds", "props_min_credits", default=100))                     # below this no player prices are fetched at all: game moneylines come first
+CREDIT_RESERVE = int(_odds_pol("odds", "reserve_credits", default=25))                           # never plan to spend the last credits: they keep the moneylines alive
+CORE_AFTER_LATE = int(_odds_pol("odds", "core_after_late", default=4))                           # credits the closing-line snapshots still need after the late run
+PROP_REFETCH_MIN = int(_odds_pol("odds", "prop_refetch_min", default=60))                        # a game's player market fetched less than this long ago is not fetched again
 
 
 def credits_spent_today(store: Store, now: datetime) -> int:
@@ -176,6 +174,25 @@ def fetch_and_store_odds(store: Store, markets: tuple[str, ...] | None = None, r
         return {"enabled": True, "error": str(e)}
 
 
+def _betting_status(store: Store, perf: dict, ops: dict, date: str, now: datetime) -> dict:
+    """The pre-registered betting gate (config/policy.yaml ``betting_gate``), recomputed from the live log; a change of status is recorded in the state and alerted once."""
+    import numpy as np
+    from nhlbet.betting_gate import evaluate_gate
+    from nhlbet.ops import notify as ops_notify
+    from nhlbet.report.betlog import resolved
+    d = resolved(store)
+    bets = d[d.is_bet & d.clv_move_pts.notna()] if len(d) else d
+    curve = perf.get("curve")
+    equity = np.r_[float(curve.bankroll.iloc[0] - curve.profit.iloc[0]), curve.bankroll.to_numpy()] if curve is not None and len(curve) else []
+    g = evaluate_gate(bets.clv_move_pts if len(bets) else [], bets.game_date if len(bets) else [], equity, ops.get("status", "OK"))
+    prev = (ops.get("betting") or {}).get("status")
+    ops = {**ops, "betting": {"status": g["status"], "since": (ops.get("betting") or {}).get("since") if prev == g["status"] else now.isoformat(timespec="seconds")}}
+    if prev is not None and prev != g["status"]:
+        ops = ops_notify.dispatch([{"type": "warning", "check": "betting_status", "key": f"betting_status:{g['status']}:{date}",
+                                    "message": f"Betting status changed from {prev} to {g['status']}: {g['why']}. This is research output, not advice."}], ops)
+    return {**g, "since": ops["betting"]["since"], "_state": ops}
+
+
 def run_daily(date: str | None = None, run_type: str = "morning", db: str = "data/nhl.db", bankroll: float = 1000.0, fixed_bankroll: bool = False,
               refresh: bool = True, odds: bool = True, do_retrain: bool | None = None, log_root: str = "data/logs", report_dir: str = "reports",
               model_dir: str = "data/models", site_dir: str = "site", readme_path: str = "README.md", export_dir: str = "data/export", now: datetime | None = None) -> dict:
@@ -222,6 +239,18 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     status = entry.get("drift", {}).get("status", "OK")
     if not data_ok:
         status = "ALERT"
+    from nhlbet.ops import chain as ops_chain, gate as ops_gate, notify as ops_notify, state as ops_state
+    repo_root = Path(log_root).resolve().parent.parent
+    state_path = repo_root / "state" / "system_state.json"
+    ops = ops_state.load_state(state_path)
+    scheduled = int(store.df("SELECT COUNT(*) AS n FROM games WHERE game_date = ? AND game_type IN (2, 3)", [date]).n.iloc[0])
+    checks, pol_sha = ops_gate.pre_checks(store, date, err if refresh else None, odds_meta, odds_meta.get("remaining"), scheduled, perf, repo_root, ops)
+    ops, ops_events = ops_gate.apply(ops, checks, pol_sha)
+    betting = _betting_status(store, perf, ops, date, now or datetime.now(timezone.utc))
+    ops = betting.pop("_state")
+    if not ops_state.can_publish(ops):                 # a halt (soft or hard) withholds every pick: the slate is built with the model marked ALERT, exactly like stale data
+        status = "ALERT"
+        notes.append("picks withheld: system " + ops["status"] + " (" + "; ".join(f"{h['check']}: {h['reason']}" for h in ops_state.open_halts(ops))[:300] + ")")
     slate = build_slate(store, bundle, date, cfg, run_type, "OK" if status == "INSUFFICIENT_DATA" else status, now=now)
 
     text = render_report(date, run_type, slate, cfg, entry["version"], {**entry, "p_source": entry.get("p_source")}, perf, odds_meta if odds_meta.get("enabled") else None, shadow=shadow)
@@ -240,6 +269,28 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
     except Exception as e:
         log.warning("evidence summary unavailable: %s", e)
     payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow, rank_weights=learn_weights(store), evidence=evidence)
+    from nhlbet.ops import health as ops_health
+    rc = ops_gate._safe("value_ranges", "soft", lambda: ops_health.range_check(payload))
+    if not rc.ok:                          # impossible numbers in what was just built: halt, rebuild the slate with nothing picked
+        ops, more = ops_gate.apply(ops, checks + [rc], pol_sha)
+        ops_events += more
+        status = "ALERT"
+        notes.append("picks withheld: system " + ops["status"] + f" ({rc.detail})")
+        slate = build_slate(store, bundle, date, cfg, run_type, "ALERT", now=now)
+        payload = build_payload(slate, cfg, perf, entry, odds_meta if odds_meta.get("enabled") else None, date, run_type, notes=notes, shadow=shadow, rank_weights=learn_weights(store), evidence=evidence)
+    payload["system"] = ops_gate.system_block(ops)
+    payload["betting"] = betting
+    try:                                   # candidates for the pre-game review agent, and the review decisions made so far today (UNREVIEWED when there are none)
+        from nhlbet.review.apply import STATE_NAME, attach_to_payload, load_state
+        from nhlbet.review.contract import build_candidates, enabled
+        if not enabled():
+            raise RuntimeError("switched off (REVIEW_ENABLED=false)")
+        review_dir = Path(log_root).parent / "review"
+        review_dir.mkdir(parents=True, exist_ok=True)
+        (review_dir / "picks_candidate.json").write_text(json.dumps(build_candidates(payload), indent=1, allow_nan=False))
+        attach_to_payload(payload, load_state(review_dir / STATE_NAME))
+    except Exception as e:
+        log.warning("review candidates unavailable: %s", e)
     build_site(payload, site_dir)
     build_bets_page(store, payload["games"], cfg.bankroll, payload["generated_at"], date, site_dir)
     # history (markdown for GitHub, html for the site) and the front-page block with clickable links
@@ -250,6 +301,15 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
         if not update_readme(readme_path, block):
             log.warning("README has no picks markers; front-page block not updated")
     written = export_logs(store, log_root)
+    try:                                   # the hash-chained ledger commits to every log file just written
+        ops_chain.append_new(repo_root)
+    except Exception as e:
+        log.error("ledger append failed: %s", e)
+        ops, more = ops_gate.apply(ops, checks + [ops_gate.failed("log_integrity", "hard", f"ledger append failed: {e}", "Do not edit the logs; restore data/logs from the log-backup branch.")], pol_sha)
+        ops_events += more
+    ops_state.save_state(ops, state_path)
+    if not ops_state.can_publish(ops):     # liveness ("ok") pings come from the always-on heartbeat job; a halt reports /fail so the external service alerts at once
+        ops_notify.ping("fail")
     try:                                   # BI datasets (Power BI / Excel); context columns come from the as-of features
         from nhlbet.data.loaders import load_tables
         from nhlbet.features.builder import BuilderConfig, FeatureBuilder
@@ -266,5 +326,10 @@ def run_daily(date: str | None = None, run_type: str = "morning", db: str = "dat
         Path(site_dir, "validation.html").write_text(render_validation_html(res, (HERE / "theme.css").read_text()))
     except Exception as e:                 # same rule: a failed evidence page must not stop the picks
         log.warning("validation page failed: %s", e)
+    try:                                   # does the pre-game review agent help? grades kept / flagged / vetoed picks alike (reports/REVIEW.md)
+        from nhlbet.review.evaluate import write_review_report
+        write_review_report(store, Path(log_root).parent.parent, report_dir)
+    except Exception as e:
+        log.warning("review report failed: %s", e)
     log.info("report written for %s (%d games, %d bets); exported %d log files", date, len(slate), sum(s.rec.action == "BET" for s in slate), len(written))
     return {"date": date, "games": len(slate), "bets": sum(s.rec.action == "BET" for s in slate), "model": entry["version"], "status": status, "notes": notes}

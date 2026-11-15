@@ -1,0 +1,43 @@
+name: Phase 4 model comparison and the single holdout evaluation
+# Runs scripts/compare.py once on the hardening branch. It records reports/holdout_eval.json; a second run stops (the holdout is evaluated exactly once).
+# Push-triggered by ci/phase4_trigger.txt. Needs the database cache only for the informational live market-blend table.
+on:
+  push:
+    branches: [hardening]
+    paths: ["ci/phase4_trigger.txt"]
+
+permissions:
+  contents: write
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e .
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/nhl.db
+            data/cache
+          key: nhl-data-${{ github.run_id }}
+          restore-keys: nhl-data-
+      - run: python scripts/compare.py --db data/nhl.db
+      - name: Commit
+        run: |
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add reports/model_comparison_research.json reports/model_comparison_phase4.md reports/holdout_eval.json reports/model_blend_live.json
+          if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+          git commit -m "Phase 4: model comparison and the single holdout evaluation"
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push && exit 0
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 4))
+          done
+          exit 1

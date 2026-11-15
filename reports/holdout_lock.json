@@ -1,0 +1,12 @@
+{
+ "rule": "last max(20% of walk-forward games, 656 games = one half-season), cut at a date boundary",
+ "source": "reports/walkforward_predictions.csv",
+ "n_walkforward_games": 2629,
+ "start": "2026-01-05",
+ "end": "2026-09-29",
+ "n_games": 656,
+ "hash_sha256": "f1a2ca36d67b63fb2de77239b1c66529d307144efcc22a9932a0d39650413590",
+ "hash_of": "sorted 'game_id,game_date,y' lines",
+ "previously_examined": true,
+ "examined_note": "model comparison and ablation reports were written before this lock existed; the lock constrains new decisions"
+}

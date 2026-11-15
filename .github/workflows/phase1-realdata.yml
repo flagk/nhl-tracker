@@ -1,0 +1,49 @@
+name: Phase 1 real-data checks
+# Truncation invariance, availability guard and outcome-shuffle null on the real database. The database only exists in the Actions cache, so these checks run here.
+# Triggered by pushing a change to ci/phase1_trigger.txt on the hardening branch (a workflow file that exists only on a branch cannot be dispatched by name),
+# or manually. Commits only reports/phase1_realdata.* back to the branch it ran on. Docs: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#push
+on:
+  push:
+    branches: [hardening]
+    paths: ["ci/phase1_trigger.txt"]
+  workflow_dispatch:
+
+concurrency:
+  group: phase1-realdata
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore the database cache (created by the daily job on the default branch)
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/nhl.db
+            data/cache
+          key: nhl-data-${{ github.run_id }}
+          restore-keys: nhl-data-
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt && pip install -e .
+      - name: Run the checks
+        id: run
+        run: python scripts/phase1_realdata.py
+        continue-on-error: true
+      - name: Commit the report
+        run: |
+          git config user.name "nhl-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add reports/phase1_realdata.json reports/phase1_realdata.md
+          if git diff --cached --quiet; then echo "nothing to commit"; else git commit -m "Phase 1 real-data checks" && git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push; fi
+      - name: Fail the job if a check failed
+        if: steps.run.outcome == 'failure'
+        run: exit 1

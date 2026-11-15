@@ -125,10 +125,11 @@ def static_games_table(payload: dict) -> str:
         mkt = f"{sides['home']['p_market'] * 100:.1f}%" if sides.get("home") else "no odds"
         if sd:
             side_cells = (f"<td data-label='Best side'>{e(str(sd['team']))}</td><td class='num' data-label='Best price'>{sd['best_decimal']:.2f}</td>"
-                          f"<td class='num' data-label='Edge'>{sd['edge'] * 100:+.1f} pts</td><td class='num' data-label='EV per $1'>{sd['ev'] * 100:+.1f}%</td>")
+                          f"<td class='num' data-label='Edge'>{sd['edge'] * 100:+.1f} pts</td><td class='num' data-label='EV per $1'>{sd['ev'] * 100:+.1f}%</td>"
+                          f"<td class='num' data-label='Stake (default settings)'>{('$' + format(g['server_stake'], ',.2f')) if g.get('server_action') == 'BET' and g.get('server_stake') else '-'}</td>")
             decision = "Qualifies under the default rules" if sd["qualifies"] else "No bet: " + e(str(g.get("blocked") or (sd["fails"][0] if sd["fails"] else "below the rules")))
         else:
-            side_cells = "<td>-</td><td>-</td><td>-</td><td>-</td>"
+            side_cells = "<td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>"
             decision = "No bet: " + e(str(g.get("blocked") or "no odds"))
         start = e(str(g.get("start_utc") or ""))[:16].replace("T", " ")
         rows.append(f"<tr><td data-label='Game'><b>{e(g['away'])} @ {e(g['home'])}</b><br><span class='muted'>{start} UTC</span></td>"
@@ -136,10 +137,112 @@ def static_games_table(payload: dict) -> str:
                     f"<td data-label='Prices as of'>{e(str(g.get('odds_captured_at') or '-'))[:16].replace('T', ' ')}</td><td data-label='Decision'>{decision}</td></tr>")
     model = payload.get("model", {})
     head = ("<tr><th>Game</th><th class='num'>Model P(home)</th><th class='num'>Market P(home), no vig</th><th>Best side</th><th class='num'>Best price</th><th class='num'>Edge</th>"
-            "<th class='num'>EV per $1</th><th>Prices as of</th><th>Decision</th></tr>")
-    return (f"<div class='banner'>JavaScript is off, so this is the basic table. Model {e(str(model.get('version')))} ({e(str(model.get('status')))}), generated {e(str(payload.get('generated_at')))}. "
+            "<th class='num'>EV per $1</th><th class='num'>Stake</th><th>Prices as of</th><th>Decision</th></tr>")
+    return (status_banners(payload) + f"<div class='banner'>JavaScript is off, so this is the basic table. Model {e(str(model.get('version')))} ({e(str(model.get('status')))}), generated {e(str(payload.get('generated_at')))}. "
             "Research and education only; not betting advice. See <a href='validation.html'>the evidence page</a> for whether any of this has an edge.</div>"
-            f"<div class='card flat scroll'><table class='rtable'><thead>{head}</thead><tbody>{''.join(rows) or '<tr><td colspan=9>No games to show.</td></tr>'}</tbody></table></div>")
+            f"<div class='card flat scroll'><table class='rtable'><thead>{head}</thead><tbody>{''.join(rows) or '<tr><td colspan=10>No games to show.</td></tr>'}</tbody></table></div>")
+
+
+def status_banners(payload: dict) -> str:
+    """System and betting status as plain HTML: shown without JavaScript, and the first thing a reader sees."""
+    import html
+    e = html.escape
+    sy, bt = payload.get("system") or {"status": "OK", "halts": []}, payload.get("betting") or {"status": "RESEARCH ONLY", "why": "no live evidence yet"}
+    out = ""
+    if sy.get("status") != "OK":
+        why = " | ".join(f"{h['check']}: {h['reason']} Next step: {h['next_step']}" for h in sy.get("halts", []))
+        out += f"<div class='banner bad'><b>System {e(str(sy['status']))}: picks are withheld.</b> {e(why)}</div>"
+    if bt.get("status") == "ELIGIBLE":
+        out += "<div class='banner' role='status'><b>Betting status: ELIGIBLE (moneylines only).</b> The live record clears the pre-registered bar. That is not a promise of profit.</div>"
+    else:
+        out += f"<div class='banner bad' role='status'><b>Betting status: RESEARCH ONLY.</b> These picks are research output, not recommendations to bet. Not yet met: {e(str(bt.get('why', '')))}</div>"
+    return out
+
+
+def static_alt_table(payload: dict) -> str:
+    """Totals and puck-line picks with the probabilities of winning, pushing and losing, the no-vig market probability, the price and (private repos only) the book."""
+    import html
+    e = html.escape
+    rows = []
+    for g in payload.get("games", []):
+        best = {}
+        for q in g.get("alt") or []:
+            if q["market"] not in best or q["edge"] > best[q["market"]]["edge"]:
+                best[q["market"]] = q
+        for q in best.values():
+            pu = q.get("p_push") or 0.0
+            rows.append(f"<tr><td data-label='Game'>{e(g['away'])} @ {e(g['home'])}</td><td data-label='Market'>{'Total' if q['market'] == 'totals' else 'Puck line'}: <b>{e(str(q['label']))}</b></td>"
+                        f"<td class='num' data-label='P(win)'>{q['p_model'] * 100:.1f}%</td><td class='num' data-label='P(push)'>{pu * 100:.1f}%</td><td class='num' data-label='P(lose)'>{max(0.0, 1 - q['p_model'] - pu) * 100:.1f}%</td>"
+                        f"<td class='num' data-label='Market, no vig'>{q['p_market'] * 100:.1f}%</td><td class='num' data-label='Edge'>{q['edge'] * 100:+.1f} pts</td>"
+                        f"<td class='num' data-label='Best price'>{q['best_decimal']:.2f}{(' @ ' + e(str(q['best_book']))) if q.get('best_book') else ''}</td>"
+                        f"<td data-label='Prices as of'>{e(str(g.get('odds_captured_at') or '-'))[:16].replace('T', ' ')}</td></tr>")
+    if not rows:
+        return ""
+    head = ("<tr><th>Game</th><th>Market</th><th class='num'>P(win)</th><th class='num'>P(push)</th><th class='num'>P(lose)</th><th class='num'>Market, no vig</th><th class='num'>Edge</th>"
+            "<th class='num'>Best price</th><th>Prices as of</th></tr>")
+    return ("<h2>Totals and puck line (experimental, paper-traded only: no stake suggested)</h2>"
+            f"<div class='card flat scroll'><table class='rtable'><thead>{head}</thead><tbody>{''.join(rows)}</tbody></table></div>")
+
+
+METHOD_NOTES = ["No edge has been demonstrated: see the evidence page for closing-line value with multiplicity-corrected intervals.",
+                "A single season cannot separate skill from luck; thousands of bets are needed to detect a few percent of ROI.",
+                "Settlement rules differ by book and none is verified per book yet; the policy file records the assumed rule.",
+                "Totals, puck line and player props are experimental, paper-traded only, and have no closing-price record.",
+                "Prices are the best seen at capture time and may not be obtainable later. Injuries and lineups are not inputs.",
+                "The system halts and withholds picks when data or logs look wrong; it never changes its own rules to carry on."]
+
+
+def static_method(payload: dict) -> str:
+    import html
+    return ("<h2>Method and limits</h2><div class='card'><ul>" + "".join(f"<li>{html.escape(n)}</li>" for n in METHOD_NOTES) + "</ul>"
+            f"<p class='note'>{html.escape(str(payload.get('disclaimer') or 'Research and education only. Not betting advice; no guarantee of profit.'))}</p></div>")
+
+
+def _review_text(rv: dict | None) -> str:
+    """Review status, reason and sources of one pick as escaped HTML (https links only)."""
+    import html
+    import re
+    e = html.escape
+    if not rv:
+        return "-"
+    label = "UNREVIEWED" if rv.get("status") == "UNREVIEWED" else {"flag": "Flagged", "veto": "Vetoed"}.get(rv.get("decision"), "Kept")
+    if rv.get("shadow") and rv.get("status") != "UNREVIEWED":
+        label = f"Shadow: would be {'vetoed' if rv.get('decision') == 'veto' else 'flagged' if rv.get('decision') == 'flag' else 'kept'}"
+    out = f"<b>{label}</b>"
+    if rv.get("shadow"):
+        out += "<br><span class='muted'>shadow mode: this pick is published unchanged</span>"
+    if rv.get("odds_status") == "not_refreshed":
+        out += "<br><span class='muted'>odds movement: unconfirmed (price not refreshed)</span>"
+    note = rv.get("warning") or rv.get("reason")
+    if note:
+        out += f"<br><span class='muted'>{e(str(note))}</span>"
+    links = [f"<a href='{e(x['url'], quote=True)}' rel='noopener noreferrer'>{e(x['url'].split('//', 1)[1].split('/', 1)[0])}</a>" for x in (rv.get("sources") or [])
+             if isinstance(x.get("url"), str) and re.fullmatch(r"https://\S+", x["url"])]
+    if links:
+        out += "<br><span class='muted'>Sources: " + ", ".join(links) + "</span>"
+    if rv.get("reviewed_at"):
+        out += f"<br><span class='muted'>checked {e(str(rv['reviewed_at']))[:16].replace('T', ' ')} UTC{' (rule-based)' if rv.get('decided_by') == 'code' else ''}</span>"
+    return out
+
+
+def static_picks_table(payload: dict) -> str:
+    """Today's picks that went through the pre-game review, and the vetoed ones with the reason, as plain HTML (no JavaScript needed). Everything is escaped."""
+    import html
+    e = html.escape
+
+    def rows(items):
+        return "".join(f"<tr><td data-label='Pick'><b>{e(str(r['pick']))}</b><br><span class='muted'>{e(str(r['game']))}</span></td><td class='num' data-label='Model'>{r['p_model'] * 100:.1f}%</td>"
+                       f"<td class='num' data-label='Market, no vig'>{r['p_market'] * 100:.1f}%</td><td class='num' data-label='Best price'>{r['price']:.2f}</td>"
+                       f"<td data-label='Pre-game review'>{_review_text(r.get('review'))}</td></tr>" for r in items)
+    head = "<tr><th>Pick</th><th class='num'>Model</th><th class='num'>Market, no vig</th><th class='num'>Best price</th><th>Pre-game review</th></tr>"
+    picks = [r for r in payload.get("ranking", []) if r.get("review")]
+    out = ""
+    if picks:
+        out += (f"<h2>Picks and their pre-game review</h2><div class='card flat scroll'><table class='rtable'><thead>{head}</thead><tbody>{rows(picks)}</tbody></table></div>")
+    if payload.get("vetoed"):
+        out += (f"<h2>Vetoed by the pre-game review ({len(payload['vetoed'])})</h2><div class='card flat scroll'><table class='rtable'><thead>{head}</thead>"
+                f"<tbody>{rows(payload['vetoed'])}</tbody></table></div>")
+    return out
 
 
 def render_html(payload: dict) -> str:
@@ -147,7 +250,7 @@ def render_html(payload: dict) -> str:
     data = json.dumps(payload, allow_nan=False).replace("</", "<\\/")      # cannot close the <script> tag
     return (tpl.replace("/*__THEME__*/", (HERE / "theme.css").read_text()).replace("/*__CORE__*/", (HERE / "core.js").read_text())
                .replace("/*__CHROME__*/", (HERE / "chrome.js").read_text()).replace("/*__UI__*/", (HERE / "ui.js").read_text())
-               .replace("__STATIC__", static_games_table(payload)).replace("__DATA__", data).replace("__TITLE__", f"NHL picks {payload['date']}"))
+               .replace("__STATIC__", static_games_table(payload) + static_picks_table(payload) + static_alt_table(payload) + static_method(payload)).replace("__DATA__", data).replace("__TITLE__", f"NHL picks {payload['date']}"))
 
 
 def build_site(payload: dict, out_dir: str | Path = "site") -> Path:

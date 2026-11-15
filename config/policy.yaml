@@ -1,0 +1,159 @@
+# Policy file: the ONLY place thresholds, limits and eligibility criteria live.
+# Only the owner (flagk) edits this file. Code opens it read-only (nhlbet/policy.py); a test and a CI check fail if anything else writes to it.
+# STATUS: PROPOSED. Every value below is a proposal for the owner to approve; sections are added phase by phase (see docs/PROGRESS.md).
+meta:
+  status: proposed
+  schema_version: 1
+
+# Holdout lock (Phase 1.8). Written by scripts/holdout_lock.py, mirrored in reports/holdout_lock.json (a test compares the two and recomputes the hash).
+# Rule: the larger of 20% of walk-forward games and one half-season (656 games), cut at a date boundary. These games were EXAMINED in earlier reports
+# (model comparison, ablations), so this is a discipline lock for new decisions, not a pristine sample; the live record since 2026-09-30 is the only unseen data.
+holdout:
+  start: "2026-01-05"
+  end: "2026-09-29"
+  n_games: 656
+  hash_sha256: "f1a2ca36d67b63fb2de77239b1c66529d307144efcc22a9932a0d39650413590"
+  previously_examined: true
+
+# Settlement rules (Phase 1.6). A rule set says how a bet is graded; each book maps to one. "verified: false" means the book's own rules page could not be
+# read from the build environment, so the industry convention (cited in docs/SETTLEMENT.md) is applied and flagged. Verify against each book's rules page.
+settlement:
+  default_ruleset: so_adds_goal
+  rulesets:
+    so_adds_goal:       # industry convention: a shootout winner is credited one goal, and one goal is added to the game total
+      shootout_in_total: true
+      overtime_in_total: true
+      puck_line_uses_official_margin: true
+      moneyline_includes_ot_so: true
+      props_overtime_counts: true
+      props_shootout_counts: false
+      prop_void_if_player_did_not_play: true
+      whole_line_push_refunds_stake: true
+    so_excluded:        # the assumption the repo used until Phase 1: totals exclude the shootout goal
+      shootout_in_total: false
+      overtime_in_total: true
+      puck_line_uses_official_margin: true
+      moneyline_includes_ot_so: true
+      props_overtime_counts: true
+      props_shootout_counts: false
+      prop_void_if_player_did_not_play: true
+      whole_line_push_refunds_stake: true
+  books:
+    default: {ruleset: so_adds_goal, verified: false}
+    draftkings: {ruleset: so_adds_goal, verified: false, note: "whole-number total equal to the line is void (2023 house rules); team totals offered both with and without OT/SO"}
+    fanduel: {ruleset: so_adds_goal, verified: false, note: "overtime goals count toward game totals; team totals are 60 minutes of regulation only"}
+
+# Evaluation (Phase 3). The primary no-vig method is proportional normalisation; power and Shin are sensitivity checks. Production edges still use Shin
+# (changing it would alter live picks and make the stored closing consensus inconsistent), so the evaluation recomputes every market probability itself.
+evaluation:
+  devig:
+    primary: proportional
+    sensitivity: [power, shin]
+    production: shin
+  min_picks_per_market: 100      # below this a market's result is labelled "insufficient evidence" everywhere it appears
+  min_clv_picks: 30
+  alpha: 0.05
+  multiple_comparisons: holm     # applied across markets (and across split cells) whenever significance is reported
+  bootstrap_resamples: 4000      # resampling whole game dates: same-day bets are correlated
+  edge_thresholds: [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08]
+
+# Staking and risk (Phase 5). Values are the ones the code used before they moved here, so behaviour is unchanged; kelly_fraction may never exceed kelly_fraction_max.
+staking:
+  kelly_fraction: 0.25            # fraction of full Kelly (quarter Kelly)
+  kelly_fraction_max: 0.25        # hard ceiling: loading a policy with a larger kelly_fraction is an error
+  max_bet_pct: 0.02               # per bet, share of bankroll
+  max_game_exposure_pct: 0.03     # per game: every market on one game is correlated, so their stakes count together
+  max_daily_exposure_pct: 0.05    # per day, all bets
+  max_bets_per_day: 5
+  min_stake: 1.0
+  min_edge: 0.03                  # raw edge: model probability minus the no-vig market probability
+  min_edge_unconfirmed_goalie: 0.04
+  min_ev: 0.01                    # per $1 after shrinkage toward the market
+  min_prob: 0.40
+  max_decimal: 4.0
+  max_disagreement: 0.12          # a larger gap to the market is presumed a model error, not an edge
+  trust_w0: 0.5
+  trust_d0: 0.06
+  min_games_played: 10
+  allow_stale_odds: false
+
+risk:
+  kill_switch:
+    max_drawdown_pct: 0.20        # of the high-water bankroll; breaching it is a HARD halt (Phase 7)
+  simulation:
+    paths: 10000
+    horizons: [200, 500]
+    ruin_level: 0.5               # "ruin" = the bankroll ever falling to this share of its start
+
+# Odds credits (Phase 6/7). The plan is assumed to reset on the 1st; these were module constants in pipeline.py and review/odds_check.py.
+odds:
+  monthly_plan_credits: 500
+  reserve_credits: 25               # never plan to spend the last credits: they keep the moneylines alive
+  core_after_late: 4                # credits the closing-line snapshots still need after the late run
+  props_min_credits: 100            # below this no player prices are fetched at all
+  extra_props_min_credits: 250      # assists / anytime-goalscorer prices only while at least this many credits remain
+  prop_refetch_min: 60              # minutes before a game's player market is fetched again
+  props_max_games: 3
+
+# The pre-game review agent (Phase 6). It is in SHADOW mode until the owner changes this value: decisions are logged and shown on the page as "shadow" annotations,
+# but every published pick stays exactly as the model made it. "active" lets vetoes remove picks from the page.
+review:
+  mode: shadow                      # shadow | active
+  min_credits_to_fetch: 60          # no price refresh for a review wave below this many remaining credits
+  credits_per_wave: 3               # one bulk call: h2h + spreads + totals
+  min_vetoed_for_verdict: 30        # vetoed picks with a closing-line value before any comparison with kept picks is read
+  min_kept_for_verdict: 100
+
+# Autonomy and reliability (Phase 7). PRIME DIRECTIVE: when anything looks wrong the system stops publishing picks and alerts; it never changes a threshold itself.
+autonomy:
+  soft_resume_healthy_runs: 3          # a SOFT halt (stale data, source outage, quota exhaustion, drift warning) clears after this many consecutive healthy runs
+  acknowledged_halts: []               # a HARD halt (drawdown, negative CLV, integrity failure, config tampering) clears ONLY when its id is listed here, by the owner
+  freshness:
+    max_data_age_days: 3
+  health:
+    min_completed_games: 5000          # fewer completed games in the database = the cache is missing or truncated
+    prob_min: 0.001                    # model probabilities and market probabilities must lie inside (prob_min, 1 - prob_min)
+    odds_min_decimal: 1.01
+    odds_max_decimal: 60.0
+    max_unlinked_odds_share: 0.35      # share of today's odds events that match no scheduled game (cross-source agreement, NHL API vs odds API)
+    max_slate_vs_odds_game_gap: 3      # |games on the NHL schedule today - events in the odds feed today|
+  kill_switch:
+    clv:
+      min_picks: 100                   # live moneyline picks with a closing-line value before the CLV limit applies
+      halt_below_mean_pts: -1.0        # HARD halt when the mean margin-free CLV is below this many probability points AND its 95% interval is entirely below zero
+  drift:
+    psi_warn: 0.20                     # feature drift (population stability index) per feature
+    psi_halt: 0.50
+    min_games: 100
+    calibration_slope_warn: [0.6, 1.4] # rolling calibration slope outside this range warns; outside halt_range halts (soft)
+    calibration_slope_halt: [0.3, 2.0]
+    disagreement_warn_pts: 8.0         # mean |model - market| in probability points over the last games
+    disagreement_halt_pts: 12.0
+    performance_window: 200
+    performance_min_ref: 400
+    performance_slope_warn: 0.5
+    performance_z_warn: 2.0
+  heartbeat:
+    ping_interval_min: 10              # the always-on heartbeat job pings the external dead-man's switch at most this often
+    recommended_period_min: 60         # configure the external check with this period...
+    recommended_grace_hours: 6         # ...and this grace: GitHub's cron has arrived up to 3-6 hours late on this repository
+  credentials:
+    claude_oauth_token_issued: null    # YYYY-MM-DD the CLAUDE_CODE_OAUTH_TOKEN was created (owner fills this in); warnings need it
+    claude_oauth_token_valid_days: 365
+    warn_days_before_expiry: [30, 14, 7]
+    odds_plan_renews_day_of_month: 1
+    odds_credit_warn_levels: [100, 50, 25]
+    keepalive_max_commit_age_days: 50  # GitHub disables schedules in a public repository after 60 days without activity
+    keepalive_max_success_age_days: 40
+  digest:
+    weekday: 0                         # Monday
+
+# Betting-eligibility gate (Phase 8), pre-registered. The page says RESEARCH ONLY unless EVERY criterion holds, and returns to RESEARCH ONLY the run any criterion fails.
+# Only moneylines can qualify: closing prices (and so closing-line value) are captured for them alone. Totals, puck lines and props stay RESEARCH ONLY.
+betting_gate:
+  markets: [h2h]
+  min_live_clv_picks: 300           # live, settled, official picks that have a closing price
+  clv_interval_level: 0.95          # the clustered (by game date) interval of mean margin-free CLV must lie entirely above zero
+  min_mean_clv_pts: 0.5             # and the mean must be at least this many probability points
+  max_drawdown_pct: 0.10            # current drawdown must be within half of the kill-switch limit
+  require_system_ok: true           # no halt open
