@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-11-16
 
-**2 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-11-16 13:04 UTC
+**2 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-11-16 21:34 UTC
 
 | | |
 |---|---|
@@ -23,8 +23,8 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| MTL @ NYR | 50.7% | 48.8% | no bet |
-| VAN @ UTA | 73.8% | 75.3% | no bet |
+| MTL @ NYR | 50.7% | 49.4% | no bet |
+| VAN @ UTA | 73.8% | 75.5% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 

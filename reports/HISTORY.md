@@ -15,7 +15,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
-| 2026-11-16 | 2 | 0 | - | - | - | - | [report](daily/2026-11-16-morning.md) · [page](../site/archive/2026-11-16.html) |
+| 2026-11-16 | 2 | 0 | - | - | - | - | [report](daily/2026-11-16-late.md) · [page](../site/archive/2026-11-16.html) |
 | 2026-11-15 | 5 | 0 | - | - | - | - | [report](daily/2026-11-15-late.md) · [page](../site/archive/2026-11-15.html) |
 | 2026-11-14 | 14 | 1 | $3.66 | $-3.66 | -100.0% | - | [report](daily/2026-11-14-late.md) · [page](../site/archive/2026-11-14.html) |
 | 2026-11-13 | 2 | 0 | - | - | - | - | [report](daily/2026-11-13-late.md) · [page](../site/archive/2026-11-13.html) |
