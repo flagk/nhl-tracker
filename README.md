@@ -9,9 +9,9 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 <!-- PICKS:START -->
 
-### Today's picks: 2026-11-19
+### Today's picks: 2026-11-20
 
-**12 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-11-19 21:05 UTC
+**0 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-11-20 20:13 UTC
 
 | | |
 |---|---|
@@ -21,22 +21,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 | 🧾 **[My bets & fake bets](https://flagk.github.io/nhl-tracker/bets.html)** | log your own bets (kept only in your browser) and see the pretend-money bets on every game |
 | 📈 [Bet log (CSV)](data/logs/bet_log.csv) | all settled recommended bets |
 
-| Game | Model: home win | Market (no-vig) | Decision |
-|---|---|---|---|
-| LAK @ TOR | 48.9% | 52.3% | no bet |
-| PHI @ OTT | 58.8% | 59.0% | no bet |
-| STL @ PIT | 53.5% | 49.7% | no bet |
-| BUF @ WSH | 53.0% | 56.0% | no bet |
-| MTL @ CAR | 70.3% | 74.3% | no bet |
-| NYI @ WPG | 51.8% | 52.4% | no bet |
-| EDM @ TBL | 61.2% | 56.5% | no bet |
-| CBJ @ CHI | 43.6% | 39.9% | no bet |
-| MIN @ CGY | 40.0% | 31.8% | no bet |
-| ANA @ COL | 58.2% | 54.2% | no bet |
-| VAN @ SEA | 57.9% | 60.3% | no bet |
-| DAL @ VGK | 50.5% | 53.0% | no bet |
-
-*No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
+*No NHL games to show for this date.*
 
 *Research and educational project; no guarantee of profit. The numbers above are not betting advice.*
 
