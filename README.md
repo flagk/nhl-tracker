@@ -9,9 +9,9 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 <!-- PICKS:START -->
 
-### Today's picks: 2026-11-21
+### Today's picks: 2026-11-22
 
-**14 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-11-21 15:05 UTC
+**5 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-11-22 13:04 UTC
 
 | | |
 |---|---|
@@ -23,20 +23,11 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| EDM @ CAR | 69.3% | 64.9% | no bet |
-| CHI @ CGY | 58.4% | 59.0% | no bet |
-| BUF @ FLA | 57.0% | 58.0% | no bet |
-| PIT @ NSH | 52.1% | 55.5% | no bet |
-| WSH @ BOS | 55.9% | 53.5% | no bet |
-| CBJ @ TOR | 51.0% | 51.3% | no bet |
-| PHI @ MTL | 58.2% | 59.4% | no bet |
-| LAK @ OTT | 58.3% | 61.6% | no bet |
-| NYI @ DET | 54.4% | 47.1% | no bet |
-| NJD @ STL | 48.2% | 45.2% | no bet |
-| VGK @ WPG | 47.5% | 44.9% | no bet |
-| ANA @ UTA | 61.0% | 59.6% | no bet |
-| MIN @ VAN | 30.9% | 27.1% | no bet |
-| SEA @ SJS | 52.3% | 51.3% | no bet |
+| CAR @ NYR | 42.9% | 40.7% | no bet |
+| BUF @ TBL | 67.1% | 65.3% | no bet |
+| EDM @ STL | 55.2% | 49.8% | no bet |
+| PIT @ DAL | 64.5% | 67.1% | no bet |
+| CHI @ VAN | 50.0% | 49.5% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
