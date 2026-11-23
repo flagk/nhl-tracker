@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-11-23
 
-**7 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-11-23 13:05 UTC
+**7 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-11-23 21:05 UTC
 
 | | |
 |---|---|
@@ -23,13 +23,13 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| CBJ @ NJD | 62.1% | 65.1% | no bet |
-| LAK @ MTL | 56.3% | 58.4% | no bet |
-| CGY @ OTT | 63.9% | 67.6% | no bet |
+| CBJ @ NJD | 62.1% | 65.0% | no bet |
+| LAK @ MTL | 56.3% | 58.2% | no bet |
+| CGY @ OTT | 63.9% | 69.6% | no bet |
 | TOR @ NYI | 56.3% | 59.5% | no bet |
-| UTA @ WPG | 46.1% | 48.3% | no bet |
-| ANA @ SEA | 49.1% | 50.3% | no bet |
-| MIN @ SJS | 37.0% | 35.4% | no bet |
+| UTA @ WPG | 46.1% | 49.9% | no bet |
+| ANA @ SEA | 49.1% | 51.9% | no bet |
+| MIN @ SJS | 37.0% | 38.7% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
