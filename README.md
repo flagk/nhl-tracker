@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-11-24
 
-**1 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-11-24 13:04 UTC
+**1 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-11-24 22:04 UTC
 
 | | |
 |---|---|
@@ -23,7 +23,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| VGK @ EDM | 50.3% | 48.4% | no bet |
+| VGK @ EDM | 50.3% | 47.5% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 

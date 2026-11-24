@@ -378,4 +378,4 @@ game_id,game_date,away,home,home_goalie,away_goalie,goalie_status,model_version,
 2026020382,2026-11-23,UTA,WPG,S. Skinner,K. Vejmelka,probable,20261122-54dfe0,0.461041,0.499266,0.494088,-0.0382249,1,NO_BET,,,,0,,,,,,edge +3.8% below the 4% minimum (starting goalie unconfirmed),2,2,0,0,24,24,0.511499,1,55
 2026020383,2026-11-23,ANA,SEA,P. Grubauer,L. Dostal,probable,20261122-54dfe0,0.491124,0.51885,0.515272,-0.0277264,1,NO_BET,,,,0,,,,,,edge +2.8% below the 4% minimum (starting goalie unconfirmed),2,2,0,0,20,24,0.518657,1,55
 2026020384,2026-11-23,MIN,SJS,Y. Askarov,J. Wallstedt,probable,20261122-54dfe0,0.370253,0.387326,0.37715,-0.0170727,0,NO_BET,,,,0,,,,,,edge +1.7% below the 4% minimum (starting goalie unconfirmed),2,2,0,0,25,25,0.329775,0,55
-2026020385,2026-11-24,VGK,EDM,T. Jarry,C. Hart,probable,20261123-65bf35,0.502722,0.484418,,0.0183037,,NO_BET,,,,0,,,,,,edge +1.8% below the 4% minimum (starting goalie unconfirmed),2,3,0,0,26,25,0.545356,1,56
+2026020385,2026-11-24,VGK,EDM,T. Jarry,C. Hart,probable,20261123-65bf35,0.502722,0.475095,,0.0276265,,NO_BET,,,,0,,,,,,edge +2.8% below the 4% minimum (starting goalie unconfirmed),2,3,0,0,26,25,0.545356,1,56
