@@ -6,7 +6,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 ## Overall
 
-- Games with a logged recommendation and a result: **372** (bet on 11; passed on 97%)
+- Games with a logged recommendation and a result: **379** (bet on 11; passed on 97%)
 - Bets: staked $30.23 · profit $-25.35 · **ROI -83.9%** · win rate 9.1%
 - **Closing-line value**: -2.15% per $1 (95% CI -3.47% to -0.58%), beat the close on 9% of 11 bets
 - ⚠️ Far too few bets to separate skill from luck (about 6,900 would be needed to detect a true 3% ROI). Closing-line value converges much faster.
@@ -15,6 +15,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
+| 2026-11-24 | 1 | 0 | - | - | - | - | [report](daily/2026-11-24-morning.md) · [page](../site/archive/2026-11-24.html) |
 | 2026-11-23 | 7 | 0 | - | - | - | - | [report](daily/2026-11-23-late.md) · [page](../site/archive/2026-11-23.html) |
 | 2026-11-22 | 5 | 0 | - | - | - | - | [report](daily/2026-11-22-late.md) · [page](../site/archive/2026-11-22.html) |
 | 2026-11-21 | 14 | 0 | - | - | - | - | [report](daily/2026-11-21-late.md) · [page](../site/archive/2026-11-21.html) |
