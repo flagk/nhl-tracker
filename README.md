@@ -11,7 +11,7 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 ### Today's picks: 2026-11-25
 
-**14 game(s) · 0 recommended bet(s)** · morning run · model health **WARN** · updated 2026-11-25 13:06 UTC
+**14 game(s) · 0 recommended bet(s)** · late run · model health **WARN** · updated 2026-11-25 21:04 UTC
 
 | | |
 |---|---|
@@ -23,20 +23,20 @@ Updated automatically every day. Most days the honest answer is "no bet".
 
 | Game | Model: home win | Market (no-vig) | Decision |
 |---|---|---|---|
-| WPG @ BOS | 59.6% | 59.3% | no bet |
-| NYR @ BUF | 50.8% | 55.4% | no bet |
-| CAR @ TBL | 44.0% | 46.1% | no bet |
-| OTT @ FLA | 52.7% | 54.6% | no bet |
-| STL @ NYI | 51.2% | 52.4% | no bet |
-| CGY @ PIT | 57.3% | 59.8% | no bet |
-| PHI @ WSH | 54.3% | 59.1% | no bet |
-| NJD @ CBJ | 44.4% | 40.8% | no bet |
+| WPG @ BOS | 59.6% | 60.3% | no bet |
+| NYR @ BUF | 50.8% | 55.1% | no bet |
+| CAR @ TBL | 44.0% | 48.8% | no bet |
+| OTT @ FLA | 52.7% | 52.6% | no bet |
+| STL @ NYI | 51.2% | 54.4% | no bet |
+| CGY @ PIT | 57.3% | 60.8% | no bet |
+| PHI @ WSH | 54.3% | 59.7% | no bet |
+| NJD @ CBJ | 44.4% | 42.3% | no bet |
 | VAN @ DET | 65.8% | 67.5% | no bet |
-| NSH @ DAL | 58.2% | 61.0% | no bet |
-| UTA @ MIN | 58.0% | 57.3% | no bet |
-| MTL @ COL | 57.4% | 52.3% | no bet |
-| CHI @ SEA | 55.5% | 59.0% | no bet |
-| SJS @ ANA | 57.5% | 56.5% | no bet |
+| NSH @ DAL | 58.2% | 61.1% | no bet |
+| UTA @ MIN | 58.0% | 57.4% | no bet |
+| MTL @ COL | 57.4% | 52.0% | no bet |
+| CHI @ SEA | 55.5% | 58.6% | no bet |
+| SJS @ ANA | 57.5% | 55.5% | no bet |
 
 *No bets today is normal: the model only bets when it sees a sizeable edge over the market.*
 
