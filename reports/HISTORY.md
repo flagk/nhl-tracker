@@ -15,6 +15,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Games | Bets | Staked | Profit | ROI | Pending | Links |
 |---|---|---|---|---|---|---|---|
+| 2026-11-27 | 15 | 1 | - | - | - | 1 | [report](daily/2026-11-27-morning.md) · [page](../site/archive/2026-11-27.html) |
 | 2026-11-25 | 14 | 0 | - | - | - | - | [report](daily/2026-11-25-late.md) · [page](../site/archive/2026-11-25.html) |
 | 2026-11-24 | 1 | 0 | - | - | - | - | [report](daily/2026-11-24-late.md) · [page](../site/archive/2026-11-24.html) |
 | 2026-11-23 | 7 | 0 | - | - | - | - | [report](daily/2026-11-23-late.md) · [page](../site/archive/2026-11-23.html) |
@@ -76,6 +77,7 @@ Every recommendation is logged **before** its game and settled afterwards; passe
 
 | Date | Game | Pick | Price | Stake | Edge | Result | Profit | CLV |
 |---|---|---|---|---|---|---|---|---|
+| 2026-11-27 | VGK @ SJS | SJS | 2.86 | $2.50 | +6.2% | pending | - | - |
 | 2026-11-14 | WPG @ CHI | CHI | 2.45 | $3.66 | +4.8% | lost | $-3.66 | -0.4% |
 | 2026-11-11 | NYR @ CGY | CGY | 2.29 | $2.90 | +4.3% | lost | $-2.90 | -1.8% |
 | 2026-11-10 | COL @ TOR | TOR | 2.50 | $2.61 | +4.7% | lost | $-2.61 | -3.5% |

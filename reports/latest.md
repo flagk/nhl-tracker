@@ -1,16 +1,83 @@
-# NHL model report: 2026-11-26 (morning run)
+# NHL model report: 2026-11-27 (morning run)
 
 > **Disclaimer.** This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.
 
-*Generated 2026-11-26 13:03 UTC · model `20261125-ee8f99` · probability source `online_platt` · bankroll $974.65 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
+*Generated 2026-11-27 13:02 UTC · model `20261125-ee8f99` · probability source `online_platt` · bankroll $974.65 · quarter-Kelly x1, per-bet cap 2%, daily cap 5%*
 
 > **Model health: WARN.** feature drift: h_early_w. Treat picks with extra scepticism.
 
-*Odds snapshot: 2026-11-26T13:02:57+00:00 · API credits left: 125*
+*Odds snapshot: 2026-11-27T13:02:09+00:00 · API credits left: 124*
 
 ## Summary
 
-No NHL games are scheduled (or none are unplayed) for this date.
+- 15 games · **1 recommended bet(s)** · total stake $2.50 (0.26% of bankroll)
+
+## Games
+
+| Game | Goalies (away / home) | Model home win | Market no-vig home | Best price | Edge | EV per $1 | Stake | Decision |
+|---|---|---|---|---|---|---|---|---|
+| TOR @ BOS (13:00 ET) | A. Stolarz / J. Swayman (probable) | 59.9% | 59.0% | BOS 1.65 | +1.0% | - | - | no bet |
+| CGY @ NJD (13:00 ET) | D. Wolf / C. Hellebuyck (probable) | 65.5% | 72.1% | CGY 3.42 | +6.6% | - | - | no bet |
+| UTA @ NSH (13:00 ET) | K. Vejmelka / J. Saros (probable) | 49.8% | 48.1% | NSH 2.02 | +1.7% | - | - | no bet |
+| DAL @ STL (14:00 ET) | J. Oettinger / J. Hofer (probable) | 47.5% | 44.2% | STL 2.21 | +3.3% | - | - | no bet |
+| OTT @ TBL (15:00 ET) | L. Ullmark / A. Vasilevskiy (probable) | 54.9% | 56.2% | OTT 2.22 | +1.3% | - | - | no bet |
+| VAN @ PHI (15:00 ET) | L. Meriläinen / J. Woll (probable) | 66.4% | 68.7% | VAN 3.05 | +2.3% | - | - | no bet |
+| FLA @ WSH (15:00 ET) | J. Markstrom / L. Thompson (probable) | 50.3% | 49.2% | WSH 1.98 | +1.1% | - | - | no bet |
+| DET @ CBJ (15:00 ET) | J. Gibson / C. Talbot (probable) | 51.4% | 54.1% | DET 2.12 | +2.8% | - | - | no bet |
+| COL @ MIN (16:00 ET) | M. Blackwood / J. Wallstedt (probable) | 54.0% | 53.9% | MIN 1.83 | +0.2% | - | - | no bet |
+| LAK @ ANA (16:00 ET) | D. Kuemper / L. Dostal (probable) | 50.2% | 49.2% | ANA 2.00 | +1.0% | - | - | no bet |
+| VGK @ SJS (16:00 ET) | C. Hart / Y. Askarov (probable) | 40.3% | 34.1% | SJS 2.86 | +6.2% | +15.3% | $2.50 | **BET SJS** |
+| NYR @ CHI (17:30 ET) | D. Garand / S. Knight (probable) | 41.1% | 38.4% | CHI 2.55 | +2.7% | - | - | no bet |
+| WPG @ NYI (19:30 ET) | S. Skinner / I. Sorokin (probable) | 53.8% | 54.9% | WPG 2.16 | +1.1% | - | - | no bet |
+| PIT @ BUF (20:00 ET) | A. Silovs / U. Luukkonen (probable) | 54.7% | 58.3% | PIT 2.35 | +3.7% | - | - | no bet |
+| SEA @ EDM (20:00 ET) | J. Daccord / D. Levi (probable) | 61.9% | 66.7% | SEA 2.90 | +4.8% | - | - | no bet |
+
+## Why
+
+**TOR @ BOS (13:00 ET)**: No bet: edge +1.0% below the 4% minimum (starting goalie unconfirmed)
+  - Context: BOS have the clearly better goal differential this season (gap 0.89 goals/game). Goaltending edge to BOS (goals saved above expected). Division/rival game.
+
+**CGY @ NJD (13:00 ET)**: No bet: model win probability 34.5% below the 40% confidence floor
+  - Context: NJD have the clearly better goal differential this season (gap 1.01 goals/game). NJD are creating the better share of expected goals recently.
+
+**UTA @ NSH (13:00 ET)**: No bet: edge +1.7% below the 4% minimum (starting goalie unconfirmed)
+  - Context: UTA are creating the better share of expected goals recently. Goaltending edge to NSH (goals saved above expected). Division/rival game.
+
+**DAL @ STL (14:00 ET)**: No bet: edge +3.3% below the 4% minimum (starting goalie unconfirmed)
+  - Context: DAL are creating the better share of expected goals recently. Goaltending edge to DAL (goals saved above expected). Division/rival game.
+
+**OTT @ TBL (15:00 ET)**: No bet: edge +1.3% below the 4% minimum (starting goalie unconfirmed)
+  - Context: Goaltending edge to OTT (goals saved above expected). Division/rival game.
+
+**VAN @ PHI (15:00 ET)**: No bet: edge +2.3% below the 4% minimum (starting goalie unconfirmed); model win probability 33.6% below the 40% confidence floor
+  - Context: PHI have the clearly better goal differential this season (gap 0.68 goals/game). PHI are creating the better share of expected goals recently. Goaltending edge to PHI (goals saved above expected).
+
+**FLA @ WSH (15:00 ET)**: No bet: edge +1.1% below the 4% minimum (starting goalie unconfirmed)
+  - Context: FLA have the clearly better goal differential this season (gap 0.26 goals/game). Goaltending edge to FLA (goals saved above expected).
+
+**DET @ CBJ (15:00 ET)**: No bet: edge +2.8% below the 4% minimum (starting goalie unconfirmed)
+  - Context: DET are creating the better share of expected goals recently.
+
+**COL @ MIN (16:00 ET)**: No bet: edge +0.2% below the 4% minimum (starting goalie unconfirmed)
+  - Context: Division/rival game.
+
+**LAK @ ANA (16:00 ET)**: No bet: edge +1.0% below the 4% minimum (starting goalie unconfirmed)
+  - Context: ANA have the clearly better goal differential this season (gap 0.36 goals/game). LAK travelled 3,953 km across 3 time zone(s) since their last game. LAK are creating the better share of expected goals recently. Division/rival game.
+
+**VGK @ SJS (16:00 ET)**: Bet $2.50 (0.26% of bankroll) on SJS at 2.86. The model gives SJS 40.3% vs the market's no-vig 34.1% (edge +6.2%); after shrinking toward the market the working probability is 35.6%, worth +1.9% per $1 at that price.
+  - Context: VGK have the clearly better goal differential this season (gap 1.15 goals/game). VGK are creating the better share of expected goals recently. Division/rival game.
+
+**NYR @ CHI (17:30 ET)**: No bet: edge +2.7% below the 4% minimum (starting goalie unconfirmed)
+  - Context: NYR have the clearly better goal differential this season (gap 0.91 goals/game). NYR are creating the better share of expected goals recently. Goaltending edge to NYR (goals saved above expected).
+
+**WPG @ NYI (19:30 ET)**: No bet: edge +1.1% below the 4% minimum (starting goalie unconfirmed)
+  - Context: NYI have the clearly better goal differential this season (gap 0.30 goals/game). Goaltending edge to NYI (goals saved above expected).
+
+**PIT @ BUF (20:00 ET)**: No bet: edge +3.7% below the 4% minimum (starting goalie unconfirmed)
+  - Context: BUF have the clearly better goal differential this season (gap 0.34 goals/game).
+
+**SEA @ EDM (20:00 ET)**: No bet: model win probability 38.1% below the 40% confidence floor
+  - Context: EDM have the clearly better goal differential this season (gap 0.77 goals/game). Division/rival game.
 
 ## Track record (all logged recommendations that have resolved)
 
@@ -76,6 +143,28 @@ Every slate is also run through several alternative strategies with pretend stak
 | `under_edge` | 154 | -4.6% | -20% to +11% | 49% | - | Goals model: $10 on the Under only, when it has a 2%+ edge (are we better at low-scoring games?) |
 | `underdog_ml` | 182 | -25.5% | -42% to -9% | 31% | -2.97% | $10 on the moneyline UNDERDOG, only when the model rates it 2%+ better than the market does |
 | `underdog_ml_control` | 347 | -10.7% | -23% to +2% | 38% | -2.95% | CONTROL: flat $10 on the moneyline underdog of every game (no skill) |
+
+### Today's fake bets on every game (pretend money, NOT recommendations)
+
+| Game | Type | Pretend pick | Pretend stake | Price | Model | Market |
+|---|---|---|---|---|---|---|
+| TOR @ BOS | Moneyline | BOS moneyline | $10.00 | 1.65 | 59.9% | 59.0% |
+| CGY @ NJD | Moneyline | NJD moneyline | $10.00 | 1.36 | 65.5% | 72.1% |
+| UTA @ NSH | Moneyline | UTA moneyline | $10.00 | 1.91 | 50.2% | 51.9% |
+| DAL @ STL | Moneyline | DAL moneyline | $10.00 | 1.74 | 52.5% | 55.8% |
+| OTT @ TBL | Moneyline | TBL moneyline | $10.00 | 1.74 | 54.9% | 56.2% |
+| VAN @ PHI | Moneyline | PHI moneyline | $10.00 | 1.43 | 66.4% | 68.7% |
+| FLA @ WSH | Moneyline | WSH moneyline | $10.00 | 1.98 | 50.3% | 49.2% |
+| DET @ CBJ | Moneyline | CBJ moneyline | $10.00 | 1.81 | 51.4% | 54.1% |
+| COL @ MIN | Moneyline | MIN moneyline | $10.00 | 1.83 | 54.0% | 53.9% |
+| LAK @ ANA | Moneyline | ANA moneyline | $10.00 | 2.00 | 50.2% | 49.2% |
+| VGK @ SJS | Moneyline | VGK moneyline | $10.00 | 1.51 | 59.7% | 65.9% |
+| NYR @ CHI | Moneyline | NYR moneyline | $10.00 | 1.59 | 58.9% | 61.6% |
+| WPG @ NYI | Moneyline | NYI moneyline | $10.00 | 1.77 | 53.8% | 54.9% |
+| PIT @ BUF | Moneyline | BUF moneyline | $10.00 | 1.67 | 54.7% | 58.3% |
+| SEA @ EDM | Moneyline | EDM moneyline | $10.00 | 1.47 | 61.9% | 66.7% |
+
+Total pretend stake $150.00. Settled results feed the `every_*` rows above; real bets follow the normal policy only.
 
 ---
 > **Disclaimer.** This is a research and educational project. No model guarantees profit, and past or back-tested results do not predict future results. Sports betting carries a real risk of loss; only stake money you can afford to lose, and check that betting is legal where you live. Nothing here is financial advice.
